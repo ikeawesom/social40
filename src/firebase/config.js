@@ -2,13 +2,13 @@
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC9vJ-3Gva493SG4ixrQRJUg9HwnFYG1U0",
-  authDomain: "social40-15b92.firebaseapp.com",
-  projectId: "social40-15b92",
-  storageBucket: "social40-15b92.appspot.com",
-  messagingSenderId: "226245662",
-  appId: "1:226245662:web:76bfcd0012a5ae87bd420f",
-  measurementId: "G-EZHDZC44JN",
+  apiKey: NEXT_PUBLIC_API_KEY,
+  authDomain: NEXT_PUBLIC_AUTH_DOMAIN,
+  projectId: NEXT_PUBLIC_PROJECT_ID,
+  storageBucket: NEXT_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: NEXT_PUBLIC_MESSAGING_SENDER_ID,
+  appId: NEXT_PUBLIC_APP_ID,
+  measurementId: NEXT_PUBLIC_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
