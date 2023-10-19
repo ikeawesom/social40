@@ -1,3 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Onest&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Onest", sans-serif;
+  /* border: 1px dotted red; */
+}
+
+input:not(.custom),
+textarea:not(.custom) {
+  resize: none;
+  @apply p-2 shadow-sm rounded-lg w-full border-[1px]
+    border-gray-200;
+}
