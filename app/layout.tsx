@@ -7,6 +7,8 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Social 40",
   description: "Compete and motivate one another to be the best.",
+  manifest: "/pwa/manifest.json",
+  icons: { apple: "/pwa/icons/icon-512x512.png" },
 };
 
 export default function RootLayout({
