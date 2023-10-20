@@ -25,8 +25,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         const uid = user.uid;
-        cookieStore.set("UID", uid);
-
         const res = await dbHandler.get({ col_name: "MEMBERS", id: uid });
         if (res.status) cookieStore.set("USER_DATA", JSON.stringify(res.data));
 
@@ -38,7 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         setUser(null);
 
-        const cur_user = cookieStore.get("UID");
+        const cur_user = cookieStore.get("USER_DATA");
 
         const route = `/auth?${new URLSearchParams({
           new_user: cur_user ? "false" : "true",
@@ -46,7 +44,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         router.push(route);
 
-        cookieStore.remove("UID");
         cookieStore.remove("USER_DATA");
       }
     });
