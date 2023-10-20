@@ -1,5 +1,6 @@
 import { FIREBASE_APP } from "./config";
 import {
+  Auth,
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
@@ -8,18 +9,12 @@ import {
 import handleResponses from "../utils/handleResponses";
 import { MEMBER_SCHEMA } from "../utils/schemas/member";
 
-export const FIREBASE_AUTH = getAuth(FIREBASE_APP);
-
 class AuthClass {
   constructor() {}
 
-  async signIn(email: string, password: string) {
+  async signIn(auth: Auth, email: string, password: string) {
     try {
-      const res = await signInWithEmailAndPassword(
-        FIREBASE_AUTH,
-        email,
-        password
-      );
+      const res = await signInWithEmailAndPassword(auth, email, password);
       const user = res.user as any as MEMBER_SCHEMA;
 
       return handleResponses({ data: user });
@@ -28,13 +23,9 @@ class AuthClass {
     }
   }
 
-  async signUp(email: string, password: string) {
+  async signUp(auth: Auth, email: string, password: string) {
     try {
-      const res = await createUserWithEmailAndPassword(
-        FIREBASE_AUTH,
-        email,
-        password
-      );
+      const res = await createUserWithEmailAndPassword(auth, email, password);
       const user = res.user as any as MEMBER_SCHEMA;
 
       return handleResponses({ data: user });
@@ -43,9 +34,9 @@ class AuthClass {
     }
   }
 
-  async signOutUser() {
+  async signOutUser(auth: Auth) {
     try {
-      await signOut(FIREBASE_AUTH);
+      await signOut(auth);
       return handleResponses();
     } catch (error: any) {
       return handleResponses({ error: error.message, status: false });

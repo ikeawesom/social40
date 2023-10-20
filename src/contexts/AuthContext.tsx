@@ -1,10 +1,11 @@
 "use client";
 import { User, onAuthStateChanged } from "firebase/auth/cordova";
 import { createContext, useContext, useEffect, useState } from "react";
-import { FIREBASE_AUTH } from "../firebase/auth";
 import { useRouter } from "next/navigation";
 import { ClientCookiesProvider } from "./CookiesProvider";
 import { useCookies } from "next-client-cookies";
+import { getAuth } from "firebase/auth";
+import { FIREBASE_APP } from "../firebase/config";
 
 type AuthContextType = {
   user: User | null;
@@ -19,11 +20,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+    const auth = getAuth(FIREBASE_APP);
+    onAuthStateChanged(auth, (user) => {
       if (user) {
         const uid = user.uid;
         cookieStore.set("UID", uid);
         setUser(user);
+
+        // redirect
+        const pathname = window.location.pathname;
+        if (pathname.includes("auth")) router.replace("/");
       } else {
         setUser(null);
         const cur_user = cookieStore.get("UID");
