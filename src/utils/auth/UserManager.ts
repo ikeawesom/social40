@@ -37,15 +37,15 @@ class UserClass {
 
         // fun
         points: 0,
-        badges: {},
+        badges: [],
         friends: [], // list of friends UIDs
 
         // tracking
         bookedIn: false,
-        activities: {}, // aka their posts
-        statistics: {},
-        participatedEvents: {}, // VOC, IPPT, HA, etc...
-        medicalStatus: {},
+        activities: [], // aka their posts
+        statistics: [],
+        participatedEvents: [], // VOC, IPPT, HA, etc...
+        medicalStatus: [],
 
         // Groups
         joinedGroups: [], // uid of groups
