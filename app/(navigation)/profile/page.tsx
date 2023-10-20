@@ -1,5 +1,4 @@
 import React from "react";
-import { getCookies } from "next-client-cookies/server";
 import ProfileSection from "@/src/components/profile/ProfileSection";
 import {
   ACTIVITY_SCHEMA,
@@ -10,6 +9,7 @@ import {
 import { dbHandler } from "@/src/firebase/db";
 import StatsSection from "@/src/components/profile/StatsSection";
 import { redirect } from "next/navigation";
+import fetchUserDataServer from "@/src/utils/fetchUserDataServer";
 
 const OPTIONS = ["activity", "stats", "statuses"];
 
@@ -19,18 +19,15 @@ export default async function Profile({
   searchParams: { [key: string]: string };
 }) {
   const option = searchParams["option"];
-  const cookieStore = getCookies();
-  const dataString = cookieStore.get("USER_DATA");
+  const data = fetchUserDataServer();
 
-  if (dataString) {
+  if (data) {
     if (!option)
       redirect(`/profile?${new URLSearchParams({ option: "activity" })}`);
     else {
       if (!OPTIONS.includes(option))
         redirect(`/profile?${new URLSearchParams({ option: "activity" })}`);
     }
-
-    const data = JSON.parse(dataString) as any as MEMBER_SCHEMA;
 
     const friendsList = data.friends;
 

@@ -1,9 +1,8 @@
 import Navbar from "@/src/components/navigation/Navbar";
-import { getCookies } from "next-client-cookies/server";
+import fetchUserDataServer from "@/src/utils/fetchUserDataServer";
 
 export default function NavLayout({ children }: { children: React.ReactNode }) {
-  const cookieStore = getCookies();
-  const data = cookieStore.get("USER_DATA");
+  const data = fetchUserDataServer();
   if (data)
     return (
       <>
