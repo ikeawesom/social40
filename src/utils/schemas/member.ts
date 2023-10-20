@@ -10,15 +10,15 @@ export type MEMBER_SCHEMA = {
 
   // fun
   points: number;
-  badges: BADGE_SCHEMA[] | {};
+  badges: BADGE_SCHEMA[] | [];
   friends: string[]; // list of friends UIDs
 
   // tracking
   bookedIn: boolean;
-  activities: ACTIVITY_SCHEMA[] | {}; // aka their posts
-  statistics: STATISTICS_SCHEMA[] | {};
-  participatedEvents: PARTICIPATED_EVENTS[] | {}; // VOC, IPPT, HA, etc...
-  medicalStatus: MEDICAL_SCHEMA[] | {};
+  activities: ACTIVITY_SCHEMA[] | []; // aka their posts
+  statistics: STATISTICS_SCHEMA[] | [];
+  participatedEvents: PARTICIPATED_EVENTS[] | []; // VOC, IPPT, HA, etc...
+  medicalStatus: MEDICAL_SCHEMA[] | [];
 
   // Groups
   joinedGroups: GROUP_SCHEMA[]; // uid of groups
