@@ -7,6 +7,7 @@ import { DataType } from "@/app/(navigation)/profile/page";
 import PrimaryButton from "../utils/PrimaryButton";
 import HRow from "../utils/HRow";
 import FriendsList from "./FriendsList";
+import SignoutButton from "../utils/SignoutButton";
 
 export default function ProfileSection({
   data,
@@ -16,11 +17,12 @@ export default function ProfileSection({
   return (
     <DefaultCard
       className={twMerge(
-        "flex flex-col gap-y-3 items-center justify-center",
+        "flex flex-col gap-y-3 items-center justify-center relative",
         className
       )}
     >
       <div className="flex flex-col gap-2 items-center justify-center">
+        <SignoutButton />
         <Image
           src="icons/icon_avatar.svg"
           height={80}
