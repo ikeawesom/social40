@@ -9,16 +9,31 @@ import {
 } from "@/src/utils/schemas/member";
 import { dbHandler } from "@/src/firebase/db";
 import StatsSection from "@/src/components/profile/StatsSection";
+import { redirect } from "next/navigation";
 
-export default async function Profile() {
+const OPTIONS = ["activity", "stats", "statuses"];
+
+export default async function Profile({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string };
+}) {
   const cookieStore = getCookies();
   const UID = cookieStore.get("UID");
+  const option = searchParams["option"];
 
   if (UID) {
     const { status, data, error } = await dbHandler.get({
       col_name: "MEMBERS",
       id: UID,
     });
+
+    if (!option)
+      redirect(`/profile?${new URLSearchParams({ option: "activity" })}`);
+    else {
+      if (!OPTIONS.includes(option))
+        redirect(`/profile?${new URLSearchParams({ option: "activity" })}`);
+    }
 
     if (status) {
       const dataSchema = data as any as MEMBER_SCHEMA;
