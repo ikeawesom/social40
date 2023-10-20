@@ -10,15 +10,15 @@ export type MEMBER_SCHEMA = {
 
   // fun
   points: number;
-  badges: BADGE_SCHEMA[];
+  badges: BADGE_SCHEMA[] | {};
   friends: string[]; // list of friends UIDs
 
   // tracking
   bookedIn: boolean;
-  activities: ACTIVITY_SCHEMA[]; // aka their posts
-  statistics: STATISTICS_SCHEMA[];
-  participatedEvents: PARTICIPATED_EVENTS[]; // VOC, IPPT, HA, etc...
-  medicalStatus: MEDICAL_SCHEMA[];
+  activities: ACTIVITY_SCHEMA[] | {}; // aka their posts
+  statistics: STATISTICS_SCHEMA[] | {};
+  participatedEvents: PARTICIPATED_EVENTS[] | {}; // VOC, IPPT, HA, etc...
+  medicalStatus: MEDICAL_SCHEMA[] | {};
 
   // Groups
   joinedGroups: GROUP_SCHEMA[]; // uid of groups
@@ -28,6 +28,7 @@ export type MEMBER_SCHEMA = {
 };
 
 export type STATISTICS_SCHEMA = {
+  index: number; // poition of list (current length of list)
   ippt: IPPT_SCHEMA;
   shooting: SHOOTING_SCHEMA;
   distanceRan: number;
@@ -45,16 +46,19 @@ export type SHOOTING_SCHEMA = {
 };
 
 export type PARTICIPATED_EVENTS = {
+  index: number; // poition of list (current length of list)
   uid: string; // UID of event
   remarks: string;
 };
 
 export type BADGE_SCHEMA = {
+  index: number; // poition of list (current length of list)
   name: string;
   color: string;
 };
 
 export type ACTIVITY_SCHEMA = {
+  index: number; // poition of list (current length of list)
   uid: string;
   owner: string; // UID of member
   title: string;
@@ -65,6 +69,7 @@ export type ACTIVITY_SCHEMA = {
 };
 
 export type MEDICAL_SCHEMA = {
+  index: number; // poition of list (current length of list)
   recepient: string; // UID of member
   doctorName: string;
   statusName: string;

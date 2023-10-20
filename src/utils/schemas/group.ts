@@ -7,7 +7,15 @@ export type GROUP_SCHEMA = {
   groupName: string;
   groupDesc: string;
   members: string[]; // List of UID of members
-  requestedMembers: string[]; // List of UID of members requested
+  requestedMembers: WAITLIST_SCHEMA[]; // List of UID of members requested
   createdEvents: EVENTS_SCHEMA[];
   medicalStatus: MEDICAL_SCHEMA[];
+};
+
+export type WAITLIST_SCHEMA = {
+  index: number; // poition of list (current length of list)
+  name: string;
+  username: string;
+  password: string;
+  adminID: string;
 };
