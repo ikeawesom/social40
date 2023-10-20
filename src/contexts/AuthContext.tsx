@@ -32,10 +32,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (pathname.includes("auth")) router.replace("/");
       } else {
         setUser(null);
+
         const cur_user = cookieStore.get("UID");
+
         const route = `/auth?${new URLSearchParams({
           new_user: cur_user ? "false" : "true",
         })}`;
+
         router.push(route);
         cookieStore.remove("UID");
       }
