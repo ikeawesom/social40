@@ -6,6 +6,7 @@ import { ClientCookiesProvider } from "./CookiesProvider";
 import { useCookies } from "next-client-cookies";
 import { getAuth } from "firebase/auth";
 import { FIREBASE_APP } from "../firebase/config";
+import { dbHandler } from "../firebase/db";
 
 type AuthContextType = {
   user: User | null;
@@ -21,10 +22,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const auth = getAuth(FIREBASE_APP);
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
         const uid = user.uid;
         cookieStore.set("UID", uid);
+
+        const res = await dbHandler.get({ col_name: "MEMBERS", id: uid });
+        if (res.status) cookieStore.set("USER_DATA", JSON.stringify(res.data));
+
         setUser(user);
 
         // redirect
@@ -40,7 +45,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         })}`;
 
         router.push(route);
+
         cookieStore.remove("UID");
+        cookieStore.remove("USER_DATA");
       }
     });
   }, [user]);
