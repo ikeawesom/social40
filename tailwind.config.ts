@@ -21,6 +21,9 @@ const config: Config = {
         "custom-red": "#FF4141",
         "custom-light-red": "#FFF2F2",
       },
+      boxShadow: {
+        "custom-top": "0 -1px 2px 0 rgb(0 0 0 / 0.05)",
+      },
     },
   },
   plugins: [],
