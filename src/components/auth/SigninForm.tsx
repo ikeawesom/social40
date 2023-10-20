@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { authHandler } from "@/src/firebase/auth";
 
 import PrimaryButton from "../utils/PrimaryButton";
+import { getAuth } from "firebase/auth";
+import { FIREBASE_APP } from "@/src/firebase/config";
 
 type userDetailsType = {
   email: string;
@@ -30,7 +32,12 @@ export default function SigninForm({ setStatus }: statusType) {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await authHandler.signIn(emailMerged, userDetails.password);
+      const auth = getAuth(FIREBASE_APP);
+      const res = await authHandler.signIn(
+        auth,
+        emailMerged,
+        userDetails.password
+      );
 
       if (!res.status) throw new Error(res.error);
       setStatus("success-signin");

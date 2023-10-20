@@ -27,6 +27,7 @@ export default function SignupForm({ setStatus }: statusType) {
   const handleSignup = async (e: React.FormEvent) => {
     setLoading(true);
     e.preventDefault();
+
     setStatus("success-signup");
   };
 
