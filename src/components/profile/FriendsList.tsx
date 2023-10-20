@@ -10,7 +10,10 @@ export default function FriendsList({ friendsList }: DataType) {
         {friendsList.length !== 0 ? (
           <ul className="flex flex-col items-start justify-start">
             {friendsList.map((item, index) => (
-              <li className="flex flex-row gap-x-1 items-center justify-start">
+              <li
+                className="flex flex-row gap-x-1 items-center justify-start"
+                key={index}
+              >
                 <Image
                   src="icons/icon_avatar.svg"
                   height={40}
