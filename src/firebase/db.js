@@ -22,7 +22,6 @@ class DbClass {
       return handleResponses({ error: e.message, status: false });
     }
   }
-  3;
 
   async edit({ col_name, data, id }) {
     try {
@@ -51,7 +50,7 @@ class DbClass {
     if (docSnap.exists()) {
       return handleResponses({ data: docSnap.data() });
     } else {
-      return handleResponses({ error: "User does not exist", status: false });
+      return handleResponses({ error: "Data not found", status: false });
     }
   }
 }
