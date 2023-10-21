@@ -41,7 +41,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="w-full bg-white shadow-custom-top absolute bottom-0 left-0 grid place-items-center">
+    <div className="w-full bg-white shadow-custom-top fixed bottom-0 left-0 grid place-items-center">
       <div className="flex items-center justify-around max-w-[500px] w-full">
         {NAV_LINKS.map((item, index) => (
           <button
