@@ -6,7 +6,7 @@ export default function NavLayout({ children }: { children: React.ReactNode }) {
   if (data)
     return (
       <>
-        {children}
+        <div className="mb-16">{children}</div>
         <Navbar />
       </>
     );
