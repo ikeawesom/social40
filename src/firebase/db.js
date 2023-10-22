@@ -5,6 +5,10 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  collection,
+  limit,
+  query,
+  getDocs,
 } from "firebase/firestore";
 import handleResponses from "../utils/handleResponses";
 
@@ -47,10 +51,27 @@ class DbClass {
     const docRef = doc(FIREBASE_DB, col_name, id);
     const docSnap = await getDoc(docRef);
 
-    if (docSnap.exists()) {
-      return handleResponses({ data: docSnap.data() });
-    } else {
-      return handleResponses({ error: "Data not found", status: false });
+    if (docSnap.exists()) return handleResponses({ data: docSnap.data() });
+
+    return handleResponses({ error: "Data not found", status: false });
+  }
+
+  async colExists({ path }) {
+    try {
+      const colRef = collection(FIREBASE_DB, path);
+      const limitColRef = query(colRef, limit(1));
+      const docSnap = await getDocs(limitColRef);
+
+      if (docSnap.docs.length === 0) throw new Error("Collection not found.");
+
+      var docList = {};
+
+      docSnap.forEach((doc) => {
+        docList[doc.id] = doc.data();
+      });
+      return handleResponses({ data: docList });
+    } catch (err) {
+      return handleResponses({ error: err.message, status: false });
     }
   }
 }
