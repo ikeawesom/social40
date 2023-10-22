@@ -1,15 +1,11 @@
 import React from "react";
 import ProfileSection from "@/src/components/profile/ProfileSection";
-import {
-  ACTIVITY_SCHEMA,
-  MEDICAL_SCHEMA,
-  MEMBER_SCHEMA,
-  STATISTICS_SCHEMA,
-} from "@/src/utils/schemas/members";
 import { dbHandler } from "@/src/firebase/db";
 import StatsSection from "@/src/components/profile/StatsSection";
 import { redirect } from "next/navigation";
 import fetchUserDataServer from "@/src/utils/fetchUserDataServer";
+import { getFriendsList } from "@/src/utils/profile/getFriendsList";
+import { getActivitiesList } from "@/src/utils/profile/getActivitiesList";
 
 const OPTIONS = ["activity", "stats", "statuses"];
 
@@ -29,50 +25,21 @@ export default async function Profile({
         redirect(`/profile?${new URLSearchParams({ option: "activity" })}`);
     }
 
-    const friendsList = data.friends;
-
-    var friendsData = [] as FriendDisplay[];
-
-    friendsList.forEach(async (id) => {
-      const res = await dbHandler.get({ col_name: "MEMBER", id: id });
-      if (res.status) {
-        var data = res.data as MEMBER_SCHEMA;
-        friendsData.push({
-          displayName: data.displayName,
-          username: data.username,
-        });
-      }
-    });
+    // manage data fetching
+    const memberID = data.memberID;
+    const friendsData = await getFriendsList({ memberID });
+    const activitiesData = await getActivitiesList({ memberID });
 
     return (
       <div className="grid sm:grid-cols-3 gap-4">
-        <ProfileSection
-          className="sm:col-span-1"
-          data={data}
-          friendsList={friendsData}
-        />
+        <ProfileSection className="sm:col-span-1" friendsData={friendsData} />
         <StatsSection
           className="sm:col-span-2"
-          data={data}
-          activities={data.activities}
-          medicalStatus={data.medicalStatus}
-          statistics={data.statistics}
+          activities={activitiesData}
+          // medicalStatus={data.medicalStatus}
+          // statistics={data.statistics}
         />
       </div>
     );
   }
 }
-
-export type FriendDisplay = {
-  displayName: string;
-  username: string;
-};
-
-export type DataType = {
-  data: MEMBER_SCHEMA;
-  className?: string;
-  friendsList?: FriendDisplay[];
-  activities?: ACTIVITY_SCHEMA[];
-  statistics?: STATISTICS_SCHEMA[];
-  medicalStatus?: MEDICAL_SCHEMA[];
-};
