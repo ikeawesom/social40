@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import useFetchUserDataServer from "@/src/utils/useFetchUserDataServer";
 import { getFriendsList } from "@/src/utils/profile/getFriendsList";
 import { getActivitiesList } from "@/src/utils/profile/getActivitiesList";
+import LoadingScreen from "@/src/components/LoadingScreen";
 
 const OPTIONS = ["activity", "stats", "statuses"];
 
@@ -42,4 +43,6 @@ export default async function Profile({
       </div>
     );
   }
+
+  return <LoadingScreen />;
 }
