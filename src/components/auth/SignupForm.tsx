@@ -1,6 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import PrimaryButton from "../utils/PrimaryButton";
+import { dbHandler } from "@/src/firebase/db";
+import { initWaitListee } from "@/src/utils/schemas/waitlist";
+import getCurrentDate from "@/src/utils/getCurrentDate";
 
 type userDetailsType = {
   admin: string;
@@ -20,6 +23,11 @@ export default function SignupForm({ setStatus }: statusType) {
     name: "",
   });
 
+  const username = `${userDetails.admin}-${userDetails.name
+    .split(" ")
+    .join("-")
+    .toLowerCase()}`;
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
   };
@@ -28,7 +36,32 @@ export default function SignupForm({ setStatus }: statusType) {
     setLoading(true);
     e.preventDefault();
 
-    setStatus("success-signup");
+    try {
+      const res = await dbHandler.get({
+        col_name: "GROUPS",
+        id: userDetails.admin,
+      });
+
+      if (!res.data) throw new Error("invalid-group");
+
+      const to_add = initWaitListee({
+        memberID: username,
+        groupID: userDetails.admin,
+        displayName: userDetails.name,
+        password: userDetails.password,
+        dateRequested: getCurrentDate(),
+      });
+
+      await dbHandler.add({
+        col_name: `/GROUPS/${userDetails.admin}/WAITLIST`,
+        id: username,
+        to_add: to_add,
+      });
+      setStatus("success-signup");
+    } catch (e: any) {
+      setStatus(e.message);
+    }
+    setLoading(false);
   };
 
   return (
