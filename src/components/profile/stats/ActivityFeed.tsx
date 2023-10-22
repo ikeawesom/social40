@@ -1,40 +1,38 @@
 import fetchUserDataClient from "@/src/utils/fetchUserDataClient";
-import { ACTIVITY_SCHEMA } from "@/src/utils/schemas/members";
+import getCurrentDate from "@/src/utils/getCurrentDate";
+import { ACTIVITY_SCHEMA } from "@/src/utils/schemas/activities";
 import React from "react";
-
-type ActivityDisplay = {
-  owner: string;
-  title: string;
-  desc: string;
-  type: string;
-  likes: string[];
-  dateCreated: string;
-};
 
 export default function ActivityFeed({
   activities,
 }: {
-  activities: ACTIVITY_SCHEMA[];
+  activities: { [activityID: string]: ACTIVITY_SCHEMA };
 }) {
-  const displayName = fetchUserDataClient()?.displayName;
+  const empty = Object.keys(activities).length === 0;
 
-  if (activities.length !== 0)
+  if (!empty)
     return (
-      <div className="grid grid-cols-1 gap-y-4">
-        {activities.map((item) => (
+      <div className="col-span-1 w-full">
+        {Object.keys(activities).map((activityID: string) => (
           <div
-            key={item.uid}
-            className="col-span-1 p-2 border-t-2 border-b-2 border-custom-light-text flex flex-col items-start justify-center"
+            key={activityID}
+            className="p-2 border-b-2 border-custom-light-text flex flex-col items-start justify-center gap-y-2"
           >
-            <div className="flex flex-col gap-1 items-start justify-center">
-              <h1>{displayName}</h1>
-              <p>{item.dateCreated}</p>
+            <h1 className="text-custom-dark-text text-sm">
+              {activities[activityID].createdByName}
+            </h1>
+            <div className="flex flex-col items-start justify-center">
+              <h1 className="text-lg font-semibold text-custom-dark-text">
+                {activities[activityID].activityTitle}
+              </h1>
+              <h4>{activities[activityID].activityDesc}</h4>
             </div>
-            <div className="flex flex-col gap-2 items-start justify-center">
-              <h1>{item.title}</h1>
-              <h4>{item.desc}</h4>
+            <div className="flex flex-row items-center justify-between w-full">
+              <p className="text-xs text-custom-grey-text">
+                {activities[activityID].createdOn}
+              </p>
+              <p>{activities[activityID].likes}</p>
             </div>
-            <p>{item.likes.length} likes</p>
           </div>
         ))}
       </div>
