@@ -14,8 +14,8 @@ class AuthClass {
 
   async signIn(auth: Auth, email: string, password: string) {
     try {
-      const res = await signInWithEmailAndPassword(auth, email, password);
-      const user = res.user as any as MEMBER_SCHEMA;
+      await signInWithEmailAndPassword(auth, email, password);
+      const user = email.split("@")[0];
 
       return handleResponses({ data: user });
     } catch (error: any) {
@@ -25,8 +25,8 @@ class AuthClass {
 
   async signUp(auth: Auth, email: string, password: string) {
     try {
-      const res = await createUserWithEmailAndPassword(auth, email, password);
-      const user = res.user as any as MEMBER_SCHEMA;
+      await createUserWithEmailAndPassword(auth, email, password);
+      const user = email.split("@")[0];
 
       return handleResponses({ data: user });
     } catch (error: any) {
