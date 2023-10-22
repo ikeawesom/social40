@@ -18,7 +18,11 @@ export default function AuthPage({
       toast.success(
         "Your account registration is pending. Please contact you commander to approve your registration."
       );
-    else if (status !== "" && status !== "success-signin") toast.error(status);
+    else if (status === "invalid-group")
+      toast.error(
+        "You have entered an invalid group. Please check for typos or contact your commander."
+      );
+    else if (status !== "" && status !== "success-signin") toast.error(status); // error message
   }, [status]);
 
   return (
