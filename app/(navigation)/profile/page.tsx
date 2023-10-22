@@ -28,21 +28,24 @@ export default async function Profile({
 
     // manage data fetching
     const memberID = data.memberID;
-    const friendsData = await getFriendsList({ memberID });
-    const activitiesData = await getActivitiesList({ memberID });
 
-    return (
-      <div className="grid sm:grid-cols-3 gap-4">
-        <ProfileSection className="sm:col-span-1" friendsData={friendsData} />
-        <StatsSection
-          className="sm:col-span-2"
-          activities={activitiesData}
-          // medicalStatus={data.medicalStatus}
-          // statistics={data.statistics}
-        />
-      </div>
-    );
+    const [friendsData, activitiesData] = await Promise.all([
+      getFriendsList({ memberID }),
+      getActivitiesList({ memberID }),
+    ]);
+
+    if (friendsData && activitiesData)
+      return (
+        <div className="grid sm:grid-cols-3 gap-4">
+          <ProfileSection className="sm:col-span-1" friendsData={friendsData} />
+          <StatsSection
+            className="sm:col-span-2"
+            activities={activitiesData}
+            // medicalStatus={data.medicalStatus}
+            // statistics={data.statistics}
+          />
+        </div>
+      );
+    return <LoadingScreen />;
   }
-
-  return <LoadingScreen />;
 }
