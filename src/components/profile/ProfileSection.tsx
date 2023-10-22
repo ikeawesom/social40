@@ -26,7 +26,7 @@ export default function ProfileSection({
     return (
       <DefaultCard
         className={twMerge(
-          "flex flex-col gap-y-3 items-center justify-center relative",
+          "flex flex-col gap-y-3 items-center justify-start relative",
           className
         )}
       >
