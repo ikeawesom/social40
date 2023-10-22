@@ -7,6 +7,7 @@ export type ACTIVITY_SCHEMA = {
   activityType: string; // type of activity (e.g. Gym, Run, etc.)
   likes: number;
   createdBy: string; // memberID of owner
+  createdByName?: string;
   createdOn: string; // date formate
 };
 
