@@ -1,10 +1,10 @@
 import { authHandler } from "@/src/firebase/auth";
 import handleResponses from "../handleResponses";
-import { MEMBER_SCHEMA } from "../schemas/member";
+import { MEMBER_SCHEMA } from "../schemas/members";
 import { getAuth } from "firebase/auth";
 import { FIREBASE_APP, SECONDARY_FIREBASE_APP } from "@/src/firebase/config";
 import { dbHandler } from "@/src/firebase/db";
-import getDate from "../getDate";
+import getDate from "../getCurrentDate";
 
 class UserClass {
   constructor() {}

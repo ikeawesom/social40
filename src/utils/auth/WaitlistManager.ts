@@ -1,6 +1,6 @@
 import { dbHandler } from "../../firebase/db";
 import handleResponses from "../handleResponses";
-import { GROUP_SCHEMA, WAITLIST_SCHEMA } from "../schemas/group";
+import { GROUP_SCHEMA, WAITLIST_SCHEMA } from "../schemas/groups";
 import { userHandler } from "./UserManager";
 
 class WaitListClass {

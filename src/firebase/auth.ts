@@ -7,7 +7,7 @@ import {
   signOut,
 } from "firebase/auth";
 import handleResponses from "../utils/handleResponses";
-import { MEMBER_SCHEMA } from "../utils/schemas/member";
+import { MEMBER_SCHEMA } from "../utils/schemas/members";
 
 class AuthClass {
   constructor() {}

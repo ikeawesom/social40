@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import DefaultCard from "../DefaultCard";
-import { MEMBER_SCHEMA } from "@/src/utils/schemas/member";
+import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 
 type DashboardProps = {
   data: MEMBER_SCHEMA;

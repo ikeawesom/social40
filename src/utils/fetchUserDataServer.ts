@@ -1,5 +1,5 @@
 import { getCookies } from "next-client-cookies/server";
-import { MEMBER_SCHEMA } from "./schemas/member";
+import { MEMBER_SCHEMA } from "./schemas/members";
 
 export default function fetchUserDataServer() {
   const cookieStore = getCookies();

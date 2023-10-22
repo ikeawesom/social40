@@ -1,5 +1,5 @@
 import { dbHandler } from "@/src/firebase/db";
-import { GROUP_SCHEMA } from "../schemas/group";
+import { GROUP_SCHEMA } from "../schemas/groups";
 import handleResponses from "../handleResponses";
 
 class GroupClass {

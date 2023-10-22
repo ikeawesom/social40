@@ -1,5 +1,5 @@
 import fetchUserDataClient from "@/src/utils/fetchUserDataClient";
-import { ACTIVITY_SCHEMA } from "@/src/utils/schemas/member";
+import { ACTIVITY_SCHEMA } from "@/src/utils/schemas/members";
 import React from "react";
 
 type ActivityDisplay = {

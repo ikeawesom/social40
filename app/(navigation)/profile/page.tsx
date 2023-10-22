@@ -5,7 +5,7 @@ import {
   MEDICAL_SCHEMA,
   MEMBER_SCHEMA,
   STATISTICS_SCHEMA,
-} from "@/src/utils/schemas/member";
+} from "@/src/utils/schemas/members";
 import { dbHandler } from "@/src/firebase/db";
 import StatsSection from "@/src/components/profile/StatsSection";
 import { redirect } from "next/navigation";
