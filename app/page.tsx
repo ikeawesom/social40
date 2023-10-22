@@ -1,9 +1,9 @@
 import DashboardScreen from "@/src/components/dashboard/DashboardScreen";
 import Navbar from "@/src/components/navigation/Navbar";
-import fetchUserDataServer from "@/src/utils/fetchUserDataServer";
+import useFetchUserDataServer from "@/src/utils/useFetchUserDataServer";
 
 export default async function Home() {
-  const data = fetchUserDataServer();
+  const data = useFetchUserDataServer();
   if (data)
     return (
       <>

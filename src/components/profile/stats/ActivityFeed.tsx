@@ -1,5 +1,3 @@
-import fetchUserDataClient from "@/src/utils/fetchUserDataClient";
-import getCurrentDate from "@/src/utils/getCurrentDate";
 import { ACTIVITY_SCHEMA } from "@/src/utils/schemas/activities";
 import React from "react";
 

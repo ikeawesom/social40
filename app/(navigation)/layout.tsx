@@ -1,8 +1,8 @@
 import Navbar from "@/src/components/navigation/Navbar";
-import fetchUserDataServer from "@/src/utils/fetchUserDataServer";
+import useFetchUserDataServer from "@/src/utils/useFetchUserDataServer";
 
 export default function NavLayout({ children }: { children: React.ReactNode }) {
-  const data = fetchUserDataServer();
+  const data = useFetchUserDataServer();
   if (data)
     return (
       <>

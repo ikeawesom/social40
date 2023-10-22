@@ -9,7 +9,7 @@ import FriendsList from "./FriendsList";
 import SignoutButton from "../utils/SignoutButton";
 import { FRIENDS_SCHEMA, MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { getCookies } from "next-client-cookies/server";
-import fetchUserDataServer from "@/src/utils/fetchUserDataServer";
+import useFetchUserDataServer from "@/src/utils/useFetchUserDataServer";
 
 export type FriendsListType = {
   friendsData: { [key: string]: MEMBER_SCHEMA };
@@ -20,7 +20,7 @@ export default function ProfileSection({
   friendsData,
   className,
 }: FriendsListType) {
-  const memberDetails = fetchUserDataServer();
+  const memberDetails = useFetchUserDataServer();
 
   if (memberDetails)
     return (

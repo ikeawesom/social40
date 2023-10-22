@@ -3,7 +3,7 @@ import ProfileSection from "@/src/components/profile/ProfileSection";
 import { dbHandler } from "@/src/firebase/db";
 import StatsSection from "@/src/components/profile/StatsSection";
 import { redirect } from "next/navigation";
-import fetchUserDataServer from "@/src/utils/fetchUserDataServer";
+import useFetchUserDataServer from "@/src/utils/useFetchUserDataServer";
 import { getFriendsList } from "@/src/utils/profile/getFriendsList";
 import { getActivitiesList } from "@/src/utils/profile/getActivitiesList";
 
@@ -15,7 +15,7 @@ export default async function Profile({
   searchParams: { [key: string]: string };
 }) {
   const option = searchParams["option"];
-  const data = fetchUserDataServer();
+  const data = useFetchUserDataServer();
 
   if (data) {
     if (!option)

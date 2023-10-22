@@ -1,12 +1,9 @@
-"use client";
-
-import { useCookies } from "next-client-cookies";
+import { getCookies } from "next-client-cookies/server";
 import { MEMBER_SCHEMA } from "./schemas/members";
 
-export default function fetchUserDataClient() {
-  const cookieStore = useCookies();
+export default function useFetchUserDataServer() {
+  const cookieStore = getCookies();
   const dataString = cookieStore.get("memberDetails");
   if (dataString) return JSON.parse(dataString) as any as MEMBER_SCHEMA;
-
   return null;
 }
