@@ -1,7 +1,7 @@
 import { dbHandler } from "@/src/firebase/db";
 import { FRIENDS_SCHEMA, MEMBER_SCHEMA } from "../schemas/members";
 
-type MemberIDType = {
+export type MemberIDType = {
   memberID: string;
 };
 
@@ -13,11 +13,11 @@ export async function getFriendsList({ memberID }: MemberIDType) {
     path: `MEMBERS/${memberID}/FRIENDS`,
   });
 
-  if (friends.status) {
-    Object.keys(friends.data).forEach((key: string) => {
-      friendList[key] = friends.data[key];
-    });
-  }
+  if (!friends.status) return friendsData;
+
+  Object.keys(friends.data).forEach((key: string) => {
+    friendList[key] = friends.data[key];
+  });
 
   const friendsID = Object.keys(friendList);
 
