@@ -9,6 +9,7 @@ import {
   limit,
   query,
   getDocs,
+  where,
 } from "firebase/firestore";
 import handleResponses from "../utils/handleResponses";
 
@@ -54,6 +55,28 @@ class DbClass {
     if (docSnap.exists()) return handleResponses({ data: docSnap.data() });
 
     return handleResponses({ error: "Data not found", status: false });
+  }
+
+  async getSpecific({ path, field, criteria, value }) {
+    try {
+      const colRef = collection(FIREBASE_DB, path);
+      const q = query(colRef, where(field, criteria, value));
+
+      const qSnap = await getDocs(q);
+
+      if (qSnap.docs.length === 0)
+        throw new Error(
+          `No document matching your criteria of "${field} ${criteria} ${value}".`
+        );
+      var docList = {};
+
+      qSnap.forEach((doc) => {
+        docList[doc.id] = doc.data();
+      });
+      return handleResponses({ data: docList });
+    } catch (err) {
+      return handleResponses({ error: err.message, status: false });
+    }
   }
 
   async colExists({ path }) {
