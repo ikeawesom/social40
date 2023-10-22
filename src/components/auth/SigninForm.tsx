@@ -5,6 +5,7 @@ import { authHandler } from "@/src/firebase/auth";
 import PrimaryButton from "../utils/PrimaryButton";
 import { getAuth } from "firebase/auth";
 import { FIREBASE_APP } from "@/src/firebase/config";
+import { useCookies } from "next-client-cookies";
 
 type userDetailsType = {
   email: string;
@@ -16,13 +17,14 @@ type statusType = {
 };
 
 export default function SigninForm({ setStatus }: statusType) {
+  const cookieStore = useCookies();
   const [loading, setLoading] = useState(false);
   const [userDetails, setUserDetails] = useState<userDetailsType>({
     email: "",
     password: "",
   });
 
-  const emailMerged = `${userDetails.email}@digital40sar.com`;
+  const emailMerged = `${userDetails.email.toLowerCase()}@digital40sar.com`;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
@@ -40,6 +42,8 @@ export default function SigninForm({ setStatus }: statusType) {
       );
 
       if (!res.status) throw new Error(res.error);
+
+      cookieStore.set("memberID", res.data);
       setStatus("success-signin");
     } catch (e: any) {
       setStatus(e.message as string);

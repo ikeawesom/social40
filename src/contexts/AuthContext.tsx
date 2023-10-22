@@ -7,6 +7,7 @@ import { useCookies } from "next-client-cookies";
 import { getAuth } from "firebase/auth";
 import { FIREBASE_APP } from "../firebase/config";
 import { dbHandler } from "../firebase/db";
+import { toast } from "sonner";
 
 type AuthContextType = {
   user: User | null;
@@ -24,27 +25,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const auth = getAuth(FIREBASE_APP);
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const uid = user.uid;
-        const res = await dbHandler.get({ col_name: "MEMBERS", id: uid });
-        if (res.status) cookieStore.set("USER_DATA", JSON.stringify(res.data));
+        try {
+          const memberID = cookieStore.get("memberID");
+          const res = await dbHandler.get({
+            col_name: "MEMBERS",
+            id: memberID,
+          });
 
+          if (!res.data) throw new Error(res.error);
+
+          cookieStore.set("memberDetails", JSON.stringify(res.data));
+
+          // redirect
+          const pathname = window.location.pathname;
+          if (pathname.includes("auth")) router.replace("/");
+        } catch (err: any) {
+          toast.error(
+            "Hmm, something went wrong. Please try again later or contact the administrator."
+          );
+        }
         setUser(user);
-
-        // redirect
-        const pathname = window.location.pathname;
-        if (pathname.includes("auth")) router.replace("/");
       } else {
         setUser(null);
 
-        const cur_user = cookieStore.get("USER_DATA");
+        const cur_user = cookieStore.get("memberDetails");
 
         const route = `/auth?${new URLSearchParams({
           new_user: cur_user ? "false" : "true",
         })}`;
 
-        router.push(route);
+        cookieStore.remove("memberDetails");
 
-        cookieStore.remove("USER_DATA");
+        router.push(route);
       }
     });
   }, [user]);
