@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           // redirect
           const pathname = window.location.pathname;
-          if (pathname.includes("auth")) router.replace("/");
+          if (pathname.includes("auth")) router.push("/");
         } catch (err: any) {
           toast.error(
             "Hmm, something went wrong. Please try again later or contact the administrator."
