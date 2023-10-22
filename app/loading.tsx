@@ -1,10 +1,6 @@
 import React from "react";
-import LoadingIcon from "@/src/components/utils/LoadingIcon";
+import LoadingScreen from "@/src/components/LoadingScreen";
 
 export default function loading() {
-  return (
-    <div className="h-screen grid place-items-center">
-      <LoadingIcon />
-    </div>
-  );
+  return <LoadingScreen />;
 }
