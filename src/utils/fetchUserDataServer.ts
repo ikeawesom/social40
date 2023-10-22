@@ -3,7 +3,7 @@ import { MEMBER_SCHEMA } from "./schemas/members";
 
 export default function fetchUserDataServer() {
   const cookieStore = getCookies();
-  const dataString = cookieStore.get("USER_DATA");
+  const dataString = cookieStore.get("memberDetails");
   if (dataString) return JSON.parse(dataString) as any as MEMBER_SCHEMA;
   return null;
 }
