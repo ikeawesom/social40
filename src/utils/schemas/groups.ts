@@ -22,6 +22,7 @@ export type GROUP_MEMBERS_SCHEMA = {
   [memberID: string]: {
     dateJoined: string; // date member joined group
     memberID: string; // memberID of member joined
+    role: string; // role of member
   };
 };
 
