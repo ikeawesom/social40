@@ -28,6 +28,16 @@ export type FRIENDS_SCHEMA = {
   friendID: string; // memberID
 };
 
+export type MEMBER_CREATED_GROUPS_SCHEMA = {
+  groupID: string;
+  createdOn: string; // date format
+};
+
+export type MEMBER_JOINED_GROUPS_SCHEMA = {
+  groupID: string;
+  dateJoined: string; // date format
+};
+
 export function initMemberObject({
   memberID,
   displayName,
