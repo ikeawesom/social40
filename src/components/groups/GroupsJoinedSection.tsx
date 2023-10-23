@@ -3,6 +3,7 @@ import HRow from "../utils/HRow";
 import Link from "next/link";
 import { joinedGroupsType } from "@/src/utils/groups/getJoinedGroups";
 import SearchGroups from "./SearchGroups";
+import GroupItem from "./GroupItem";
 
 export default function GroupsJoinedSection({
   joinedGroups,
@@ -18,16 +19,11 @@ export default function GroupsJoinedSection({
       <SearchGroups />
       {!empty ? (
         Object.keys(joinedGroups).map((groupID: string) => (
-          <Link
-            href={`/groups/${groupID}`}
-            className="flex flex-col items-start justify-center w-full bg-white rounded-lg py-1 px-2"
+          <GroupItem
             key={groupID}
-          >
-            <h1 className="font-bold">{joinedGroups[groupID]["groupID"]}</h1>
-            <p className="text-xs text-custom-grey-text">
-              Joined on: {joinedGroups[groupID]["dateJoined"]}
-            </p>
-          </Link>
+            title={groupID}
+            subtitle={`Joined on: ${joinedGroups[groupID]["dateJoined"]}`}
+          />
         ))
       ) : (
         <>
