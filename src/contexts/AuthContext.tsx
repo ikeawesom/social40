@@ -7,11 +7,11 @@ import { useCookies } from "next-client-cookies";
 import { getAuth } from "firebase/auth";
 import { FIREBASE_APP } from "../firebase/config";
 import { dbHandler } from "../firebase/db";
-import { toast } from "sonner";
+import { MEMBER_SCHEMA } from "../utils/schemas/members";
 
 type AuthContextType = {
-  user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  user: MEMBER_SCHEMA | null;
+  setUser: React.Dispatch<React.SetStateAction<MEMBER_SCHEMA | null>>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -19,15 +19,14 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const cookieStore = useCookies();
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<MEMBER_SCHEMA | null>(null);
 
   useEffect(() => {
     const auth = getAuth(FIREBASE_APP);
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
+    onAuthStateChanged(auth, async (userAuth) => {
+      if (userAuth && user) {
         const pathname = window.location.pathname;
         if (pathname.includes("auth")) router.push("/");
-        setUser(user);
       } else {
         setUser(null);
 
@@ -36,8 +35,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const route = `/auth?${new URLSearchParams({
           new_user: cur_user ? "false" : "true",
         })}`;
-
-        cookieStore.remove("memberDetails");
 
         router.push(route, { scroll: false });
       }

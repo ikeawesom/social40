@@ -5,8 +5,8 @@ import { authHandler } from "@/src/firebase/auth";
 import PrimaryButton from "../utils/PrimaryButton";
 import { getAuth } from "firebase/auth";
 import { FIREBASE_APP } from "@/src/firebase/config";
-import { useCookies } from "next-client-cookies";
 import { dbHandler } from "@/src/firebase/db";
+import { useAuth } from "@/src/contexts/AuthContext";
 
 type userDetailsType = {
   email: string;
@@ -18,7 +18,8 @@ type statusType = {
 };
 
 export default function SigninForm({ setStatus }: statusType) {
-  const cookieStore = useCookies();
+  const { setUser } = useAuth();
+
   const [loading, setLoading] = useState(false);
   const [userDetails, setUserDetails] = useState<userDetailsType>({
     email: "",
@@ -43,20 +44,13 @@ export default function SigninForm({ setStatus }: statusType) {
       );
 
       if (!res.status) throw new Error(res.error);
-
       const memberID = res.data;
 
-      const resA = await dbHandler.get({
-        col_name: "MEMBERS",
-        id: memberID,
-      });
+      const resA = await dbHandler.get({ col_name: "MEMBERS", id: memberID });
 
       if (!resA.status) throw new Error(resA.error);
 
-      const dataString = JSON.stringify(resA.data);
-      cookieStore.set("memberDetails", dataString);
-
-      setStatus("success-signin");
+      setUser(resA.data);
     } catch (e: any) {
       setStatus(e.message as string);
     } finally {
