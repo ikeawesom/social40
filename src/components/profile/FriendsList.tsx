@@ -54,5 +54,5 @@ export default function FriendsList() {
       );
     }
   }
-  return <LoadingIcon />;
+  return <LoadingIcon width={30} height={30} />;
 }

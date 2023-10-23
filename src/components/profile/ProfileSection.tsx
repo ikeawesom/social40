@@ -11,15 +11,13 @@ import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import FriendsList from "./FriendsList";
 import LoadingIcon from "../utils/LoadingIcon";
 import { useProfile } from "@/src/hooks/profile/useProfile";
-import LoadingScreen from "../screens/LoadingScreen";
 import { toast } from "sonner";
-import { useMemberID } from "@/src/hooks/useMemberID";
+import LoadingScreenSmall from "../screens/LoadingScreenSmall";
 
 export type FriendsListType = { [key: string]: MEMBER_SCHEMA };
 
 export default function ProfileSection({ className }: { className: string }) {
-  const { memberID } = useMemberID();
-  const { memberDetails } = useProfile(memberID);
+  const { memberDetails } = useProfile();
 
   if (memberDetails) {
     return (
@@ -65,5 +63,5 @@ export default function ProfileSection({ className }: { className: string }) {
     );
   }
 
-  return <LoadingScreen />;
+  return <LoadingScreenSmall />;
 }
