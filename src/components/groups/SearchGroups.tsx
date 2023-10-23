@@ -4,18 +4,20 @@ import { toast } from "sonner";
 import PrimaryButton from "../utils/PrimaryButton";
 import Image from "next/image";
 import { dbHandler } from "@/src/firebase/db";
-import useFetchUserDataClient from "@/src/utils/useFetchUserDataClient";
 import handleSearchGroup from "@/src/utils/groups/handleSearchGroup";
+import { useProfile } from "@/src/hooks/profile/useProfile";
 
 export default function SearchGroups() {
   const [loading, setLoading] = useState(false);
   const [groupID, setGroupID] = useState("");
-  const data = useFetchUserDataClient();
+  const { memberDetails } = useProfile();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
+      if (!memberDetails)
+        throw new Error("An error has occurred. Please try again later.");
       const res = await dbHandler.get({
         col_name: "GROUPS",
         id: groupID,
@@ -26,15 +28,13 @@ export default function SearchGroups() {
           "You have entered an invalid group ID. Please try again."
         );
 
-      if (data) {
-        const res = await handleSearchGroup({ data, groupID });
-        if (!res.status) throw new Error(res.error);
-        toast.success(
-          `You have requested to join ${groupID}. Please wait for a group admin to accept your request.`
-        );
-      }
-    } catch (e: any) {
-      toast.error(e.message);
+      const resA = await handleSearchGroup({ data: memberDetails, groupID });
+      if (resA.error) throw new Error(resA.error);
+      toast.success(
+        `You have requested to join ${groupID}. Please wait for a group admin to accept your request.`
+      );
+    } catch (error: any) {
+      toast.error(error.message);
     }
     setLoading(false);
   };
