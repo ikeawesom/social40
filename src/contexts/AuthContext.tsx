@@ -1,48 +1,42 @@
 "use client";
-import { User, onAuthStateChanged } from "firebase/auth/cordova";
+import { onAuthStateChanged } from "firebase/auth/cordova";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ClientCookiesProvider } from "./CookiesProvider";
-import { useCookies } from "next-client-cookies";
 import { getAuth } from "firebase/auth";
 import { FIREBASE_APP } from "../firebase/config";
-import { dbHandler } from "../firebase/db";
-import { MEMBER_SCHEMA } from "../utils/schemas/members";
 
 type AuthContextType = {
-  user: MEMBER_SCHEMA | null;
-  setUser: React.Dispatch<React.SetStateAction<MEMBER_SCHEMA | null>>;
+  memberID: string | null;
+  setMember: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const cookieStore = useCookies();
   const router = useRouter();
-  const [user, setUser] = useState<MEMBER_SCHEMA | null>(null);
+  const [memberID, setMember] = useState<string | null>(null);
 
   useEffect(() => {
     const auth = getAuth(FIREBASE_APP);
     onAuthStateChanged(auth, async (userAuth) => {
-      if (userAuth && user) {
+      if (userAuth) {
         const pathname = window.location.pathname;
         if (pathname.includes("auth")) router.push("/");
       } else {
-        setUser(null);
-
-        const cur_user = cookieStore.get("memberDetails");
+        const cur_member = memberID;
 
         const route = `/auth?${new URLSearchParams({
-          new_user: cur_user ? "false" : "true",
+          new_user: cur_member ? "false" : "true",
         })}`;
 
+        setMember(null);
         router.push(route, { scroll: false });
       }
     });
-  }, [user]);
+  }, [setMember]);
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ memberID, setMember }}>
       {children}
     </AuthContext.Provider>
   );
