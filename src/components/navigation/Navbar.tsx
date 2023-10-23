@@ -12,12 +12,6 @@ const NAV_LINKS = [
     link: "/",
   },
   {
-    title: "Search",
-    icon: "icon_search.svg",
-    active: "icon_search_active.svg",
-    link: "/search",
-  },
-  {
     title: "Groups",
     icon: "icon_group.svg",
     active: "icon_group_active.svg",
@@ -37,7 +31,7 @@ export default function Navbar() {
 
   const handleNav = (path: string) => {
     setPathname(path);
-    router.push(path);
+    router.push(path, { scroll: false });
   };
 
   return (
