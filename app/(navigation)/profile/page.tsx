@@ -38,12 +38,13 @@ export default async function Profile({
       return (
         <div className="grid sm:grid-cols-3 gap-4">
           <ProfileSection className="sm:col-span-1" friendsData={friendsData} />
-          <StatsSection
+          {/* TO DO */}
+          {/* <StatsSection
             className="sm:col-span-2"
             activities={activitiesData}
             // medicalStatus={data.medicalStatus}
             // statistics={data.statistics}
-          />
+          /> */}
         </div>
       );
     return <LoadingScreen />;
