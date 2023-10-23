@@ -17,43 +17,36 @@ export default async function Profile({
   searchParams: { [key: string]: string };
 }) {
   const option = searchParams["option"];
-  const data = useFetchUserDataServer();
 
-  if (data) {
-    if (!option)
+  if (!option)
+    redirect(`/profile?${new URLSearchParams({ option: "activity" })}`);
+  else {
+    if (!OPTIONS.includes(option))
       redirect(`/profile?${new URLSearchParams({ option: "activity" })}`);
-    else {
-      if (!OPTIONS.includes(option))
-        redirect(`/profile?${new URLSearchParams({ option: "activity" })}`);
-    }
+  }
 
-    // manage data fetching
-    const memberID = data.memberID;
+  // manage data fetching
+  // const memberID = data.memberID;
 
-    const [friendsData, activitiesData] = await Promise.all([
-      getFriendsList({ memberID }),
-      getActivitiesList({ memberID }),
-    ]);
+  // const [friendsData, activitiesData] = await Promise.all([
+  // getFriendsList({ memberID }),
+  //   getActivitiesList({ memberID }),
+  // ]);
 
-    if (friendsData && activitiesData)
-      return (
-        <>
-          <HeaderBar text="My Profile" />
-          <div className="grid sm:grid-cols-3 gap-4">
-            <ProfileSection
-              className="sm:col-span-1"
-              friendsData={friendsData}
-            />
-            {/* TO DO */}
-            {/* <StatsSection
+  // if (friendsData && activitiesData)
+  return (
+    <>
+      <HeaderBar text="My Profile" />
+      <div className="grid sm:grid-cols-3 gap-4">
+        <ProfileSection className="sm:col-span-1" />
+        {/* TO DO */}
+        {/* <StatsSection
             className="sm:col-span-2"
             activities={activitiesData}
             // medicalStatus={data.medicalStatus}
             // statistics={data.statistics}
           /> */}
-          </div>
-        </>
-      );
-    return <LoadingScreen />;
-  }
+      </div>
+    </>
+  );
 }
