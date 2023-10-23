@@ -1,8 +1,10 @@
 import { dbHandler } from "@/src/firebase/db";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { useEffect, useState } from "react";
+import { useMemberID } from "../useMemberID";
 
-export function useProfile(memberID: string) {
+export function useProfile() {
+  const { memberID } = useMemberID();
   const [memberDetails, setMemberDetails] = useState<MEMBER_SCHEMA | null>();
 
   useEffect(() => {
@@ -11,7 +13,7 @@ export function useProfile(memberID: string) {
       if (res.status) setMemberDetails(res.data);
       else setMemberDetails(null);
     };
-    if (memberID) handleFetch(memberID);
+    if (memberID !== "") handleFetch(memberID);
   }, [memberID]);
 
   return { memberDetails, setMemberDetails };
