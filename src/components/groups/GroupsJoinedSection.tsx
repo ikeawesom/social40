@@ -14,7 +14,7 @@ export default function GroupsJoinedSection({
 
   return (
     <div className="flex flex-col gap-y-1 items-start justify-start w-full">
-      <h1 className="font-bold text-custom-dark-text">My Groups</h1>
+      <h1 className="font-bold text-custom-dark-text">Joined Groups</h1>
       <HRow className="bg-custom-grey-text mb-1 mt-0" />
       <SearchGroups />
       {!empty ? (
