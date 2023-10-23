@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import useFetchUserDataServer from "@/src/utils/useFetchUserDataServer";
 import { getFriendsList } from "@/src/utils/profile/getFriendsList";
 import { getActivitiesList } from "@/src/utils/profile/getActivitiesList";
-import LoadingScreen from "@/src/components/LoadingScreen";
+import LoadingScreen from "@/src/components/screens/LoadingScreen";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 
 const OPTIONS = ["activity", "stats", "statuses"];

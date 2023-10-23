@@ -1,4 +1,4 @@
-import LoadingScreen from "@/src/components/LoadingScreen";
+import LoadingScreen from "@/src/components/screens/LoadingScreen";
 import Navbar from "@/src/components/navigation/Navbar";
 import useFetchUserDataServer from "@/src/utils/useFetchUserDataServer";
 

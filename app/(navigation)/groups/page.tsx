@@ -1,4 +1,4 @@
-import LoadingScreen from "@/src/components/LoadingScreen";
+import LoadingScreen from "@/src/components/screens/LoadingScreen";
 import GroupsCreatedSection from "@/src/components/groups/GroupsCreatedSection";
 import GroupsJoinedSection from "@/src/components/groups/GroupsJoinedSection";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
