@@ -25,23 +25,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const auth = getAuth(FIREBASE_APP);
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        try {
-          const memberID = cookieStore.get("memberID");
-          const res = await dbHandler.get({
-            col_name: "MEMBERS",
-            id: memberID,
-          });
-
-          if (!res.data) throw new Error(res.error);
-
-          cookieStore.set("memberDetails", JSON.stringify(res.data));
-
-          // redirect
-          const pathname = window.location.pathname;
-          if (pathname.includes("auth")) router.push("/");
-        } catch (err: any) {
-          router.refresh();
-        }
+        const pathname = window.location.pathname;
+        if (pathname.includes("auth")) router.push("/");
         setUser(user);
       } else {
         setUser(null);
