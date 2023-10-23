@@ -3,18 +3,13 @@ import { twMerge } from "tailwind-merge";
 import SecondaryButton from "../utils/SecondaryButton";
 import PrimaryButton from "../utils/PrimaryButton";
 import generateID from "@/src/utils/getRandomID";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import Modal from "../utils/Modal";
-import { useCookies } from "next-client-cookies";
 
 type FormType = {
   className?: string;
 };
 
 export default function CreateGroupForm({ className }: FormType) {
-  const cookieStore = useCookies();
-
   const [groupDetails, setGroupDetails] = useState({
     name: "",
     desc: "",
