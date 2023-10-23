@@ -1,7 +1,12 @@
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import NotFoundScreen from "@/src/components/screens/NotFoundScreen";
 import { dbHandler } from "@/src/firebase/db";
+import { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Groups",
+};
 
 export default async function GroupPage({
   params,

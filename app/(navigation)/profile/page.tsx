@@ -2,6 +2,11 @@ import React from "react";
 import ProfileSection from "@/src/components/profile/ProfileSection";
 import { redirect } from "next/navigation";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Profile",
+};
 
 const OPTIONS = ["activity", "stats", "statuses"];
 
