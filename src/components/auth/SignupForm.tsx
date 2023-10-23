@@ -44,6 +44,16 @@ export default function SignupForm({ setStatus }: statusType) {
 
       if (!res.data) throw new Error("invalid-group");
 
+      const resA = await dbHandler.get({
+        col_name: `GROUPS/${userDetails.admin}/WAITLIST`,
+        id: username,
+      });
+
+      if (resA.status)
+        throw new Error(
+          `Your request to ${userDetails.admin} is already pending. Please update your commander.`
+        );
+
       const to_add = initWaitListee({
         memberID: username,
         groupID: userDetails.admin,
