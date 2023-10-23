@@ -1,13 +1,18 @@
 import React from "react";
 import Image from "next/image";
 
-export default function LoadingIcon() {
+type LoadingType = {
+  width?: number;
+  height?: number;
+};
+
+export default function LoadingIcon({ height, width }: LoadingType) {
   return (
     <div className="animate-spin">
       <Image
         src="/icons/icon_spinner.svg"
-        width={100}
-        height={100}
+        width={height ? height : 100}
+        height={width ? width : 100}
         alt="Loading..."
       />
     </div>
