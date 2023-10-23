@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { FriendsListType } from "./ProfileSection";
+import { getFriendsList } from "@/src/utils/profile/getFriendsList";
+import { useAuth } from "@/src/contexts/AuthContext";
 
-export default function FriendsList({
-  friendsData,
-  className,
-}: FriendsListType) {
+export default function FriendsList() {
+  const [friendsData, setFriendData] = useState<FriendsListType>();
+  const { memberID } = useAuth();
+
+  useEffect(() => {
+    const handleFetch = async (memberID: string) => {
+      const res = await getFriendsList({ memberID });
+      setFriendData(res);
+    };
+    if (memberID) handleFetch(memberID);
+  }, [friendsData, memberID]);
+
   if (friendsData) {
     const empty = Object.keys(friendsData).length === 0;
 
