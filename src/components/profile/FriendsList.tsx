@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
-import { useAuth } from "@/src/contexts/AuthContext";
 import { useFriendsList } from "@/src/hooks/profile/useFriendsList";
 import { toast } from "sonner";
 import LoadingIcon from "../utils/LoadingIcon";
+import { useMemberID } from "@/src/hooks/useMemberID";
 
 export default function FriendsList() {
-  const { memberID } = useAuth();
+  const { memberID } = useMemberID();
+  const { friendsData } = useFriendsList(memberID);
 
   if (memberID) {
-    const { friendsData } = useFriendsList(memberID);
-
     if (friendsData) {
       const empty = Object.keys(friendsData).length === 0;
 
