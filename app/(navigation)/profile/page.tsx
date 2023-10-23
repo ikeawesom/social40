@@ -7,6 +7,7 @@ import useFetchUserDataServer from "@/src/utils/useFetchUserDataServer";
 import { getFriendsList } from "@/src/utils/profile/getFriendsList";
 import { getActivitiesList } from "@/src/utils/profile/getActivitiesList";
 import LoadingScreen from "@/src/components/LoadingScreen";
+import HeaderBar from "@/src/components/navigation/HeaderBar";
 
 const OPTIONS = ["activity", "stats", "statuses"];
 
@@ -36,16 +37,22 @@ export default async function Profile({
 
     if (friendsData && activitiesData)
       return (
-        <div className="grid sm:grid-cols-3 gap-4">
-          <ProfileSection className="sm:col-span-1" friendsData={friendsData} />
-          {/* TO DO */}
-          {/* <StatsSection
+        <>
+          <HeaderBar text="My Profile" />
+          <div className="grid sm:grid-cols-3 gap-4">
+            <ProfileSection
+              className="sm:col-span-1"
+              friendsData={friendsData}
+            />
+            {/* TO DO */}
+            {/* <StatsSection
             className="sm:col-span-2"
             activities={activitiesData}
             // medicalStatus={data.medicalStatus}
             // statistics={data.statistics}
           /> */}
-        </div>
+          </div>
+        </>
       );
     return <LoadingScreen />;
   }
