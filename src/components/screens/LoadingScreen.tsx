@@ -1,5 +1,5 @@
 import React from "react";
-import LoadingIcon from "./utils/LoadingIcon";
+import LoadingIcon from "../utils/LoadingIcon";
 
 export default function LoadingScreen() {
   return (
