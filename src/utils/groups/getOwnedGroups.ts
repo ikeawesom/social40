@@ -1,6 +1,6 @@
-import { dbHandler } from "../firebase/db";
-import { MemberIDType } from "./profile/getFriendsList";
-import { MEMBER_CREATED_GROUPS_SCHEMA } from "./schemas/members";
+import { dbHandler } from "../../firebase/db";
+import { MemberIDType } from "../profile/getFriendsList";
+import { MEMBER_CREATED_GROUPS_SCHEMA } from "../schemas/members";
 
 export type ownedGroupsType = {
   [groupID: string]: MEMBER_CREATED_GROUPS_SCHEMA;
