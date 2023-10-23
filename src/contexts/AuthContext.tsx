@@ -30,6 +30,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         })}`;
 
         setMember(null);
+        localStorage.clear();
         router.push(route, { scroll: false });
       }
     });
