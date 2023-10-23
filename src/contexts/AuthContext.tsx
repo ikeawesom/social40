@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const pathname = window.location.pathname;
           if (pathname.includes("auth")) router.push("/");
         } catch (err: any) {
-          console.log(err);
+          router.refresh();
         }
         setUser(user);
       } else {
