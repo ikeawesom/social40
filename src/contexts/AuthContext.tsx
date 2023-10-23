@@ -54,7 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         cookieStore.remove("memberDetails");
 
-        router.push(route);
+        router.push(route, { scroll: false });
       }
     });
   }, [user]);
