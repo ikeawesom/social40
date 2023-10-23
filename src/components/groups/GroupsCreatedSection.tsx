@@ -30,7 +30,9 @@ export default function GroupsCreatedSection({
         ))
       ) : (
         <>
-          <h1>You have not created any groups.</h1>
+          <h1 className="text-custom-grey-text text-sm">
+            You have not created any groups.
+          </h1>
         </>
       )}
     </div>
