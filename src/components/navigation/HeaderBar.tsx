@@ -15,7 +15,7 @@ export default function HeaderBar({
   return (
     <div
       className={twMerge(
-        "w-full bg-white shadow-sm fixed top-0 left-0 py-2 px-2 flex items-center justify-start gap-x-2 z-40",
+        "w-full bg-white shadow-sm fixed top-0 left-0 py-4 px-2 flex items-center justify-start gap-x-2 z-40",
         !back ? "px-4" : ""
       )}
     >
@@ -28,7 +28,7 @@ export default function HeaderBar({
           height={30}
         />
       )}
-      <h1 className="text-xl font-bold text-custom-dark-text">{text}</h1>
+      <h1 className="text-xl font-semibold text-custom-dark-text">{text}</h1>
     </div>
   );
 }
