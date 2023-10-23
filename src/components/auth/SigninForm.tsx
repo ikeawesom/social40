@@ -50,8 +50,8 @@ export default function SigninForm({ setStatus }: statusType) {
       const resA = await dbHandler.get({ col_name: "MEMBERS", id: memberID });
 
       if (!resA.status) throw new Error(resA.error);
-      const memberDetails = resA.data as MEMBER_SCHEMA;
-      setMember(memberDetails.memberID);
+      setMember(memberID);
+      localStorage.setItem("memberID", memberID);
     } catch (e: any) {
       setStatus(e.message as string);
     } finally {
