@@ -16,10 +16,7 @@ export async function getJoinedGroups({ memberID }: MemberIDType) {
     id: memberID,
   });
 
-  if (!res.status) {
-    console.log(res.error);
-    return joinedGroups;
-  }
+  if (!res.status) return joinedGroups; // no groups joined
 
   Object.keys(res.data).map((groupID: string) => {
     joinedGroups[groupID] = res.data[groupID];

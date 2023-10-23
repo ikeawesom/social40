@@ -9,8 +9,6 @@ export default function GroupsJoinedSection({
 }: {
   joinedGroups: joinedGroupsType;
 }) {
-  console.log(joinedGroups);
-
   const empty = Object.keys(joinedGroups).length === 0;
 
   return (

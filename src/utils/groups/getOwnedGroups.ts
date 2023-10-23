@@ -13,10 +13,7 @@ export async function getOwnedGroups({ memberID }: MemberIDType) {
     id: memberID,
   });
 
-  if (!res.status) {
-    console.log(res.error);
-    return ownedGroups;
-  }
+  if (!res.status) return ownedGroups; // no groups owned
 
   Object.keys(res.data).map((groupID: string) => {
     ownedGroups[groupID] = res.data[groupID];
