@@ -2,13 +2,13 @@
 import React from "react";
 import DefaultCard from "../DefaultCard";
 import { useAuth } from "@/src/contexts/AuthContext";
-import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
+import { useMemberID } from "@/src/hooks/useMemberID";
 
 type DashboardProps = {
   className?: string;
 };
 export default function DashboardScreen({ className }: DashboardProps) {
-  const { user } = useAuth();
+  const { memberID } = useMemberID();
   // activity feed
   return <DefaultCard></DefaultCard>;
 }
