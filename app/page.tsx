@@ -12,5 +12,4 @@ export default async function Home() {
         <DashboardScreen className="mb-16" data={data} />
       </>
     );
-  return redirect("/");
 }
