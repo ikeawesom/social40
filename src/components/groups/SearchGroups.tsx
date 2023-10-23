@@ -47,7 +47,6 @@ export default function SearchGroups() {
         type="text"
         required
         placeholder="Enter group name"
-        className="text-sm"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setGroupID(e.target.value)
         }
