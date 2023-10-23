@@ -1,8 +1,8 @@
-import { ownedGroupsType } from "@/src/utils/groups/getOwnedGroups";
 import React from "react";
 import HRow from "../utils/HRow";
 import Link from "next/link";
 import { joinedGroupsType } from "@/src/utils/groups/getJoinedGroups";
+import SearchGroups from "./SearchGroups";
 
 export default function GroupsJoinedSection({
   joinedGroups,
@@ -16,7 +16,8 @@ export default function GroupsJoinedSection({
   return (
     <div className="flex flex-col gap-y-1 items-start justify-start w-full">
       <h1 className="font-bold text-custom-dark-text">My Groups</h1>
-      <HRow className="bg-custom-grey-text mb-1 mt-0" />
+      <HRow className="bg-custom-grey-text mb-1 mt-0 h-[2px]" />
+      <SearchGroups />
       {!empty ? (
         Object.keys(joinedGroups).map((groupID: string) => (
           <Link
@@ -32,7 +33,9 @@ export default function GroupsJoinedSection({
         ))
       ) : (
         <>
-          <h1>You have not joined any groups.</h1>
+          <h1 className="text-custom-grey-text text-sm">
+            You have not joined any groups.
+          </h1>
         </>
       )}
     </div>
