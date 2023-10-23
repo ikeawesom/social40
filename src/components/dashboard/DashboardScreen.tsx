@@ -1,13 +1,14 @@
 "use client";
 import React from "react";
 import DefaultCard from "../DefaultCard";
+import { useAuth } from "@/src/contexts/AuthContext";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 
 type DashboardProps = {
-  data: MEMBER_SCHEMA;
   className?: string;
 };
-export default function DashboardScreen({ data, className }: DashboardProps) {
+export default function DashboardScreen({ className }: DashboardProps) {
+  const { user } = useAuth();
   // activity feed
   return <DefaultCard></DefaultCard>;
 }
