@@ -42,7 +42,11 @@ export function initMemberObject({
   memberID,
   displayName,
   role,
-}: MEMBER_SCHEMA) {
+}: {
+  memberID: string;
+  displayName: string;
+  role: string;
+}) {
   return {
     memberID,
     displayName,
