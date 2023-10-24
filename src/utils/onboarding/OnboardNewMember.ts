@@ -21,23 +21,19 @@ export async function OnboardNewMember({
   role,
 }: OnboardMemberTypes) {
   try {
-    // simultaneous proccesses
-    const res = await Promise.all([
-      // register new user
-      RegisterUser({ email, password }),
+    // register new user
+    const registerStatus = await RegisterUser({ email, password });
 
-      // add member to DB
-      AddMember({
-        memberID,
-        displayName,
-        role: role ? role : "member",
-      }),
-    ]);
+    if (!registerStatus.status) throw new Error(registerStatus.error);
 
-    // check for any errors
-    res.forEach((res) => {
-      if (!res.status) throw new Error(res.error);
+    // add member to DB
+    const memberDBStatus = await AddMember({
+      memberID,
+      displayName,
+      role: role ? role : "member",
     });
+
+    if (!memberDBStatus.status) throw new Error(memberDBStatus.error);
 
     return handleResponses();
   } catch (err: any) {
