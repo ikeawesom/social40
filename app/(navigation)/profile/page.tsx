@@ -32,7 +32,7 @@ export default async function Profile({
   return (
     <>
       <HeaderBar text="My Profile" />
-      <div className="grid sm:grid-cols-3 gap-4">
+      <div className="grid sm:grid-cols-1 gap-4">
         <ProfileSection className="sm:col-span-1" />
         {/* TO DO */}
         {/* <StatsSection
