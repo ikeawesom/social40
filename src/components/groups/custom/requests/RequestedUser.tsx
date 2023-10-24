@@ -37,10 +37,8 @@ export default function RequestedUser({
       )}
     >
       <div className="flex flex-col items-start justify-center">
-        <h1 className="font-medium text-sm min-[300px]:text-lg">
-          {displayName}
-        </h1>
-        <p className="text-xs text-custom-grey-text min-[300px]:text-sm">
+        <h1 className="font-medium text-sm">{displayName}</h1>
+        <p className="text-xs text-custom-grey-text">
           {memberID.length > MAX_LENGTH
             ? memberID.substring(0, MAX_LENGTH - 3) + "..."
             : memberID}
