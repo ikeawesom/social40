@@ -91,9 +91,9 @@ export default function RequestsSection({
     <DefaultCard className="py-2 px-3">
       <div className="flex flex-col items-center justify-start w-full">
         <div className="flex items-center justify-between w-full">
-          <h1 className="text-custom-dark-text font-semibold flex gap-1 items-center justify-start text-start">
+          <h1 className="text-custom-dark-text font-semibold flex gap-1 items-center justify-start text-start min-[300px]:text-lg">
             Requests
-            <span className="bg-custom-red text-custom-light-text font-medium px-1 rounded-full text-sm text-center my-2">
+            <span className="bg-custom-red text-custom-light-text font-medium px-2 rounded-full text-sm text-center my-2">
               {Object.keys(data).length > 9 ? "9+" : Object.keys(data).length}
             </span>
           </h1>

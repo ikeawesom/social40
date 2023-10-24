@@ -37,14 +37,16 @@ export default function RequestedUser({
       )}
     >
       <div className="flex flex-col items-start justify-center">
-        <h1 className="font-medium text-sm">{displayName}</h1>
-        <p className="text-xs text-custom-grey-text">
+        <h1 className="font-medium text-sm min-[300px]:text-lg">
+          {displayName}
+        </h1>
+        <p className="text-xs text-custom-grey-text min-[300px]:text-sm">
           {memberID.length > MAX_LENGTH
             ? memberID.substring(0, MAX_LENGTH - 3) + "..."
             : memberID}
         </p>
       </div>
-      <div className="flex items-center justify-center gap-1 duration-200">
+      <div className="flex items-center justify-center gap-1 min-[300px]:gap-4 duration-200">
         <PrimaryButton
           className="p-1 bg-custom-light-green border-[1px] border-custom-green"
           onClick={() => accept(memberID, groupID, displayName, password)}
@@ -52,8 +54,9 @@ export default function RequestedUser({
           <Image
             src="/icons/icon_tick.svg"
             alt="Accept"
-            width={20}
-            height={20}
+            width={0}
+            height={0}
+            className="w-[20px] min-[300px]:w-[30px] h-auto"
           />
         </PrimaryButton>
         <SecondaryButton
@@ -62,9 +65,10 @@ export default function RequestedUser({
         >
           <Image
             src="/icons/icon_cross.svg"
-            width={20}
-            height={20}
             alt="Reject"
+            width={0}
+            height={0}
+            className="w-[20px] min-[300px]:w-[30px] h-auto"
           />
         </SecondaryButton>
       </div>
