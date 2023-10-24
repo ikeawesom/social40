@@ -9,6 +9,14 @@ export type WaitListData = {
 
 export function useGroupRequests(groupID: string) {
   const [requested, setRequested] = useState<WaitListData | null>();
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    if (success) {
+      setSuccess(false);
+      setRequested(undefined);
+    }
+  }, [success]);
 
   useEffect(() => {
     const handleFetch = async (groupID: string) => {
@@ -24,12 +32,12 @@ export function useGroupRequests(groupID: string) {
         obj[data.memberID] = data;
         if (!added) added = true;
       });
-
       if (added) setRequested(obj);
-      else setRequested(null);
+      if (!added) setRequested(null);
     };
-    handleFetch(groupID);
-  }, [groupID]);
 
-  return { requested };
+    if (requested === undefined) handleFetch(groupID);
+  }, [groupID, requested]);
+
+  return { requested, setSuccess };
 }

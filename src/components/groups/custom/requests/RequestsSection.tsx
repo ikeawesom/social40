@@ -8,14 +8,15 @@ import { OnboardGroupMember } from "@/src/utils/onboarding/OnboardGroupMember";
 import { OnboardNewMember } from "@/src/utils/onboarding/OnboardNewMember";
 import { toast } from "sonner";
 import { dbHandler } from "@/src/firebase/db";
-import { useRouter } from "next/navigation";
 
 export default function RequestsSection({
   data,
   groupID,
+  reload,
 }: {
-  data?: WaitListData;
-  groupID?: string;
+  data: WaitListData;
+  groupID: string;
+  reload: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -62,6 +63,7 @@ export default function RequestsSection({
       console.log("Onboarded group member.");
       if (!onboardGroupStatus.status) throw new Error(onboardGroupStatus.error);
       toast.success(`${memberID} added to ${groupID}.`);
+      if (reload) reload(true);
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -70,54 +72,45 @@ export default function RequestsSection({
 
   const handleReject = async (groupID: string, memberID: string) => {};
 
-  if (data)
-    return (
-      <DefaultCard className="py-2 px-3">
-        {!groupID ? (
-          <p className="text-sm text-custom-grey-text text-center">
-            No requests for now! Invite others.
-          </p>
-        ) : (
-          <div className="flex flex-col items-center justify-start w-full">
-            <div className="flex items-center justify-between w-full">
-              <h1 className="text-custom-dark-text font-semibold text-sm flex gap-1 items-center justify-start text-start">
-                Requests
-                <span className="bg-custom-red text-custom-light-text font-medium px-1 rounded-full text-xs text-center">
-                  {Object.keys(data).length > 10
-                    ? "9+"
-                    : Object.keys(data).length}
-                </span>
-              </h1>
-              <Image
-                onClick={() => setShow(!show)}
-                src="/icons/icon_arrow-down.svg"
-                alt="Show"
-                width={30}
-                height={30}
-                className={`duration-300 ${show ? "rotate-180" : ""}`}
-              />
-            </div>
-            {show && (
-              <div className="relative w-full flex-col flex items-center justify-start max-h-[30vh] overflow-y-scroll rounded-lg">
-                {loading && (
-                  <div className="w-full absolute grid place-items-center h-full bg-white/30 z-30">
-                    <LoadingIcon width={30} height={30} />
-                  </div>
-                )}
-                {Object.keys(data).map((item) => (
-                  <RequestedUser
-                    accept={handleAccept}
-                    reject={handleReject}
-                    groupID={groupID}
-                    className="py-2 px-3 rounded-none"
-                    key={data[item].memberID}
-                    data={data[item]}
-                  />
-                ))}
+  return (
+    <DefaultCard className="py-2 px-3">
+      <div className="flex flex-col items-center justify-start w-full">
+        <div className="flex items-center justify-between w-full">
+          <h1 className="text-custom-dark-text font-semibold text-sm flex gap-1 items-center justify-start text-start">
+            Requests
+            <span className="bg-custom-red text-custom-light-text font-medium px-1 rounded-full text-xs text-center">
+              {Object.keys(data).length > 10 ? "9+" : Object.keys(data).length}
+            </span>
+          </h1>
+          <Image
+            onClick={() => setShow(!show)}
+            src="/icons/icon_arrow-down.svg"
+            alt="Show"
+            width={30}
+            height={30}
+            className={`duration-300 ${show ? "rotate-180" : ""}`}
+          />
+        </div>
+        {show && (
+          <div className="relative w-full flex-col flex items-center justify-start max-h-[30vh] overflow-y-scroll rounded-lg">
+            {loading && (
+              <div className="w-full absolute grid place-items-center h-full bg-white/30 z-30">
+                <LoadingIcon width={30} height={30} />
               </div>
             )}
+            {Object.keys(data).map((item) => (
+              <RequestedUser
+                accept={handleAccept}
+                reject={handleReject}
+                groupID={groupID}
+                className="py-2 px-3 rounded-none"
+                key={data[item].memberID}
+                data={data[item]}
+              />
+            ))}
           </div>
         )}
-      </DefaultCard>
-    );
+      </div>
+    </DefaultCard>
+  );
 }
