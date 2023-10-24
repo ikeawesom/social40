@@ -61,8 +61,8 @@ export default function RequestsSection({
         role: "member",
       });
 
-      console.log("Onboarded group member.");
       if (!onboardGroupStatus.status) throw new Error(onboardGroupStatus.error);
+      console.log("Onboarded group member.");
       toast.success(`Added ${memberID}.`);
       if (reload) reload(true);
     } catch (error: any) {
