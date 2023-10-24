@@ -34,10 +34,8 @@ export type MEMBER_CREATED_GROUPS_SCHEMA = {
 };
 
 export type MEMBER_JOINED_GROUPS_SCHEMA = {
-  [groupID: string]: {
-    groupID: string;
-    dateJoined: string; // date format
-  };
+  groupID: string;
+  dateJoined: string; // date format
 };
 
 export function initMemberObject({
