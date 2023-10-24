@@ -12,13 +12,13 @@ export default function CustomGroupContainer({ groupID }: { groupID: string }) {
 
   if (data) {
     return (
-      <div>
+      <div className="flex flex-col items-center justify-start w-full gap-4">
         <GroupHeader
           owner={data.createdBy}
           title={data.groupName}
           desc={data.groupDesc}
         />
-        {role === "owner" && <GroupRequested />}
+        {role === "owner" && <GroupRequested groupID={groupID} />}
       </div>
     );
   } else if (error.includes("not found")) {
