@@ -6,6 +6,7 @@ import OfflineScreen from "../../screens/OfflineScreen";
 import NotFoundScreen from "../../screens/NotFoundScreen";
 import LoadingScreenSmall from "../../screens/LoadingScreenSmall";
 import { useGroupData } from "@/src/hooks/groups/custom/useGroupData";
+import GroupMembers from "./GroupMembers";
 
 export default function CustomGroupContainer({ groupID }: { groupID: string }) {
   const { data, error, role } = useGroupData(groupID);
@@ -19,6 +20,7 @@ export default function CustomGroupContainer({ groupID }: { groupID: string }) {
           desc={data.groupDesc}
         />
         {role === "owner" && <GroupRequested groupID={groupID} />}
+        <GroupMembers groupID={groupID} />
       </div>
     );
   } else if (error.includes("not found")) {
