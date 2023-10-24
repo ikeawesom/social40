@@ -10,10 +10,17 @@ import {
   query,
   getDocs,
   where,
+  initializeFirestore,
+  CACHE_SIZE_UNLIMITED,
 } from "firebase/firestore";
 import handleResponses from "../utils/handleResponses";
 
-const FIREBASE_DB = getFirestore(FIREBASE_APP);
+// const FIREBASE_DB = getFirestore(FIREBASE_APP);
+const FIREBASE_DB = initializeFirestore(FIREBASE_APP, {
+  cacheSizeBytes: CACHE_SIZE_UNLIMITED,
+});
+
+console.log("Initailized Firestore");
 
 class DbClass {
   constructor() {}
@@ -50,11 +57,13 @@ class DbClass {
 
   async get({ col_name, id }) {
     const docRef = doc(FIREBASE_DB, col_name, id);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) return handleResponses({ data: docSnap.data() });
-
-    return handleResponses({ error: "Data not found", status: false });
+    try {
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) return handleResponses({ data: docSnap.data() });
+      return handleResponses({ error: "Data not found.", status: false });
+    } catch (error) {
+      return handleResponses({ error: error.message, status: false });
+    }
   }
 
   async getSpecific({ path, field, criteria, value }) {
