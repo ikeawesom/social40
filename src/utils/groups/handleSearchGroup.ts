@@ -3,6 +3,7 @@ import { MEMBER_SCHEMA } from "../schemas/members";
 import { initWaitListee } from "../schemas/waitlist";
 import getCurrentDate from "../getCurrentDate";
 import handleResponses from "../handleResponses";
+import { memberInGroup } from "../OnboardGroupMember";
 
 export default async function handleSearchGroup({
   data,
@@ -15,15 +16,9 @@ export default async function handleSearchGroup({
     const memberID = data.memberID;
     const displayName = data.displayName;
 
-    const res = await dbHandler.get({
-      col_name: "GROUP_MEMBERS",
-      id: groupID,
-    });
+    const res = await memberInGroup(groupID, memberID);
 
-    if (!res.status) throw new Error(res.error);
-
-    if (Object.keys(res.data).includes(memberID))
-      throw new Error("You are already a member of this group.");
+    if (!res.status) throw new Error("You are already a member of this group.");
 
     const to_add = initWaitListee({
       memberID,
