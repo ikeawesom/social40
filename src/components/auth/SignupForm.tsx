@@ -57,20 +57,14 @@ export default function SignupForm({ setStatus }: statusType) {
 
       // see if member inside group
       const resB = await dbHandler.get({
-        col_name: "GROUP_MEMBERS",
-        id: userDetails.admin,
+        col_name: `GROUPS/${userDetails.admin}/MEMBERS`,
+        id: username,
       });
 
-      if (!resB.status) throw new Error(resB.error);
-
-      const groupMembers = resB.data as GROUP_MEMBERS_SCHEMA;
-
-      Object.keys(groupMembers).forEach((memberID: string) => {
-        if (memberID === username)
-          throw new Error(
-            "You already have an account under this Admin ID. Please sign in instead."
-          );
-      });
+      if (resB.data)
+        throw new Error(
+          "You already have an account under this Admin ID. Please sign in instead."
+        );
 
       // new member
       const to_add = initWaitListee({
