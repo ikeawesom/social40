@@ -1,16 +1,9 @@
 import { dbHandler } from "../../firebase/db";
 import { MemberIDType } from "../profile/getFriendsList";
-import {
-  MEMBER_CREATED_GROUPS_SCHEMA,
-  MEMBER_JOINED_GROUPS_SCHEMA,
-} from "../schemas/members";
-
-export type joinedGroupsType = {
-  [groupID: string]: MEMBER_JOINED_GROUPS_SCHEMA;
-};
+import { MEMBER_JOINED_GROUPS_SCHEMA } from "../schemas/members";
 
 export async function getJoinedGroups({ memberID }: MemberIDType) {
-  var joinedGroups = {} as joinedGroupsType;
+  var joinedGroups = {} as MEMBER_JOINED_GROUPS_SCHEMA;
   const res = await dbHandler.get({
     col_name: "MEMBERS_JOINED-GROUPS",
     id: memberID,

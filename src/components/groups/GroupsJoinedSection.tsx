@@ -1,14 +1,13 @@
 import React from "react";
 import HRow from "../utils/HRow";
-import Link from "next/link";
-import { joinedGroupsType } from "@/src/utils/groups/getJoinedGroups";
 import SearchGroups from "./SearchGroups";
 import GroupItem from "./GroupItem";
+import { MEMBER_JOINED_GROUPS_SCHEMA } from "@/src/utils/schemas/members";
 
 export default function GroupsJoinedSection({
   joinedGroups,
 }: {
-  joinedGroups: joinedGroupsType;
+  joinedGroups: MEMBER_JOINED_GROUPS_SCHEMA;
 }) {
   const empty = Object.keys(joinedGroups).length === 0;
 
