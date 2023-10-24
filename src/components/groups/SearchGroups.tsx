@@ -57,7 +57,7 @@ export default function SearchGroups() {
         disabled={loading}
       >
         <Image
-          src="icons/navigation/icon_search.svg"
+          src="/icons/navigation/icon_search.svg"
           alt="Search"
           height={30}
           width={30}

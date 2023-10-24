@@ -32,7 +32,7 @@ export default function ProfileSection({ className }: { className: string }) {
             <div className="flex flex-col gap-2 items-center justify-center">
               <SignoutButton />
               <Image
-                src="icons/icon_avatar.svg"
+                src="/icons/icon_avatar.svg"
                 height={80}
                 width={80}
                 alt="Profile"

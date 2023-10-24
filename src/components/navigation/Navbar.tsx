@@ -46,8 +46,8 @@ export default function Navbar() {
             <Image
               src={
                 pathname !== item.link
-                  ? `icons/navigation/${item.icon}`
-                  : `icons/navigation/${item.active}`
+                  ? `/icons/navigation/${item.icon}`
+                  : `/icons/navigation/${item.active}`
               }
               height={20}
               width={20}

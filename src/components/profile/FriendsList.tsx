@@ -24,7 +24,7 @@ export default function FriendsList() {
                   key={memberID}
                 >
                   <Image
-                    src="icons/icon_avatar.svg"
+                    src="/icons/icon_avatar.svg"
                     height={40}
                     width={40}
                     alt="Profile"
