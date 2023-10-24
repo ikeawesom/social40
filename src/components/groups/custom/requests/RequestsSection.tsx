@@ -62,7 +62,7 @@ export default function RequestsSection({
 
       console.log("Onboarded group member.");
       if (!onboardGroupStatus.status) throw new Error(onboardGroupStatus.error);
-      toast.success(`${memberID} added to ${groupID}.`);
+      toast.success(`Added ${memberID}.`);
       if (reload) reload(true);
     } catch (error: any) {
       toast.error(error.message);
@@ -70,7 +70,22 @@ export default function RequestsSection({
     setLoading(false);
   };
 
-  const handleReject = async (groupID: string, memberID: string) => {};
+  const handleReject = async (groupID: string, memberID: string) => {
+    setLoading(true);
+    try {
+      const res = await dbHandler.delete({
+        col_name: `GROUPS/${groupID}/WAITLIST`,
+        id: memberID,
+      });
+
+      if (!res.status) throw new Error(res.error);
+      toast.success(`Rejected ${memberID}.`);
+      if (reload) reload(true);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+    setLoading(false);
+  };
 
   return (
     <DefaultCard className="py-2 px-3">
@@ -94,7 +109,7 @@ export default function RequestsSection({
         {show && (
           <div className="relative w-full flex-col flex items-center justify-start max-h-[30vh] overflow-y-scroll rounded-lg">
             {loading && (
-              <div className="w-full absolute grid place-items-center h-full bg-white/30 z-30">
+              <div className="w-full absolute grid place-items-center h-full bg-black/25 z-30">
                 <LoadingIcon width={30} height={30} />
               </div>
             )}
