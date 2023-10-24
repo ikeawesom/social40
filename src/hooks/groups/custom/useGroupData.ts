@@ -1,10 +1,15 @@
 import { dbHandler } from "@/src/firebase/db";
-import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
+import { GROUP_MEMBERS_SCHEMA, GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { useState, useEffect } from "react";
+import { useMemberID } from "../../useMemberID";
+
+export type RolesType = "member" | "admin" | "owner";
 
 export function useGroupData(groupID: string) {
+  const { memberID } = useMemberID();
   const [data, setData] = useState<GROUP_SCHEMA>();
   const [error, setError] = useState("");
+  const [role, setRole] = useState<RolesType>("member");
 
   useEffect(() => {
     const handleFetch = async (groupID: string) => {
@@ -19,5 +24,23 @@ export function useGroupData(groupID: string) {
     handleFetch(groupID);
   }, [groupID]);
 
-  return { data, error };
+  useEffect(() => {
+    const handleFetch = async (groupID: string, memberID: string) => {
+      try {
+        const res = await dbHandler.get({
+          col_name: "GROUP_MEMBERS",
+          id: groupID,
+        });
+        if (!res.status) return setError(res.error);
+        const fetched = res.data as GROUP_MEMBERS_SCHEMA;
+        const roleFetched = fetched[memberID].role as RolesType;
+        setRole(roleFetched);
+      } catch (err: any) {
+        return setError(err);
+      }
+    };
+    if (memberID) handleFetch(groupID, memberID);
+  }, [groupID, memberID]);
+
+  return { data, error, role };
 }
