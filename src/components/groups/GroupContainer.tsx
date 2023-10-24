@@ -13,21 +13,16 @@ export default function GroupContainer() {
   const { groupsCreated } = useOwnedGroups();
   const { joinedGroups } = useJoinedGroups();
 
-  if (memberDetails) {
+  if (memberDetails && joinedGroups) {
     const role = memberDetails.role;
     return (
       <div className="flex flex-col gap-10 items-center justify-start w-full">
-        {role !== "member" &&
-          (groupsCreated ? (
-            <GroupsCreatedSection ownedGroups={groupsCreated} />
-          ) : (
-            <LoadingIcon />
-          ))}
-        {joinedGroups ? (
-          <GroupsJoinedSection joinedGroups={joinedGroups} />
+        {role !== "member" && groupsCreated ? (
+          <GroupsCreatedSection ownedGroups={groupsCreated} />
         ) : (
-          <LoadingIcon />
+          <LoadingIcon width={30} height={30} />
         )}
+        <GroupsJoinedSection joinedGroups={joinedGroups} />
       </div>
     );
   }
