@@ -91,6 +91,7 @@ export default function SignupForm({ setStatus }: statusType) {
         type="password"
         name="password"
         placeholder="Choose a password"
+        minLength={8}
         onChange={handleChange}
       />
       <span className="min-[500px]:w-[400px] w-[85vw]">
