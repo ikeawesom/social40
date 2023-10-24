@@ -31,6 +31,8 @@ export default async function GroupPage({
         />
       </>
     );
+  } else if (res.error.includes("offline")) {
+    return <OfflineScreen />;
   }
   return <NotFoundScreen />;
 }
