@@ -4,6 +4,7 @@ import PrimaryButton from "../utils/PrimaryButton";
 import { dbHandler } from "@/src/firebase/db";
 import { initWaitListee } from "@/src/utils/schemas/waitlist";
 import getCurrentDate from "@/src/utils/getCurrentDate";
+import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
 
 type userDetailsType = {
   admin: string;
@@ -54,6 +55,24 @@ export default function SignupForm({ setStatus }: statusType) {
           `Your request to ${userDetails.admin} is already pending. Please update your commander.`
         );
 
+      // see if member inside group
+      const resB = await dbHandler.get({
+        col_name: "GROUP_MEMBERS",
+        id: userDetails.admin,
+      });
+
+      if (!resB.status) throw new Error(resB.error);
+
+      const groupMembers = resB.data as GROUP_MEMBERS_SCHEMA;
+
+      Object.keys(groupMembers).forEach((memberID: string) => {
+        if (memberID === username)
+          throw new Error(
+            "You already have an account under this Admin ID. Please sign in instead."
+          );
+      });
+
+      // new member
       const to_add = initWaitListee({
         memberID: username,
         groupID: userDetails.admin,
