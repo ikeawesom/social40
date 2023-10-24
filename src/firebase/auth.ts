@@ -1,13 +1,10 @@
-import { FIREBASE_APP } from "./config";
 import {
   Auth,
   createUserWithEmailAndPassword,
-  getAuth,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
 import handleResponses from "../utils/handleResponses";
-import { MEMBER_SCHEMA } from "../utils/schemas/members";
 
 class AuthClass {
   constructor() {}
