@@ -13,7 +13,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 export const FIREBASE_APP = initializeApp(firebaseConfig);
+console.log("Initializing Primary Firebase App");
 export const SECONDARY_FIREBASE_APP = initializeApp(
   firebaseConfig,
   "SECONDARY"
 );
+console.log("Initializing Secondary Firebase App");
