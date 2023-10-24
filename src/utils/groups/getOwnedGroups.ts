@@ -8,15 +8,22 @@ export type ownedGroupsType = {
 
 export async function getOwnedGroups({ memberID }: MemberIDType) {
   var ownedGroups = {} as ownedGroupsType;
-  const res = await dbHandler.get({
-    col_name: "MEMBERS_CREATED-GROUPS",
-    id: memberID,
+  const res = await dbHandler.getDocs({
+    col_name: `MEMBERS/${memberID}/GROUPS-CREATED`,
   });
 
   if (!res.status) return ownedGroups; // no groups owned
 
-  Object.keys(res.data).map((groupID: string) => {
-    ownedGroups[groupID] = res.data[groupID];
+  const groupsArr = res.data as any[];
+
+  groupsArr.forEach((item: any) => {
+    const data = item.data() as MEMBER_CREATED_GROUPS_SCHEMA;
+    const groupID = data.groupID;
+    const createdOn = data.createdOn;
+    ownedGroups[groupID] = {
+      groupID: groupID,
+      createdOn: createdOn,
+    };
   });
 
   return ownedGroups;
