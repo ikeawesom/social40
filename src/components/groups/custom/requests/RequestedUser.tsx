@@ -45,8 +45,8 @@ export default function RequestedUser({
         </p>
       </div>
       <div className="flex items-center justify-center gap-1 min-[300px]:gap-4 duration-200">
-        <PrimaryButton
-          className="p-1 bg-custom-light-green border-[1px] border-custom-green"
+        <SecondaryButton
+          className="w-fit p-0 bg-custom-green"
           onClick={() => accept(memberID, groupID, displayName, password)}
         >
           <Image
@@ -54,11 +54,11 @@ export default function RequestedUser({
             alt="Accept"
             width={0}
             height={0}
-            className="w-[20px] min-[300px]:w-[30px] h-auto"
+            className="w-[25px] min-[300px]:w-[30px] h-auto"
           />
-        </PrimaryButton>
+        </SecondaryButton>
         <SecondaryButton
-          className="p-1 bg-custom-light-red border-[1px] border-custom-red"
+          className="bg-custom-red p-0 w-fit"
           onClick={() => reject(groupID, memberID)}
         >
           <Image
@@ -66,7 +66,7 @@ export default function RequestedUser({
             alt="Reject"
             width={0}
             height={0}
-            className="w-[20px] min-[300px]:w-[30px] h-auto"
+            className="w-[25px] min-[300px]:w-[30px] h-auto"
           />
         </SecondaryButton>
       </div>
