@@ -19,6 +19,7 @@ export default function GroupMemberTab({
   const memberID = data.memberID;
   const bookedIn = data.bookedIn;
   const dateJoined = data.dateJoined;
+  const role = data.role;
 
   return (
     <div
@@ -37,6 +38,9 @@ export default function GroupMemberTab({
           <h1 className="font-bold text-sm text-custom-dark-text">
             {displayName}
           </h1>
+          {role === "owner" && (
+            <p className="text-xs text-custom-green">(owner)</p>
+          )}
         </div>
         <p className="text-xs text-custom-grey-text">
           {memberID.length > MAX_LENGTH
