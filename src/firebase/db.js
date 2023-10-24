@@ -66,6 +66,16 @@ class DbClass {
     }
   }
 
+  async getDocs({ col_name }) {
+    const colRef = collection(FIREBASE_DB, col_name);
+    try {
+      const docsSnap = await getDocs(colRef);
+      return handleResponses({ data: docsSnap.docs });
+    } catch (error) {
+      return handleResponses({ error: error.message, status: false });
+    }
+  }
+
   async getSpecific({ path, field, criteria, value }) {
     try {
       const colRef = collection(FIREBASE_DB, path);
