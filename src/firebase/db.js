@@ -12,6 +12,7 @@ import {
   where,
   initializeFirestore,
   CACHE_SIZE_UNLIMITED,
+  orderBy,
 } from "firebase/firestore";
 import handleResponses from "../utils/handleResponses";
 
@@ -76,10 +77,26 @@ class DbClass {
     }
   }
 
-  async getSpecific({ path, field, criteria, value }) {
+  async getSpecific(args) {
+    const { path, field, criteria, value, orderCol, ascending } = args;
+
     try {
       const colRef = collection(FIREBASE_DB, path);
-      const q = query(colRef, where(field, criteria, value));
+      var q;
+
+      if (orderCol && field) {
+        query(
+          colRef,
+          where(field, criteria, value),
+          orderBy(orderCol, !ascending ? "desc" : "asc")
+        );
+      } else if (!orderCol && field) {
+        query(colRef, where(field, criteria, value));
+      } else if (orderCol && !field) {
+        query(colRef, orderBy(orderCol, !ascending ? "desc" : "asc"));
+      } else {
+        throw new Error("Invalid props.");
+      }
 
       const qSnap = await getDocs(q);
 
