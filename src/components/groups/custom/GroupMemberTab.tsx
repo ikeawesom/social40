@@ -11,11 +11,13 @@ export default function GroupMemberTab({
     memberID: string;
     role: string;
     displayName?: string | undefined;
+    bookedIn?: boolean | undefined;
   };
   className?: string;
 }) {
   const displayName = data.displayName;
   const memberID = data.memberID;
+  const bookedIn = data.bookedIn;
 
   return (
     <div
@@ -25,7 +27,14 @@ export default function GroupMemberTab({
       )}
     >
       <div className="flex flex-col items-start justify-center">
-        <h1 className="font-medium text-sm">{displayName}</h1>
+        <div className="flex items-center justify-start gap-1">
+          <span
+            className={`h-2 w-2 rounded-full ${
+              bookedIn ? "bg-custom-green" : "bg-custom-orange"
+            }`}
+          />
+          <h1 className="font-medium text-sm">{displayName}</h1>
+        </div>
         <p className="text-xs text-custom-grey-text">
           {memberID.length > MAX_LENGTH
             ? memberID.substring(0, MAX_LENGTH - 3) + "..."

@@ -24,6 +24,7 @@ export type GROUP_MEMBERS_SCHEMA = {
     memberID: string; // memberID of member joined
     role: string; // role of member
     displayName?: string; // display name of member
+    bookedIn?: boolean;
   };
 };
 

@@ -38,6 +38,7 @@ export function useGroupMembers(groupID: string) {
               [memberIDFetched]: {
                 ...fetched[memberIDFetched],
                 displayName: data.displayName,
+                bookedIn: data.bookedIn,
               },
             };
           }
