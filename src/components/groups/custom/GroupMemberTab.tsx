@@ -18,6 +18,7 @@ export default function GroupMemberTab({
   const displayName = data.displayName;
   const memberID = data.memberID;
   const bookedIn = data.bookedIn;
+  const dateJoined = data.dateJoined;
 
   return (
     <div
@@ -33,13 +34,16 @@ export default function GroupMemberTab({
               bookedIn ? "bg-custom-green" : "bg-custom-orange"
             }`}
           />
-          <h1 className="font-medium text-sm">{displayName}</h1>
+          <h1 className="font-bold text-sm text-custom-dark-text">
+            {displayName}
+          </h1>
         </div>
         <p className="text-xs text-custom-grey-text">
           {memberID.length > MAX_LENGTH
             ? memberID.substring(0, MAX_LENGTH - 3) + "..."
             : memberID}
         </p>
+        <p className="text-xs text-custom-grey-text">Joined on: {dateJoined}</p>
       </div>
     </div>
   );
