@@ -28,19 +28,19 @@ export function useGroupData(groupID: string) {
     const handleFetch = async (groupID: string, memberID: string) => {
       try {
         const res = await dbHandler.get({
-          col_name: "GROUP_MEMBERS",
-          id: groupID,
+          col_name: `GROUPS/${groupID}/MEMBERS`,
+          id: memberID,
         });
         if (!res.status) return setError(res.error);
         const fetched = res.data as GROUP_MEMBERS_SCHEMA;
-        const roleFetched = fetched[memberID].role as RolesType;
+        const roleFetched = fetched.role as RolesType;
         setRole(roleFetched);
       } catch (err: any) {
         return setError(err);
       }
     };
     if (memberID) handleFetch(groupID, memberID);
-  }, [groupID, memberID]);
+  }, [memberID]);
 
   return { data, error, role };
 }
