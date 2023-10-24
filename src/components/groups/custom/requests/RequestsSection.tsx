@@ -8,6 +8,7 @@ import { OnboardGroupMember } from "@/src/utils/onboarding/OnboardGroupMember";
 import { OnboardNewMember } from "@/src/utils/onboarding/OnboardNewMember";
 import { toast } from "sonner";
 import { dbHandler } from "@/src/firebase/db";
+import InnerContainer from "@/src/components/utils/InnerContainer";
 
 export default function RequestsSection({
   data,
@@ -107,7 +108,7 @@ export default function RequestsSection({
           />
         </div>
         {show && (
-          <div className="relative w-full flex-col flex items-center justify-start max-h-[30vh] overflow-y-scroll rounded-lg shadow-inner">
+          <InnerContainer>
             {loading && (
               <div className="w-full absolute grid place-items-center h-full bg-black/25 z-30">
                 <LoadingIcon width={30} height={30} />
@@ -123,7 +124,7 @@ export default function RequestsSection({
                 data={data[item]}
               />
             ))}
-          </div>
+          </InnerContainer>
         )}
       </div>
     </DefaultCard>
