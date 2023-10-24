@@ -23,6 +23,7 @@ export default function AuthPage({
         "You have entered an invalid group. Please check for typos or contact your commander."
       );
     else if (status !== "" && status !== "success-signin") toast.error(status); // error message
+    if (status !== "") setStatus("");
   }, [status]);
 
   return (
