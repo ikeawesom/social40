@@ -3,7 +3,7 @@ import { MEMBER_SCHEMA } from "../schemas/members";
 import { initWaitListee } from "../schemas/waitlist";
 import getCurrentDate from "../getCurrentDate";
 import handleResponses from "../handleResponses";
-import { memberInGroup } from "../OnboardGroupMember";
+import { memberInGroup } from "../onboarding/OnboardGroupMember";
 
 export default async function handleSearchGroup({
   data,
