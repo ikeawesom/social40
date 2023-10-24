@@ -18,7 +18,7 @@ type GroupItemType = {
   groupID: string;
 };
 
-const MAX_LENGTH = 20;
+const MAX_LENGTH = 30;
 
 export default function RequestedUser({
   className,
