@@ -16,29 +16,32 @@ export async function OnboardGroupMember({
   role,
 }: OnboardGroupMemberType) {
   try {
-    // check if member exists
-    const memberStatus = await memberExists(memberID);
-    if (!memberStatus.status) throw new Error(memberStatus.error);
+    // simultaneous proccesses
+    const res = await Promise.all([
+      // check if member exists
+      memberExists(memberID),
 
-    // check if member already in group
-    const groupStatus = await memberInGroup(groupID, memberID);
-    if (!groupStatus.status) throw new Error(groupStatus.error);
+      // check if member already in group
+      memberInGroup(groupID, memberID),
 
-    // add member to group
-    const memberGroupStatus = await addMemberToGroup({
-      groupID,
-      memberID,
-      role: role ? role : "member",
+      // add member to group
+      addMemberToGroup({
+        groupID,
+        memberID,
+        role: role ? role : "member",
+      }),
+
+      // remove member from waitlist
+      removeMemberWaitlist({ groupID, memberID }),
+
+      // add group to member join
+      addGroupToMember({ groupID, memberID }),
+    ]);
+
+    // check for any errors
+    res.forEach((res) => {
+      if (!res.status) throw new Error(res.error);
     });
-    if (!memberGroupStatus.status) throw new Error(memberGroupStatus.error);
-
-    // remove member from waitlist
-    const memberWaitlist = await removeMemberWaitlist({ groupID, memberID });
-    if (!memberWaitlist.status) throw new Error(memberWaitlist.error);
-
-    // add group to member join
-    const groupMemberStatus = await addGroupToMember({ groupID, memberID });
-    if (!groupMemberStatus.status) throw new Error(groupMemberStatus.error);
 
     return handleResponses();
   } catch (err: any) {
