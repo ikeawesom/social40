@@ -13,6 +13,7 @@ import LoadingIcon from "../utils/LoadingIcon";
 import { useProfile } from "@/src/hooks/profile/useProfile";
 import { toast } from "sonner";
 import LoadingScreenSmall from "../screens/LoadingScreenSmall";
+import OfflineScreen from "../screens/OfflineScreen";
 
 export type FriendsListType = { [key: string]: MEMBER_SCHEMA };
 
@@ -61,6 +62,7 @@ export default function ProfileSection({ className }: { className: string }) {
     toast.error(
       "There was an error loading your profile. Please refresh to try again."
     );
+    return <OfflineScreen />;
   }
 
   return <LoadingScreenSmall />;
