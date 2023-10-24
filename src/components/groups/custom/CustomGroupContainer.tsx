@@ -8,7 +8,7 @@ import LoadingScreenSmall from "../../screens/LoadingScreenSmall";
 import { useGroupData } from "@/src/hooks/groups/custom/useGroupData";
 
 export default function CustomGroupContainer({ groupID }: { groupID: string }) {
-  const { data, error } = useGroupData(groupID);
+  const { data, error, role } = useGroupData(groupID);
 
   if (data) {
     return (
@@ -18,7 +18,7 @@ export default function CustomGroupContainer({ groupID }: { groupID: string }) {
           title={data.groupName}
           desc={data.groupDesc}
         />
-        <GroupRequested />
+        {role === "owner" && <GroupRequested />}
       </div>
     );
   } else if (error.includes("not found")) {
