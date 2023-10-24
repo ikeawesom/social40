@@ -20,6 +20,8 @@ const config: Config = {
         "custom-light-orange": "#FFF6D7",
         "custom-red": "#FF4141",
         "custom-light-red": "#FFF2F2",
+        "custom-green": "#2B8B35",
+        "custom-light-green": "#E2FFE5",
       },
       boxShadow: {
         "custom-top": "0 -1px 2px 0 rgb(0 0 0 / 0.05)",
