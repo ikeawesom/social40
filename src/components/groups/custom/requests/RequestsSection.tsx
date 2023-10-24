@@ -91,10 +91,10 @@ export default function RequestsSection({
     <DefaultCard className="py-2 px-3">
       <div className="flex flex-col items-center justify-start w-full">
         <div className="flex items-center justify-between w-full">
-          <h1 className="text-custom-dark-text font-semibold text-sm flex gap-1 items-center justify-start text-start">
+          <h1 className="text-custom-dark-text font-semibold flex gap-1 items-center justify-start text-start">
             Requests
-            <span className="bg-custom-red text-custom-light-text font-medium px-1 rounded-full text-xs text-center">
-              {Object.keys(data).length > 10 ? "9+" : Object.keys(data).length}
+            <span className="bg-custom-red text-custom-light-text font-medium px-1 rounded-full text-sm text-center my-2">
+              {Object.keys(data).length > 9 ? "9+" : Object.keys(data).length}
             </span>
           </h1>
           <Image
@@ -107,7 +107,7 @@ export default function RequestsSection({
           />
         </div>
         {show && (
-          <div className="relative w-full flex-col flex items-center justify-start max-h-[30vh] overflow-y-scroll rounded-lg">
+          <div className="relative w-full flex-col flex items-center justify-start max-h-[30vh] overflow-y-scroll rounded-lg shadow-inner">
             {loading && (
               <div className="w-full absolute grid place-items-center h-full bg-black/25 z-30">
                 <LoadingIcon width={30} height={30} />
