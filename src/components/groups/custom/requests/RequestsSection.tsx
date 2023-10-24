@@ -3,6 +3,12 @@ import DefaultCard from "../../../DefaultCard";
 import Image from "next/image";
 import RequestedUser from "./RequestedUser";
 import { WaitListData } from "@/src/hooks/groups/custom/requests/useGroupRequests";
+import LoadingIcon from "@/src/components/utils/LoadingIcon";
+import { OnboardGroupMember } from "@/src/utils/onboarding/OnboardGroupMember";
+import { OnboardNewMember } from "@/src/utils/onboarding/OnboardNewMember";
+import { toast } from "sonner";
+import { dbHandler } from "@/src/firebase/db";
+import { useRouter } from "next/navigation";
 
 export default function RequestsSection({
   data,
@@ -12,6 +18,58 @@ export default function RequestsSection({
   groupID?: string;
 }) {
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleAccept = async (
+    memberID: string,
+    groupID: string,
+    displayName: string,
+    password: string | undefined
+  ) => {
+    const email = memberID + "@digital40sar.com";
+
+    setLoading(true);
+    try {
+      // check if new user
+      const newMemberStatus = await dbHandler.get({
+        col_name: "MEMBERS",
+        id: memberID,
+      });
+
+      if (!newMemberStatus.status) {
+        // new user
+        console.log("New member. Preparing to register");
+        const onboardMemberStatus = await OnboardNewMember({
+          displayName,
+          memberID,
+          email,
+          password,
+          role: "member",
+        });
+
+        if (!onboardMemberStatus.status)
+          throw new Error(onboardMemberStatus.error);
+        console.log("Registed user.");
+      }
+
+      console.log("Preparing to onboard group member.");
+      const onboardGroupStatus = await OnboardGroupMember({
+        groupID,
+        memberID,
+        role: "member",
+      });
+
+      console.log("Onboarded group member.");
+      if (!onboardGroupStatus.status) throw new Error(onboardGroupStatus.error);
+      toast.success(`${memberID} added to ${groupID}.`);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+    setLoading(false);
+  };
+
+  const handleReject = async (groupID: string, memberID: string) => {};
+
   if (data)
     return (
       <DefaultCard className="py-2 px-3">
@@ -40,9 +98,16 @@ export default function RequestsSection({
               />
             </div>
             {show && (
-              <div className="w-full flex-col flex items-center justify-start max-h-[30vh] overflow-y-scroll rounded-lg">
+              <div className="relative w-full flex-col flex items-center justify-start max-h-[30vh] overflow-y-scroll rounded-lg">
+                {loading && (
+                  <div className="w-full absolute grid place-items-center h-full bg-white/30 z-30">
+                    <LoadingIcon width={30} height={30} />
+                  </div>
+                )}
                 {Object.keys(data).map((item) => (
                   <RequestedUser
+                    accept={handleAccept}
+                    reject={handleReject}
                     groupID={groupID}
                     className="py-2 px-3 rounded-none"
                     key={data[item].memberID}
