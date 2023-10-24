@@ -11,9 +11,9 @@ export default function GroupRequested({ groupID }: { groupID: string }) {
       {requested === undefined ? (
         <LoadingScreenSmall width={30} height={30} />
       ) : requested === null ? (
-        <RequestsSection empty />
+        <RequestsSection />
       ) : (
-        <RequestsSection data={requested} />
+        <RequestsSection groupID={groupID} data={requested} />
       )}
     </div>
   );
