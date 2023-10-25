@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import DefaultCard from "../DefaultCard";
 import Image from "next/image";
 import SecondaryButton from "../utils/SecondaryButton";
@@ -14,13 +14,45 @@ import { useProfile } from "@/src/hooks/profile/useProfile";
 import { toast } from "sonner";
 import LoadingScreenSmall from "../screens/LoadingScreenSmall";
 import OfflineScreen from "../screens/OfflineScreen";
+import StatusDot from "../utils/StatusDot";
+import ToggleBibo from "./ToggleBibo";
+import { useHostname } from "@/src/hooks/useHostname";
+import { useMemberID } from "@/src/hooks/useMemberID";
+import LoadingScreen from "../screens/LoadingScreen";
 
 export type FriendsListType = { [key: string]: MEMBER_SCHEMA };
 
 export default function ProfileSection({ className }: { className: string }) {
-  const { memberDetails } = useProfile();
+  const { memberID } = useMemberID();
+  const { memberDetails, setMemberDetails } = useProfile();
+  const { host } = useHostname();
+  const [loading, setLoading] = useState(false);
+
+  const handleBibo = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${host}/api/bibo`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          memberID: memberID,
+        }),
+      });
+      if (res.status) setMemberDetails(undefined);
+      else
+        throw new Error(
+          "An unknown error occurred. Please restart the app and try again."
+        );
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+    setLoading(false);
+  };
 
   if (memberDetails) {
+    const bibo = memberDetails.bookedIn as boolean;
     return (
       <DefaultCard
         className={twMerge(
@@ -30,15 +62,24 @@ export default function ProfileSection({ className }: { className: string }) {
       >
         {memberDetails ? (
           <>
+            {loading && (
+              <LoadingScreen className="absolute h-full w-full rounded-lg bg-black/10 z-30" />
+            )}
             <div className="flex flex-col gap-2 items-center justify-center">
               <SignoutButton />
-              <Image
-                src="/icons/icon_avatar.svg"
-                height={80}
-                width={80}
-                alt="Profile"
-                className="drop-shadow-md"
-              />
+              <div className="relative">
+                <StatusDot
+                  status={bibo}
+                  className="absolute top-1 right-1 h-4 w-4 z-20 drop-shadow-md"
+                />
+                <Image
+                  src="/icons/icon_avatar.svg"
+                  height={80}
+                  width={80}
+                  alt="Profile"
+                  className="drop-shadow-md"
+                />
+              </div>
               <div className="flex flex-col items-center justify-center gap-0">
                 <h1 className="font-bold text-custom-dark-text text-base">
                   {memberDetails.displayName}
@@ -48,10 +89,13 @@ export default function ProfileSection({ className }: { className: string }) {
                 </p>
               </div>
             </div>
-            <SecondaryButton>Edit Profile</SecondaryButton>
-            <PrimaryButton>Invite Friends</PrimaryButton>
+            <div className="w-full flex items-center justify-between gap-3">
+              <SecondaryButton>Edit Profile</SecondaryButton>
+              <ToggleBibo handleBibo={handleBibo} fetchedBibo={bibo} />
+            </div>
             <HRow />
             <FriendsList />
+            <PrimaryButton>Invite Friends</PrimaryButton>
           </>
         ) : (
           <LoadingIcon />
