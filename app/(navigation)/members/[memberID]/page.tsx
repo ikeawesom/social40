@@ -18,8 +18,8 @@ export default async function MemberPage({
     // member does not exist
     return <NotFoundScreen />;
   } else if (res.status) {
-    const dataFetched = res.data;
-    const memberData = dataFetched as MEMBER_SCHEMA;
+    const dataFetched = JSON.stringify(res.data);
+    const memberData = JSON.parse(dataFetched) as MEMBER_SCHEMA;
     return (
       <>
         <HeaderBar text={memberID} back />
