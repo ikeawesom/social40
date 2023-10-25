@@ -32,7 +32,7 @@ export default function RequestedUser({
   return (
     <div
       className={twMerge(
-        "w-full rounded-lg py-2 px-3 shadow-sm hover:bg-custom-light-text duration-300 flex items-center justify-between",
+        "w-full rounded-lg py-2 px-3 shadow-sm hover:bg-custom-light-text duration-300 gap-1 flex flex-col items-start justify-center",
         className
       )}
     >
@@ -44,30 +44,18 @@ export default function RequestedUser({
             : memberID}
         </p>
       </div>
-      <div className="flex items-center justify-center gap-1 min-[300px]:gap-4 duration-200">
-        <SecondaryButton
-          className="w-fit p-0 bg-custom-green"
+      <div className="flex items-center justify-between gap-4 duration-200 w-full">
+        <PrimaryButton
+          className="py-1 border-[1px] border-transparent"
           onClick={() => accept(memberID, groupID, displayName, password)}
         >
-          <Image
-            src="/icons/icon_tick.svg"
-            alt="Accept"
-            width={0}
-            height={0}
-            className="w-[25px] min-[300px]:w-[30px] h-auto"
-          />
-        </SecondaryButton>
+          Accept
+        </PrimaryButton>
         <SecondaryButton
-          className="bg-custom-red p-0 w-fit"
+          className="border-custom-red text-custom-red py-1"
           onClick={() => reject(groupID, memberID)}
         >
-          <Image
-            src="/icons/icon_cross.svg"
-            alt="Reject"
-            width={0}
-            height={0}
-            className="w-[25px] min-[300px]:w-[30px] h-auto"
-          />
+          Reject
         </SecondaryButton>
       </div>
     </div>
