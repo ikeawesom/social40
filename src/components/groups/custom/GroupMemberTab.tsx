@@ -2,6 +2,7 @@ import React from "react";
 import { twMerge } from "tailwind-merge";
 import { MAX_LENGTH } from "./requests/RequestedUser";
 import { useMemberID } from "@/src/hooks/useMemberID";
+import { useRouter } from "next/navigation";
 
 export default function GroupMemberTab({
   data,
@@ -17,6 +18,7 @@ export default function GroupMemberTab({
   className?: string;
 }) {
   const { memberID } = useMemberID();
+  const router = useRouter();
   const displayName = data.displayName;
   const groupMemberID = data.memberID;
   const bookedIn = data.bookedIn;
@@ -25,8 +27,9 @@ export default function GroupMemberTab({
 
   return (
     <div
+      onClick={() => router.push(`/members/${groupMemberID}`)}
       className={twMerge(
-        "w-full py-2 px-3 shadow-sm duration-300 flex items-center justify-between",
+        "w-full py-2 px-3 shadow-sm duration-300 flex items-center justify-between cursor-pointer",
         memberID === groupMemberID
           ? "bg-custom-light-orange hover:brightness-95"
           : "hover:bg-custom-light-text",
