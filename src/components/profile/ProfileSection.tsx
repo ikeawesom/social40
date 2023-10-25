@@ -62,9 +62,6 @@ export default function ProfileSection({ className }: { className: string }) {
       >
         {memberDetails ? (
           <>
-            {loading && (
-              <LoadingScreen className="absolute h-full w-full rounded-lg bg-black/10 z-30" />
-            )}
             <div className="flex flex-col gap-2 items-center justify-center">
               <SignoutButton />
               <div className="relative">
@@ -91,7 +88,11 @@ export default function ProfileSection({ className }: { className: string }) {
             </div>
             <div className="w-full flex items-center justify-between gap-3">
               <SecondaryButton>Edit Profile</SecondaryButton>
-              <ToggleBibo handleBibo={handleBibo} fetchedBibo={bibo} />
+              <ToggleBibo
+                loading={loading}
+                handleBibo={handleBibo}
+                fetchedBibo={bibo}
+              />
             </div>
             <HRow />
             <FriendsList />
