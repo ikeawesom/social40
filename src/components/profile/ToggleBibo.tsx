@@ -27,7 +27,7 @@ export default function ToggleBibo({
         bibo
           ? "bg-custom-light-green border-custom-green text-custom-green"
           : "border-custom-orange text-custom-orange bg-custom-light-orange",
-        loading ? "opacity-80 grid place-items-center" : ""
+        loading ? "opacity-40 grid place-items-center" : ""
       )}
     >
       {loading ? (
