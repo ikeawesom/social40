@@ -39,5 +39,5 @@ export default function GroupMembers({ groupID }: { groupID: string }) {
   if (error) {
     toast.error(error);
   }
-  return <LoadingIcon />;
+  return <LoadingIcon width={30} height={30} />;
 }
