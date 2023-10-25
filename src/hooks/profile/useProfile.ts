@@ -13,8 +13,8 @@ export function useProfile() {
       if (res.status) setMemberDetails(res.data);
       else setMemberDetails(null);
     };
-    if (memberID !== "") handleFetch(memberID);
-  }, [memberID]);
+    if (memberID !== "" && memberDetails === undefined) handleFetch(memberID);
+  }, [memberID, memberDetails]);
 
   return { memberDetails, setMemberDetails };
 }
