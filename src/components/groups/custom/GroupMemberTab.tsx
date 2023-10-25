@@ -28,7 +28,7 @@ export default function GroupMemberTab({
       className={twMerge(
         "w-full py-2 px-3 shadow-sm duration-300 flex items-center justify-between",
         memberID === groupMemberID
-          ? "bg-custom-light-orange hover:brightness-75"
+          ? "bg-custom-light-orange hover:brightness-95"
           : "hover:bg-custom-light-text",
         className
       )}
