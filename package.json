@@ -25,7 +25,6 @@
     "@types/qrcode": "^1.5.4",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@types/react-qr-reader": "^2.1.6",
     "autoprefixer": "^10",
     "eslint": "^8",
     "eslint-config-next": "13.5.4",
