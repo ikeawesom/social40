@@ -17,7 +17,7 @@ import {
 import handleResponses from "../utils/handleResponses";
 
 // const FIREBASE_DB = getFirestore(FIREBASE_APP);
-const FIREBASE_DB = initializeFirestore(FIREBASE_APP, {
+export const FIREBASE_DB = initializeFirestore(FIREBASE_APP, {
   cacheSizeBytes: CACHE_SIZE_UNLIMITED,
 });
 
