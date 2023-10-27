@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import LoadingIcon from "../utils/LoadingIcon";
 import { twMerge } from "tailwind-merge";
+import { toast } from "sonner";
 import { MEMBER_BOOKED_IN } from "@/src/utils/schemas/members";
 import { dbHandler } from "@/src/firebase/db";
 import { useMemberID } from "@/src/hooks/useMemberID";
@@ -101,24 +102,17 @@ export default function BiboScanner() {
         )}
       />
       {!loading ? (
-        <>
-          <p
-            className={twMerge(
-              "animate-pulse font-bold",
-              success !== ""
-                ? "text-custom-green"
-                : error !== ""
-                ? "text-custom-red"
-                : "text-custom-grey-text"
-            )}
-          >
-            {success !== ""
-              ? success
-              : error !== ""
-              ? error
-              : "Searching for code..."}
+        <div className="flex flex-col gap-2 items-center justify-center">
+          <p className="animate-pulse font-bold text-custom-grey-text text-sm text-center">
+            Searching for code...
           </p>
-        </>
+          {success !== "" && (
+            <p className="text-custom-green text-center">{success}</p>
+          )}
+          {error !== "" && (
+            <p className="text-custom-red text-center">{error}</p>
+          )}
+        </div>
       ) : (
         <>
           <div className="w-[290px] aspect-square rounded-lg overflow-hidden bg-white grid place-items-center">
