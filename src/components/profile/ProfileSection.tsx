@@ -20,13 +20,15 @@ import { useHostname } from "@/src/hooks/useHostname";
 import { useMemberID } from "@/src/hooks/useMemberID";
 import { useRouter } from "next/navigation";
 import { ROLES_HIERARCHY } from "../members/MemberProfileContainer";
+import NotFoundScreen from "../screens/NotFoundScreen";
+import ServerErrorScreen from "../screens/ServerErrorScreen";
 
 export type FriendsListType = { [key: string]: MEMBER_SCHEMA };
 
 export default function ProfileSection({ className }: { className?: string }) {
   const router = useRouter();
   const { memberID } = useMemberID();
-  const { memberDetails, setMemberDetails } = useProfile();
+  const { memberDetails, setMemberDetails, error } = useProfile();
   const { host } = useHostname();
   const [loading, setLoading] = useState(false);
 
@@ -110,11 +112,10 @@ export default function ProfileSection({ className }: { className?: string }) {
         )}
       </DefaultCard>
     );
-  } else if (memberDetails === null) {
-    toast.error(
-      "There was an error loading your profile. Please refresh to try again."
-    );
-    return <OfflineScreen />;
+  } else if (error) {
+    if (error.includes("offline")) return <OfflineScreen />;
+    if (error.includes("not found")) return <NotFoundScreen />;
+    else return <ServerErrorScreen eMsg={error} />;
   }
 
   return <LoadingScreenSmall />;
