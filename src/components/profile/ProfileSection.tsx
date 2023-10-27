@@ -104,7 +104,6 @@ export default function ProfileSection({ className }: { className?: string }) {
             </div>
             <HRow />
             <FriendsList />
-            <PrimaryButton>Invite Friends</PrimaryButton>
           </>
         ) : (
           <LoadingIcon />

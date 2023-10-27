@@ -4,6 +4,7 @@ import { useFriendsList } from "@/src/hooks/profile/useFriendsList";
 import { toast } from "sonner";
 import LoadingIcon from "../utils/LoadingIcon";
 import { useMemberID } from "@/src/hooks/useMemberID";
+import PrimaryButton from "../utils/PrimaryButton";
 
 export default function FriendsList() {
   const { memberID } = useMemberID();
@@ -46,6 +47,7 @@ export default function FriendsList() {
               No friends added. Invite someone today!
             </p>
           )}
+          <PrimaryButton className="mt-2">Invite Friends</PrimaryButton>
         </div>
       );
     } else if (friendsData === null) {
