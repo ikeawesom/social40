@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useMemberID } from "./useMemberID";
 import QRCode from "qrcode";
+import { MEMBER_BOOKED_IN } from "../utils/schemas/members";
+import getCurrentDate from "../utils/getCurrentDate";
 
 export function useBiboQR() {
   const { memberID } = useMemberID();
@@ -8,15 +10,22 @@ export function useBiboQR() {
   const [error, setError] = useState<string>();
 
   useEffect(() => {
-    const handleQR = (id: string) => {
-      QRCode.toDataURL(id, { width: 300 }, (err, dataUrl) => {
+    const handleQR = (data: string) => {
+      QRCode.toDataURL(data, { width: 300 }, (err, dataUrl) => {
         if (err) setError(err.message);
         else setDataURL(dataUrl);
       });
     };
 
     if (!dataURL && memberID !== "") {
-      handleQR(memberID);
+      const toSend = {
+        memberID: memberID,
+        bookInOn: getCurrentDate(),
+      } as MEMBER_BOOKED_IN;
+
+      const toSendStr = JSON.stringify(toSend);
+
+      handleQR(toSendStr);
     }
   }, [dataURL, memberID]);
 
