@@ -23,7 +23,7 @@ export default function ToggleBibo({
       disabled={loading}
       onClick={handleBibo}
       className={twMerge(
-        "font-bold",
+        "font-bold flex-1",
         bibo
           ? "bg-custom-light-green border-custom-green text-custom-green"
           : "border-custom-orange text-custom-orange bg-custom-light-orange",

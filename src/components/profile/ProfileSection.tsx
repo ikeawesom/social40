@@ -91,8 +91,8 @@ export default function ProfileSection({ className }: { className: string }) {
                 </p>
               </div>
             </div>
-            <div className="w-full flex items-center justify-between gap-3">
-              <SecondaryButton>Edit Profile</SecondaryButton>
+            <div className="w-full flex items-stretch justify-between gap-3 flex-wrap">
+              <SecondaryButton className="flex-1">Edit Profile</SecondaryButton>
               <ToggleBibo
                 loading={loading}
                 handleBibo={handleBibo}
