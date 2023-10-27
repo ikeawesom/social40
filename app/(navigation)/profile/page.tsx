@@ -33,8 +33,8 @@ export default async function Profile({
   return (
     <>
       <HeaderBar text="My Profile" />
-      <div className="grid sm:grid-cols-1 gap-4">
-        <div className="sm:col-span-1 flex flex-col gap-4 items-stretch justify-center">
+      <div className="grid place-items-center">
+        <div className="sm:col-span-1 flex flex-col gap-4 items-stretch justify-center w-full max-w-[500px]">
           <ProfileSection />
           <BiboSection />
         </div>
@@ -46,6 +46,13 @@ export default async function Profile({
             // statistics={data.statistics}
           /> */}
       </div>
+
+      {/*
+       ---------- WHEN ACTIVITES ARE IMPLEMENTED, SPLIT THE COLUMNS -----------
+      <div className="grid sm:grid-cols-1 gap-4">
+        <div className="sm:col-span-1 flex flex-col gap-4 items-stretch justify-center">
+          <ProfileSection />
+          <BiboSection /> */}
     </>
   );
 }
