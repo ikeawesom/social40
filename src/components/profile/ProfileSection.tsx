@@ -19,6 +19,7 @@ import ToggleBibo from "./ToggleBibo";
 import { useHostname } from "@/src/hooks/useHostname";
 import { useMemberID } from "@/src/hooks/useMemberID";
 import { useRouter } from "next/navigation";
+import { ROLES_HIERARCHY } from "../members/MemberProfileContainer";
 
 export type FriendsListType = { [key: string]: MEMBER_SCHEMA };
 
@@ -31,9 +32,11 @@ export default function ProfileSection({ className }: { className: string }) {
 
   if (memberDetails) {
     const bibo = memberDetails.bookedIn as boolean;
+    const role = memberDetails.role;
+    const aboveAdmin = ROLES_HIERARCHY[role] >= ROLES_HIERARCHY["admin"];
 
     const handleBibo = async () => {
-      if (bibo) {
+      if (bibo || aboveAdmin) {
         setLoading(true);
         try {
           const res = await fetch(`${host}/api/bibo`, {
