@@ -18,41 +18,46 @@ import StatusDot from "../utils/StatusDot";
 import ToggleBibo from "./ToggleBibo";
 import { useHostname } from "@/src/hooks/useHostname";
 import { useMemberID } from "@/src/hooks/useMemberID";
-import LoadingScreen from "../screens/LoadingScreen";
+import { useRouter } from "next/navigation";
 
 export type FriendsListType = { [key: string]: MEMBER_SCHEMA };
 
 export default function ProfileSection({ className }: { className: string }) {
+  const router = useRouter();
   const { memberID } = useMemberID();
   const { memberDetails, setMemberDetails } = useProfile();
   const { host } = useHostname();
   const [loading, setLoading] = useState(false);
 
-  const handleBibo = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`${host}/api/bibo`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          memberID: memberID,
-        }),
-      });
-      if (res.status) setMemberDetails(undefined);
-      else
-        throw new Error(
-          "An unknown error occurred. Please restart the app and try again."
-        );
-    } catch (error: any) {
-      toast.error(error.message);
-    }
-    setLoading(false);
-  };
-
   if (memberDetails) {
     const bibo = memberDetails.bookedIn as boolean;
+
+    const handleBibo = async () => {
+      if (bibo) {
+        setLoading(true);
+        try {
+          const res = await fetch(`${host}/api/bibo`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              memberID: memberID,
+            }),
+          });
+          if (res.status) setMemberDetails(undefined);
+          else
+            throw new Error(
+              "An unknown error occurred. Please restart the app and try again."
+            );
+        } catch (error: any) {
+          toast.error(error.message);
+        }
+        setLoading(false);
+      } else {
+        router.push("/bibo");
+      }
+    };
     return (
       <DefaultCard
         className={twMerge(
