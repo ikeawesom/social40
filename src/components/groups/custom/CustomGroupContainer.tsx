@@ -7,6 +7,7 @@ import NotFoundScreen from "../../screens/NotFoundScreen";
 import LoadingScreenSmall from "../../screens/LoadingScreenSmall";
 import { useGroupData } from "@/src/hooks/groups/custom/useGroupData";
 import GroupMembers from "./GroupMembers";
+import ServerErrorScreen from "../../screens/ServerErrorScreen";
 
 export default function CustomGroupContainer({ groupID }: { groupID: string }) {
   const { data, error, role } = useGroupData(groupID);
@@ -29,6 +30,8 @@ export default function CustomGroupContainer({ groupID }: { groupID: string }) {
   } else if (error.includes("offline")) {
     // client is offline
     return <OfflineScreen />;
+  } else if (error !== "") {
+    return <ServerErrorScreen />;
   }
   // loading data
   return <LoadingScreenSmall />;
