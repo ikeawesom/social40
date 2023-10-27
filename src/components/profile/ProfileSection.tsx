@@ -23,7 +23,7 @@ import { ROLES_HIERARCHY } from "../members/MemberProfileContainer";
 
 export type FriendsListType = { [key: string]: MEMBER_SCHEMA };
 
-export default function ProfileSection({ className }: { className: string }) {
+export default function ProfileSection({ className }: { className?: string }) {
   const router = useRouter();
   const { memberID } = useMemberID();
   const { memberDetails, setMemberDetails } = useProfile();
