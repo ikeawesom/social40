@@ -47,7 +47,7 @@ export default function FriendsList() {
               No friends added. Invite someone today!
             </p>
           )}
-          <PrimaryButton className="mt-2">Invite Friends</PrimaryButton>
+          <PrimaryButton className="mt-4">Invite Friends</PrimaryButton>
         </div>
       );
     } else if (friendsData === null) {
