@@ -38,8 +38,8 @@ export default function BiboScanner() {
           aspectRatio: 1,
         };
         const successScan = async (text: string) => {
+          html5QrCode.stop();
           setLoading(true);
-          html5QrCode.pause();
           const data = JSON.parse(text) as MEMBER_BOOKED_IN;
           const bookInOn = data.bookInOn;
           const bookInDate = bookInOn.split(" ")[0];
@@ -57,11 +57,13 @@ export default function BiboScanner() {
             if (!res.status) throw new Error("Member:", res.error);
 
             const to_log = {
-              membersBookedIn: {
+              bookedInMembers: {
                 [bookInDate]: {
-                  memberID: memberBookIn,
-                  bookInOn: bookInOn,
-                } as MEMBER_BOOKED_IN,
+                  [memberBookIn]: {
+                    memberID: memberBookIn,
+                    bookInOn: bookInOn,
+                  } as MEMBER_BOOKED_IN,
+                },
               },
             };
 
@@ -77,7 +79,12 @@ export default function BiboScanner() {
             handleError(err.message);
           }
           setLoading(false);
-          html5QrCode.resume();
+          html5QrCode.start(
+            { facingMode: "environment" },
+            config,
+            successScan,
+            () => {}
+          );
         };
 
         html5QrCode = new Html5Qrcode("reader");
