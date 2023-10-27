@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import LoadingIcon from "../utils/LoadingIcon";
 import { twMerge } from "tailwind-merge";
-import { toast } from "sonner";
 import { MEMBER_BOOKED_IN } from "@/src/utils/schemas/members";
 import { dbHandler } from "@/src/firebase/db";
 import { useMemberID } from "@/src/hooks/useMemberID";
@@ -10,10 +9,25 @@ import { useMemberID } from "@/src/hooks/useMemberID";
 export default function BiboScanner() {
   const { memberID } = useMemberID();
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
   const [bookingMember, setBookingMember] = useState("");
 
   let html5QrCode: Html5Qrcode;
 
+  const handleSuccess = (text: string) => {
+    setSuccess(text);
+    setTimeout(() => {
+      setSuccess("");
+    }, 2000);
+  };
+
+  const handleError = (text: string) => {
+    setError(text);
+    setTimeout(() => {
+      setError("");
+    }, 2000);
+  };
   useEffect(() => {
     function startQR() {
       if (!html5QrCode?.getState()) {
@@ -57,10 +71,9 @@ export default function BiboScanner() {
             });
 
             if (!resA.status) throw new Error("Current:", resA.error);
-            toast.success(`Successfully booked in member: ${memberBookIn}`);
+            handleSuccess(`Successfully booked in member: ${memberBookIn}`);
           } catch (err: any) {
-            toast.error(err.message);
-            console.log(err);
+            handleError(err.message);
           }
           setLoading(false);
           html5QrCode.resume();
@@ -89,8 +102,21 @@ export default function BiboScanner() {
       />
       {!loading ? (
         <>
-          <p className="animate-pulse font-bold text-custom-green">
-            Searching for code...
+          <p
+            className={twMerge(
+              "animate-pulse font-bold",
+              success !== ""
+                ? "text-custom-green"
+                : error !== ""
+                ? "text-custom-red"
+                : "text-custom-grey-text"
+            )}
+          >
+            {success !== ""
+              ? success
+              : error !== ""
+              ? error
+              : "Searching for code..."}
           </p>
         </>
       ) : (
