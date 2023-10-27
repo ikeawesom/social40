@@ -9,9 +9,11 @@ import MemberPoints from "./MemberPoints";
 import LoadingScreenSmall from "../screens/LoadingScreenSmall";
 import MemberBadges from "./MemberBadges";
 
-const ROLES_HIERARCHY = {
-  owner: 3,
-  admin: 2,
+export const ROLES_HIERARCHY = {
+  owner: 5,
+  uadmin: 4,
+  admin: 3,
+  umember: 2,
   member: 1,
 } as { [role: string]: number };
 
