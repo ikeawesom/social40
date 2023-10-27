@@ -13,7 +13,9 @@ export type MEMBER_SCHEMA = {
   ipptID: string;
   shootingID: string;
   statisticsID: string;
-  bookedInMembers?: { [memberID: string]: MEMBER_BOOKED_IN };
+  bookedInMembers?: {
+    [dateBookedIn: string]: { [memberID: string]: MEMBER_BOOKED_IN };
+  };
 
   createdOn: string; // date format
 };
