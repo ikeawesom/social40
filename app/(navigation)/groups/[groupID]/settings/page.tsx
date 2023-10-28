@@ -11,7 +11,9 @@ export default function GroupSettingsPage({
   return (
     <>
       <HeaderBar back text={`Settings for ${groupID}`} />
-      <CustomGroupSettings groupID={groupID} />
+      <div className="w-full grid place-items-center">
+        <CustomGroupSettings groupID={groupID} />
+      </div>
     </>
   );
 }
