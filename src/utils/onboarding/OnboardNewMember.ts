@@ -5,7 +5,7 @@ import { dbHandler } from "../../firebase/db";
 import { initMemberObject } from "../schemas/members";
 import handleResponses from "../handleResponses";
 
-type OnboardMemberTypes = {
+export type OnboardMemberTypes = {
   email?: string;
   password?: string;
   memberID?: string;
