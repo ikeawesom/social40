@@ -1,11 +1,11 @@
 import React from "react";
 import { useGroupMembers } from "@/src/hooks/groups/custom/useGroupMembers";
-import LoadingIcon from "../../utils/LoadingIcon";
 import DefaultCard from "../../DefaultCard";
 import HRow from "../../utils/HRow";
 import InnerContainer from "../../utils/InnerContainer";
 import GroupMemberTab from "./GroupMemberTab";
 import { toast } from "sonner";
+import DefaultSkeleton from "../../utils/DefaultSkeleton";
 
 export default function GroupMembers({ groupID }: { groupID: string }) {
   const { membersList, error } = useGroupMembers(groupID);
@@ -30,5 +30,5 @@ export default function GroupMembers({ groupID }: { groupID: string }) {
   if (error) {
     toast.error(error);
   }
-  return <LoadingIcon width={30} height={30} />;
+  return <DefaultSkeleton />;
 }
