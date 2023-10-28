@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { getAuth } from "firebase/auth";
 import { FIREBASE_APP } from "../firebase/config";
 import { authHandler } from "../firebase/auth";
+import { cookies } from "next/headers";
+import { useHostname } from "../hooks/useHostname";
+import { clearCookies } from "../utils/clearCookies";
 
 type AuthContextType = {
   memberID: string | null;
@@ -15,6 +18,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const { host } = useHostname();
   const [memberID, setMember] = useState<string | null>(null);
 
   useEffect(() => {
@@ -22,17 +26,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     onAuthStateChanged(auth, async (userAuth) => {
       if (userAuth) {
         console.log("logged in");
-        const memberID = localStorage.getItem("memberID");
+        const fetchedMemberID = await fetch(`${host}/api/auth`);
+        const data = (await fetchedMemberID.json()) as string;
+
+        console.log("cookie:", data);
+
         const pathname = window.location.pathname;
 
         if (pathname.includes("auth")) {
           router.push("/");
         } else {
-          if (!memberID) {
+          if (!data) {
             const auth = getAuth(FIREBASE_APP);
             await authHandler.signOutUser(auth);
           } else {
-            setMember(memberID);
+            setMember(data);
           }
         }
       } else {
@@ -44,7 +52,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         })}`;
 
         setMember(null);
-        localStorage.clear();
+        await clearCookies(host);
+
         router.push(route, { scroll: false });
       }
     });

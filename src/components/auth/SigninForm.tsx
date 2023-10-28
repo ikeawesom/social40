@@ -7,7 +7,7 @@ import { getAuth } from "firebase/auth";
 import { FIREBASE_APP } from "@/src/firebase/config";
 import { dbHandler } from "@/src/firebase/db";
 import { useAuth } from "@/src/contexts/AuthContext";
-import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
+import { useHostname } from "@/src/hooks/useHostname";
 
 type userDetailsType = {
   email: string;
@@ -20,7 +20,7 @@ type statusType = {
 
 export default function SigninForm({ setStatus }: statusType) {
   const { setMember } = useAuth();
-
+  const { host } = useHostname();
   const [loading, setLoading] = useState(false);
   const [userDetails, setUserDetails] = useState<userDetailsType>({
     email: "",
@@ -50,8 +50,16 @@ export default function SigninForm({ setStatus }: statusType) {
       const resA = await dbHandler.get({ col_name: "MEMBERS", id: memberID });
 
       if (!resA.status) throw new Error(resA.error);
+
+      await fetch(`${host}/api/auth`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ memberID, strategy: "INIT" }),
+      });
+
       setMember(memberID);
-      localStorage.setItem("memberID", memberID);
     } catch (e: any) {
       setStatus(e.message as string);
     } finally {
