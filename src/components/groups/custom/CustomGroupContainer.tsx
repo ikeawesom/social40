@@ -8,11 +8,15 @@ import LoadingScreenSmall from "../../screens/LoadingScreenSmall";
 import { useGroupData } from "@/src/hooks/groups/custom/useGroupData";
 import GroupMembers from "./GroupMembers";
 import ServerErrorScreen from "../../screens/ServerErrorScreen";
+import { useIsGroupMember } from "@/src/hooks/groups/custom/useIsGroupMember";
+import RestrictedScreen from "../../screens/RestrictedScreen";
 
 export default function CustomGroupContainer({ groupID }: { groupID: string }) {
+  const { valid } = useIsGroupMember(groupID);
   const { data, error, role } = useGroupData(groupID);
 
-  if (data) {
+  if (valid === false) return <RestrictedScreen />;
+  else if (data) {
     return (
       <div className="flex flex-col items-center justify-start w-full gap-4">
         <GroupHeader
