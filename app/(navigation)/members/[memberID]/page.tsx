@@ -23,10 +23,7 @@ export default async function MemberPage({
     return (
       <>
         <HeaderBar text={memberID} back />
-        <MemberProfileContainer
-          viewProfile={memberID}
-          viewMemberData={memberData}
-        />
+        <MemberProfileContainer viewMemberData={memberData} />
       </>
     );
   }

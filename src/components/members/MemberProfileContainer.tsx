@@ -18,10 +18,8 @@ export const ROLES_HIERARCHY = {
 } as { [role: string]: number };
 
 export default function MemberProfileContainer({
-  viewProfile,
   viewMemberData,
 }: {
-  viewProfile: string;
   viewMemberData: MEMBER_SCHEMA;
 }) {
   const { memberDetails } = useProfile();
