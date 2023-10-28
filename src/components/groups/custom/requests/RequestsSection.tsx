@@ -4,11 +4,10 @@ import Image from "next/image";
 import RequestedUser from "./RequestedUser";
 import { WaitListData } from "@/src/hooks/groups/custom/requests/useGroupRequests";
 import LoadingIcon from "@/src/components/utils/LoadingIcon";
-import { OnboardGroupMember } from "@/src/utils/onboarding/OnboardGroupMember";
-import { OnboardNewMember } from "@/src/utils/onboarding/OnboardNewMember";
 import { toast } from "sonner";
 import { dbHandler } from "@/src/firebase/db";
 import InnerContainer from "@/src/components/utils/InnerContainer";
+import { Onboarding } from "@/src/utils/onboarding";
 
 export default function RequestsSection({
   data,
@@ -41,7 +40,7 @@ export default function RequestsSection({
       if (!newMemberStatus.status) {
         // new user
         console.log("New member. Preparing to register");
-        const onboardMemberStatus = await OnboardNewMember({
+        const onboardMemberStatus = await Onboarding.Account({
           displayName,
           memberID,
           email,
@@ -55,7 +54,7 @@ export default function RequestsSection({
       }
 
       console.log("Preparing to onboard group member.");
-      const onboardGroupStatus = await OnboardGroupMember({
+      const onboardGroupStatus = await Onboarding.GroupMember({
         groupID,
         memberID,
         role: "member",
