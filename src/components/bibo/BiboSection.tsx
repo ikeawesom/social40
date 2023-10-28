@@ -24,29 +24,37 @@ export default function BiboSection() {
               <h1 className="text-start font-semibold text-base">
                 Book in Members
               </h1>
+              <PrimaryButton
+                onClick={() => router.push("/book-someone")}
+                className="my-2"
+              >
+                Book Someone In
+              </PrimaryButton>
               {membersBookedIn && Object.keys(membersBookedIn).length !== 0 ? (
-                <>
+                <InnerContainer className="py-2 gap-4 max-h-[100vh]">
                   {Object.keys(membersBookedIn).map((date, index) => {
                     const dateObj = membersBookedIn[date];
                     return (
-                      <InnerContainer
+                      <div
                         key={index}
-                        className="items-start justify-center"
+                        className="flex flex-col w-full items-start justify-center"
                       >
-                        <div className="flex flex-col items-start justify-center mb-3">
-                          <h1 className="text-sm text-custom-grey-text px-3 text-start">
+                        <div className="flex flex-col items-start justify-center w-full px-3">
+                          <h1 className="text-sm text-custom-grey-text text-start">
                             {date}
                           </h1>
                           <HRow />
                         </div>
-                        <div className="flex flex-col items-start justify-center gap-2 w-full">
+
+                        <div className="flex flex-col items-start justify-center gap-2 w-full overflow-y-scroll">
                           {Object.keys(dateObj).map((memberID, indexA) => {
                             const memberObject = dateObj[memberID];
                             const time = memberObject.bookInOn.split(" ")[1];
+
                             return (
                               <div
                                 key={indexA}
-                                className="hover:bg-custom-light-text duration-200 w-full px-3 py-1"
+                                className="hover:bg-custom-light-text duration-200 w-full py-1 px-3"
                               >
                                 <h1 className="font-bold text-custom-dark-text">
                                   {memberObject.memberID}
@@ -58,22 +66,16 @@ export default function BiboSection() {
                             );
                           })}
                         </div>
-                      </InnerContainer>
+                      </div>
                     );
                   })}
-                </>
+                </InnerContainer>
               ) : (
                 <p className="text-start text-custom-grey-text text-xs">
                   You have not booked in anyone before.
                 </p>
               )}
             </div>
-            <PrimaryButton
-              onClick={() => router.push("/book-someone")}
-              className="mt-4"
-            >
-              Book Someone In
-            </PrimaryButton>
           </DefaultCard>
         );
     }
