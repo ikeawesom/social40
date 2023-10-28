@@ -17,3 +17,15 @@ export default function LoadingIcon({ height, width }: LoadingType) {
     />
   );
 }
+
+export function LoadingIconBright({ height, width }: LoadingType) {
+  return (
+    <Image
+      src="/icons/icon_spinner_bright.svg"
+      width={height ? height : 100}
+      height={width ? width : 100}
+      alt="Loading..."
+      className="animate-spin"
+    />
+  );
+}
