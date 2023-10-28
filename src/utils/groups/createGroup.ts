@@ -1,6 +1,9 @@
 import { dbHandler } from "@/src/firebase/db";
-import getCurrentDate from "../getCurrentDate";
-import { GROUP_SCHEMA, initGroupObject } from "../schemas/groups";
+import {
+  GROUP_MEMBERS_SCHEMA,
+  GROUP_SCHEMA,
+  initGroupObject,
+} from "../schemas/groups";
 import handleResponses from "../handleResponses";
 import { MEMBER_CREATED_GROUPS_SCHEMA } from "../schemas/members";
 
@@ -38,18 +41,32 @@ export async function createGroup({
 
     if (!resA.status) throw new Error(resA.error);
 
+    const groupMemberData = {
+      dateJoined: createdOn,
+      memberID: createdBy,
+      role: "owner",
+    } as GROUP_MEMBERS_SCHEMA;
+
+    const resB = await dbHandler.add({
+      col_name: `GROUPS/${groupID}/MEMBERS`,
+      id: createdBy,
+      to_add: groupMemberData,
+    });
+
+    if (!resB.status) throw new Error(resB.error);
+
     const memberGroupData = {
       createdOn,
       groupID,
     } as MEMBER_CREATED_GROUPS_SCHEMA;
 
-    const resB = await dbHandler.add({
+    const resC = await dbHandler.add({
       col_name: `MEMBERS/${createdBy}/GROUPS-CREATED`,
       id: groupID,
       to_add: memberGroupData,
     });
 
-    if (!resB.status) throw new Error(resB.error);
+    if (!resC.status) throw new Error(resC.error);
 
     return handleResponses();
   } catch (err: any) {
