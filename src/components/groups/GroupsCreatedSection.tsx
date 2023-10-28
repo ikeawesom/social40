@@ -1,8 +1,8 @@
 import React from "react";
 import HRow from "../utils/HRow";
-import Link from "next/link";
 import { ownedGroupsType } from "@/src/utils/groups/getOwnedGroups";
 import GroupItem from "./GroupItem";
+import CreateGroupContainer from "./create/CreateGroupContainer";
 
 export default function GroupsCreatedSection({
   ownedGroups,
@@ -15,6 +15,7 @@ export default function GroupsCreatedSection({
     <div className="flex flex-col gap-y-1 items-start justify-start w-full">
       <h1 className="font-bold text-custom-dark-text">Created Groups</h1>
       <HRow className="bg-custom-grey-text mb-1 mt-0" />
+      <CreateGroupContainer />
       {!empty ? (
         Object.keys(ownedGroups).map((groupID: string) => (
           <GroupItem

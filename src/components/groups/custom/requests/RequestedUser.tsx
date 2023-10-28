@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
-import Image from "next/image";
 import { WAITLIST_SCHEMA } from "@/src/utils/schemas/waitlist";
+import { MAX_LENGTH } from "@/src/utils/constants";
 
 type GroupItemType = {
   className?: string;
@@ -17,8 +17,6 @@ type GroupItemType = {
   reject: (groupID: string, memberID: string) => void;
   groupID: string;
 };
-
-export const MAX_LENGTH = 30;
 
 export default function RequestedUser({
   className,

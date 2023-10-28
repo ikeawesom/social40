@@ -7,11 +7,17 @@ import NotFoundScreen from "../../screens/NotFoundScreen";
 import LoadingScreenSmall from "../../screens/LoadingScreenSmall";
 import { useGroupData } from "@/src/hooks/groups/custom/useGroupData";
 import GroupMembers from "./GroupMembers";
+import ServerErrorScreen from "../../screens/ServerErrorScreen";
+import { useIsGroupMember } from "@/src/hooks/groups/custom/useIsGroupMember";
+import RestrictedScreen from "../../screens/RestrictedScreen";
+import SettingsSection from "./settings/SettingsSection";
 
 export default function CustomGroupContainer({ groupID }: { groupID: string }) {
+  const { valid } = useIsGroupMember(groupID);
   const { data, error, role } = useGroupData(groupID);
-
-  if (data) {
+  const owner = role === "owner";
+  if (valid === false) return <RestrictedScreen />;
+  else if (data) {
     return (
       <div className="flex flex-col items-center justify-start w-full gap-4">
         <GroupHeader
@@ -19,8 +25,9 @@ export default function CustomGroupContainer({ groupID }: { groupID: string }) {
           title={data.groupName}
           desc={data.groupDesc}
         />
-        {role === "owner" && <GroupRequested groupID={groupID} />}
+        {owner && <GroupRequested groupID={groupID} />}
         <GroupMembers groupID={groupID} />
+        {owner && <SettingsSection groupID={groupID} />}
       </div>
     );
   } else if (error.includes("not found")) {
@@ -29,6 +36,8 @@ export default function CustomGroupContainer({ groupID }: { groupID: string }) {
   } else if (error.includes("offline")) {
     // client is offline
     return <OfflineScreen />;
+  } else if (error !== "") {
+    return <ServerErrorScreen />;
   }
   // loading data
   return <LoadingScreenSmall />;

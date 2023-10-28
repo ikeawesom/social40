@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import DefaultCard from "../DefaultCard";
 import Image from "next/image";
 import SecondaryButton from "../utils/SecondaryButton";
@@ -14,13 +14,55 @@ import { useProfile } from "@/src/hooks/profile/useProfile";
 import { toast } from "sonner";
 import LoadingScreenSmall from "../screens/LoadingScreenSmall";
 import OfflineScreen from "../screens/OfflineScreen";
+import StatusDot from "../utils/StatusDot";
+import ToggleBibo from "./ToggleBibo";
+import { useHostname } from "@/src/hooks/useHostname";
+import { useMemberID } from "@/src/hooks/useMemberID";
+import { useRouter } from "next/navigation";
+import NotFoundScreen from "../screens/NotFoundScreen";
+import ServerErrorScreen from "../screens/ServerErrorScreen";
+import { ROLES_HIERARCHY } from "@/src/utils/constants";
 
 export type FriendsListType = { [key: string]: MEMBER_SCHEMA };
 
-export default function ProfileSection({ className }: { className: string }) {
-  const { memberDetails } = useProfile();
+export default function ProfileSection({ className }: { className?: string }) {
+  const router = useRouter();
+  const { memberID } = useMemberID();
+  const { memberDetails, setMemberDetails, error } = useProfile();
+  const { host } = useHostname();
+  const [loading, setLoading] = useState(false);
 
   if (memberDetails) {
+    const bibo = memberDetails.bookedIn as boolean;
+    const role = memberDetails.role;
+    const aboveAdmin = ROLES_HIERARCHY[role] >= ROLES_HIERARCHY["admin"];
+
+    const handleBibo = async () => {
+      if (bibo || aboveAdmin) {
+        setLoading(true);
+        try {
+          const res = await fetch(`${host}/api/bibo`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              memberID: memberID,
+            }),
+          });
+          if (res.status) setMemberDetails(undefined);
+          else
+            throw new Error(
+              "An unknown error occurred. Please restart the app and try again."
+            );
+        } catch (error: any) {
+          toast.error(error.message);
+        }
+        setLoading(false);
+      } else {
+        router.push("/bibo");
+      }
+    };
     return (
       <DefaultCard
         className={twMerge(
@@ -32,13 +74,19 @@ export default function ProfileSection({ className }: { className: string }) {
           <>
             <div className="flex flex-col gap-2 items-center justify-center">
               <SignoutButton />
-              <Image
-                src="/icons/icon_avatar.svg"
-                height={80}
-                width={80}
-                alt="Profile"
-                className="drop-shadow-md"
-              />
+              <div className="relative">
+                <StatusDot
+                  status={bibo}
+                  className="absolute top-1 right-1 h-4 w-4 z-20 drop-shadow-md"
+                />
+                <Image
+                  src="/icons/icon_avatar.svg"
+                  height={80}
+                  width={80}
+                  alt="Profile"
+                  className="drop-shadow-md"
+                />
+              </div>
               <div className="flex flex-col items-center justify-center gap-0">
                 <h1 className="font-bold text-custom-dark-text text-base">
                   {memberDetails.displayName}
@@ -48,8 +96,14 @@ export default function ProfileSection({ className }: { className: string }) {
                 </p>
               </div>
             </div>
-            <SecondaryButton>Edit Profile</SecondaryButton>
-            <PrimaryButton>Invite Friends</PrimaryButton>
+            <div className="w-full flex items-stretch justify-between gap-3 flex-wrap">
+              <SecondaryButton className="flex-1">Edit Profile</SecondaryButton>
+              <ToggleBibo
+                loading={loading}
+                handleBibo={handleBibo}
+                fetchedBibo={bibo}
+              />
+            </div>
             <HRow />
             <FriendsList />
           </>
@@ -58,11 +112,10 @@ export default function ProfileSection({ className }: { className: string }) {
         )}
       </DefaultCard>
     );
-  } else if (memberDetails === null) {
-    toast.error(
-      "There was an error loading your profile. Please refresh to try again."
-    );
-    return <OfflineScreen />;
+  } else if (error) {
+    if (error.includes("offline")) return <OfflineScreen />;
+    if (error.includes("not found")) return <NotFoundScreen />;
+    else return <ServerErrorScreen eMsg={error} />;
   }
 
   return <LoadingScreenSmall />;

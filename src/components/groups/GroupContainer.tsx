@@ -7,9 +7,12 @@ import { useOwnedGroups } from "@/src/hooks/groups/useOwnedGroups";
 import { useJoinedGroups } from "@/src/hooks/groups/useJoinedGroups";
 import LoadingIcon from "../utils/LoadingIcon";
 import LoadingScreenSmall from "../screens/LoadingScreenSmall";
+import OfflineScreen from "../screens/OfflineScreen";
+import NotFoundScreen from "../screens/NotFoundScreen";
+import ServerErrorScreen from "../screens/ServerErrorScreen";
 
 export default function GroupContainer() {
-  const { memberDetails } = useProfile();
+  const { memberDetails, error } = useProfile();
   const { groupsCreated } = useOwnedGroups();
   const { joinedGroups } = useJoinedGroups();
 
@@ -27,6 +30,11 @@ export default function GroupContainer() {
         <GroupsJoinedSection joinedGroups={joinedGroups} />
       </div>
     );
+  } else if (error) {
+    if (error.includes("offline")) return <OfflineScreen />;
+    if (error.includes("not found")) return <NotFoundScreen />;
+    else return <ServerErrorScreen eMsg={error} />;
   }
+
   return <LoadingScreenSmall />;
 }

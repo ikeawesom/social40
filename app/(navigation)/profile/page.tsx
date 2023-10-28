@@ -3,6 +3,7 @@ import ProfileSection from "@/src/components/profile/ProfileSection";
 import { redirect } from "next/navigation";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import { Metadata } from "next";
+import BiboSection from "@/src/components/bibo/BiboSection";
 
 export const metadata: Metadata = {
   title: "Profile",
@@ -32,8 +33,11 @@ export default async function Profile({
   return (
     <>
       <HeaderBar text="My Profile" />
-      <div className="grid sm:grid-cols-1 gap-4">
-        <ProfileSection className="sm:col-span-1" />
+      <div className="grid place-items-center">
+        <div className="sm:col-span-1 flex flex-col gap-4 items-stretch justify-center w-full max-w-[500px]">
+          <ProfileSection />
+          <BiboSection />
+        </div>
         {/* TO DO */}
         {/* <StatsSection
             className="sm:col-span-2"
@@ -42,6 +46,13 @@ export default async function Profile({
             // statistics={data.statistics}
           /> */}
       </div>
+
+      {/*
+       ---------- WHEN ACTIVITES ARE IMPLEMENTED, SPLIT THE COLUMNS -----------
+      <div className="grid sm:grid-cols-1 gap-4">
+        <div className="sm:col-span-1 flex flex-col gap-4 items-stretch justify-center">
+          <ProfileSection />
+          <BiboSection /> */}
     </>
   );
 }

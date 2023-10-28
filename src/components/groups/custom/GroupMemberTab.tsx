@@ -1,9 +1,9 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
-import { MAX_LENGTH } from "./requests/RequestedUser";
 import { useMemberID } from "@/src/hooks/useMemberID";
 import { useRouter } from "next/navigation";
 import StatusDot from "../../utils/StatusDot";
+import { MAX_LENGTH } from "@/src/utils/constants";
 
 export default function GroupMemberTab({
   data,
