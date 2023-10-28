@@ -19,9 +19,9 @@ import ToggleBibo from "./ToggleBibo";
 import { useHostname } from "@/src/hooks/useHostname";
 import { useMemberID } from "@/src/hooks/useMemberID";
 import { useRouter } from "next/navigation";
-import { ROLES_HIERARCHY } from "../members/MemberProfileContainer";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import ServerErrorScreen from "../screens/ServerErrorScreen";
+import { ROLES_HIERARCHY } from "@/src/utils/constants";
 
 export type FriendsListType = { [key: string]: MEMBER_SCHEMA };
 

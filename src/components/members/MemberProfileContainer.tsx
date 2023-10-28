@@ -8,14 +8,7 @@ import BookedStatus from "./BookedStatus";
 import MemberPoints from "./MemberPoints";
 import LoadingScreenSmall from "../screens/LoadingScreenSmall";
 import MemberBadges from "./MemberBadges";
-
-export const ROLES_HIERARCHY = {
-  owner: 5,
-  uadmin: 4,
-  admin: 3,
-  umember: 2,
-  member: 1,
-} as { [role: string]: number };
+import { ROLES_HIERARCHY } from "@/src/utils/constants";
 
 export default function MemberProfileContainer({
   viewMemberData,

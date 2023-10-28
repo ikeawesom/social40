@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
-import { ROLES_HIERARCHY } from "@/src/components/members/MemberProfileContainer";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import { useProfile } from "@/src/hooks/profile/useProfile";
 import LoadingScreenSmall from "@/src/components/screens/LoadingScreenSmall";
 import BiboScanner from "@/src/components/bibo/BiboScanner";
+import { ROLES_HIERARCHY } from "@/src/utils/constants";
 
 export default function BookSomeoneInPage() {
   const { memberDetails } = useProfile();

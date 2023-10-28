@@ -5,8 +5,8 @@ import HRow from "../utils/HRow";
 import { useProfile } from "@/src/hooks/profile/useProfile";
 import PrimaryButton from "../utils/PrimaryButton";
 import { useRouter } from "next/navigation";
-import { ROLES_HIERARCHY } from "../members/MemberProfileContainer";
 import InnerContainer from "../utils/InnerContainer";
+import { ROLES_HIERARCHY } from "@/src/utils/constants";
 
 export default function BiboSection() {
   const router = useRouter();

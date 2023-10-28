@@ -1,11 +1,6 @@
+import { BADGE_COLORS } from "@/src/utils/constants";
 import { BADGE_SCHEMA } from "@/src/utils/schemas/members";
 import React from "react";
-
-export const BADGE_COLORS = {
-  Gold: "bg-orange-300",
-  Sharpshooter: "bg-green-300",
-  Recon: "bg-blue-300",
-} as { [key: string]: string };
 
 export default function MemberBadges({ badges }: { badges: BADGE_SCHEMA[] }) {
   return (

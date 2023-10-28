@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import LoadingScreenSmall from "@/src/components/screens/LoadingScreenSmall";
 import BiboQR from "@/src/components/bibo/BiboQR";
 import { useProfile } from "@/src/hooks/profile/useProfile";
-import { ROLES_HIERARCHY } from "@/src/components/members/MemberProfileContainer";
+import { ROLES_HIERARCHY } from "@/src/utils/constants";
 
 export default function BiboPage() {
   const { memberDetails } = useProfile();
