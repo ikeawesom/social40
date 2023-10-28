@@ -10,11 +10,12 @@ import GroupMembers from "./GroupMembers";
 import ServerErrorScreen from "../../screens/ServerErrorScreen";
 import { useIsGroupMember } from "@/src/hooks/groups/custom/useIsGroupMember";
 import RestrictedScreen from "../../screens/RestrictedScreen";
+import SettingsSection from "./settings/SettingsSection";
 
 export default function CustomGroupContainer({ groupID }: { groupID: string }) {
   const { valid } = useIsGroupMember(groupID);
   const { data, error, role } = useGroupData(groupID);
-
+  const owner = role === "owner";
   if (valid === false) return <RestrictedScreen />;
   else if (data) {
     return (
@@ -24,8 +25,9 @@ export default function CustomGroupContainer({ groupID }: { groupID: string }) {
           title={data.groupName}
           desc={data.groupDesc}
         />
-        {role === "owner" && <GroupRequested groupID={groupID} />}
+        {owner && <GroupRequested groupID={groupID} />}
         <GroupMembers groupID={groupID} />
+        {owner && <SettingsSection groupID={groupID} />}
       </div>
     );
   } else if (error.includes("not found")) {
