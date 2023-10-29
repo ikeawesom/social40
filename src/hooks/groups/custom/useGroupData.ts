@@ -40,7 +40,7 @@ export function useGroupData(groupID: string) {
       }
     };
     if (memberID) handleFetch(groupID, memberID);
-  }, [memberID]);
+  }, [groupID, memberID]);
 
   return { data, error, role };
 }

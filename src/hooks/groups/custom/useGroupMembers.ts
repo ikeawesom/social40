@@ -62,7 +62,7 @@ export function useGroupMembers(groupID: string) {
     };
 
     if (membersList === undefined) handleFetch(groupID);
-  }, [groupID]);
+  }, [membersList, groupID]);
 
   return { error, membersList };
 }
