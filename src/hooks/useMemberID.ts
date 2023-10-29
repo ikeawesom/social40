@@ -14,7 +14,7 @@ export function useMemberID() {
       setMemberID(data);
     };
     if (memberID === "") getMemberID();
-  }, [memberID]);
+  }, [memberID, host]);
 
   return { memberID, setMemberID };
 }

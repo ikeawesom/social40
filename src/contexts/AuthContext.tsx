@@ -54,7 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         router.push(route, { scroll: false });
       }
     });
-  }, [memberID]);
+  }, [host, router, memberID]);
 
   return (
     <AuthContext.Provider value={{ memberID, setMember }}>

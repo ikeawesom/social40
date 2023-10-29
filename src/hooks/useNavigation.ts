@@ -5,7 +5,7 @@ export default function useNavigation() {
 
   useEffect(() => {
     if (pathname === "") setPathname(window.location.pathname);
-  }, []);
+  }, [pathname]);
 
   return { pathname, setPathname };
 }

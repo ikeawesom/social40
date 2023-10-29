@@ -16,7 +16,7 @@ export default function ToggleBibo({
 
   useEffect(() => {
     setBibo(fetchedBibo);
-  }, [bibo]);
+  }, [fetchedBibo]);
 
   return (
     <SecondaryButton
