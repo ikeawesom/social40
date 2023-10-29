@@ -37,6 +37,22 @@ export default function SigninForm({ setStatus }: statusType) {
     e.preventDefault();
     setLoading(true);
     try {
+      const memberID = userDetails.email;
+
+      const resB = await fetch(`${host}/api/auth/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ memberID }),
+      });
+
+      const { status } = await resB.json();
+      if (!status)
+        throw new Error(
+          "An unknown error occurred. Please refresh and try again."
+        );
+
       const auth = getAuth(FIREBASE_APP);
       const res = await authHandler.signIn(
         auth,
@@ -45,22 +61,14 @@ export default function SigninForm({ setStatus }: statusType) {
       );
 
       if (!res.status) throw new Error(res.error);
-      const memberID = res.data;
 
       const resA = await dbHandler.get({ col_name: "MEMBERS", id: memberID });
 
       if (!resA.status) throw new Error(resA.error);
 
-      await fetch(`${host}/api/auth`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ memberID, strategy: "INIT" }),
-      });
-
       setMember(memberID);
     } catch (e: any) {
+      await fetch(`${host}/api/auth/clear`, { method: "POST" });
       setStatus(e.message as string);
     } finally {
       setLoading(false);
