@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
+import { NextRequest, NextResponse } from "next/server";
 
-export function getMethod(url: string) {
+function getMethod(url: string) {
   const urlArray = url.split("/");
   const method = urlArray[urlArray.length - 1];
   return method;
