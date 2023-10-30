@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import PrimaryButton from "../../utils/PrimaryButton";
 import CreateGroupForm from "../CreateGroupForm";
