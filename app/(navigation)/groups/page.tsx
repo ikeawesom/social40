@@ -13,6 +13,11 @@ import { MemberGroupsType } from "@/src/utils/groups/getJoinedGroups";
 import GroupsJoinedSection from "@/src/components/groups/GroupsJoinedSection";
 import { ownedGroupsType } from "@/src/utils/groups/getOwnedGroups";
 import GroupsCreatedSection from "@/src/components/groups/GroupsCreatedSection";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Groups",
+};
 
 export default async function Groups() {
   const cookieStore = cookies();
