@@ -1,12 +1,7 @@
 import { cookies } from "next/headers";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { NextRequest, NextResponse } from "next/server";
-
-function getMethod(url: string) {
-  const urlArray = url.split("/");
-  const method = urlArray[urlArray.length - 1];
-  return method;
-}
+import { getMethod } from "@/src/utils/API/getAPIMethod";
 
 export async function POST(request: NextRequest) {
   const cookieStore = cookies();
@@ -19,6 +14,7 @@ export async function POST(request: NextRequest) {
     };
     const { memberID } = fetchedData;
     cookieStore.set("memberID", memberID);
+    console.log("Stored member cookie");
   } else if (method === "signup") {
     // handle sign up requests here
   } else if (method === "clear") {
@@ -27,6 +23,7 @@ export async function POST(request: NextRequest) {
     cookieNames.forEach((cookie: RequestCookie) => {
       cookieStore.delete(cookie.name);
     });
+    console.log("Cleared all cookies.");
   }
 
   return NextResponse.json({ status: true });
