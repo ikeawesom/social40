@@ -6,7 +6,7 @@ import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const method = getMethod(request.url);
+  const { option } = getMethod(request.url);
   const fetchedData = await request.json();
 
   if (!fetchedData)
@@ -18,14 +18,14 @@ export async function POST(request: NextRequest) {
   const { memberID } = fetchedData;
 
   // methods include: friends, member
-  if (method === "member") {
+  if (option === "member") {
     const res = await dbHandler.get({ col_name: "MEMBERS", id: memberID });
     if (!res.status)
       return NextResponse.json({ error: res.error, status: false });
     const memberData = res.data as MEMBER_SCHEMA;
     return NextResponse.json({ status: true, data: memberData });
   }
-  if (method === "friends") {
+  if (option === "friends") {
     const res = await getFriendsList({ memberID });
     if (!res)
       return NextResponse.json({

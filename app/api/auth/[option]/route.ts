@@ -5,19 +5,19 @@ import { getMethod } from "@/src/utils/API/getAPIMethod";
 
 export async function POST(request: NextRequest) {
   const cookieStore = cookies();
-  const method = getMethod(request.url);
+  const { option } = getMethod(request.url);
 
   // methods are: signin, signup, clear
-  if (method === "signin") {
+  if (option === "signin") {
     const fetchedData = (await request.json()) as {
       memberID: string;
     };
     const { memberID } = fetchedData;
     cookieStore.set("memberID", memberID);
     console.log("Stored member cookie");
-  } else if (method === "signup") {
+  } else if (option === "signup") {
     // handle sign up requests here
-  } else if (method === "clear") {
+  } else if (option === "clear") {
     // clear all cookies from session
     const cookieNames = cookieStore.getAll();
     cookieNames.forEach((cookie: RequestCookie) => {
@@ -31,9 +31,9 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   const cookieStore = cookies();
-  const method = getMethod(request.url);
+  const { option } = getMethod(request.url);
 
-  if (method === "signin") {
+  if (option === "signin") {
     // return memberID from cookie store
     const memberID = cookieStore.get("memberID");
     if (!memberID)
