@@ -29,7 +29,9 @@ export default function GroupMemberTab({
   if (data)
     return (
       <div
-        onClick={() => router.push(`/members/${groupMemberID}`)}
+        onClick={() =>
+          router.push(`/members/${groupMemberID}`, { scroll: false })
+        }
         className={twMerge(
           "w-full py-2 px-3 shadow-sm duration-300 flex items-center justify-between cursor-pointer",
           memberID === groupMemberID

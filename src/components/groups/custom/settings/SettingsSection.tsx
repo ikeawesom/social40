@@ -12,7 +12,7 @@ export default function SettingsSection({ groupID }: { groupID: string }) {
       </p>
       <PrimaryButton
         onClick={() => {
-          router.push(`/groups/${groupID}/settings`);
+          router.push(`/groups/${groupID}/settings`, { scroll: false });
         }}
       >
         Group Settings

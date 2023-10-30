@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const pathname = window.location.pathname;
 
         if (pathname.includes("auth")) {
-          router.push("/");
+          router.push("/", { scroll: false });
         } else {
           if (!status) {
             console.log("no status");

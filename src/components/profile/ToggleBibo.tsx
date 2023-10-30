@@ -46,7 +46,7 @@ export default function ToggleBibo({
       }
       setLoading(false);
     } else {
-      router.push("/bibo");
+      router.push("/bibo", { scroll: false });
     }
   };
 

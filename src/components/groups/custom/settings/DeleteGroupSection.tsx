@@ -35,7 +35,7 @@ export default function DeleteGroupSection({
       toast.success("Successfully deleted group. Returning to home...");
 
       setTimeout(() => {
-        router.push("/groups");
+        router.push("/groups", { scroll: false });
       }, 1500);
     } catch (err: any) {
       toast.error(err.message);

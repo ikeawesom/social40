@@ -61,7 +61,7 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
       closeModal();
       toast.success(`Successfully created group ${admin}. Redirecting...`);
       setTimeout(() => {
-        router.push(`/groups/${admin}`);
+        router.push(`/groups/${admin}`, { scroll: false });
       }, 1500);
     } catch (err: any) {
       toast.error(err.message);
