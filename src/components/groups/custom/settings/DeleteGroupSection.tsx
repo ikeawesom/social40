@@ -110,7 +110,7 @@ export default function DeleteGroupSection({
               group.
             </p>
             <PrimaryButton
-              disabled={!equals}
+              disabled={!equals || loading}
               type="submit"
               className={twMerge(
                 "mt-2 bg-custom-red grid place-items-center",
