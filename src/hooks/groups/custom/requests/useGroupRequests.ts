@@ -27,7 +27,6 @@ export function useGroupRequests(groupID: string) {
         GetPostObj({ sub: "get", groupID })
       );
       const fetchedData = await res.json();
-      console.log(fetchedData);
       if (!fetchedData.status) return setRequested(null);
 
       const { data } = fetchedData;
