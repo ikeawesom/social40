@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import RequestsSection from "./requests/RequestsSection";
 import { useGroupRequests } from "@/src/hooks/groups/custom/requests/useGroupRequests";
