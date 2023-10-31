@@ -27,20 +27,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     onAuthStateChanged(auth, async (userAuth) => {
       if (userAuth) {
         console.log("logged in");
-        const fetchedMemberID = await fetch(`${host}/api/auth/signin`);
-        const { status, data } = await fetchedMemberID.json();
+        const fetchedMemberID = sessionStorage.getItem("memberID");
         const pathname = window.location.pathname;
 
         if (pathname.includes("auth")) {
           router.push("/", { scroll: false });
+          sessionStorage.clear();
         } else {
-          if (!status) {
-            console.log("no status");
+          if (!fetchedMemberID) {
+            console.log("no session storage found");
             const res = await handleSignOut(host);
             if (!res.status) toast.error(res.error);
           } else {
-            const { value } = data;
-            setMember(value);
+            setMember(fetchedMemberID);
+            sessionStorage.clear();
           }
         }
       } else {
@@ -51,6 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         })}`;
         setMember(null);
         await clearCookies(host);
+        sessionStorage.clear();
         router.push(route, { scroll: false });
       }
     });
@@ -78,6 +79,9 @@ export async function handleSignOut(host: string) {
     });
     const auth = getAuth(FIREBASE_APP);
     await authHandler.signOutUser(auth);
+
+    await clearCookies(host);
+
     return handleResponses();
   } catch (err: any) {
     return handleResponses({ error: err.message, status: false });

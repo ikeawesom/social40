@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import { authHandler } from "@/src/firebase/auth";
-
 import PrimaryButton from "../utils/PrimaryButton";
 import { getAuth } from "firebase/auth";
 import { FIREBASE_APP } from "@/src/firebase/config";
 import { dbHandler } from "@/src/firebase/db";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { useHostname } from "@/src/hooks/useHostname";
+import { GetPostObj } from "@/src/utils/API/GetPostObj";
 
 type userDetailsType = {
   email: string;
@@ -38,21 +38,17 @@ export default function SigninForm({ setStatus }: statusType) {
     setLoading(true);
     try {
       const memberID = userDetails.email;
+      sessionStorage.setItem("memberID", memberID);
 
-      const resB = await fetch(`${host}/api/auth/signin`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ memberID }),
-      });
+      const PostMember = GetPostObj({ memberID });
 
-      const { status } = await resB.json();
-      if (!status)
-        throw new Error(
-          "An unknown error occurred. Please refresh and try again."
-        );
+      const resB = await fetch(`${host}/api/auth/cookiemember`, PostMember);
 
+      const { status, error } = await resB.json();
+
+      if (!status) throw new Error(error);
+
+      // sign in to firebase
       const auth = getAuth(FIREBASE_APP);
       const res = await authHandler.signIn(
         auth,
@@ -62,14 +58,11 @@ export default function SigninForm({ setStatus }: statusType) {
 
       if (!res.status) throw new Error(res.error);
 
-      const resA = await dbHandler.get({ col_name: "MEMBERS", id: memberID });
-
-      if (!resA.status) throw new Error(resA.error);
-
       setMember(memberID);
     } catch (e: any) {
       await fetch(`${host}/api/auth/clear`, { method: "POST" });
       setStatus(e.message as string);
+      sessionStorage.clear();
     } finally {
       setLoading(false);
     }
