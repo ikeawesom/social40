@@ -1,10 +1,7 @@
 import React from "react";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import { cookies } from "next/headers";
-import LoadingScreenSmall from "@/src/components/screens/LoadingScreenSmall";
-import { dbHandler } from "@/src/firebase/db";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
-import NotFoundScreen from "@/src/components/screens/NotFoundScreen";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { MemberGroupsType } from "@/src/utils/groups/getJoinedGroups";
@@ -13,6 +10,7 @@ import { ownedGroupsType } from "@/src/utils/groups/getOwnedGroups";
 import GroupsCreatedSection from "@/src/components/groups/GroupsCreatedSection";
 import { Metadata } from "next";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ServerErrorScreen from "@/src/components/screens/ServerErrorScreen";
 
 export const metadata: Metadata = {
   title: "Groups",
@@ -67,5 +65,5 @@ export default async function Groups() {
       return ErrorScreenHandler(err);
     }
   }
-  return <LoadingScreenSmall />;
+  return <ServerErrorScreen />;
 }

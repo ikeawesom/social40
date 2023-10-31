@@ -11,6 +11,7 @@ import LoadingScreenSmall from "@/src/components/screens/LoadingScreenSmall";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ServerErrorScreen from "@/src/components/screens/ServerErrorScreen";
 
 export const metadata: Metadata = {
   title: "Profile",
@@ -88,7 +89,7 @@ export default async function Profile({
       return ErrorScreenHandler(err);
     }
   }
-  return <LoadingScreenSmall />;
+  return <ServerErrorScreen />;
 }
 
 // if (!option)

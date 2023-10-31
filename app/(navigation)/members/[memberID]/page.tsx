@@ -3,8 +3,8 @@ import BookedStatus from "@/src/components/members/BookedStatus";
 import MemberBadges from "@/src/components/members/MemberBadges";
 import MemberPoints from "@/src/components/members/MemberPoints";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
-import LoadingScreenSmall from "@/src/components/screens/LoadingScreenSmall";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
+import ServerErrorScreen from "@/src/components/screens/ServerErrorScreen";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
@@ -86,5 +86,5 @@ export default async function MemberPage({
       return ErrorScreenHandler(err);
     }
   }
-  return <LoadingScreenSmall />;
+  return <ServerErrorScreen />;
 }

@@ -3,6 +3,7 @@ import EditGroupForm from "@/src/components/groups/custom/settings/EditGroupForm
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import LoadingScreenSmall from "@/src/components/screens/LoadingScreenSmall";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
+import ServerErrorScreen from "@/src/components/screens/ServerErrorScreen";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { GROUP_MEMBERS_SCHEMA, GROUP_SCHEMA } from "@/src/utils/schemas/groups";
@@ -56,5 +57,5 @@ export default async function GroupSettingsPage({
       return ErrorScreenHandler(err);
     }
   }
-  return <LoadingScreenSmall />;
+  return <ServerErrorScreen />;
 }

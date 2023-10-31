@@ -12,6 +12,7 @@ import GroupMembers, {
 } from "@/src/components/groups/custom/GroupMembers";
 import GroupRequested from "@/src/components/groups/custom/GroupRequested";
 import SettingsSection from "@/src/components/groups/custom/settings/SettingsSection";
+import ServerErrorScreen from "@/src/components/screens/ServerErrorScreen";
 
 export async function generateMetadata({
   params,
@@ -76,5 +77,5 @@ export default async function GroupPage({
       return ErrorScreenHandler(err);
     }
   }
-  return <LoadingScreenSmall />;
+  return <ServerErrorScreen />;
 }
