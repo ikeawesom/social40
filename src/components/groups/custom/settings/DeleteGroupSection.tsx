@@ -1,15 +1,14 @@
+"use client";
 import React, { useState } from "react";
 import Modal from "@/src/components/utils/Modal";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
-import { GROUP_MEMBERS_SCHEMA, GROUP_SCHEMA } from "@/src/utils/schemas/groups";
+import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import Image from "next/image";
 import HRow from "@/src/components/utils/HRow";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import LoadingIcon from "@/src/components/utils/LoadingIcon";
 import { toast } from "sonner";
-import { dbHandler } from "@/src/firebase/db";
 import { useRouter } from "next/navigation";
-import { WAITLIST_SCHEMA } from "@/src/utils/schemas/waitlist";
 import { deleteGroup } from "@/src/utils/groups/deleteGroup";
 
 export default function DeleteGroupSection({
@@ -21,7 +20,7 @@ export default function DeleteGroupSection({
   const [inputName, setInputName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { createdBy, groupDesc, groupID, groupName } = groupData;
+  const { createdBy, groupID } = groupData;
   const router = useRouter();
   const fullName = `${createdBy}/${groupID}`;
   const equals = inputName === fullName;
@@ -35,7 +34,7 @@ export default function DeleteGroupSection({
       toast.success("Successfully deleted group. Returning to home...");
 
       setTimeout(() => {
-        router.push("/groups");
+        router.push("/groups", { scroll: false });
       }, 1500);
     } catch (err: any) {
       toast.error(err.message);

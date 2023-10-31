@@ -8,11 +8,6 @@ export type GROUP_SCHEMA = {
   createdOn: string;
 };
 
-export type WAITLIST_SCHEMA = {
-  dateRequested: string; // date of request
-  memberID: string; // memberID of requesting user
-};
-
 export type GROUP_EVENTS_SCHEMA = {
   eventID: string; // eventID of event linked to group
   groupID: string; // groupID of group containing event

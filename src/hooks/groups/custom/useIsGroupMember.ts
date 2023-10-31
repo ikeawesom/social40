@@ -17,7 +17,7 @@ export function useIsGroupMember(groupID: string) {
     };
 
     if (valid === undefined && memberID !== "") handleCheck();
-  }, [memberID]);
+  }, [memberID, valid]);
 
   return { valid };
 }

@@ -1,6 +1,6 @@
+"use client";
 import React, { useState } from "react";
 import DefaultCard from "@/src/components/DefaultCard";
-import { useMemberID } from "@/src/hooks/useMemberID";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import { LoadingIconBright } from "@/src/components/utils/LoadingIcon";
@@ -12,7 +12,6 @@ export default function EditGroupForm({
 }: {
   groupData: GROUP_SCHEMA;
 }) {
-  const { memberID } = useMemberID();
   const initGroupName = groupData.groupName;
   const initGroupDesc = groupData.groupDesc;
 

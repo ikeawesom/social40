@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { dbHandler } from "@/src/firebase/db";
 import InnerContainer from "@/src/components/utils/InnerContainer";
 import { Onboarding } from "@/src/utils/onboarding";
+import { useHostname } from "@/src/hooks/useHostname";
+import { GetPostObj } from "@/src/utils/API/GetPostObj";
 
 export default function RequestsSection({
   data,
@@ -18,6 +20,7 @@ export default function RequestsSection({
   groupID: string;
   reload: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const { host } = useHostname();
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -32,12 +35,13 @@ export default function RequestsSection({
     setLoading(true);
     try {
       // check if new user
-      const newMemberStatus = await dbHandler.get({
-        col_name: "MEMBERS",
-        id: memberID,
-      });
+      const newMemberStatus = await fetch(
+        `${host}/api/profile/member`,
+        GetPostObj({ memberID })
+      );
+      const newMemberData = await newMemberStatus.json();
 
-      if (!newMemberStatus.status) {
+      if (!newMemberData.status) {
         // new user
         console.log("New member. Preparing to register");
         const onboardMemberStatus = await Onboarding.Account({
