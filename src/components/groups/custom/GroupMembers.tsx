@@ -15,7 +15,7 @@ export default function GroupMembers({
   membersList: GroupDetailsType;
 }) {
   return (
-    <DefaultCard className="w-full flex flex-col items-start justify-start gap-2 max-h-[40vh]">
+    <DefaultCard className="w-full flex flex-col items-start justify-start gap-2 max-h-[80vh]">
       <div className="w-full">
         <h1 className="text-custom-dark-text font-semibold flex gap-1 items-center justify-start text-start">
           Members

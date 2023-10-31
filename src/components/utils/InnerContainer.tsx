@@ -11,7 +11,7 @@ export default function InnerContainer({
   return (
     <div
       className={twMerge(
-        "relative w-full flex-col flex items-center justify-start max-h-[30vh] overflow-y-scroll rounded-lg shadow-inner",
+        "relative w-full flex-col flex items-center justify-start overflow-y-scroll rounded-lg shadow-inner",
         className
       )}
     >

@@ -92,7 +92,7 @@ export default function RequestsSection({
   };
 
   return (
-    <DefaultCard className="py-2 px-3">
+    <DefaultCard className="py-2 px-3 max-h-[80vh]">
       <div className="flex flex-col items-center justify-start w-full">
         <div className="flex items-center justify-between w-full">
           <h1 className="text-custom-dark-text font-semibold flex gap-1 items-center justify-start text-start">
