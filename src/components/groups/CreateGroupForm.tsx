@@ -4,12 +4,23 @@ import SecondaryButton from "../utils/SecondaryButton";
 import PrimaryButton from "../utils/PrimaryButton";
 import generateID from "@/src/utils/getRandomID";
 import Modal from "../utils/Modal";
+import HRow from "../utils/HRow";
+import Image from "next/image";
+import { toast } from "sonner";
+import { LoadingIconBright } from "../utils/LoadingIcon";
+import getCurrentDate from "@/src/utils/getCurrentDate";
+import { useMemberID } from "@/src/hooks/useMemberID";
+import { useRouter } from "next/navigation";
+import { createGroup } from "@/src/utils/groups/createGroup";
 
 type FormType = {
   className?: string;
+  closeModal: () => void;
 };
 
-export default function CreateGroupForm({ className }: FormType) {
+export default function CreateGroupForm({ className, closeModal }: FormType) {
+  const { memberID } = useMemberID();
+  const router = useRouter();
   const [groupDetails, setGroupDetails] = useState({
     name: "",
     desc: "",
@@ -30,16 +41,56 @@ export default function CreateGroupForm({ className }: FormType) {
     setGroupDetails({ ...groupDetails, desc: e.target.value });
   };
 
-  const createGroup = async (e: React.FormEvent) => {
+  const handleGroup = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    const { admin, desc, name } = groupDetails;
+    if (admin.split(" ").length > 1)
+      return toast.error("Admin ID cannot have spaces.");
+
+    try {
+      const res = await createGroup({
+        groupID: admin,
+        createdBy: memberID,
+        groupDesc: desc,
+        groupName: name,
+        createdOn: getCurrentDate(),
+      });
+
+      if (!res.status) throw new Error(res.error);
+      closeModal();
+      toast.success(`Successfully created group ${admin}. Redirecting...`);
+      setTimeout(() => {
+        router.push(`/groups/${admin}`, { scroll: false });
+      }, 1500);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+    setLoading(false);
   };
 
   return (
     <Modal>
+      <div className="mb-4">
+        <div className="flex items-center justify-between w-full">
+          <h1 className="text-custom-dark-text font-semibold">Create Group</h1>
+          <button
+            onClick={closeModal}
+            className="hover:opacity-75 duration-200"
+          >
+            <Image
+              src="/icons/icon_close.svg"
+              alt="Close"
+              width={15}
+              height={15}
+            />
+          </button>
+        </div>
+        <HRow />
+      </div>
       <form
         className={twMerge("flex-col gap-y-4 flex", className)}
-        onSubmit={createGroup}
+        onSubmit={handleGroup}
       >
         <span className="flex flex-col gap-2 items-center justify-center mb-4">
           <input
@@ -85,9 +136,9 @@ export default function CreateGroupForm({ className }: FormType) {
         <PrimaryButton
           disabled={loading}
           type="submit"
-          className="text-sm py-2 px-0"
+          className="text-sm py-2 px-0 grid place-items-center"
         >
-          Create group
+          {loading ? <LoadingIconBright height={20} /> : "Create group"}
         </PrimaryButton>
       </form>
     </Modal>

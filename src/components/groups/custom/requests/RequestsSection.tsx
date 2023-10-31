@@ -4,11 +4,12 @@ import Image from "next/image";
 import RequestedUser from "./RequestedUser";
 import { WaitListData } from "@/src/hooks/groups/custom/requests/useGroupRequests";
 import LoadingIcon from "@/src/components/utils/LoadingIcon";
-import { OnboardGroupMember } from "@/src/utils/onboarding/OnboardGroupMember";
-import { OnboardNewMember } from "@/src/utils/onboarding/OnboardNewMember";
 import { toast } from "sonner";
 import { dbHandler } from "@/src/firebase/db";
 import InnerContainer from "@/src/components/utils/InnerContainer";
+import { Onboarding } from "@/src/utils/onboarding";
+import { useHostname } from "@/src/hooks/useHostname";
+import { GetPostObj } from "@/src/utils/API/GetPostObj";
 
 export default function RequestsSection({
   data,
@@ -19,6 +20,7 @@ export default function RequestsSection({
   groupID: string;
   reload: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const { host } = useHostname();
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -33,15 +35,16 @@ export default function RequestsSection({
     setLoading(true);
     try {
       // check if new user
-      const newMemberStatus = await dbHandler.get({
-        col_name: "MEMBERS",
-        id: memberID,
-      });
+      const newMemberStatus = await fetch(
+        `${host}/api/profile/member`,
+        GetPostObj({ memberID })
+      );
+      const newMemberData = await newMemberStatus.json();
 
-      if (!newMemberStatus.status) {
+      if (!newMemberData.status) {
         // new user
         console.log("New member. Preparing to register");
-        const onboardMemberStatus = await OnboardNewMember({
+        const onboardMemberStatus = await Onboarding.Account({
           displayName,
           memberID,
           email,
@@ -55,14 +58,14 @@ export default function RequestsSection({
       }
 
       console.log("Preparing to onboard group member.");
-      const onboardGroupStatus = await OnboardGroupMember({
+      const onboardGroupStatus = await Onboarding.GroupMember({
         groupID,
         memberID,
         role: "member",
       });
 
-      console.log("Onboarded group member.");
       if (!onboardGroupStatus.status) throw new Error(onboardGroupStatus.error);
+      console.log("Onboarded group member.");
       toast.success(`Added ${memberID}.`);
       if (reload) reload(true);
     } catch (error: any) {
@@ -89,7 +92,7 @@ export default function RequestsSection({
   };
 
   return (
-    <DefaultCard className="py-2 px-3">
+    <DefaultCard className="py-2 px-3 max-h-[80vh]">
       <div className="flex flex-col items-center justify-start w-full">
         <div className="flex items-center justify-between w-full">
           <h1 className="text-custom-dark-text font-semibold flex gap-1 items-center justify-start text-start">

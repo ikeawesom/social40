@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import { authHandler } from "@/src/firebase/auth";
-
 import PrimaryButton from "../utils/PrimaryButton";
 import { getAuth } from "firebase/auth";
 import { FIREBASE_APP } from "@/src/firebase/config";
 import { dbHandler } from "@/src/firebase/db";
 import { useAuth } from "@/src/contexts/AuthContext";
-import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
+import { useHostname } from "@/src/hooks/useHostname";
+import { GetPostObj } from "@/src/utils/API/GetPostObj";
 
 type userDetailsType = {
   email: string;
@@ -20,7 +20,7 @@ type statusType = {
 
 export default function SigninForm({ setStatus }: statusType) {
   const { setMember } = useAuth();
-
+  const { host } = useHostname();
   const [loading, setLoading] = useState(false);
   const [userDetails, setUserDetails] = useState<userDetailsType>({
     email: "",
@@ -37,6 +37,17 @@ export default function SigninForm({ setStatus }: statusType) {
     e.preventDefault();
     setLoading(true);
     try {
+      const memberID = userDetails.email;
+
+      const PostMember = GetPostObj({ memberID });
+
+      const resB = await fetch(`${host}/api/auth/cookiemember`, PostMember);
+
+      const { status, error } = await resB.json();
+
+      if (!status) throw new Error(error);
+
+      // sign in to firebase
       const auth = getAuth(FIREBASE_APP);
       const res = await authHandler.signIn(
         auth,
@@ -45,14 +56,10 @@ export default function SigninForm({ setStatus }: statusType) {
       );
 
       if (!res.status) throw new Error(res.error);
-      const memberID = res.data;
 
-      const resA = await dbHandler.get({ col_name: "MEMBERS", id: memberID });
-
-      if (!resA.status) throw new Error(resA.error);
       setMember(memberID);
-      localStorage.setItem("memberID", memberID);
     } catch (e: any) {
+      await fetch(`${host}/api/auth/clear`, { method: "POST" });
       setStatus(e.message as string);
     } finally {
       setLoading(false);

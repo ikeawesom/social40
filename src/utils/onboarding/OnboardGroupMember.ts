@@ -1,8 +1,6 @@
 import { dbHandler } from "../../firebase/db";
 import getCurrentDate from "../getCurrentDate";
 import handleResponses from "../handleResponses";
-import { GROUP_MEMBERS_SCHEMA } from "../schemas/groups";
-import { MEMBER_JOINED_GROUPS_SCHEMA } from "../schemas/members";
 
 export type OnboardGroupMemberType = {
   groupID: string;
@@ -68,31 +66,16 @@ export async function addGroupToMember({
   memberID,
 }: OnboardGroupMemberType) {
   try {
-    var memberGroups = {} as MEMBER_JOINED_GROUPS_SCHEMA;
-
-    const res = await dbHandler.get({
-      col_name: "MEMBERS_JOINED-GROUPS",
-      id: memberID,
-    });
-
-    if (!res.status) {
-      // member has not joined any groups
-      // groups data will remain as empty: {}
-    } else {
-      // member has already joined groups
-      memberGroups = res.data as MEMBER_JOINED_GROUPS_SCHEMA;
-    }
-
     // assign new group
-    memberGroups[groupID] = {
+    const to_add = {
       dateJoined: getCurrentDate(),
       groupID: groupID,
     };
 
     const resA = await dbHandler.add({
-      col_name: "MEMBERS_JOINED-GROUPS",
-      id: memberID,
-      to_add: memberGroups,
+      col_name: `MEMBERS/${memberID}/GROUPS-JOINED`,
+      id: groupID,
+      to_add: to_add,
     });
 
     if (!resA.status) throw new Error(resA.error);
@@ -109,24 +92,16 @@ export async function addMemberToGroup({
 }: OnboardGroupMemberType) {
   if (groupID && memberID && role) {
     try {
-      const currentData = await dbHandler.get({
-        col_name: "GROUP_MEMBERS",
-        id: groupID,
-      });
-      if (!currentData.status) throw new Error(currentData.error);
-
-      var currentMembers = currentData.data as GROUP_MEMBERS_SCHEMA;
-
-      currentMembers[memberID] = {
+      const to_add = {
         dateJoined: getCurrentDate(),
         memberID: memberID,
         role: role,
       };
 
       const res = await dbHandler.add({
-        col_name: "GROUP_MEMBERS",
-        id: groupID,
-        to_add: currentMembers,
+        col_name: `GROUPS/${groupID}/MEMBERS`,
+        id: memberID,
+        to_add: to_add,
       });
 
       if (!res.status) throw new Error(res.error);
@@ -145,7 +120,7 @@ export async function addMemberToGroup({
 export async function memberInGroup(groupID: string, memberID: string) {
   try {
     const res = await dbHandler.get({
-      col_name: "GROUP_MEMBERS",
+      col_name: "GROUPS",
       id: groupID,
     });
 
@@ -154,7 +129,12 @@ export async function memberInGroup(groupID: string, memberID: string) {
         "Group not found. Please check your Group ID and try again."
       );
 
-    if (Object.keys(res.data).includes(memberID))
+    const resA = await dbHandler.get({
+      col_name: `GROUPS/${groupID}/MEMBERS`,
+      id: memberID,
+    });
+
+    if (resA.data)
       throw new Error(
         `${memberID} is already a member of the group: ${groupID}.`
       );

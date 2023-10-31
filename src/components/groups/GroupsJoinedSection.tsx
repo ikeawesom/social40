@@ -2,12 +2,12 @@ import React from "react";
 import HRow from "../utils/HRow";
 import SearchGroups from "./SearchGroups";
 import GroupItem from "./GroupItem";
-import { MEMBER_JOINED_GROUPS_SCHEMA } from "@/src/utils/schemas/members";
+import { MemberGroupsType } from "@/src/utils/groups/getJoinedGroups";
 
 export default function GroupsJoinedSection({
   joinedGroups,
 }: {
-  joinedGroups: MEMBER_JOINED_GROUPS_SCHEMA;
+  joinedGroups: MemberGroupsType;
 }) {
   const empty = Object.keys(joinedGroups).length === 0;
 

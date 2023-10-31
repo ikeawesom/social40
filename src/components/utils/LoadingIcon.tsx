@@ -8,13 +8,24 @@ type LoadingType = {
 
 export default function LoadingIcon({ height, width }: LoadingType) {
   return (
-    <div className="animate-spin">
-      <Image
-        src="/icons/icon_spinner.svg"
-        width={height ? height : 100}
-        height={width ? width : 100}
-        alt="Loading..."
-      />
-    </div>
+    <Image
+      src="/icons/icon_spinner.svg"
+      width={height ? height : 100}
+      height={width ? width : 100}
+      alt="Loading..."
+      className="animate-spin"
+    />
+  );
+}
+
+export function LoadingIconBright({ height, width }: LoadingType) {
+  return (
+    <Image
+      src="/icons/icon_spinner_bright.svg"
+      width={height ? height : 100}
+      height={width ? width : 100}
+      alt="Loading..."
+      className="animate-spin"
+    />
   );
 }

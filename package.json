@@ -11,8 +11,10 @@
   "dependencies": {
     "encoding": "^0.1.13",
     "firebase": "^10.5.0",
+    "html5-qrcode": "^2.3.8",
     "next": "13.5.4",
     "next-pwa": "^5.6.0",
+    "qrcode": "^1.5.3",
     "react": "^18",
     "react-dom": "^18",
     "sharp": "^0.32.6",
@@ -21,6 +23,7 @@
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/qrcode": "^1.5.4",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10",
