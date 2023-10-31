@@ -38,7 +38,6 @@ export default function SigninForm({ setStatus }: statusType) {
     setLoading(true);
     try {
       const memberID = userDetails.email;
-      sessionStorage.setItem("memberID", memberID);
 
       const PostMember = GetPostObj({ memberID });
 
@@ -62,7 +61,6 @@ export default function SigninForm({ setStatus }: statusType) {
     } catch (e: any) {
       await fetch(`${host}/api/auth/clear`, { method: "POST" });
       setStatus(e.message as string);
-      sessionStorage.clear();
     } finally {
       setLoading(false);
     }

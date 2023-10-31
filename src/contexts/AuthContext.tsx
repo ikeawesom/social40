@@ -27,21 +27,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     onAuthStateChanged(auth, async (userAuth) => {
       if (userAuth) {
         console.log("logged in");
-        const fetchedMemberID = sessionStorage.getItem("memberID");
         const pathname = window.location.pathname;
 
         if (pathname.includes("auth")) {
           router.push("/", { scroll: false });
-          sessionStorage.clear();
-        } else {
-          if (!fetchedMemberID) {
-            console.log("no session storage found");
-            const res = await handleSignOut(host);
-            if (!res.status) toast.error(res.error);
-          } else {
-            setMember(fetchedMemberID);
-            sessionStorage.clear();
-          }
         }
       } else {
         console.log("signed out");
@@ -51,7 +40,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         })}`;
         setMember(null);
         await clearCookies(host);
-        sessionStorage.clear();
         router.push(route, { scroll: false });
       }
     });
