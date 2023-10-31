@@ -10,6 +10,7 @@ import LoadingIcon from "@/src/components/utils/LoadingIcon";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { deleteGroup } from "@/src/utils/groups/deleteGroup";
+import { twMerge } from "tailwind-merge";
 
 export default function DeleteGroupSection({
   groupData,
@@ -38,8 +39,8 @@ export default function DeleteGroupSection({
       }, 1500);
     } catch (err: any) {
       toast.error(err.message);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -111,7 +112,10 @@ export default function DeleteGroupSection({
             <PrimaryButton
               disabled={!equals}
               type="submit"
-              className="mt-2 bg-custom-red grid place-items-center"
+              className={twMerge(
+                "mt-2 bg-custom-red grid place-items-center",
+                loading ? "cursor-not-allowed" : ""
+              )}
             >
               {loading ? (
                 <LoadingIcon width={20} height={20} />
