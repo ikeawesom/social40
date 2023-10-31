@@ -7,7 +7,9 @@ import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import GroupHeader from "@/src/components/groups/custom/GroupHeader";
 import { GROUP_MEMBERS_SCHEMA, GROUP_SCHEMA } from "@/src/utils/schemas/groups";
-import GroupMembers from "@/src/components/groups/custom/GroupMembers";
+import GroupMembers, {
+  GroupDetailsType,
+} from "@/src/components/groups/custom/GroupMembers";
 import GroupRequested from "@/src/components/groups/custom/GroupRequested";
 import SettingsSection from "@/src/components/groups/custom/settings/SettingsSection";
 
@@ -52,13 +54,20 @@ export default async function GroupPage({
 
       if (!bodyA.status) throw new Error(bodyA.error);
       const { createdBy, groupName, groupDesc } = bodyA.data as GROUP_SCHEMA;
+
+      // get group members
+      const resB = await fetch(`${host}/api/groups/members`, PostObj);
+      const bodyB = await resB.json();
+
+      if (!bodyB.status) throw new Error(bodyB.error);
+      const groupMembers = bodyB.data as GroupDetailsType;
       return (
         <>
           <HeaderBar back text={groupID} />
           <div className="flex flex-col items-center justify-start w-full gap-4">
             <GroupHeader owner={createdBy} title={groupName} desc={groupDesc} />
             {owner && <GroupRequested groupID={groupID} />}
-            <GroupMembers groupID={groupID} />
+            <GroupMembers membersList={groupMembers} />
             {owner && <SettingsSection groupID={groupID} />}
           </div>
         </>
