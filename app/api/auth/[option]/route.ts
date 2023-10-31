@@ -2,16 +2,22 @@ import { cookies } from "next/headers";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { NextRequest, NextResponse } from "next/server";
 import { getMethod } from "@/src/utils/API/getAPIMethod";
+import { authHandler } from "@/src/firebase/auth";
+import { FIREBASE_APP } from "@/src/firebase/config";
+import { getAuth } from "firebase/auth";
 
 export async function POST(request: NextRequest) {
   const cookieStore = cookies();
   const { option } = getMethod(request.url);
 
   // methods are: signin, signup, clear
-  if (option === "signin") {
+  if (option === "cookiemember") {
+    // get sign in data
     const fetchedData = (await request.json()) as {
       memberID: string;
     };
+
+    // assign cookies
     const { memberID } = fetchedData;
     cookieStore.set("memberID", memberID);
     console.log("Stored member cookie");
