@@ -2,6 +2,8 @@
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { WAITLIST_SCHEMA } from "@/src/utils/schemas/waitlist";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 export type WaitListData = {
@@ -9,12 +11,14 @@ export type WaitListData = {
 };
 
 export function useGroupRequests(groupID: string) {
+  const router = useRouter();
   const { host } = useHostname();
   const [requested, setRequested] = useState<WaitListData | null>();
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     if (success) {
+      router.refresh();
       setSuccess(false);
       setRequested(undefined);
     }
