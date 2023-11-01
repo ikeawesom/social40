@@ -2,7 +2,6 @@
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { WAITLIST_SCHEMA } from "@/src/utils/schemas/waitlist";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
