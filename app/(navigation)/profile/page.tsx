@@ -11,22 +11,34 @@ import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
+import StatsSection, {
+  StatusListType,
+} from "@/src/components/profile/StatsSection";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Profile",
 };
 
-// const OPTIONS = ["activity", "stats", "statuses"];
+const OPTIONS = ["activity", "stats", "statuses"];
 
 export default async function Profile({
   searchParams,
 }: {
   searchParams: { [key: string]: string };
 }) {
-  // const option = searchParams["option"];
+  const option = searchParams["option"];
   const cookieStore = cookies();
 
   const data = cookieStore.get("memberID");
+
+  if (!option)
+    redirect(`/profile?${new URLSearchParams({ option: "activity" })}`);
+  else {
+    if (!OPTIONS.includes(option))
+      redirect(`/profile?${new URLSearchParams({ option: "activity" })}`);
+  }
+
   if (data) {
     const memberID = data.value;
     try {
@@ -52,6 +64,13 @@ export default async function Profile({
 
       const friendsList = dataA.data as FriendsListType;
 
+      // fetch member status
+      const resB = await fetch(`${host}/api/profile/status`, PostObj);
+      const dataB = await resB.json();
+
+      if (!dataB.status) throw new Error(dataB.error);
+
+      const statusList = dataB.data as StatusListType;
       // admin extra settings
       const { role } = memberData;
       const admin = ROLES_HIERARCHY[role] >= ROLES_HIERARCHY["admin"];
@@ -65,18 +84,20 @@ export default async function Profile({
                 friendsData={friendsList}
                 memberData={memberData}
               />
+              <StatsSection
+                className="sm:col-span-2"
+                option={option}
+                // activities={activitiesData}
+                statuses={statusList}
+                // statistics={data.statistics}
+              />
               {admin && <BiboSection memberData={memberData} />}
-              <p className="text-custom-grey-text text-center text-sm mb-6">
-                v0.1.0
-              </p>
             </div>
             {/* TO DO */}
-            {/* <StatsSection
-            className="sm:col-span-2"
-            activities={activitiesData}
-            // medicalStatus={data.medicalStatus}
-            // statistics={data.statistics}
-          /> */}
+
+            <p className="text-custom-grey-text text-center text-sm mb-6">
+              v0.1.0
+            </p>
           </div>
 
           {/*
@@ -94,14 +115,7 @@ export default async function Profile({
   return <SignInAgainScreen />;
 }
 
-// if (!option)
-//   redirect(`/profile?${new URLSearchParams({ option: "activity" })}`);
-// else {
-//   if (!OPTIONS.includes(option))
-//     redirect(`/profile?${new URLSearchParams({ option: "activity" })}`);
-// }
-
 // const [friendsData, activitiesData] = await Promise.all([
-// getFriendsList({ memberID }),
+//   getFriendsList({ memberID }),
 //   getActivitiesList({ memberID }),
 // ]);
