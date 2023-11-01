@@ -71,6 +71,10 @@ export default function AuthPage({
             </p>
           </div>
         )}
+        <p className="text-custom-grey-text text-center text-sm">
+          v0.1.0: Please note that this is still a beta testing version. Some
+          features may still be unstable.
+        </p>
       </div>
     </div>
   );

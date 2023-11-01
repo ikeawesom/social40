@@ -66,6 +66,9 @@ export default async function Profile({
                 memberData={memberData}
               />
               {admin && <BiboSection memberData={memberData} />}
+              <p className="text-custom-grey-text text-center text-sm mb-6">
+                v0.1.0
+              </p>
             </div>
             {/* TO DO */}
             {/* <StatsSection
