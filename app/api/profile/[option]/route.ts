@@ -36,19 +36,17 @@ export async function POST(request: NextRequest) {
     const friendsList = res as FriendsListType;
     return NextResponse.json({ status: true, data: friendsList });
   } else if (option === "status") {
-    const res = await dbHandler.getDocs({
-      col_name: `MEMBERS/${memberID}/STATUSES`,
+    const res = await dbHandler.getSpecific({
+      path: `MEMBERS/${memberID}/STATUSES`,
+      orderCol: "endDate",
+      ascending: false,
     });
+
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
 
-    const statusArr = res.data as any[];
-    const statusObj = {} as StatusListType;
-
-    statusArr.forEach((item: any) => {
-      const data = item.data() as STATUS_SCHEMA;
-      statusObj[data.statusID] = data;
-    });
+    // const statusArr =  as any[];
+    const statusObj = res.data as StatusListType;
 
     return NextResponse.json({ status: true, data: statusObj });
   }
