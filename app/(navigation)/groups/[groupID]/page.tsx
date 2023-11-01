@@ -1,7 +1,6 @@
 import React from "react";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import { cookies } from "next/headers";
-import LoadingScreenSmall from "@/src/components/screens/LoadingScreenSmall";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
@@ -12,7 +11,7 @@ import GroupMembers, {
 } from "@/src/components/groups/custom/GroupMembers";
 import GroupRequested from "@/src/components/groups/custom/GroupRequested";
 import SettingsSection from "@/src/components/groups/custom/settings/SettingsSection";
-import ServerErrorScreen from "@/src/components/screens/ServerErrorScreen";
+import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 
 export async function generateMetadata({
   params,
@@ -77,5 +76,5 @@ export default async function GroupPage({
       return ErrorScreenHandler(err);
     }
   }
-  return <ServerErrorScreen />;
+  return <SignInAgainScreen />;
 }
