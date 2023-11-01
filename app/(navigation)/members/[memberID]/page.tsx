@@ -4,7 +4,7 @@ import MemberBadges from "@/src/components/members/MemberBadges";
 import MemberPoints from "@/src/components/members/MemberPoints";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
-import ServerErrorScreen from "@/src/components/screens/ServerErrorScreen";
+import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
@@ -86,5 +86,5 @@ export default async function MemberPage({
       return ErrorScreenHandler(err);
     }
   }
-  return <ServerErrorScreen />;
+  return <SignInAgainScreen />;
 }

@@ -7,11 +7,10 @@ import { Metadata } from "next";
 import BiboSection from "@/src/components/bibo/BiboSection";
 import { cookies } from "next/headers";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
-import LoadingScreenSmall from "@/src/components/screens/LoadingScreenSmall";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import ServerErrorScreen from "@/src/components/screens/ServerErrorScreen";
+import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 
 export const metadata: Metadata = {
   title: "Profile",
@@ -89,7 +88,7 @@ export default async function Profile({
       return ErrorScreenHandler(err);
     }
   }
-  return <ServerErrorScreen />;
+  return <SignInAgainScreen />;
 }
 
 // if (!option)
