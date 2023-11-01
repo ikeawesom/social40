@@ -36,7 +36,7 @@ export default async function ProfileSection({
       {memberData ? (
         <>
           <div className="flex flex-col gap-2 items-center justify-center">
-            <SignoutButton />
+            <SignoutButton absolute />
             <div className="relative">
               <StatusDot
                 status={bibo}
