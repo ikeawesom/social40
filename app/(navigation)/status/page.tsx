@@ -1,6 +1,7 @@
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import CreateStatus from "@/src/components/status/CreateStatus";
+import QuickStatusLinks from "@/src/components/status/QuickStatusLinks";
 import { cookies } from "next/headers";
 import React from "react";
 
@@ -14,7 +15,10 @@ export default async function StatusPage() {
     return (
       <>
         <HeaderBar back text="Add Status" />
-        <CreateStatus memberID={memberID} />
+        <div className="flex flex-col items-start justify-center gap-4">
+          <CreateStatus memberID={memberID} />
+          <QuickStatusLinks />
+        </div>
       </>
     );
   }
