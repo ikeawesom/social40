@@ -8,6 +8,7 @@ import { dbHandler } from "@/src/firebase/db";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
+import { clearCookies } from "@/src/utils/clearCookies";
 
 type userDetailsType = {
   email: string;
@@ -59,7 +60,7 @@ export default function SigninForm({ setStatus }: statusType) {
 
       setMember(memberID);
     } catch (e: any) {
-      await fetch(`${host}/api/auth/clear`, { method: "POST" });
+      await clearCookies(host);
       setStatus(e.message as string);
     } finally {
       setLoading(false);
