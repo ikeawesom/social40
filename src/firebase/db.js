@@ -85,15 +85,16 @@ class DbClass {
       var q;
 
       if (orderCol && field) {
-        query(
+        q = query(
           colRef,
           where(field, criteria, value),
           orderBy(orderCol, !ascending ? "desc" : "asc")
         );
       } else if (!orderCol && field) {
-        query(colRef, where(field, criteria, value));
+        q = query(colRef, where(field, criteria, value));
       } else if (orderCol && !field) {
-        query(colRef, orderBy(orderCol, !ascending ? "desc" : "asc"));
+        const asc = ascending ? "asc" : "desc";
+        q = query(colRef, orderBy(orderCol, asc));
       } else {
         throw new Error("Invalid props.");
       }
