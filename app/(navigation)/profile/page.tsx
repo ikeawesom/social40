@@ -95,7 +95,7 @@ export default async function Profile({
             </div>
             {/* TO DO */}
 
-            <p className="text-custom-grey-text text-center text-sm mb-6">
+            <p className="text-custom-grey-text text-center text-sm my-6">
               v0.1.0
             </p>
           </div>
