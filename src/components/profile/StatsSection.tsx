@@ -38,9 +38,9 @@ export type StatisticsListType = { [statisticID: string]: STATISTICS_SCHEMA };
 
 type StatsSectionType = {
   className?: string;
-  activities?: ActivityListType;
-  statistics?: StatisticsListType;
-  statuses?: StatusListType;
+  activities: ActivityListType;
+  statistics: StatisticsListType;
+  statuses: StatusListType;
   option: string;
 };
 

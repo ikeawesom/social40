@@ -87,9 +87,9 @@ export default async function Profile({
               <StatsSection
                 className="sm:col-span-2"
                 option={option}
-                // activities={activitiesData}
+                activities={{}}
                 statuses={statusList}
-                // statistics={data.statistics}
+                statistics={{}}
               />
               {admin && <BiboSection memberData={memberData} />}
             </div>
