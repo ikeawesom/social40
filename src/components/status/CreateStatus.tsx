@@ -34,6 +34,7 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
     status: false,
     ess: false,
     sheets: false,
+    ir: false,
     cfm: false,
     consent: false,
   });
@@ -41,7 +42,10 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
   const readyMC = checked.ess && checked.sheets;
 
   var ready =
-    checked.cfm && checked.consent && (checked.status ? readyMC : true);
+    checked.cfm &&
+    checked.consent &&
+    checked.ir &&
+    (checked.status ? readyMC : true);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -221,6 +225,21 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
               </div>
             </>
           )}
+          <div className="flex items-center justify-start gap-4">
+            <input
+              type="checkbox"
+              required
+              id="ir"
+              className="h-fit flex-1"
+              name="ir"
+              onChange={handleCheck}
+            />
+            <label htmlFor="ir" className="flex-3 text-sm">
+              I have completed and submitted an{" "}
+              <span className="text-custom-primary">Incident Report</span> to my
+              commanders.
+            </label>
+          </div>
           <div className="flex items-center justify-start gap-4">
             <input
               type="checkbox"
