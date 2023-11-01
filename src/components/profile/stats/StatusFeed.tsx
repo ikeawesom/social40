@@ -4,7 +4,8 @@ import React from "react";
 export default function StatusFeed({
   status,
 }: {
-  status: { [statusID: string]: STATUS_SCHEMA };
+  status: { [statusID: string]: STATUS_SCHEMA } | undefined;
 }) {
+  console.log(status);
   return <div>StatusFeed</div>;
 }
