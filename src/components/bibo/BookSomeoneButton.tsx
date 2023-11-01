@@ -8,7 +8,7 @@ export default function BookSomeoneButton() {
   return (
     <PrimaryButton
       onClick={() => router.push("/book-someone")}
-      className="my-2"
+      className="mb-2"
     >
       Book Someone In
     </PrimaryButton>
