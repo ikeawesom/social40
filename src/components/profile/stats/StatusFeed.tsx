@@ -57,11 +57,13 @@ export default function StatusFeed({
                     End Date: {curStatus.endDate.split(" ")[0]}
                   </p>
                 </div>
-                <div className="grid place-items-center w-full">
+                <div className="grid place-items-center w-full text-center">
                   {curStatus.endorsed.status ? (
-                    <p className="text-custom-green font-bold">Endorsed</p>
+                    <p className="text-custom-green font-bold text-sm">
+                      Endorsed
+                    </p>
                   ) : (
-                    <p className="text-custom-orange font-bold">
+                    <p className="text-custom-orange font-bold text-sm">
                       Pending Endorsement
                     </p>
                   )}
