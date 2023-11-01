@@ -1,6 +1,6 @@
 import { FIREBASE_APP } from "./config";
 import {
-  getFirestore,
+  addDoc,
   setDoc,
   deleteDoc,
   doc,
@@ -31,6 +31,15 @@ class DbClass {
       const ref = doc(FIREBASE_DB, col_name, id);
       await setDoc(ref, to_add);
       return handleResponses();
+    } catch (e) {
+      return handleResponses({ error: e.message, status: false });
+    }
+  }
+
+  async addGeneral({ path, to_add }) {
+    try {
+      const ref = await addDoc(collection(FIREBASE_DB, path), to_add);
+      return handleResponses({ data: ref });
     } catch (e) {
       return handleResponses({ error: e.message, status: false });
     }
