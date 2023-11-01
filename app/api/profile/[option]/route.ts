@@ -1,5 +1,6 @@
 import { FriendsListType } from "@/src/components/profile/ProfileSection";
 import { StatusListType } from "@/src/components/profile/StatsSection";
+import { StatusInputType } from "@/src/components/status/CreateStatus";
 import { dbHandler } from "@/src/firebase/db";
 import { getMethod } from "@/src/utils/API/getAPIMethod";
 import { getFriendsList } from "@/src/utils/profile/getFriendsList";
@@ -45,10 +46,47 @@ export async function POST(request: NextRequest) {
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
 
-    // const statusArr =  as any[];
     const statusObj = res.data as StatusListType;
 
     return NextResponse.json({ status: true, data: statusObj });
+  } else if (option === "set-status") {
+    const data = fetchedData.status as StatusInputType;
+
+    const to_add = {
+      statusID: "",
+      statusTitle: data.title,
+      statusDesc: data.desc,
+      memberID: memberID,
+      doctor: data.doctor,
+      endorsed: {
+        status: false,
+        endorsedBy: "",
+      },
+      startDate: data.start,
+      endDate: data.end,
+    } as STATUS_SCHEMA;
+
+    const res = await dbHandler.addGeneral({
+      path: `MEMBERS/${memberID}/STATUSES`,
+      to_add: to_add,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ error: res.error, status: false });
+
+    const fetchedStatusID = res.data.id as string;
+
+    const resA = await dbHandler.edit({
+      col_name: `MEMBERS/${memberID}/STATUSES`,
+      id: fetchedStatusID,
+      data: { statusID: fetchedStatusID },
+    });
+
+    if (!resA.status)
+      return NextResponse.json({ error: resA.error, status: false });
+
+    console.log("done");
+    return NextResponse.json({ status: true });
   }
 
   return NextResponse.json({
