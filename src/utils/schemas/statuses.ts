@@ -7,6 +7,7 @@ export type STATUS_SCHEMA = {
   endorsed: {
     status: boolean;
     endorsedBy: string; // memberID of endorsed admin
+    endorsedOn: string; // date endorsed
   };
   startDate: string; // date format
   endDate: string; // date format

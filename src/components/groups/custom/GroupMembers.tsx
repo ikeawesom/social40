@@ -22,7 +22,7 @@ export default function GroupMembers({
         </h1>
         <HRow />
       </div>
-      <InnerContainer>
+      <InnerContainer className="max-h-[90vh]">
         {Object.keys(membersList).map((item) => (
           <GroupMemberTab key={item} data={membersList[item]} />
         ))}

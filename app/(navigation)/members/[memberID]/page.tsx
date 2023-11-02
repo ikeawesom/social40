@@ -3,6 +3,8 @@ import BookedStatus from "@/src/components/members/BookedStatus";
 import MemberBadges from "@/src/components/members/MemberBadges";
 import MemberPoints from "@/src/components/members/MemberPoints";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
+import { StatusListType } from "@/src/components/profile/StatsSection";
+import StatusFeed from "@/src/components/profile/stats/StatusFeed";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
@@ -11,6 +13,17 @@ import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
 import React from "react";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { memberID: string };
+}) {
+  const member = params.memberID;
+  return {
+    title: member,
+  };
+}
 
 export default async function MemberPage({
   params,
@@ -59,6 +72,14 @@ export default async function MemberPage({
       const rankName =
         `${viewMemberData.rank} ${viewMemberData.displayName}`.trim();
 
+      // fetch statuses from member
+      const resB = await fetch(`${host}/api/profile/status`, PostObjA);
+      const dataB = await resB.json();
+
+      if (!dataB.status) throw new Error(dataB.error);
+
+      const statusList = dataB.data as StatusListType;
+
       return (
         <>
           <HeaderBar text={clickedMemberID} back />
@@ -78,6 +99,9 @@ export default async function MemberPage({
                 </p>
               </div>
               <MemberBadges badges={viewMemberData.badges} />
+            </DefaultCard>
+            <DefaultCard className="w-full">
+              <StatusFeed viewProfile status={statusList} />
             </DefaultCard>
           </div>
         </>

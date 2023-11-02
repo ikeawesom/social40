@@ -2,8 +2,13 @@ import HeaderBar from "@/src/components/navigation/HeaderBar";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import CreateStatus from "@/src/components/status/CreateStatus";
 import QuickStatusLinks from "@/src/components/status/QuickStatusLinks";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Create Status",
+};
 
 export default async function StatusPage() {
   const cookieStore = cookies();

@@ -3,6 +3,7 @@ import { StatusListType } from "@/src/components/profile/StatsSection";
 import { StatusInputType } from "@/src/components/status/CreateStatus";
 import { dbHandler } from "@/src/firebase/db";
 import { getMethod } from "@/src/utils/API/getAPIMethod";
+import getCurrentDate from "@/src/utils/getCurrentDate";
 import { getFriendsList } from "@/src/utils/profile/getFriendsList";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
@@ -85,7 +86,36 @@ export async function POST(request: NextRequest) {
     if (!resA.status)
       return NextResponse.json({ error: resA.error, status: false });
 
-    console.log("done");
+    return NextResponse.json({ status: true });
+  } else if (option === "custom-status") {
+    // get a specific status
+    const { statusID } = fetchedData;
+
+    const res = await dbHandler.get({
+      col_name: `MEMBERS/${memberID}/STATUSES`,
+      id: statusID,
+    });
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    return NextResponse.json({ status: true, data: res.data });
+  } else if (option === "endorse-status") {
+    // endorse-status
+    const { statusID, adminID } = fetchedData;
+    const res = await dbHandler.edit({
+      col_name: `MEMBERS/${memberID}/STATUSES`,
+      id: statusID,
+      data: {
+        endorsed: {
+          endorsedOn: getCurrentDate(),
+          endorsedBy: adminID,
+          status: true,
+        },
+      },
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
     return NextResponse.json({ status: true });
   }
 
