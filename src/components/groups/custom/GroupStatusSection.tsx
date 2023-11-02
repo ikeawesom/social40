@@ -1,10 +1,10 @@
 import React from "react";
-import DefaultCard from "../DefaultCard";
-import HRow from "../utils/HRow";
+import DefaultCard from "../../DefaultCard";
+import HRow from "../../utils/HRow";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
-import InnerContainer from "../utils/InnerContainer";
+import InnerContainer from "../../utils/InnerContainer";
 import { twMerge } from "tailwind-merge";
-import EndorseStatus from "./EndorseStatus";
+import EndorseStatus from "../../status/EndorseStatus";
 
 export type GroupStatusType = {
   [memberID: string]: { [statusID: string]: STATUS_SCHEMA };

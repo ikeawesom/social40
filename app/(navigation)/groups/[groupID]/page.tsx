@@ -15,7 +15,7 @@ import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import GroupStatusSection, {
   GroupStatusType,
-} from "@/src/components/status/GroupStatusSection";
+} from "@/src/components/groups/custom/GroupStatusSection";
 
 export async function generateMetadata({
   params,
