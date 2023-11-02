@@ -1,15 +1,14 @@
 import React from "react";
 import DefaultCard from "../DefaultCard";
 import Image from "next/image";
-import SecondaryButton from "../utils/SecondaryButton";
 import { twMerge } from "tailwind-merge";
 import HRow from "../utils/HRow";
-import SignoutButton from "../utils/SignoutButton";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import FriendsList from "./FriendsList";
 import LoadingIcon from "../utils/LoadingIcon";
 import StatusDot from "../utils/StatusDot";
 import ToggleBibo from "./ToggleBibo";
+import EditProfileButton from "./edit/EditProfileButton";
 
 export type FriendsListType = { [key: string]: MEMBER_SCHEMA };
 
@@ -26,6 +25,7 @@ export default async function ProfileSection({
   const role = memberData.role as string;
   const memberID = memberData.memberID as string;
 
+  const rankName = `${memberData.rank} ${memberData.displayName}`.trim();
   return (
     <DefaultCard
       className={twMerge(
@@ -36,7 +36,6 @@ export default async function ProfileSection({
       {memberData ? (
         <>
           <div className="flex flex-col gap-2 items-center justify-center">
-            <SignoutButton absolute />
             <div className="relative">
               <StatusDot
                 status={bibo}
@@ -52,15 +51,15 @@ export default async function ProfileSection({
             </div>
             <div className="flex flex-col items-center justify-center gap-0">
               <h1 className="font-bold text-custom-dark-text text-base">
-                {memberData.displayName}
+                {rankName}
               </h1>
               <p className="text-center text-custom-grey-text text-xs">
                 {memberData.memberID}
               </p>
             </div>
           </div>
-          <div className="w-full flex items-stretch justify-between gap-3 flex-wrap">
-            <SecondaryButton className="flex-1">Edit Profile</SecondaryButton>
+          <div className="w-full flex gap-3 flex-col">
+            <EditProfileButton />
             <ToggleBibo memberID={memberID} role={role} fetchedBibo={bibo} />
           </div>
           <HRow />

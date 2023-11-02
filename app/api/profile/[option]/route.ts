@@ -28,6 +28,39 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: res.error, status: false });
     const memberData = res.data as MEMBER_SCHEMA;
     return NextResponse.json({ status: true, data: memberData });
+  } else if (option === "edit") {
+    const { rank, name } = fetchedData;
+    const rankChange = {
+      rank,
+    };
+    const nameChange = {
+      displayName: name,
+    };
+    const res = await dbHandler.edit({
+      col_name: "MEMBERS",
+      id: memberID,
+      data: rankChange,
+    });
+
+    if (!res.status)
+      return NextResponse.json({
+        error: `Rank Change Error: ${res.error}`,
+        status: false,
+      });
+
+    const resA = await dbHandler.edit({
+      col_name: "MEMBERS",
+      id: memberID,
+      data: nameChange,
+    });
+
+    if (!resA.status)
+      return NextResponse.json({
+        error: `Name Change Error: ${resA.error}`,
+        status: false,
+      });
+
+    return NextResponse.json({ status: true });
   } else if (option === "friends") {
     const res = await getFriendsList({ memberID });
     if (!res)

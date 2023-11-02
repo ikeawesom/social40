@@ -1,10 +1,13 @@
 import {
   Auth,
   createUserWithEmailAndPassword,
+  getAuth,
   signInWithEmailAndPassword,
   signOut,
+  updatePassword,
 } from "firebase/auth";
 import handleResponses from "../utils/handleResponses";
+import { FIREBASE_APP } from "./config";
 
 class AuthClass {
   constructor() {}
@@ -34,6 +37,19 @@ class AuthClass {
   async signOutUser(auth: Auth) {
     try {
       await signOut(auth);
+      return handleResponses();
+    } catch (error: any) {
+      return handleResponses({ error: error.message, status: false });
+    }
+  }
+
+  async changePassword(password: string) {
+    try {
+      const auth = getAuth(FIREBASE_APP);
+      const curUser = auth.currentUser;
+      if (!curUser) throw new Error("User not found");
+
+      await updatePassword(curUser, password);
       return handleResponses();
     } catch (error: any) {
       return handleResponses({ error: error.message, status: false });
