@@ -33,7 +33,7 @@ export default function EndorseStatus({
       const PostObj = GetPostObj({ statusID, memberID, adminID });
       await fetch(`${host}/api/profile/endorse-status`, PostObj);
       if (router) router.refresh();
-      else setStatusNew(true);
+      setStatusNew(true);
 
       toast.success("Status endorsed successfully.");
     } catch (err: any) {
