@@ -33,8 +33,8 @@ export default function MemberStatusTab({
     >
       <div className="flex items-start justify-center flex-col gap-2 flex-[2]">
         <div className="flex flex-col items-start justify-center">
-          <h3 className="text-custom-dark-text text-sm">{statusDesc}</h3>
-          <h1 className="text text-custom-dark-text font-semibold">
+          <h3 className="text-custom-dark-text text-xs">{statusDesc}</h3>
+          <h1 className="text-sm text-custom-dark-text font-semibold">
             {statusTitle}
           </h1>
           <p className="text-custom-grey-text text-xs">

@@ -44,13 +44,15 @@ export default function EndorseStatus({
   return (
     <div className={twMerge("flex-1 grid place-items-center", className)}>
       {statusNew ? (
-        <p className="font-semibold text-custom-orange text-center">Endorsed</p>
+        <p className="font-semibold text-custom-orange text-center text-sm">
+          Endorsed
+        </p>
       ) : loading ? (
         <LoadingIcon width={20} height={20} />
       ) : (
         <SecondaryButton
           onClick={handleEndorse}
-          className="px-2 text-custom-orange border-custom-orange"
+          className="px-2 text-custom-orange border-custom-orange text-sm"
         >
           Endorse
         </SecondaryButton>

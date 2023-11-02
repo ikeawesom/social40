@@ -36,16 +36,16 @@ export default function StatusFeed({
                     <p className="text-xs text-custom-grey-text">
                       {curStatus.doctor}
                     </p>
-                    <h1 className="text-lg text-custom-dark-text font-semibold">
+                    <h1 className="text-custom-dark-text font-semibold">
                       {curStatus.statusTitle}
                     </h1>
-                    <h3 className="text-base text-custom-dark-text">
+                    <h3 className="text-sm text-custom-dark-text">
                       {curStatus.statusDesc}
                     </h3>
-                    <p className="text-custom-grey-text text-sm">
+                    <p className="text-custom-grey-text text-xs">
                       Start Date: {curStatus.startDate.split(" ")[0]}
                     </p>
-                    <p className="text-custom-grey-text text-sm">
+                    <p className="text-custom-grey-text text-xs">
                       End Date: {curStatus.endDate.split(" ")[0]}
                     </p>
                   </div>
