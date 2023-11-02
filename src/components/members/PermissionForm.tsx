@@ -8,6 +8,9 @@ import { LoadingIconBright } from "../utils/LoadingIcon";
 import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
+import { twMerge } from "tailwind-merge";
+import DefaultCard from "../DefaultCard";
+import HRow from "../utils/HRow";
 
 export default function PermissionForm({
   currentMember,
@@ -27,6 +30,7 @@ export default function PermissionForm({
 
   const ready = confirm === viewMember.memberID;
   const noChange = currentRole === oldRole;
+  const sameRole = viewMember.role === currentMember.role;
 
   const getPermissions = (roleA: string) => {
     var obj = {} as any;
@@ -52,6 +56,10 @@ export default function PermissionForm({
     e.preventDefault();
     setLoading(true);
     try {
+      if (sameRole)
+        throw new Error(
+          "You cannot change the permissions of another member of the same level."
+        );
       const PostObj = GetPostObj({
         memberID: viewMember.memberID,
         permission: currentRole,
@@ -69,62 +77,84 @@ export default function PermissionForm({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col items-start justify-center gap-2"
-    >
-      <div className="flex items-center justify-start w-full gap-2">
-        <p className="text-sm flex-[2]">Your permissions</p>
-        <p className="flex-[3] text-sm font-semibold">
-          {ROLES_HIERARCHY[currentMember.role].title}
-        </p>
-      </div>
-      <div className="flex items-center justify-start w-full gap-2">
-        <label htmlFor="permission" className="text-sm flex-[2]">
-          Set Permissions
-        </label>
-        <select
-          name="permission"
-          id="permission"
-          className="flex-[3]"
-          value={currentRole}
-          onChange={handleChangeSelect}
-        >
-          {Object.keys(permissions).map((item: string) => {
-            return (
-              <option key={item} value={item}>
-                {permissions[item].title}
-              </option>
-            );
-          })}
-        </select>
-      </div>
-      <div className="flex flex-col items-start justify-center gap-1 w-full m2-2">
-        <p className="text-sm">
-          Please type this member's member ID below to confirm.
-        </p>
-        <input
-          type="text"
-          placeholder={viewMember.memberID}
-          value={confirm}
-          onChange={handleChangeCfm}
-        />
-        <p className="text-sm text-custom-grey-text">
-          Note that the higher the level, the more permissions will be available
-          to this member.
-        </p>
-      </div>
-      <PrimaryButton
-        type="submit"
-        disabled={loading || !ready || noChange}
-        className="grid place-items-center"
+    <DefaultCard className={twMerge("w-full", sameRole && "opacity-60")}>
+      <div
+        onClick={() =>
+          toast.error(
+            "You cannot change the permissions of another member of the same level."
+          )
+        }
       >
-        {loading ? (
-          <LoadingIconBright width={20} height={20} />
-        ) : (
-          "Update Permissions"
-        )}
-      </PrimaryButton>
-    </form>
+        <div className="pointer-events-none">
+          <h1 className="text-start font-semibold text-base">Permissions</h1>
+          <HRow className="mb-2" />
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col items-start justify-center gap-2"
+          >
+            <div className="flex items-center justify-start w-full gap-2">
+              <p className="text-sm flex-[2]">Your permissions</p>
+              <p className="flex-[3] text-sm font-semibold">
+                {ROLES_HIERARCHY[currentMember.role].title}
+              </p>
+            </div>
+            <div className="flex items-center justify-start w-full gap-2">
+              <label htmlFor="permission" className="text-sm flex-[2]">
+                Set Permissions
+              </label>
+              {sameRole ? (
+                <>
+                  <p className="flex-[3] text-sm font-semibold">
+                    {ROLES_HIERARCHY[viewMember.role].title}
+                  </p>
+                </>
+              ) : (
+                <select
+                  name="permission"
+                  id="permission"
+                  className="flex-[3]"
+                  value={currentRole}
+                  onChange={handleChangeSelect}
+                >
+                  {Object.keys(permissions).map((item: string) => {
+                    return (
+                      <option key={item} value={item}>
+                        {permissions[item].title}
+                      </option>
+                    );
+                  })}
+                </select>
+              )}
+            </div>
+            <div className="flex flex-col items-start justify-center gap-1 w-full m2-2">
+              <p className="text-sm">
+                Please type this member's member ID below to confirm.
+              </p>
+              <input
+                type="text"
+                placeholder={viewMember.memberID}
+                value={confirm}
+                onChange={handleChangeCfm}
+              />
+              <p className="text-sm text-custom-grey-text">
+                Note that the higher the level, the more permissions will be
+                available to this member.
+              </p>
+            </div>
+            <PrimaryButton
+              type="submit"
+              disabled={loading || !ready || noChange}
+              className="grid place-items-center"
+            >
+              {loading ? (
+                <LoadingIconBright width={20} height={20} />
+              ) : (
+                "Update Permissions"
+              )}
+            </PrimaryButton>
+          </form>
+        </div>
+      </div>
+    </DefaultCard>
   );
 }
