@@ -5,6 +5,7 @@ import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import InnerContainer from "../../utils/InnerContainer";
 import { twMerge } from "tailwind-merge";
 import EndorseStatus from "../../status/EndorseStatus";
+import Link from "next/link";
 
 export type GroupStatusType = {
   [memberID: string]: { [statusID: string]: STATUS_SCHEMA };
@@ -60,7 +61,8 @@ export default function GroupStatusSection({
 
                   const active = today <= endDateNew;
                   return (
-                    <div
+                    <Link
+                      href={`/members/${memberID}/${statusID}`}
                       className={twMerge(
                         "w-full py-2 px-4 flex items-center gap-2 justify-between hover:bg-custom-light-text duration-200",
                         active ? "bg-custom-light-red" : ""
@@ -89,7 +91,7 @@ export default function GroupStatusSection({
                         memberID={memberID}
                         status={endorsed.status}
                       />
-                    </div>
+                    </Link>
                   );
                 })}
               </div>
