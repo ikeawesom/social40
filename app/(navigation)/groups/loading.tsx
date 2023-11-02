@@ -1,6 +1,6 @@
 import React from "react";
-import LoadingScreen from "@/src/components/screens/LoadingScreen";
+import LoadingScreenSmall from "@/src/components/screens/LoadingScreenSmall";
 
 export default function loading() {
-  return <LoadingScreen />;
+  return <LoadingScreenSmall />;
 }
