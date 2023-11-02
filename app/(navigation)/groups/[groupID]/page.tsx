@@ -68,6 +68,7 @@ export default async function GroupPage({
             <GroupHeader owner={createdBy} title={groupName} desc={groupDesc} />
             {owner && <GroupRequested groupID={groupID} />}
             <GroupMembers membersList={groupMembers} />
+            {/* TODO: Add group statuses section */}
             {owner && <SettingsSection groupID={groupID} />}
           </div>
         </>

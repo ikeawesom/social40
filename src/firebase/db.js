@@ -1,6 +1,6 @@
 import { FIREBASE_APP } from "./config";
 import {
-  getFirestore,
+  addDoc,
   setDoc,
   deleteDoc,
   doc,
@@ -31,6 +31,15 @@ class DbClass {
       const ref = doc(FIREBASE_DB, col_name, id);
       await setDoc(ref, to_add);
       return handleResponses();
+    } catch (e) {
+      return handleResponses({ error: e.message, status: false });
+    }
+  }
+
+  async addGeneral({ path, to_add }) {
+    try {
+      const ref = await addDoc(collection(FIREBASE_DB, path), to_add);
+      return handleResponses({ data: ref });
     } catch (e) {
       return handleResponses({ error: e.message, status: false });
     }
@@ -85,15 +94,16 @@ class DbClass {
       var q;
 
       if (orderCol && field) {
-        query(
+        q = query(
           colRef,
           where(field, criteria, value),
           orderBy(orderCol, !ascending ? "desc" : "asc")
         );
       } else if (!orderCol && field) {
-        query(colRef, where(field, criteria, value));
+        q = query(colRef, where(field, criteria, value));
       } else if (orderCol && !field) {
-        query(colRef, orderBy(orderCol, !ascending ? "desc" : "asc"));
+        const asc = ascending ? "asc" : "desc";
+        q = query(colRef, orderBy(orderCol, asc));
       } else {
         throw new Error("Invalid props.");
       }
