@@ -109,17 +109,10 @@ export default async function MemberPage({
                 </DefaultCard>
               )}
               {higher && (
-                <DefaultCard className="w-full">
-                  <h1 className="text-start font-semibold text-base">
-                    Permissions
-                  </h1>
-                  <HRow className="mb-2" />
-
-                  <PermissionForm
-                    currentMember={currentMemberData}
-                    viewMember={viewMemberData}
-                  />
-                </DefaultCard>
+                <PermissionForm
+                  currentMember={currentMemberData}
+                  viewMember={viewMemberData}
+                />
               )}
             </div>
           </div>
