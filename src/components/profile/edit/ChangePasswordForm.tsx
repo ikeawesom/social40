@@ -61,9 +61,9 @@ export default function ChangePasswordForm() {
         onChange={handleChange}
         placeholder="Confirm your password"
       />
-      <div className="w-full flex items-center justify-between gap-2  mt-2">
+      <div className="w-full flex items-center justify-between gap-2 mt-2">
         <SecondaryButton onClick={() => setShow(!show)}>
-          {show ? "Hide Passwords" : "Show Passwords"}
+          {show ? "Hide" : "Show"}
         </SecondaryButton>
         <PrimaryButton
           type="submit"
