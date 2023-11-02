@@ -3,6 +3,7 @@ import React from "react";
 import InnerContainer from "../../utils/InnerContainer";
 import AddStatusButton from "./status/AddStatusButton";
 import { twMerge } from "tailwind-merge";
+import { getActiveStatus } from "@/src/utils/getActiveStatus";
 
 export default function StatusFeed({
   status,
@@ -19,18 +20,7 @@ export default function StatusFeed({
         <InnerContainer className="max-h-[100vh]">
           {Object.keys(status).map((statusID: string) => {
             const curStatus = status[statusID];
-            const today = new Date();
-            const endDateStr = curStatus.endDate.split(" ")[0];
-            const endDateArr = endDateStr.split("/");
-            const endDate = new Date(
-              Number.parseInt(endDateArr[2]),
-              Number.parseInt(endDateArr[1]) - 1,
-              Number.parseInt(endDateArr[0]) + 1,
-              7,
-              59
-            );
-
-            const active = today <= endDate;
+            const active = getActiveStatus(curStatus.endDate);
 
             return (
               <div

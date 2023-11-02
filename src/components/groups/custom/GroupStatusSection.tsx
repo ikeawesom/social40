@@ -6,6 +6,7 @@ import InnerContainer from "../../utils/InnerContainer";
 import { twMerge } from "tailwind-merge";
 import EndorseStatus from "../../status/EndorseStatus";
 import Link from "next/link";
+import { getActiveStatus } from "@/src/utils/getActiveStatus";
 
 export type GroupStatusType = {
   [memberID: string]: { [statusID: string]: STATUS_SCHEMA };
@@ -48,18 +49,7 @@ export default function GroupStatusSection({
                     endorsed,
                   } = statusData;
 
-                  const today = new Date();
-                  const endDateStr = endDate.split(" ")[0];
-                  const endDateArr = endDateStr.split("/");
-                  const endDateNew = new Date(
-                    Number.parseInt(endDateArr[2]),
-                    Number.parseInt(endDateArr[1]) - 1,
-                    Number.parseInt(endDateArr[0]) + 1,
-                    7,
-                    59
-                  );
-
-                  const active = today <= endDateNew;
+                  const active = getActiveStatus(endDate);
                   return (
                     <Link
                       href={`/members/${memberID}/${statusID}`}
