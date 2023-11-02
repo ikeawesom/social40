@@ -22,7 +22,8 @@ export default function ToggleBibo({
   const { host } = useHostname();
 
   const [bibo, setBibo] = useState<boolean>();
-  const aboveAdmin = ROLES_HIERARCHY[role] >= ROLES_HIERARCHY["admin"];
+  const aboveAdmin =
+    ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

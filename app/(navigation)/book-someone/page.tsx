@@ -30,7 +30,8 @@ export default async function BookSomeoneInPage() {
 
       const memberDetails = data.data as MEMBER_SCHEMA;
       const { role } = memberDetails;
-      const aboveAdmin = ROLES_HIERARCHY[role] >= ROLES_HIERARCHY["admin"];
+      const aboveAdmin =
+        ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
       if (!aboveAdmin) return <RestrictedScreen />;
       return (
         <>

@@ -65,7 +65,8 @@ export default async function MemberPage({
       const viewMemberData = dataA.data as MEMBER_SCHEMA;
       const viewMemberRole = viewMemberData.role;
 
-      const admin = ROLES_HIERARCHY[role] >= ROLES_HIERARCHY[viewMemberRole];
+      const admin =
+        ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY[viewMemberRole].rank;
 
       if (!admin) return <RestrictedScreen />;
 

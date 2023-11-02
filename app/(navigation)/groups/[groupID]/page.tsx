@@ -50,7 +50,7 @@ export default async function GroupPage({
       if (!body.status) return <RestrictedScreen />;
       const { role } = body.data as GROUP_MEMBERS_SCHEMA;
       const owner = role === "owner";
-      const admin = ROLES_HIERARCHY[role] >= ROLES_HIERARCHY["admin"];
+      const admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
 
       // get group data
       const PostObj = GetPostObj({ groupID });
