@@ -110,10 +110,6 @@ class DbClass {
 
       const qSnap = await getDocs(q);
 
-      if (qSnap.docs.length === 0)
-        throw new Error(
-          `No document matching your criteria of "${field} ${criteria} ${value}".`
-        );
       var docList = {};
 
       qSnap.forEach((doc) => {
