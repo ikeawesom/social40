@@ -10,7 +10,7 @@ export default function EditProfileButton() {
       className="flex-1"
       onClick={() => router.push("/edit-profile")}
     >
-      Edit Profile
+      Settings
     </SecondaryButton>
   );
 }

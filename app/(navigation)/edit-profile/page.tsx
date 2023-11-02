@@ -35,23 +35,29 @@ export default async function EditProfilePage() {
 
     return (
       <>
-        <HeaderBar text="Edit Profile" back />
+        <HeaderBar text="Settings" back />
         <div className="grid place-items-center">
           <div className="w-full flex flex-col items-center justify-start gap-4 max-w-[500px]">
-            <DefaultCard className="w-full flex flex-col items-center justify-start gap-4">
-              <div className="flex flex-col gap-2 items-center justify-center">
-                <Image
-                  src="/icons/icon_avatar.svg"
-                  height={80}
-                  width={80}
-                  alt="Profile"
-                  className="drop-shadow-md"
-                />
-                <p className="text-center text-custom-grey-text text-sm">
-                  {memberData.memberID}
-                </p>
+            <DefaultCard className="w-full">
+              <h1 className="text-custom-dark-text font-semibold text-start">
+                Edit Profile
+              </h1>
+              <HRow />
+              <div className="flex flex-col items-center justify-start gap-4 mt-4">
+                <div className="flex flex-col gap-2 items-center justify-center">
+                  <Image
+                    src="/icons/icon_avatar.svg"
+                    height={80}
+                    width={80}
+                    alt="Profile"
+                    className="drop-shadow-md"
+                  />
+                  <p className="text-center text-custom-grey-text text-sm">
+                    {memberData.memberID}
+                  </p>
+                </div>
+                <EditProfileForm memberData={memberData} />
               </div>
-              <EditProfileForm memberData={memberData} />
             </DefaultCard>
             <DefaultCard className="w-full">
               <h1 className="text-custom-dark-text font-semibold text-start">
