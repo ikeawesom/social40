@@ -55,9 +55,13 @@ export default async function Groups() {
       return (
         <>
           <HeaderBar text="Groups" />
-          <div className="flex flex-col gap-10 items-center justify-start w-full">
-            {ownedGroups && <GroupsCreatedSection ownedGroups={ownedGroups} />}
-            <GroupsJoinedSection joinedGroups={joinedGroups} />
+          <div className="grid place-items-center">
+            <div className="max-w-[500px] flex flex-col gap-10 items-center justify-start w-full">
+              {ownedGroups && (
+                <GroupsCreatedSection ownedGroups={ownedGroups} />
+              )}
+              <GroupsJoinedSection joinedGroups={joinedGroups} />
+            </div>
           </div>
         </>
       );
