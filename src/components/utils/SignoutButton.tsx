@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { getAuth } from "firebase/auth";
 import { FIREBASE_APP } from "@/src/firebase/config";
 import Image from "next/image";
-import { twMerge } from "tailwind-merge";
 import { useRouter } from "next/navigation";
 import SecondaryButton from "./SecondaryButton";
 import { LoadingIconBright } from "./LoadingIcon";
@@ -36,7 +35,7 @@ export default function SignoutButton({
       onClick={handleSignout}
     >
       {loading ? (
-        <LoadingIconBright width={20} height={20} />
+        <LoadingIconBright width={25} height={25} />
       ) : (
         <div className="flex items-center justify-center gap-2">
           <p className="text-lg font-semibold text-custom-light-text">
