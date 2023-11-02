@@ -87,6 +87,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: resA.error, status: false });
 
     return NextResponse.json({ status: true });
+  } else if (option === "custom-status") {
+    // get a specific status
+    const { statusID } = fetchedData;
+
+    const res = await dbHandler.get({
+      col_name: `MEMBERS/${memberID}/STATUSES`,
+      id: statusID,
+    });
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    return NextResponse.json({ status: true, data: res.data });
   } else if (option === "endorse-status") {
     // endorse-status
     const { statusID, adminID } = fetchedData;
