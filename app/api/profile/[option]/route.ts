@@ -86,7 +86,6 @@ export async function POST(request: NextRequest) {
     if (!resA.status)
       return NextResponse.json({ error: resA.error, status: false });
 
-    console.log("done");
     return NextResponse.json({ status: true });
   } else if (option === "endorse-status") {
     // endorse-status
