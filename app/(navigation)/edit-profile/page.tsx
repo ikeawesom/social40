@@ -4,6 +4,7 @@ import ChangePasswordForm from "@/src/components/profile/edit/ChangePasswordForm
 import EditProfileForm from "@/src/components/profile/edit/EditProfileForm";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import HRow from "@/src/components/utils/HRow";
+import SignoutButton from "@/src/components/utils/SignoutButton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
@@ -35,29 +36,32 @@ export default async function EditProfilePage() {
     return (
       <>
         <HeaderBar text="Edit Profile" back />
-        <div className="w-full flex flex-col items-center justify-start gap-4">
-          <DefaultCard className="w-full flex flex-col items-center justify-start gap-4">
-            <div className="flex flex-col gap-2 items-center justify-center">
-              <Image
-                src="/icons/icon_avatar.svg"
-                height={80}
-                width={80}
-                alt="Profile"
-                className="drop-shadow-md"
-              />
-              <p className="text-center text-custom-grey-text text-sm">
-                {memberData.memberID}
-              </p>
-            </div>
-            <EditProfileForm memberData={memberData} />
-          </DefaultCard>
-          <DefaultCard className="w-full">
-            <h1 className="text-custom-dark-text font-semibold text-start">
-              Change Password
-            </h1>
-            <HRow />
-            <ChangePasswordForm />
-          </DefaultCard>
+        <div className="grid place-items-center">
+          <div className="w-full flex flex-col items-center justify-start gap-4 max-w-[500px]">
+            <DefaultCard className="w-full flex flex-col items-center justify-start gap-4">
+              <div className="flex flex-col gap-2 items-center justify-center">
+                <Image
+                  src="/icons/icon_avatar.svg"
+                  height={80}
+                  width={80}
+                  alt="Profile"
+                  className="drop-shadow-md"
+                />
+                <p className="text-center text-custom-grey-text text-sm">
+                  {memberData.memberID}
+                </p>
+              </div>
+              <EditProfileForm memberData={memberData} />
+            </DefaultCard>
+            <DefaultCard className="w-full">
+              <h1 className="text-custom-dark-text font-semibold text-start">
+                Change Password
+              </h1>
+              <HRow />
+              <ChangePasswordForm />
+            </DefaultCard>
+            <SignoutButton />
+          </div>
         </div>
       </>
     );
