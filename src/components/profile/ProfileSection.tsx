@@ -10,6 +10,7 @@ import FriendsList from "./FriendsList";
 import LoadingIcon from "../utils/LoadingIcon";
 import StatusDot from "../utils/StatusDot";
 import ToggleBibo from "./ToggleBibo";
+import EditProfileButton from "./edit/EditProfileButton";
 
 export type FriendsListType = { [key: string]: MEMBER_SCHEMA };
 
@@ -26,6 +27,7 @@ export default async function ProfileSection({
   const role = memberData.role as string;
   const memberID = memberData.memberID as string;
 
+  const rankName = `${memberData.rank} ${memberData.displayName}`.trim();
   return (
     <DefaultCard
       className={twMerge(
@@ -52,7 +54,7 @@ export default async function ProfileSection({
             </div>
             <div className="flex flex-col items-center justify-center gap-0">
               <h1 className="font-bold text-custom-dark-text text-base">
-                {memberData.displayName}
+                {rankName}
               </h1>
               <p className="text-center text-custom-grey-text text-xs">
                 {memberData.memberID}
@@ -60,7 +62,7 @@ export default async function ProfileSection({
             </div>
           </div>
           <div className="w-full flex items-stretch justify-between gap-3 flex-wrap">
-            <SecondaryButton className="flex-1">Edit Profile</SecondaryButton>
+            <EditProfileButton />
             <ToggleBibo memberID={memberID} role={role} fetchedBibo={bibo} />
           </div>
           <HRow />
