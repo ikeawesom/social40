@@ -1,8 +1,10 @@
 import {
   Auth,
+  User,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  updatePassword,
 } from "firebase/auth";
 import handleResponses from "../utils/handleResponses";
 
@@ -34,6 +36,15 @@ class AuthClass {
   async signOutUser(auth: Auth) {
     try {
       await signOut(auth);
+      return handleResponses();
+    } catch (error: any) {
+      return handleResponses({ error: error.message, status: false });
+    }
+  }
+
+  async changePassword(authUser: User, password: string) {
+    try {
+      await updatePassword(authUser, password);
       return handleResponses();
     } catch (error: any) {
       return handleResponses({ error: error.message, status: false });
