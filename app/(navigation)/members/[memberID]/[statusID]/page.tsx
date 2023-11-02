@@ -42,7 +42,7 @@ export default async function CustomStatusPage({
     const data = body.data as MEMBER_SCHEMA;
     const { role } = data;
 
-    const admin = ROLES_HIERARCHY[role] >= ROLES_HIERARCHY["admin"];
+    const admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
 
     if (!admin) return <RestrictedScreen />;
 

@@ -38,7 +38,8 @@ export default async function Groups() {
       const memberData = data.data as MEMBER_SCHEMA;
 
       const { role } = memberData;
-      const admin = ROLES_HIERARCHY[role] >= ROLES_HIERARCHY["admin"];
+      const admin =
+        ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
 
       // get joined groups
       const resA = await fetch(`${host}/api/groups/joined`, PostObj);
@@ -55,9 +56,13 @@ export default async function Groups() {
       return (
         <>
           <HeaderBar text="Groups" />
-          <div className="flex flex-col gap-10 items-center justify-start w-full">
-            {ownedGroups && <GroupsCreatedSection ownedGroups={ownedGroups} />}
-            <GroupsJoinedSection joinedGroups={joinedGroups} />
+          <div className="grid place-items-center">
+            <div className="max-w-[500px] flex flex-col gap-10 items-center justify-start w-full">
+              {ownedGroups && (
+                <GroupsCreatedSection ownedGroups={ownedGroups} />
+              )}
+              <GroupsJoinedSection joinedGroups={joinedGroups} />
+            </div>
           </div>
         </>
       );

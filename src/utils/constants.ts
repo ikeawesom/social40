@@ -1,10 +1,9 @@
 export const ROLES_HIERARCHY = {
-  owner: 5,
-  uadmin: 4,
-  admin: 3,
-  umember: 2,
-  member: 1,
-} as { [role: string]: number };
+  owner: { rank: 4, title: "Level 4" },
+  admin: { rank: 3, title: "Level 3" },
+  commander: { rank: 2, title: "Level 2" },
+  member: { rank: 1, title: "Level 1" },
+} as { [role: string]: { rank: number; title: string } };
 
 export const BADGE_COLORS = {
   Gold: "bg-orange-300",

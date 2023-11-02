@@ -35,16 +35,14 @@ export default function SignoutButton({
       onClick={handleSignout}
     >
       {loading ? (
-        <LoadingIconBright width={25} height={25} />
+        <LoadingIconBright width={20} height={20} />
       ) : (
         <div className="flex items-center justify-center gap-2">
-          <p className="text-lg font-semibold text-custom-light-text">
-            Sign out
-          </p>
+          <p className="font-semibold text-custom-light-text">Sign out</p>
           <Image
             src="/icons/icon_signout.svg"
-            width={width ? width : 25}
-            height={height ? height : 25}
+            width={width ? width : 20}
+            height={height ? height : 20}
             alt="Sign Out"
             className="rounded-full cursor-pointer"
           />

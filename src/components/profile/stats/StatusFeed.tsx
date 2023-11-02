@@ -4,6 +4,7 @@ import InnerContainer from "../../utils/InnerContainer";
 import AddStatusButton from "./status/AddStatusButton";
 import { twMerge } from "tailwind-merge";
 import { getActiveStatus } from "@/src/utils/getActiveStatus";
+import HRow from "../../utils/HRow";
 
 export default function StatusFeed({
   status,
@@ -17,6 +18,7 @@ export default function StatusFeed({
   return (
     <div className="flex flex-col items-start justify-start gap-y-1 w-full">
       <h1 className="text-start font-semibold text-base">Statuses</h1>
+      <HRow className="mb-2" />
       {!viewProfile && <AddStatusButton />}
       {!empty ? (
         <InnerContainer className="max-h-[100vh]">

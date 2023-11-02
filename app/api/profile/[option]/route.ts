@@ -83,6 +83,18 @@ export async function POST(request: NextRequest) {
     const statusObj = res.data as StatusListType;
 
     return NextResponse.json({ status: true, data: statusObj });
+  } else if (option === "set-permission") {
+    const { permission } = fetchedData;
+
+    const res = await dbHandler.edit({
+      col_name: `MEMBERS`,
+      id: memberID,
+      data: { role: permission },
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+    return NextResponse.json({ status: true });
   } else if (option === "set-status") {
     const data = fetchedData.status as StatusInputType;
 
