@@ -23,38 +23,14 @@ export default function StatusFeed({
           {Object.keys(status).map((statusID: string) => {
             const curStatus = status[statusID];
             const active = getActiveStatus(curStatus.endDate);
+
             if (active)
               return (
-                <div
-                  className={twMerge(
-                    "w-full flex items-start justify-center p-3 flex-col gap-2 hover:bg-custom-light-text duration-200",
-                    active ? "bg-custom-light-red" : ""
-                  )}
-                  key={statusID}
-                >
-                  <div className="flex flex-col items-start justify-center">
-                    <p className="text-xs text-custom-grey-text">
-                      {curStatus.doctor}
-                    </p>
-                    <h1 className="text-custom-dark-text font-semibold">
-                      {curStatus.statusTitle}
-                    </h1>
-                    <h3 className="text-sm text-custom-dark-text">
-                      {curStatus.statusDesc}
-                    </h3>
-                    <p className="text-custom-grey-text text-xs">
-                      Start Date: {curStatus.startDate.split(" ")[0]}
-                    </p>
-                    <p className="text-custom-grey-text text-xs">
-                      End Date: {curStatus.endDate.split(" ")[0]}
-                    </p>
-                  </div>
-                  {!curStatus.endorsed.status && (
-                    <p className="text-custom-orange font-bold text-sm text-center">
-                      Pending Endorsement
-                    </p>
-                  )}
-                </div>
+                <StatusDetails
+                  active
+                  curStatus={curStatus}
+                  key={curStatus.statusID}
+                />
               );
           })}
           {Object.keys(status).map((statusID: string) => {
@@ -62,42 +38,51 @@ export default function StatusFeed({
             const active = getActiveStatus(curStatus.endDate);
             if (!active)
               return (
-                <div
-                  className={twMerge(
-                    "w-full flex items-start justify-center p-3 flex-col gap-2 hover:bg-custom-light-text duration-200",
-                    active ? "bg-custom-light-red" : ""
-                  )}
-                  key={statusID}
-                >
-                  <div className="flex flex-col items-start justify-center">
-                    <p className="text-xs text-custom-grey-text">
-                      {curStatus.doctor}
-                    </p>
-                    <h1 className="text-lg text-custom-dark-text font-semibold">
-                      {curStatus.statusTitle}
-                    </h1>
-                    <h3 className="text-base text-custom-dark-text">
-                      {curStatus.statusDesc}
-                    </h3>
-                    <p className="text-custom-grey-text text-sm">
-                      Start Date: {curStatus.startDate.split(" ")[0]}
-                    </p>
-                    <p className="text-custom-grey-text text-sm">
-                      End Date: {curStatus.endDate.split(" ")[0]}
-                    </p>
-                  </div>
-                  {!curStatus.endorsed.status && (
-                    <p className="text-custom-orange font-bold text-sm text-center">
-                      Pending Endorsement
-                    </p>
-                  )}
-                </div>
+                <StatusDetails curStatus={curStatus} key={curStatus.statusID} />
               );
           })}
         </InnerContainer>
       ) : (
         <p className="text-start text-custom-grey-text text-xs">
           No status information recorded for this account.
+        </p>
+      )}
+    </div>
+  );
+}
+
+type StatusDetailType = {
+  active?: boolean;
+  curStatus: STATUS_SCHEMA;
+};
+export function StatusDetails({ active, curStatus }: StatusDetailType) {
+  const statusID = curStatus.statusID;
+  return (
+    <div
+      className={twMerge(
+        "w-full flex items-start justify-center p-3 flex-col gap-2 hover:bg-custom-light-text duration-200",
+        active ? "bg-custom-light-red" : ""
+      )}
+      key={statusID}
+    >
+      <div className="flex flex-col items-start justify-center">
+        <p className="text-xs text-custom-grey-text">{curStatus.doctor}</p>
+        <h1 className="text-custom-dark-text font-semibold">
+          {curStatus.statusTitle}
+        </h1>
+        <h3 className="text-sm text-custom-dark-text">
+          {curStatus.statusDesc}
+        </h3>
+        <p className="text-custom-grey-text text-xs">
+          Start Date: {curStatus.startDate.split(" ")[0]}
+        </p>
+        <p className="text-custom-grey-text text-xs">
+          End Date: {curStatus.endDate.split(" ")[0]}
+        </p>
+      </div>
+      {!curStatus.endorsed.status && (
+        <p className="text-custom-orange font-bold text-sm text-center">
+          Pending Endorsement
         </p>
       )}
     </div>
