@@ -1,10 +1,8 @@
 import React from "react";
 import DefaultCard from "../DefaultCard";
 import Image from "next/image";
-import SecondaryButton from "../utils/SecondaryButton";
 import { twMerge } from "tailwind-merge";
 import HRow from "../utils/HRow";
-import SignoutButton from "../utils/SignoutButton";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import FriendsList from "./FriendsList";
 import LoadingIcon from "../utils/LoadingIcon";
@@ -38,7 +36,6 @@ export default async function ProfileSection({
       {memberData ? (
         <>
           <div className="flex flex-col gap-2 items-center justify-center">
-            <SignoutButton absolute />
             <div className="relative">
               <StatusDot
                 status={bibo}
