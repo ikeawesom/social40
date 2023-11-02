@@ -101,17 +101,25 @@ export default async function GroupPage({
       return (
         <>
           <HeaderBar back text={groupID} />
-          <div className="flex flex-col items-center justify-start w-full gap-4">
-            <GroupHeader owner={createdBy} title={groupName} desc={groupDesc} />
-            {owner && <GroupRequested groupID={groupID} />}
-            <GroupMembers membersList={groupMembers} />
-            {admin && (
-              <GroupStatusSection
-                adminID={memberID}
-                GroupStatusList={groupStatusList}
-              />
-            )}
-            {owner && <SettingsSection groupID={groupID} />}
+          <div className="grid place-items-center">
+            <div className="max-w-[500px] w-full">
+              <div className="flex flex-col items-center justify-start w-full gap-4">
+                <GroupHeader
+                  owner={createdBy}
+                  title={groupName}
+                  desc={groupDesc}
+                />
+                {owner && <GroupRequested groupID={groupID} />}
+                <GroupMembers membersList={groupMembers} />
+                {admin && (
+                  <GroupStatusSection
+                    adminID={memberID}
+                    GroupStatusList={groupStatusList}
+                  />
+                )}
+                {owner && <SettingsSection groupID={groupID} />}
+              </div>
+            </div>
           </div>
         </>
       );
