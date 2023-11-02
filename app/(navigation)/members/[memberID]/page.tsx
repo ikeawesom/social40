@@ -12,6 +12,17 @@ import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
 import React from "react";
 
+export async function generateMetadata({
+  params,
+}: {
+  params: { memberID: string };
+}) {
+  const member = params.memberID;
+  return {
+    title: member,
+  };
+}
+
 export default async function MemberPage({
   params,
 }: {
