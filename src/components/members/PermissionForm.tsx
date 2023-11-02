@@ -35,7 +35,7 @@ export default function PermissionForm({
   const getPermissions = (roleA: string) => {
     var obj = {} as any;
     Object.keys(ROLES_HIERARCHY).forEach((item: any) => {
-      if (ROLES_HIERARCHY[item].rank <= ROLES_HIERARCHY[roleA].rank) {
+      if (ROLES_HIERARCHY[item].rank < ROLES_HIERARCHY[roleA].rank) {
         obj[item] = ROLES_HIERARCHY[item];
       }
     });
@@ -79,13 +79,14 @@ export default function PermissionForm({
   return (
     <DefaultCard className={twMerge("w-full", sameRole && "opacity-60")}>
       <div
-        onClick={() =>
-          toast.error(
-            "You cannot change the permissions of another member of the same level."
-          )
-        }
+        onClick={() => {
+          sameRole &&
+            toast.error(
+              "You cannot change the permissions of another member of the same level."
+            );
+        }}
       >
-        <div className="pointer-events-none">
+        <div className={sameRole ? "pointer-events-none" : ""}>
           <h1 className="text-start font-semibold text-base">Permissions</h1>
           <HRow className="mb-2" />
           <form
