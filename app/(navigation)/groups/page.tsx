@@ -38,7 +38,8 @@ export default async function Groups() {
       const memberData = data.data as MEMBER_SCHEMA;
 
       const { role } = memberData;
-      const admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
+      const admin =
+        ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
 
       // get joined groups
       const resA = await fetch(`${host}/api/groups/joined`, PostObj);
