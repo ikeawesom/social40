@@ -12,6 +12,10 @@ import GroupMembers, {
 import GroupRequested from "@/src/components/groups/custom/GroupRequested";
 import SettingsSection from "@/src/components/groups/custom/settings/SettingsSection";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
+import { ROLES_HIERARCHY } from "@/src/utils/constants";
+import GroupStatusSection, {
+  GroupStatusType,
+} from "@/src/components/status/GroupStatusSection";
 
 export async function generateMetadata({
   params,
@@ -46,6 +50,7 @@ export default async function GroupPage({
       if (!body.status) return <RestrictedScreen />;
       const { role } = body.data as GROUP_MEMBERS_SCHEMA;
       const owner = role === "owner";
+      const admin = ROLES_HIERARCHY[role] >= ROLES_HIERARCHY["admin"];
 
       // get group data
       const PostObj = GetPostObj({ groupID });
@@ -61,6 +66,41 @@ export default async function GroupPage({
 
       if (!bodyB.status) throw new Error(bodyB.error);
       const groupMembers = bodyB.data as GroupDetailsType;
+
+      // get group statuses
+      const memberIDList = Object.keys(groupMembers);
+      const to_send = {
+        groupID: groupID,
+        list: memberIDList,
+      };
+
+      const resC = await fetch(`${host}/api/groups/statuses`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(to_send),
+        cache: "no-store" as "no-store",
+      });
+
+      const bodyC = await resC.json();
+
+      if (!bodyC.status) throw new Error(bodyC.error);
+
+      const groupStatusList = {} as GroupStatusType;
+
+      const dataC = bodyC.data as any[];
+
+      dataC.forEach((item: any) => {
+        const data = item.data;
+        const memberID = Object.keys(data)[0];
+        const memberStatusObj = data[memberID];
+        groupStatusList[memberID] = memberStatusObj;
+      });
+
+      console.log(groupStatusList);
+
+      console.log(admin);
       return (
         <>
           <HeaderBar back text={groupID} />
@@ -69,6 +109,12 @@ export default async function GroupPage({
             {owner && <GroupRequested groupID={groupID} />}
             <GroupMembers membersList={groupMembers} />
             {/* TODO: Add group statuses section */}
+            {admin && (
+              <GroupStatusSection
+                adminID={memberID}
+                GroupStatusList={groupStatusList}
+              />
+            )}
             {owner && <SettingsSection groupID={groupID} />}
           </div>
         </>
