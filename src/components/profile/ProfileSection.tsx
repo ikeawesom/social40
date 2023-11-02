@@ -58,7 +58,7 @@ export default async function ProfileSection({
               </p>
             </div>
           </div>
-          <div className="w-full flex items-stretch justify-between gap-3 flex-wrap">
+          <div className="w-full flex gap-3 flex-col">
             <EditProfileButton />
             <ToggleBibo memberID={memberID} role={role} fetchedBibo={bibo} />
           </div>
