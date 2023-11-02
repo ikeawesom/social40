@@ -7,15 +7,17 @@ import { getActiveStatus } from "@/src/utils/getActiveStatus";
 
 export default function StatusFeed({
   status,
+  viewProfile,
 }: {
   status: { [statusID: string]: STATUS_SCHEMA };
+  viewProfile?: boolean;
 }) {
   const empty = Object.keys(status).length === 0;
 
   return (
     <div className="flex flex-col items-start justify-start gap-y-1 w-full">
       <h1 className="text-start font-semibold text-base">Statuses</h1>
-      <AddStatusButton />
+      {!viewProfile && <AddStatusButton />}
       {!empty ? (
         <InnerContainer className="max-h-[100vh]">
           {Object.keys(status).map((statusID: string) => {
@@ -47,24 +49,18 @@ export default function StatusFeed({
                     End Date: {curStatus.endDate.split(" ")[0]}
                   </p>
                 </div>
-                <div className="grid place-items-center w-full text-center">
-                  {curStatus.endorsed.status ? (
-                    <p className="text-custom-green font-bold text-sm">
-                      Endorsed
-                    </p>
-                  ) : (
-                    <p className="text-custom-orange font-bold text-sm">
-                      Pending Endorsement
-                    </p>
-                  )}
-                </div>
+                {!curStatus.endorsed.status && (
+                  <p className="text-custom-orange font-bold text-sm text-center">
+                    Pending Endorsement
+                  </p>
+                )}
               </div>
             );
           })}
         </InnerContainer>
       ) : (
         <p className="text-start text-custom-grey-text text-xs">
-          You have no status information added to your account.
+          No status information recorded for this account.
         </p>
       )}
     </div>
