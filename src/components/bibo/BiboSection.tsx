@@ -33,7 +33,7 @@ export default function BiboSection({
                     <HRow />
                   </div>
 
-                  <div className="flex flex-col items-start justify-center gap-2 w-full overflow-y-scroll">
+                  <div className="flex flex-col items-start justify-center gap-2 w-full">
                     {Object.keys(dateObj).map((memberID, indexA) => {
                       const memberObject = dateObj[memberID];
                       const time = memberObject.bookInOn.split(" ")[1];
