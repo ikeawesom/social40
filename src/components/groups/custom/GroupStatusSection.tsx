@@ -3,10 +3,8 @@ import DefaultCard from "../../DefaultCard";
 import HRow from "../../utils/HRow";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import InnerContainer from "../../utils/InnerContainer";
-import { twMerge } from "tailwind-merge";
-import EndorseStatus from "../../status/EndorseStatus";
-import Link from "next/link";
 import { getActiveStatus } from "@/src/utils/getActiveStatus";
+import MemberStatusTab from "./MemberStatusTab";
 
 export type GroupStatusType = {
   [memberID: string]: { [statusID: string]: STATUS_SCHEMA };
@@ -41,48 +39,31 @@ export default function GroupStatusSection({
                 <HRow className="my-0" />
                 {Object.keys(memberStatus).map((statusID: string) => {
                   const statusData = memberStatus[statusID];
-                  const {
-                    endDate,
-                    startDate,
-                    statusTitle,
-                    statusDesc,
-                    endorsed,
-                  } = statusData;
+                  const active = getActiveStatus(statusData.endDate);
 
-                  const active = getActiveStatus(endDate);
-                  return (
-                    <Link
-                      href={`/members/${memberID}/${statusID}`}
-                      className={twMerge(
-                        "w-full py-2 px-4 flex items-center gap-2 justify-between hover:bg-custom-light-text duration-200",
-                        active ? "bg-custom-light-red" : ""
-                      )}
-                      key={statusID}
-                    >
-                      <div className="flex items-start justify-center flex-col gap-2 flex-[2]">
-                        <div className="flex flex-col items-start justify-center">
-                          <h3 className="text-custom-dark-text text-sm">
-                            {statusDesc}
-                          </h3>
-                          <h1 className="text text-custom-dark-text font-semibold">
-                            {statusTitle}
-                          </h1>
-                          <p className="text-custom-grey-text text-xs">
-                            Start Date: {startDate.split(" ")[0]}
-                          </p>
-                          <p className="text-custom-grey-text text-xs">
-                            End Date: {endDate.split(" ")[0]}
-                          </p>
-                        </div>
-                      </div>
-                      <EndorseStatus
-                        statusID={statusID}
+                  if (active)
+                    return (
+                      <MemberStatusTab
+                        active={active}
                         adminID={adminID}
                         memberID={memberID}
-                        status={endorsed.status}
+                        statusData={statusData}
                       />
-                    </Link>
-                  );
+                    );
+                })}
+                {Object.keys(memberStatus).map((statusID: string) => {
+                  const statusData = memberStatus[statusID];
+
+                  const active = getActiveStatus(statusData.endDate);
+                  if (!active)
+                    return (
+                      <MemberStatusTab
+                        active={active}
+                        adminID={adminID}
+                        memberID={memberID}
+                        statusData={statusData}
+                      />
+                    );
                 })}
               </div>
             );
