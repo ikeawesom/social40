@@ -22,7 +22,11 @@ export default function HeaderBar({
     >
       {back && (
         <Image
-          onClick={() => router.back()}
+          onClick={() => {
+            router.back();
+            router.refresh();
+            console.log("Refreshed.");
+          }}
           src="/icons/navigation/icon_back.svg"
           alt="Back"
           width={30}
