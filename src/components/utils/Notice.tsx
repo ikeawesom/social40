@@ -16,8 +16,8 @@ export default function Notice({
   return (
     <div
       className={twMerge(
-        "w-full rounded-lg border-[1.5px]",
-        status === "info" && "bg-blue-100 border-blue-800",
+        "w-full rounded-lg border-[1.2px] p-2",
+        status === "info" && "bg-blue-50 border-blue-700",
         status === "success" && "bg-custom-light-green border-custom-green",
         status === "error" && "bg-custom-light-red border-custom-red",
         status === "warning" && "bg-custom-light-orange border-custom-orange",
@@ -26,7 +26,7 @@ export default function Notice({
     >
       <p
         className={twMerge(
-          status === "info" && "text-blue-800",
+          status === "info" && "text-blue-700",
           status === "success" && "text-custom-green",
           status === "error" && "text-custom-red",
           status === "warning" && "text-custom-orange",
