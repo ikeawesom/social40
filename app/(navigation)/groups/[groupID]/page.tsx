@@ -98,9 +98,6 @@ export default async function GroupPage({
         groupStatusList[memberID] = memberStatusObj;
       });
 
-      console.log(groupStatusList);
-
-      console.log(admin);
       return (
         <>
           <HeaderBar back text={groupID} />
@@ -108,7 +105,6 @@ export default async function GroupPage({
             <GroupHeader owner={createdBy} title={groupName} desc={groupDesc} />
             {owner && <GroupRequested groupID={groupID} />}
             <GroupMembers membersList={groupMembers} />
-            {/* TODO: Add group statuses section */}
             {admin && (
               <GroupStatusSection
                 adminID={memberID}
