@@ -43,7 +43,7 @@ export default function BiboSection({
                           key={indexA}
                           className="hover:bg-custom-light-text duration-200 w-full py-1 px-3"
                         >
-                          <h1 className="font-bold text-custom-dark-text">
+                          <h1 className="text-custom-dark-text">
                             {memberObject.memberID}
                           </h1>
                           <p className="text-sm text-custom-grey-text">
