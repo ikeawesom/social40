@@ -1,12 +1,14 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import ChangePasswordForm from "@/src/components/profile/edit/ChangePasswordForm";
+import CreateNewMemberForm from "@/src/components/profile/edit/CreateNewMemberForm";
 import EditProfileForm from "@/src/components/profile/edit/EditProfileForm";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import HRow from "@/src/components/utils/HRow";
 import SignoutButton from "@/src/components/utils/SignoutButton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
 import Image from "next/image";
@@ -33,11 +35,15 @@ export default async function EditProfilePage() {
 
     const memberData = data.data as MEMBER_SCHEMA;
 
+    const admin =
+      ROLES_HIERARCHY[memberData.role].rank >= ROLES_HIERARCHY["admin"].rank;
+
     return (
       <>
         <HeaderBar text="Settings" back />
         <div className="grid place-items-center">
           <div className="w-full flex flex-col items-center justify-start gap-4 max-w-[500px]">
+            {/* Edit Profile */}
             <DefaultCard className="w-full">
               <h1 className="text-custom-dark-text font-semibold text-start">
                 Edit Profile
@@ -59,6 +65,7 @@ export default async function EditProfilePage() {
                 <EditProfileForm memberData={memberData} />
               </div>
             </DefaultCard>
+            {/* Change password */}
             <DefaultCard className="w-full">
               <h1 className="text-custom-dark-text font-semibold text-start">
                 Change Password
@@ -66,6 +73,16 @@ export default async function EditProfilePage() {
               <HRow />
               <ChangePasswordForm />
             </DefaultCard>
+            {/* Create Member */}
+            {admin && (
+              <DefaultCard className="w-full">
+                <h1 className="text-custom-dark-text font-semibold text-start">
+                  Create New Member
+                </h1>
+                <HRow />
+                <CreateNewMemberForm memberData={memberData} />
+              </DefaultCard>
+            )}
             <SignoutButton />
           </div>
         </div>
