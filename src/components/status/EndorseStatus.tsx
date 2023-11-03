@@ -9,7 +9,6 @@ import { twMerge } from "tailwind-merge";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export default function EndorseStatus({
-  status,
   statusID,
   memberID,
   adminID,
@@ -17,13 +16,11 @@ export default function EndorseStatus({
   router,
 }: {
   statusID: string;
-  status: boolean;
   memberID: string;
   adminID: string;
   className?: string;
   router?: AppRouterInstance;
 }) {
-  const [statusNew, setStatusNew] = useState(status);
   const { host } = useHostname();
   const [loading, setLoading] = useState(false);
 
@@ -33,30 +30,22 @@ export default function EndorseStatus({
       const PostObj = GetPostObj({ statusID, memberID, adminID });
       await fetch(`${host}/api/profile/endorse-status`, PostObj);
       if (router) router.refresh();
-      setStatusNew(true);
-
       toast.success("Status endorsed successfully.");
     } catch (err: any) {
       toast.error(err.message);
+      setLoading(false);
     }
-    setLoading(false);
   };
   return (
-    <div className={twMerge("flex-1 grid place-items-center", className)}>
-      {statusNew ? (
-        <p className="font-semibold text-custom-orange text-center text-sm">
-          Endorsed
-        </p>
-      ) : loading ? (
-        <LoadingIcon width={20} height={20} />
-      ) : (
-        <SecondaryButton
-          onClick={handleEndorse}
-          className="px-2 text-custom-orange border-custom-orange text-sm"
-        >
-          Endorse
-        </SecondaryButton>
+    <SecondaryButton
+      disabled={loading}
+      onClick={handleEndorse}
+      className={twMerge(
+        "grid place-items-center px-2 text-custom-orange border-custom-orange text-sm",
+        className
       )}
-    </div>
+    >
+      {loading ? <LoadingIcon width={20} height={20} /> : "Endorse"}
+    </SecondaryButton>
   );
 }

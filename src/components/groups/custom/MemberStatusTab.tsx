@@ -3,7 +3,6 @@ import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import Link from "next/link";
 import React from "react";
 import { twMerge } from "tailwind-merge";
-import EndorseStatus from "../../status/EndorseStatus";
 import { useRouter } from "next/navigation";
 
 type MemberStatusType = {
@@ -45,13 +44,15 @@ export default function MemberStatusTab({
           </p>
         </div>
       </div>
-      <EndorseStatus
-        router={router}
-        statusID={statusID}
-        adminID={adminID}
-        memberID={memberID}
-        status={endorsed.status}
-      />
+      {endorsed.status ? (
+        <p className="font-semibold text-custom-orange text-center text-xs">
+          Endorsed
+        </p>
+      ) : (
+        <p className="font-semibold text-custom-orange text-center text-xs">
+          Pending Review
+        </p>
+      )}
     </Link>
   );
 }
