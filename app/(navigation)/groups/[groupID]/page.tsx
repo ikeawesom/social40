@@ -16,6 +16,11 @@ import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import GroupStatusSection, {
   GroupStatusType,
 } from "@/src/components/groups/custom/GroupStatusSection";
+import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
+import GroupLeaderboard, {
+  MembersDataType,
+} from "@/src/components/groups/custom/GroupLeaderboard";
+import GroupTraining from "@/src/components/groups/custom/GroupTraining";
 
 export async function generateMetadata({
   params,
@@ -48,6 +53,7 @@ export default async function GroupPage({
       const res = await fetch(`${host}/api/groups/memberof`, groupPostObj);
       const body = await res.json();
       if (!body.status) return <RestrictedScreen />;
+
       const { role } = body.data as GROUP_MEMBERS_SCHEMA;
       const owner = role === "owner";
       const admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
@@ -91,12 +97,34 @@ export default async function GroupPage({
 
       const dataC = bodyC.data as any[];
 
-      dataC.forEach((item: any) => {
+      const memberPromises = dataC.map(async (item: any) => {
+        // handle group members
         const data = item.data;
         const memberID = Object.keys(data)[0];
         const memberStatusObj = data[memberID];
         groupStatusList[memberID] = memberStatusObj;
+
+        // handle members list
+        const PostObjA = GetPostObj({ memberID });
+        const res = await fetch(`${host}/api/profile/member`, PostObjA);
+        const body = await res.json();
+
+        if (!body.status) return { status: false, error: body.error };
+        return { status: true, data: body.data };
       });
+
+      const membersPromiseList = await Promise.all(memberPromises);
+
+      var groupMembersDataObj = {} as any;
+
+      membersPromiseList.forEach((item: any) => {
+        if (!item.status) throw new Error(item.error);
+        const memberData = item.data as MEMBER_SCHEMA;
+        const memberID = memberData.memberID as string;
+        groupMembersDataObj[memberID] = memberData;
+      });
+
+      const groupMembersData = groupMembersDataObj as MembersDataType;
 
       return (
         <>
@@ -111,6 +139,8 @@ export default async function GroupPage({
                 />
                 {owner && <GroupRequested groupID={groupID} />}
                 <GroupMembers membersList={groupMembers} />
+                <GroupLeaderboard memberData={groupMembersData} />
+                <GroupTraining />
                 {admin && (
                   <GroupStatusSection
                     adminID={memberID}
