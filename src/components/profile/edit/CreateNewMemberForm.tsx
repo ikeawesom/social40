@@ -213,7 +213,9 @@ export default function CreateNewMemberForm({ memberData }: NewMemberType) {
               <HRow />
               <ul className="list-disc ml-4">
                 {permissionList[item].desc.map((itemA: string) => (
-                  <li className="text-sm">{itemA}</li>
+                  <li key={itemA} className="text-sm">
+                    {itemA}
+                  </li>
                 ))}
               </ul>
             </li>
