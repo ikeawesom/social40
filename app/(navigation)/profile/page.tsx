@@ -73,7 +73,7 @@ export default async function Profile({
       const statusList = dataB.data as StatusListType;
       // admin extra settings
       const { role } = memberData;
-      const admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
+      const cos = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["cos"].rank;
 
       return (
         <>
@@ -91,7 +91,7 @@ export default async function Profile({
                 statuses={statusList}
                 statistics={{}}
               />
-              {admin && <BiboSection memberData={memberData} />}
+              {cos && <BiboSection memberData={memberData} />}
             </div>
             {/* TO DO */}
 
