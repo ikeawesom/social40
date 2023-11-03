@@ -100,12 +100,12 @@ export default function PermissionForm({
               </p>
             </div>
             <div className="flex items-center justify-start w-full gap-2">
-              <label htmlFor="permission" className="text-sm flex-[2]">
+              <label htmlFor="permission" className="text-sm w-fit">
                 Set Permissions
               </label>
               {sameRole ? (
                 <>
-                  <p className="flex-[3] text-sm font-semibold">
+                  <p className="flex-1 text-sm font-semibold">
                     {ROLES_HIERARCHY[viewMember.role].title}
                   </p>
                 </>
