@@ -6,11 +6,11 @@ export default function ActiveStatusSection({ active }: { active: boolean }) {
   return (
     <DefaultCard className="flex flex-col w-full items-start justify-center gap-1">
       <div className="flex items-center justify-start gap-1">
-        <p>Status: </p>
+        <p className="text-sm text-custom-dark-text">Status: </p>
         {active ? (
-          <h4 className="font-bold text-custom-orange">ACTIVE</h4>
+          <h4 className="font-bold text-custom-orange text-sm">ACTIVE</h4>
         ) : (
-          <h4 className="font-semibold text-custom-green">INACTIVE</h4>
+          <h4 className="font-semibold text-custom-green text-sm">INACTIVE</h4>
         )}
       </div>
       {active ? (
@@ -21,7 +21,7 @@ export default function ActiveStatusSection({ active }: { active: boolean }) {
       ) : (
         <Notice
           status="info"
-          text="Member is safe to participate in the conduct as this status has ended."
+          text="Member is safe to participate in conducts as this status has ended. Continue monitoring the status and intensity of the conduct."
         />
       )}
     </DefaultCard>

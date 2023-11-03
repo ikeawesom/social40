@@ -18,17 +18,21 @@ export default function EndorseSection({
   return (
     <DefaultCard className="flex flex-col w-full items-start justify-center gap-1">
       <div className="flex items-center justify-start gap-1">
-        <p>Endorsment: </p>
+        <p className="text-custom-dark-text text-sm">Endorsment: </p>
         {statusData.endorsed.status ? (
-          <h4 className="font-bold text-custom-green">ENDORSED</h4>
+          <h4 className="font-bold text-custom-green text-sm">ENDORSED</h4>
         ) : (
-          <h4 className="font-semibold text-custom-orange">PENDING</h4>
+          <h4 className="font-semibold text-custom-orange text-sm">PENDING</h4>
         )}
       </div>
       {statusData.endorsed.status && (
         <>
-          <p>Endorsed by: {statusData.endorsed.endorsedBy}</p>
-          <p>Endorsed on: {statusData.endorsed.endorsedOn}</p>
+          <p className="text-custom-dark-text text-sm">
+            Endorsed by: {statusData.endorsed.endorsedBy}
+          </p>
+          <p className="text-custom-dark-text text-sm">
+            Endorsed on: {statusData.endorsed.endorsedOn}
+          </p>
         </>
       )}
       {!statusData.endorsed.status && (
@@ -37,7 +41,6 @@ export default function EndorseSection({
           className="w-full"
           adminID={adminID}
           memberID={memberID}
-          status={statusData.endorsed.status}
           statusID={statusData.statusID}
         />
       )}

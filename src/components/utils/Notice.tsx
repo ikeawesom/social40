@@ -30,7 +30,8 @@ export default function Notice({
           status === "success" && "text-custom-green",
           status === "error" && "text-custom-red",
           status === "warning" && "text-custom-orange",
-          textClassName
+          textClassName,
+          "text-sm"
         )}
       >
         {text}

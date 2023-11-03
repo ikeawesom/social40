@@ -71,19 +71,17 @@ export default async function CustomStatusPage({
               <HRow />
             </div>
             <div className="flex flex-col w-full items-start justify-center">
-              <p className="text-custom-grey-text">
+              <p className="text-custom-grey-text text-sm">
                 Prescribed by: {statusData.doctor}
               </p>
-              <h1 className="text-custom-dark-text text-2xl">
+              <h1 className="text-custom-dark-text text-xl">
                 {statusData.statusTitle}
               </h1>
-              <h3 className="text-custom-dark-text text-lg">
-                {statusData.statusDesc}
-              </h3>
-              <p className="text-custom-grey-text">
+              <h3 className="text-custom-dark-text">{statusData.statusDesc}</h3>
+              <p className="text-custom-grey-text text-sm">
                 Start Date: {statusData.startDate}
               </p>
-              <p className="text-custom-grey-text">
+              <p className="text-custom-grey-text text-sm">
                 End Date: {statusData.endDate}
               </p>
             </div>
