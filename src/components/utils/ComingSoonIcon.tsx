@@ -6,13 +6,20 @@ export default function ComingSoonIcon({
   width,
   height,
   small,
+  className,
 }: {
   width?: number;
   height?: number;
   small?: boolean;
+  className?: string;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
+    <div
+      className={twMerge(
+        "flex flex-col items-center justify-center gap-4",
+        className
+      )}
+    >
       <Image
         alt="Coming Soon"
         src="/icons/icon_fire.svg"
