@@ -58,7 +58,7 @@ export default function PermissionForm({
     try {
       if (sameRole)
         throw new Error(
-          "You cannot change the permissions of another member of the same level."
+          "You cannot change the permissions of another member of the same tier."
         );
       const PostObj = GetPostObj({
         memberID: viewMember.memberID,
@@ -82,7 +82,7 @@ export default function PermissionForm({
         onClick={() => {
           sameRole &&
             toast.error(
-              "You cannot change the permissions of another member of the same level."
+              "You cannot change the permissions of another member of the same tier."
             );
         }}
       >
@@ -100,12 +100,12 @@ export default function PermissionForm({
               </p>
             </div>
             <div className="flex items-center justify-start w-full gap-2">
-              <label htmlFor="permission" className="text-sm flex-[2]">
+              <label htmlFor="permission" className="text-sm w-fit">
                 Set Permissions
               </label>
               {sameRole ? (
                 <>
-                  <p className="flex-[3] text-sm font-semibold">
+                  <p className="flex-1 text-sm font-semibold">
                     {ROLES_HIERARCHY[viewMember.role].title}
                   </p>
                 </>
@@ -138,7 +138,7 @@ export default function PermissionForm({
                 onChange={handleChangeCfm}
               />
               <p className="text-sm text-custom-grey-text">
-                Note that the higher the level, the more permissions will be
+                Note that the higher the tier, the more permissions will be
                 available to this member.
               </p>
             </div>

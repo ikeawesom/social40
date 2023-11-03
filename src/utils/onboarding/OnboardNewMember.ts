@@ -10,7 +10,7 @@ export type OnboardMemberTypes = {
   password?: string;
   memberID?: string;
   displayName?: string;
-  role?: "member" | "admin" | "owner";
+  role?: string;
 };
 
 export async function OnboardNewMember({

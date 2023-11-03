@@ -33,6 +33,7 @@ export default function SignoutButton({
     <SecondaryButton
       className="grid place-items-center bg-custom-red border-0"
       onClick={handleSignout}
+      disabled={loading}
     >
       {loading ? (
         <LoadingIconBright width={20} height={20} />

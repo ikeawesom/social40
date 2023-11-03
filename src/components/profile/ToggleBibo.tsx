@@ -22,8 +22,7 @@ export default function ToggleBibo({
   const { host } = useHostname();
 
   const [bibo, setBibo] = useState<boolean>();
-  const aboveAdmin =
-    ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
+  const aboveCOS = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["cos"].rank;
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -31,7 +30,7 @@ export default function ToggleBibo({
   }, [fetchedBibo]);
 
   const handleBibo = async () => {
-    if (bibo || aboveAdmin) {
+    if (bibo || aboveCOS) {
       setLoading(true);
       try {
         const PostObj = GetPostObj({ memberID: memberID });
