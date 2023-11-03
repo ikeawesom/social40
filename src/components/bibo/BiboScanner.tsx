@@ -124,7 +124,7 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
           </div>
           <div className="w-full items-stretch justify-between gap-2 flex">
             <SecondaryButton
-              className="bg-custom-red text-custom-light-text border-custom-red"
+              className="text-sm bg-custom-red text-custom-light-text border-custom-red"
               onClick={handleReset}
             >
               Reject
@@ -132,7 +132,7 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
             <SecondaryButton
               disabled={biboLoad}
               onClick={handleBookIn}
-              className="grid place-items-center bg-custom-green text-custom-light-text border-custom-green"
+              className="text-sm grid place-items-center bg-custom-green text-custom-light-text border-custom-green"
             >
               {biboLoad ? (
                 <LoadingIconBright width={24} height={24} />
