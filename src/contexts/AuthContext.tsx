@@ -30,7 +30,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const pathname = window.location.pathname;
 
         if (pathname.includes("auth")) {
-          router.push("/", { scroll: false });
+          router.push("/home", { scroll: false });
         }
       } else {
         console.log("signed out");

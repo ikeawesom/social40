@@ -9,7 +9,7 @@ const NAV_LINKS = [
     title: "Home",
     icon: "icon_home.svg",
     active: "icon_home_active.svg",
-    link: "/",
+    link: "/home",
   },
   {
     title: "Groups",
