@@ -19,10 +19,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-          <Toaster richColors position="top-center" />
-          <PageWrapper>{children}</PageWrapper>
-        </AuthProvider>
+        <Toaster richColors position="top-center" />
+        <PageWrapper>{children}</PageWrapper>
       </body>
     </html>
   );
