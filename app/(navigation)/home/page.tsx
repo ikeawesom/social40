@@ -18,6 +18,7 @@ export default async function Home() {
       <>
         <HeaderBar text="Home" />
         <ComingSoonCard text="Group Activities" />
+        <ComingSoonCard text="Friends Activities" />
       </>
     );
   }
