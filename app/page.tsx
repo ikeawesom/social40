@@ -5,6 +5,7 @@ import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -28,16 +29,40 @@ export default async function Home() {
           Compete and motivate one another to be the best.
         </p>
         <div className="flex items-center justify-between gap-3 w-full my-2">
-          <Link href="/auth" className="w-full flex-1">
-            <SecondaryButton>Install App</SecondaryButton>
+          <Link href="/" className="w-full flex-1">
+            <SecondaryButton className="flex items-center justify-center gap-1">
+              Get the app
+              <Image
+                src="/icons/icon_download.svg"
+                alt=""
+                width={15}
+                height={15}
+              />
+            </SecondaryButton>
           </Link>
           {!data ? (
-            <Link href="/home" className="w-full flex-1">
-              <PrimaryButton>Get Started</PrimaryButton>
+            <Link href="/auth" className="w-full flex-1">
+              <PrimaryButton className="flex items-center justify-center">
+                Get started
+                <Image
+                  src="/icons/icon_right_bright.svg"
+                  alt=""
+                  width={20}
+                  height={20}
+                />
+              </PrimaryButton>
             </Link>
           ) : (
-            <Link href="/auth" className="w-full flex-1">
-              <PrimaryButton>Go to Home</PrimaryButton>
+            <Link href="/home" className="w-full flex-1">
+              <PrimaryButton className="flex items-center justify-center">
+                Go to home
+                <Image
+                  src="/icons/icon_right_bright.svg"
+                  alt=""
+                  width={20}
+                  height={20}
+                />
+              </PrimaryButton>
             </Link>
           )}
         </div>
