@@ -20,7 +20,7 @@ import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import GroupLeaderboard, {
   MembersDataType,
 } from "@/src/components/groups/custom/GroupLeaderboard";
-import GroupTraining from "@/src/components/groups/custom/GroupTraining";
+import GroupActivities from "@/src/components/groups/custom/GroupActivities";
 
 export async function generateMetadata({
   params,
@@ -140,7 +140,7 @@ export default async function GroupPage({
                 {owner && <GroupRequested groupID={groupID} />}
                 <GroupMembers membersList={groupMembers} />
                 <GroupLeaderboard memberData={groupMembersData} />
-                <GroupTraining />
+                <GroupActivities />
                 {admin && (
                   <GroupStatusSection
                     adminID={memberID}

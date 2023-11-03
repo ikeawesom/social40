@@ -29,17 +29,13 @@ export default function AuthPage({
   return (
     <div className="grid place-items-center min-h-[80vh]">
       <div className="flex flex-col gap-y-6 items-center justify-center">
-        <div className="flex flex-col gap-y-2 items-center justify-center">
-          <h1 className="sm:text-6xl text-5xl">
-            Social
-            <span className="text-custom-primary font-bold text-center">
-              40
-            </span>
-          </h1>
-          <p className="text-custom-grey-text text-center sm:text-base text-sm">
-            Compete and motivate one another to be the best.
-          </p>
-        </div>
+        <h1 className="sm:text-6xl text-5xl">
+          Social
+          <span className="text-custom-primary font-bold text-center">40</span>
+        </h1>
+        <p className="text-custom-grey-text text-center sm:text-base text-sm">
+          Compete and motivate one another to be the best.
+        </p>
         {newUser === "false" ? (
           <div className="flex-col flex gap-y-4 items-center justify-center min-[500px]:w-[400px] w-[85vw]">
             <SigninForm setStatus={setStatus} />
@@ -71,10 +67,6 @@ export default function AuthPage({
             </p>
           </div>
         )}
-        <p className="text-custom-grey-text text-center text-sm">
-          v0.1.0: Please note that this is still a beta testing version. Some
-          features may still be unstable.
-        </p>
       </div>
     </div>
   );
