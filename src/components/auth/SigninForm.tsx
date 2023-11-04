@@ -4,11 +4,11 @@ import { authHandler } from "@/src/firebase/auth";
 import PrimaryButton from "../utils/PrimaryButton";
 import { getAuth } from "firebase/auth";
 import { FIREBASE_APP } from "@/src/firebase/config";
-import { dbHandler } from "@/src/firebase/db";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { clearCookies } from "@/src/utils/clearCookies";
+import { useRouter } from "next/navigation";
 
 type userDetailsType = {
   email: string;
@@ -20,6 +20,7 @@ type statusType = {
 };
 
 export default function SigninForm({ setStatus }: statusType) {
+  const router = useRouter();
   const { setMember } = useAuth();
   const { host } = useHostname();
   const [loading, setLoading] = useState(false);
@@ -57,7 +58,7 @@ export default function SigninForm({ setStatus }: statusType) {
       );
 
       if (!res.status) throw new Error(res.error);
-
+      router.refresh();
       setMember(memberID);
     } catch (e: any) {
       await clearCookies(host);
