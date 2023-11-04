@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
-import SecondaryButton from "../utils/SecondaryButton";
-import PrimaryButton from "../utils/PrimaryButton";
+import SecondaryButton from "../../utils/SecondaryButton";
+import PrimaryButton from "../../utils/PrimaryButton";
 import generateID from "@/src/utils/getRandomID";
-import Modal from "../utils/Modal";
-import HRow from "../utils/HRow";
+import Modal from "../../utils/Modal";
+import HRow from "../../utils/HRow";
 import Image from "next/image";
 import { toast } from "sonner";
-import { LoadingIconBright } from "../utils/LoadingIcon";
+import { LoadingIconBright } from "../../utils/LoadingIcon";
 import getCurrentDate from "@/src/utils/getCurrentDate";
 import { useMemberID } from "@/src/hooks/useMemberID";
 import { useRouter } from "next/navigation";
@@ -44,11 +44,12 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
   const handleGroup = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { admin, desc, name } = groupDetails;
-    if (admin.split(" ").length > 1)
-      return toast.error("Admin ID cannot have spaces.");
 
     try {
+      const { admin, desc, name } = groupDetails;
+      if (admin.split(" ").length > 1)
+        throw new Error("Admin ID cannot have spaces.");
+
       const res = await createGroup({
         groupID: admin,
         createdBy: memberID,

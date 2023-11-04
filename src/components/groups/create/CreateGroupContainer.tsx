@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import PrimaryButton from "../../utils/PrimaryButton";
-import CreateGroupForm from "../CreateGroupForm";
+import CreateGroupForm from "./CreateGroupForm";
 
 export default function CreateGroupContainer() {
   const [show, setShow] = useState(false);
