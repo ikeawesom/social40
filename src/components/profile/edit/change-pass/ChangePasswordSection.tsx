@@ -12,6 +12,7 @@ export default function ChangePasswordSection() {
     <DefaultCard className="w-full">
       <Link
         href=""
+        scroll={false}
         className="flex items-center justify-between w-full"
         onClick={() => setShow(!show)}
       >
