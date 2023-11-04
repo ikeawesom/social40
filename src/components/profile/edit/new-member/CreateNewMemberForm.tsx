@@ -1,16 +1,16 @@
 "use client";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import React, { useState } from "react";
-import SecondaryButton from "../../utils/SecondaryButton";
+import SecondaryButton from "../../../utils/SecondaryButton";
 import Image from "next/image";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
-import HRow from "../../utils/HRow";
-import PrimaryButton from "../../utils/PrimaryButton";
+import HRow from "../../../utils/HRow";
+import PrimaryButton from "../../../utils/PrimaryButton";
 import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { Onboarding } from "@/src/utils/onboarding";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import { LoadingIconBright } from "../../utils/LoadingIcon";
+import { LoadingIconBright } from "../../../utils/LoadingIcon";
 
 type NewMemberType = {
   memberData: MEMBER_SCHEMA;

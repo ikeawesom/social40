@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import PrimaryButton from "../../utils/PrimaryButton";
-import { LoadingIconBright } from "../../utils/LoadingIcon";
-import SecondaryButton from "../../utils/SecondaryButton";
+import PrimaryButton from "../../../utils/PrimaryButton";
+import { LoadingIconBright } from "../../../utils/LoadingIcon";
+import SecondaryButton from "../../../utils/SecondaryButton";
 import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { handleSignOut } from "@/src/contexts/AuthContext";
