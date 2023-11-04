@@ -41,7 +41,10 @@ export default function SignoutButton({
       disabled={loading}
     >
       {loading ? (
-        <LoadingIconBright width={20} height={20} />
+        <LoadingIconBright
+          width={width ? width : 20}
+          height={height ? height : 20}
+        />
       ) : (
         <div className="flex items-center justify-center gap-2">
           <p
