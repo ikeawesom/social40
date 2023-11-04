@@ -107,7 +107,7 @@ export default function RequestsSection({
             alt="Show"
             width={30}
             height={30}
-            className={`duration-300 ${show ? "rotate-180" : ""}`}
+            className={`duration-300 ease-in-out ${show ? "rotate-180" : ""}`}
           />
         </div>
         {show && (
