@@ -29,11 +29,11 @@ export default async function Home() {
         <p className="text-custom-grey-text text-center sm:text-base text-sm">
           Compete and motivate one another to be the best.
         </p>
-        <div className="flex items-center justify-between gap-3 w-full my-2">
+        <div className="flex items-center justify-between gap-3 w-full">
           <InstallButton />
           {!data ? (
             <Link href="/auth" className="w-full flex-1">
-              <PrimaryButton className="flex items-center justify-center">
+              <PrimaryButton className="flex items-center justify-center text-lg">
                 Get started
                 <Image
                   src="/icons/icon_right_bright.svg"
@@ -45,7 +45,7 @@ export default async function Home() {
             </Link>
           ) : (
             <Link href="/home" className="w-full flex-1">
-              <PrimaryButton className="flex items-center justify-center">
+              <PrimaryButton className="flex items-center justify-center text-lg">
                 Go to home
                 <Image
                   src="/icons/icon_right_bright.svg"
