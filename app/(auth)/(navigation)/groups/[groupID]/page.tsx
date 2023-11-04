@@ -11,7 +11,6 @@ import GroupMembers, {
 } from "@/src/components/groups/custom/GroupMembers";
 import GroupRequested from "@/src/components/groups/custom/GroupRequested";
 import SettingsSection from "@/src/components/groups/custom/settings/SettingsSection";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import GroupStatusSection, {
   GroupStatusType,
@@ -21,6 +20,7 @@ import GroupLeaderboard, {
   MembersDataType,
 } from "@/src/components/groups/custom/GroupLeaderboard";
 import GroupActivities from "@/src/components/groups/custom/GroupActivities";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params,
@@ -157,5 +157,5 @@ export default async function GroupPage({
       return ErrorScreenHandler(err);
     }
   }
-  return <SignInAgainScreen />;
+  redirect("/auth-error");
 }

@@ -4,7 +4,6 @@ import ActiveStatusSection from "@/src/components/members/status/ActiveStatusSec
 import EndorseSection from "@/src/components/members/status/EndorseSection";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import HRow from "@/src/components/utils/HRow";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
@@ -14,6 +13,7 @@ import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import { cookies } from "next/headers";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Status",
@@ -27,7 +27,7 @@ export default async function CustomStatusPage({
   const cookieStore = cookies();
   const data = cookieStore.get("memberID");
 
-  if (!data) return <SignInAgainScreen />;
+  if (!data) redirect("/auth-error");
 
   const adminID = data.value;
   try {

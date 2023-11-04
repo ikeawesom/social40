@@ -10,7 +10,6 @@ import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import StatsSection, {
   StatusListType,
 } from "@/src/components/profile/StatsSection";
@@ -112,7 +111,7 @@ export default async function Profile({
       return ErrorScreenHandler(err);
     }
   }
-  return <SignInAgainScreen />;
+  redirect("/auth-error");
 }
 
 // const [friendsData, activitiesData] = await Promise.all([

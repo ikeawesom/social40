@@ -4,10 +4,10 @@ import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import BiboScanner from "@/src/components/bibo/BiboScanner";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { cookies } from "next/headers";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
+import { redirect } from "next/navigation";
 
 export default async function BookSomeoneInPage() {
   const cookieStore = cookies();
@@ -48,5 +48,5 @@ export default async function BookSomeoneInPage() {
       return ErrorScreenHandler(err);
     }
   }
-  return <SignInAgainScreen />;
+  redirect("/auth-error");
 }

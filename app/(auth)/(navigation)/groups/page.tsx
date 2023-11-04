@@ -10,7 +10,7 @@ import { ownedGroupsType } from "@/src/utils/groups/getOwnedGroups";
 import GroupsCreatedSection from "@/src/components/groups/GroupsCreatedSection";
 import { Metadata } from "next";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Groups",
@@ -70,5 +70,5 @@ export default async function Groups() {
       return ErrorScreenHandler(err);
     }
   }
-  return <SignInAgainScreen />;
+  redirect("/auth-error");
 }

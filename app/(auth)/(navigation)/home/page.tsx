@@ -1,8 +1,8 @@
 import HeaderBar from "@/src/components/navigation/HeaderBar";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import ComingSoonCard from "@/src/components/utils/ComingSoonCard";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -24,5 +24,5 @@ export default async function Home() {
       </>
     );
   }
-  return <SignInAgainScreen />;
+  redirect("/auth-error");
 }

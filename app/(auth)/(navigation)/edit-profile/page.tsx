@@ -3,7 +3,6 @@ import HeaderBar from "@/src/components/navigation/HeaderBar";
 import ChangePasswordForm from "@/src/components/profile/edit/ChangePasswordForm";
 import CreateNewMemberForm from "@/src/components/profile/edit/CreateNewMemberForm";
 import EditProfileForm from "@/src/components/profile/edit/EditProfileForm";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import HRow from "@/src/components/utils/HRow";
 import SignoutButton from "@/src/components/utils/SignoutButton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
@@ -12,12 +11,13 @@ import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 export default async function EditProfilePage() {
   const cookieStore = cookies();
   const data = cookieStore.get("memberID");
 
-  if (!data) return <SignInAgainScreen />;
+  if (!data) redirect("/auth-error");
 
   const memberID = data.value;
   try {

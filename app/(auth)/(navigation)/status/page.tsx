@@ -1,9 +1,9 @@
 import HeaderBar from "@/src/components/navigation/HeaderBar";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import CreateStatus from "@/src/components/status/CreateStatus";
 import QuickStatusLinks from "@/src/components/status/QuickStatusLinks";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import React from "react";
 
 export const metadata: Metadata = {
@@ -27,5 +27,5 @@ export default async function StatusPage() {
       </>
     );
   }
-  return <SignInAgainScreen />;
+  redirect("/auth-error");
 }

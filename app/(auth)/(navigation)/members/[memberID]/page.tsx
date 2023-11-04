@@ -6,13 +6,12 @@ import PermissionForm from "@/src/components/members/PermissionForm";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import { StatusListType } from "@/src/components/profile/StatsSection";
 import StatusFeed from "@/src/components/profile/stats/StatusFeed";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
-import HRow from "@/src/components/utils/HRow";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import React from "react";
 
 export async function generateMetadata({
@@ -122,5 +121,5 @@ export default async function MemberPage({
       return ErrorScreenHandler(err);
     }
   }
-  return <SignInAgainScreen />;
+  redirect("/auth-error");
 }
