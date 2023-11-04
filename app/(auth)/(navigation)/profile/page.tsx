@@ -94,10 +94,6 @@ export default async function Profile({
               {cos && <BiboSection memberData={memberData} />}
             </div>
             {/* TO DO */}
-
-            <p className="text-custom-grey-text text-center text-sm my-6">
-              v0.1.0
-            </p>
           </div>
 
           {/*

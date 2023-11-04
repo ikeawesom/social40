@@ -14,7 +14,12 @@ export default function SignInAgainScreen() {
         <p className="text-center text-custom-grey-text text-xl">
           Due to security measures, you need to sign in again.
         </p>
-        <SignoutButton />
+        <SignoutButton
+          textStyle="text-lg"
+          width={25}
+          height={25}
+          text="Continue"
+        />
       </div>
     </div>
   );

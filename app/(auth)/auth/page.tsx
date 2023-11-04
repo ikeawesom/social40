@@ -1,4 +1,5 @@
 "use client";
+import Hero from "@/src/components/Hero";
 import SigninForm from "@/src/components/auth/SigninForm";
 import SignupForm from "@/src/components/auth/SignupForm";
 import Link from "next/link";
@@ -29,13 +30,7 @@ export default function AuthPage({
   return (
     <div className="grid place-items-center min-h-[80vh]">
       <div className="flex flex-col gap-y-6 items-center justify-center">
-        <h1 className="sm:text-6xl text-5xl">
-          Social
-          <span className="text-custom-primary font-bold text-center">40</span>
-        </h1>
-        <p className="text-custom-grey-text text-center sm:text-base text-sm">
-          Compete and motivate one another to be the best.
-        </p>
+        <Hero />
         {newUser === "false" ? (
           <div className="flex-col flex gap-y-4 items-center justify-center min-[500px]:w-[400px] w-[85vw]">
             <SigninForm setStatus={setStatus} />

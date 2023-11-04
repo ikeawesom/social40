@@ -85,6 +85,9 @@ export default async function EditProfilePage() {
             )}
             <SignoutButton />
           </div>
+          <p className="text-custom-grey-text text-center text-sm my-6">
+            v0.1.0
+          </p>
         </div>
       </>
     );
