@@ -1,7 +1,8 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
-import ChangePasswordForm from "@/src/components/profile/edit/ChangePasswordForm";
-import CreateNewMemberForm from "@/src/components/profile/edit/CreateNewMemberForm";
+import ChangePasswordSection from "@/src/components/profile/edit/change-pass/ChangePasswordSection";
+import ChangePasswordForm from "@/src/components/profile/edit/change-pass/ChangePasswordForm";
+import CreateNewMemberForm from "@/src/components/profile/edit/new-member/CreateNewMemberForm";
 import EditProfileForm from "@/src/components/profile/edit/EditProfileForm";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import HRow from "@/src/components/utils/HRow";
@@ -12,6 +13,7 @@ import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
 import Image from "next/image";
+import NewMemberSection from "@/src/components/profile/edit/new-member/NewMemberSection";
 
 export default async function EditProfilePage() {
   const cookieStore = cookies();
@@ -66,23 +68,9 @@ export default async function EditProfilePage() {
               </div>
             </DefaultCard>
             {/* Change password */}
-            <DefaultCard className="w-full">
-              <h1 className="text-custom-dark-text font-semibold text-start">
-                Change Password
-              </h1>
-              <HRow />
-              <ChangePasswordForm />
-            </DefaultCard>
+            <ChangePasswordSection />
             {/* Create Member */}
-            {admin && (
-              <DefaultCard className="w-full">
-                <h1 className="text-custom-dark-text font-semibold text-start">
-                  Create New Member
-                </h1>
-                <HRow />
-                <CreateNewMemberForm memberData={memberData} />
-              </DefaultCard>
-            )}
+            {admin && <NewMemberSection memberData={memberData} />}
             <SignoutButton />
           </div>
           <p className="text-custom-grey-text text-center text-sm my-6">
