@@ -40,6 +40,9 @@ export default function FriendsList({
           ))}
         </ul>
       ) : (
+        // <p className="text-start text-custom-grey-text text-xs">
+        //   No friends added. Invite someone today!
+        // </p>
         <ComingSoonIcon width={25} height={25} />
       )}
       <PrimaryButton className="mt-4">Invite Friends</PrimaryButton>
