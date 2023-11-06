@@ -24,10 +24,13 @@ export default function SignupForm({ setStatus }: statusType) {
     name: "",
   });
 
-  const username = `${userDetails.admin}-${userDetails.name
+  const groupIDtrimmed = userDetails.admin.trim().toLowerCase();
+  const nameTrimmed = userDetails.name
+    .trim()
+    .toLowerCase()
     .split(" ")
-    .join("-")
-    .toLowerCase()}`;
+    .join("-");
+  const username = `${groupIDtrimmed}-${nameTrimmed}`;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
@@ -40,24 +43,24 @@ export default function SignupForm({ setStatus }: statusType) {
     try {
       const res = await dbHandler.get({
         col_name: "GROUPS",
-        id: userDetails.admin,
+        id: groupIDtrimmed,
       });
 
       if (!res.data) throw new Error("invalid-group");
 
       const resA = await dbHandler.get({
-        col_name: `GROUPS/${userDetails.admin}/WAITLIST`,
+        col_name: `GROUPS/${groupIDtrimmed}/WAITLIST`,
         id: username,
       });
 
       if (resA.status)
         throw new Error(
-          `Your request to ${userDetails.admin} is already pending. Please update your commander.`
+          `Your request to ${groupIDtrimmed} is already pending. Please update your commander.`
         );
 
       // see if member inside group
       const resB = await dbHandler.get({
-        col_name: `GROUPS/${userDetails.admin}/MEMBERS`,
+        col_name: `GROUPS/${groupIDtrimmed}/MEMBERS`,
         id: username,
       });
 
@@ -69,14 +72,14 @@ export default function SignupForm({ setStatus }: statusType) {
       // new member
       const to_add = initWaitListee({
         memberID: username,
-        groupID: userDetails.admin,
-        displayName: userDetails.name,
+        groupID: groupIDtrimmed,
+        displayName: userDetails.name.trim(),
         password: userDetails.password,
         dateRequested: getCurrentDate(),
       });
 
       await dbHandler.add({
-        col_name: `/GROUPS/${userDetails.admin}/WAITLIST`,
+        col_name: `/GROUPS/${groupIDtrimmed}/WAITLIST`,
         id: username,
         to_add: to_add,
       });
