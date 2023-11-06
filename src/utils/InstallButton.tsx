@@ -9,15 +9,13 @@ let deferredPrompt: any;
 export default function InstallButton() {
   const [install, setInstall] = useState(false);
 
-  const event = new Event("beforeinstallprompt");
-
   useEffect(() => {
     window.addEventListener("beforeinstallprompt", (e: Event) => {
       e.preventDefault();
       deferredPrompt = e;
       setInstall(true);
     });
-  }, [event]);
+  }, [deferredPrompt]);
 
   const handleInstall = () => {
     deferredPrompt.prompt();
