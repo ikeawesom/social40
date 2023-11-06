@@ -1,7 +1,7 @@
 import React from "react";
 import ReturnHomeButton from "../utils/ReturnHomeButton";
 
-export default function NotFoundScreen() {
+export default function NotFoundScreen({ error }: { error: string }) {
   return (
     <div className="grid place-items-center h-[50vh]">
       <div className="flex flex-col gap-5 items-center justify-center">
@@ -13,6 +13,7 @@ export default function NotFoundScreen() {
             Hmm.. can't find the page you are looking for. Please check your URL
             again.
           </p>
+          <p>Error: {error}</p>
         </div>
         <ReturnHomeButton />
       </div>
