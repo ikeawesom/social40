@@ -34,9 +34,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       } else {
         console.log("signed out");
-        const cur_member = memberID;
         const route = `/auth?${new URLSearchParams({
-          new_user: cur_member ? "false" : "true",
+          new_user: "false",
         })}`;
         setMember(null);
         await clearCookies(host);

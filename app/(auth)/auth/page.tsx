@@ -31,22 +31,7 @@ export default function AuthPage({
     <div className="grid place-items-center min-h-[80vh]">
       <div className="flex flex-col gap-y-6 items-center justify-center">
         <Hero />
-        {newUser === "false" ? (
-          <div className="flex-col flex gap-y-4 items-center justify-center min-[500px]:w-[400px] w-[85vw]">
-            <SigninForm setStatus={setStatus} />
-            <p className="text-center">
-              New here?{" "}
-              <span>
-                <Link
-                  className="text-orange-500 hover:brightness-90 duration-300"
-                  href={`?${new URLSearchParams({ new_user: "true" })}`}
-                >
-                  Sign up.
-                </Link>
-              </span>
-            </p>
-          </div>
-        ) : (
+        {newUser === "true" ? (
           <div className="flex-col flex gap-y-4 items-center justify-center min-[500px]:w-[400px] w-[85vw]">
             <SignupForm setStatus={setStatus} />
             <p className="text-center">
@@ -57,6 +42,21 @@ export default function AuthPage({
                   href={`?${new URLSearchParams({ new_user: "false" })}`}
                 >
                   Sign in.
+                </Link>
+              </span>
+            </p>
+          </div>
+        ) : (
+          <div className="flex-col flex gap-y-4 items-center justify-center min-[500px]:w-[400px] w-[85vw]">
+            <SigninForm setStatus={setStatus} />
+            <p className="text-center">
+              New here?{" "}
+              <span>
+                <Link
+                  className="text-orange-500 hover:brightness-90 duration-300"
+                  href={`?${new URLSearchParams({ new_user: "true" })}`}
+                >
+                  Sign up.
                 </Link>
               </span>
             </p>
