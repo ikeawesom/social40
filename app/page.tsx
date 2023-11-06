@@ -19,7 +19,7 @@ export default async function Home() {
     <div className="grid place-items-center h-[80vh]">
       <div className="flex flex-col gap-y-4 items-center justify-center">
         <Hero />
-        <div className="flex items-center justify-between gap-3 w-full">
+        <div className="flex items-center justify-between gap-3 w-full max-[400px]:flex-col">
           <InstallButton />
           {!data ? (
             <Link href="/auth" className="w-full flex-1">
