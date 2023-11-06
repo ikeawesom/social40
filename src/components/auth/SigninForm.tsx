@@ -39,10 +39,11 @@ export default function SigninForm({ setStatus }: statusType) {
     e.preventDefault();
     setLoading(true);
     try {
-      const memberID = userDetails.email;
+      // lowercase memberID (not case-sensitive)
+      const memberID = userDetails.email.toLowerCase();
 
+      // setting cookie for memberID
       const PostMember = GetPostObj({ memberID });
-
       const resB = await fetch(`${host}/api/auth/cookiemember`, PostMember);
 
       const { status, error } = await resB.json();
