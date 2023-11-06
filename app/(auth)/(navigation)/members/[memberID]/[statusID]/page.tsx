@@ -42,9 +42,10 @@ export default async function CustomStatusPage({
     const data = body.data as MEMBER_SCHEMA;
     const { role } = data;
 
-    const admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
+    const commanderRole =
+      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
 
-    if (!admin) return <RestrictedScreen />;
+    if (!commanderRole) return <RestrictedScreen />;
 
     const { memberID, statusID } = params;
     const PostObj = GetPostObj({
