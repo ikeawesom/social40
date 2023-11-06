@@ -13,7 +13,7 @@ export default function NotFoundScreen({ error }: { error: string }) {
             Hmm.. can't find the page you are looking for. Please check your URL
             again.
           </p>
-          <p>Error: {error}</p>
+          <p className="text-center text-custom-grey-text">Error: {error}</p>
         </div>
         <ReturnHomeButton />
       </div>
