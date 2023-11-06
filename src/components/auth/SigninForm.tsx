@@ -29,7 +29,8 @@ export default function SigninForm({ setStatus }: statusType) {
     password: "",
   });
 
-  const emailMerged = `${userDetails.email.toLowerCase()}@digital40sar.com`;
+  const username = userDetails.email.toLowerCase().trim();
+  const emailMerged = `${username}@digital40sar.com`;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
@@ -40,7 +41,7 @@ export default function SigninForm({ setStatus }: statusType) {
     setLoading(true);
     try {
       // lowercase memberID (not case-sensitive)
-      const memberID = userDetails.email.toLowerCase();
+      const memberID = username;
 
       // setting cookie for memberID
       const PostMember = GetPostObj({ memberID });
