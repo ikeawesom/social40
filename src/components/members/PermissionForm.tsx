@@ -11,6 +11,8 @@ import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { twMerge } from "tailwind-merge";
 import DefaultCard from "../DefaultCard";
 import HRow from "../utils/HRow";
+import SecondaryButton from "../utils/SecondaryButton";
+import Image from "next/image";
 
 export default function PermissionForm({
   currentMember,
@@ -24,6 +26,7 @@ export default function PermissionForm({
   const oldRole = viewMember.role;
 
   const [confirm, setConfirm] = useState("");
+  const [showRoles, setShowRoles] = useState(false);
   const [currentRole, setCurrentRole] = useState(oldRole);
   const [loading, setLoading] = useState(false);
   const { host } = useHostname();
@@ -87,9 +90,31 @@ export default function PermissionForm({
         }}
       >
         <div className={sameRole ? "pointer-events-none" : ""}>
-          <h1 className="text-start font-semibold text-base">
-            Account Permissions
-          </h1>
+          <div className="flex flex-row items-center justify-start gap-2">
+            <h1 className="text-start font-semibold text-base">
+              Account Permissions
+            </h1>
+            <SecondaryButton
+              onClick={() => setShowRoles(!showRoles)}
+              className="w-fit self-stretch p-0 border-0 shadow-none"
+            >
+              {showRoles ? (
+                <Image
+                  src="/icons/icon_question_primary.svg"
+                  alt="Show"
+                  width={30}
+                  height={30}
+                />
+              ) : (
+                <Image
+                  src="/icons/icon_question.svg"
+                  alt="Hide"
+                  width={30}
+                  height={30}
+                />
+              )}
+            </SecondaryButton>
+          </div>
           <HRow className="mb-2" />
           <form
             onSubmit={handleSubmit}
@@ -163,6 +188,25 @@ export default function PermissionForm({
               )}
             </PrimaryButton>
           </form>
+          {showRoles && (
+            <ul className="mt-4 w-full flex flex-col items-start justify-center gap-4">
+              {Object.keys(permissions).map((item: any) => (
+                <li key={item} className="w-full">
+                  <h1 className="text-custom-dark-text font-semibold">
+                    {permissions[item].title}
+                  </h1>
+                  <HRow />
+                  <ul className="list-disc ml-4">
+                    {permissions[item].desc.map((itemA: string) => (
+                      <li key={itemA} className="text-sm">
+                        {itemA}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </DefaultCard>
