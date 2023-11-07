@@ -35,7 +35,7 @@ export default function PermissionForm({
   const getPermissions = (roleA: string) => {
     var obj = {} as any;
     Object.keys(ROLES_HIERARCHY).forEach((item: any) => {
-      if (ROLES_HIERARCHY[item].rank < ROLES_HIERARCHY[roleA].rank) {
+      if (ROLES_HIERARCHY[item].rank <= ROLES_HIERARCHY[roleA].rank) {
         obj[item] = ROLES_HIERARCHY[item];
       }
     });

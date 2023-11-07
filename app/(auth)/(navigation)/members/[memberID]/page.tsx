@@ -109,10 +109,12 @@ export default async function MemberPage({
                 </DefaultCard>
               )}
               {higher && (
+                // global member permissions
                 <PermissionForm
                   currentMember={currentMemberData}
                   viewMember={viewMemberData}
                 />
+                // TODO: ADD GROUP PERMISSIONS
               )}
             </div>
           </div>
