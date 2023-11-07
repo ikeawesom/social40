@@ -54,7 +54,8 @@ export default async function GroupPage({
       const body = await res.json();
       if (!body.status) return <RestrictedScreen />;
 
-      const { role } = body.data as GROUP_MEMBERS_SCHEMA;
+      const currentMember = body.data as GROUP_MEMBERS_SCHEMA;
+      const { role } = currentMember;
       const owner = role === "owner";
       const admin =
         GROUP_ROLES_HEIRARCHY[role].rank >= GROUP_ROLES_HEIRARCHY["admin"].rank;
@@ -139,7 +140,11 @@ export default async function GroupPage({
                   desc={groupDesc}
                 />
                 {owner && <GroupRequested groupID={groupID} />}
-                <GroupMembers membersList={groupMembers} />
+                <GroupMembers
+                  curMember={currentMember}
+                  groupID={groupID}
+                  membersList={groupMembers}
+                />
                 <GroupLeaderboard memberData={groupMembersData} />
                 <GroupActivities />
                 {admin && (
