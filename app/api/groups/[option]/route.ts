@@ -179,7 +179,7 @@ export async function POST(request: NextRequest) {
 
     // remove directly from group
     const res = await dbHandler.delete({
-      col_name: `GROUPS${groupID}`,
+      col_name: `GROUPS/${groupID}/MEMBERS`,
       id: memberID,
     });
     if (!res.status)
