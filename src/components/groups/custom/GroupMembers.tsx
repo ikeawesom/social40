@@ -11,8 +11,12 @@ export type GroupDetailsType = {
 
 export default function GroupMembers({
   membersList,
+  groupID,
+  curMember,
 }: {
   membersList: GroupDetailsType;
+  groupID: string;
+  curMember: GROUP_MEMBERS_SCHEMA;
 }) {
   return (
     <DefaultCard className="w-full flex flex-col items-start justify-start gap-2 max-h-[80vh]">
@@ -24,7 +28,12 @@ export default function GroupMembers({
       </div>
       <InnerContainer className="max-h-[90vh]">
         {Object.keys(membersList).map((item) => (
-          <GroupMemberTab key={item} data={membersList[item]} />
+          <GroupMemberTab
+            curMember={curMember}
+            groupID={groupID}
+            key={item}
+            data={membersList[item]}
+          />
         ))}
       </InnerContainer>
     </DefaultCard>
