@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 import getCurrentDate from "../getCurrentDate";
 
 export type GROUP_SCHEMA = {
@@ -5,7 +6,7 @@ export type GROUP_SCHEMA = {
   groupName: string;
   groupDesc: string;
   createdBy: string; // memberID of owner
-  createdOn: string;
+  createdOn: Timestamp;
 };
 
 export type GROUP_EVENTS_SCHEMA = {
@@ -14,7 +15,7 @@ export type GROUP_EVENTS_SCHEMA = {
 };
 
 export type GROUP_MEMBERS_SCHEMA = {
-  dateJoined: string; // date member joined group
+  dateJoined: Timestamp; // date member joined group
   memberID: string; // memberID of member joined
   role: string; // role of member
   displayName?: string; // display name of member
