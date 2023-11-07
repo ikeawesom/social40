@@ -16,5 +16,5 @@ textarea:not(.custom),
 select:not(.custom) {
   resize: none;
   @apply p-2 shadow-sm rounded-lg w-full border-[1px]
-    border-gray-200;
+    border-gray-200 text-sm;
 }
