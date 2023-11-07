@@ -102,7 +102,7 @@ export default async function CustomStatusPage({
             </div>
           </DefaultCard>
           <ActiveStatusSection active={active} />
-          {commanderRole && !sameMember && (
+          {commanderRole && !sameMember && statusData.endorsed.status && (
             <EndorseSection
               adminID={adminID}
               memberID={memberID}
