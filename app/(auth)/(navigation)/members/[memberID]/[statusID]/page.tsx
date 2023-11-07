@@ -62,6 +62,8 @@ export default async function CustomStatusPage({
     // reject if status does not belong to member and member is not a commander
     if (!commanderRole && !bodyB.status) return <RestrictedScreen />;
 
+    const sameMember = adminID === memberID;
+
     const resA = await fetch(
       `${host}/api/profile/custom-status`,
       StatusPostObj
@@ -100,7 +102,7 @@ export default async function CustomStatusPage({
             </div>
           </DefaultCard>
           <ActiveStatusSection active={active} />
-          {commanderRole && (
+          {commanderRole && !sameMember && (
             <EndorseSection
               adminID={adminID}
               memberID={memberID}
