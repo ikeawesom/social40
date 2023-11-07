@@ -1,17 +1,30 @@
-export default function getCurrentDate() {
-  var currentdate = new Date();
+import { Timestamp } from "firebase/firestore";
+
+export function DateToString(date: Date) {
   var datetime =
-    currentdate.getDate() +
+    date.getDate() +
     "/" +
-    (currentdate.getMonth() + 1) +
+    (date.getMonth() + 1) +
     "/" +
-    currentdate.getFullYear() +
+    date.getFullYear() +
     " " +
-    currentdate.getHours() +
+    date.getHours() +
     ":" +
-    currentdate.getMinutes() +
+    date.getMinutes() +
     ":" +
-    currentdate.getSeconds();
+    date.getSeconds();
 
   return datetime;
+}
+
+// to fetch from firestore
+export function TimestampToDateString(timestamp: Timestamp) {
+  return DateToString(timestamp.toDate());
+}
+
+// to register into firestore
+export default function getCurrentDate() {
+  const currentdate = new Date();
+  const stamp = Timestamp.fromDate(currentdate);
+  return stamp;
 }
