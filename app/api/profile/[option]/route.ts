@@ -162,6 +162,17 @@ export async function POST(request: NextRequest) {
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
     return NextResponse.json({ status: true });
+  } else if (option === "member-status") {
+    // check if status belongs to member
+    const { statusID } = fetchedData;
+    const res = await dbHandler.get({
+      col_name: `MEMBERS/${memberID}/STATUSES`,
+      id: statusID,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+    return NextResponse.json({ status: true });
   }
 
   return NextResponse.json({

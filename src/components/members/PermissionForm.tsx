@@ -87,25 +87,35 @@ export default function PermissionForm({
         }}
       >
         <div className={sameRole ? "pointer-events-none" : ""}>
-          <h1 className="text-start font-semibold text-base">Permissions</h1>
+          <h1 className="text-start font-semibold text-base">
+            Account Permissions
+          </h1>
           <HRow className="mb-2" />
           <form
             onSubmit={handleSubmit}
             className="flex flex-col items-start justify-center gap-2"
           >
-            <div className="flex items-center justify-start w-full gap-2">
-              <p className="text-sm flex-[2]">Your permissions</p>
-              <p className="flex-[3] text-sm font-semibold">
+            <div
+              className="flex items-center justify-between w-full gap-2 shadow-sm border-[1px]
+    border-gray-200 rounded-lg px-3 py-2"
+            >
+              <p className="text-sm w-fit">Your Permissions</p>
+              <p className="text-sm font-semibold">
                 {ROLES_HIERARCHY[currentMember.role].title}
               </p>
             </div>
-            <div className="flex items-center justify-start w-full gap-2">
+            <div
+              className={twMerge(
+                "flex justify-between w-full gap-2 shadow-sm border-[1px] border-gray-200 rounded-lg px-3 py-2",
+                sameRole ? "flex-row items-center" : "flex-col items-start"
+              )}
+            >
               <label htmlFor="permission" className="text-sm w-fit">
                 Set Permissions
               </label>
               {sameRole ? (
                 <>
-                  <p className="flex-1 text-sm font-semibold">
+                  <p className="text-sm font-semibold">
                     {ROLES_HIERARCHY[viewMember.role].title}
                   </p>
                 </>
@@ -113,13 +123,12 @@ export default function PermissionForm({
                 <select
                   name="permission"
                   id="permission"
-                  className="flex-[3]"
                   value={currentRole}
                   onChange={handleChangeSelect}
                 >
                   {Object.keys(permissions).map((item: string) => {
                     return (
-                      <option key={item} value={item}>
+                      <option className="p-2" key={item} value={item}>
                         {permissions[item].title}
                       </option>
                     );

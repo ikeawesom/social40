@@ -152,6 +152,48 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ status: true, data: statusPromiseArray });
+  } else if (option === "make-admin") {
+    // make member admin
+    const res = await dbHandler.edit({
+      col_name: `GROUPS/${groupID}/MEMBERS`,
+      id: memberID,
+      data: { role: "admin" },
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+    return NextResponse.json({ status: true });
+  } else if (option === "remove-admin") {
+    // remove admin rights
+    const res = await dbHandler.edit({
+      col_name: `GROUPS/${groupID}/MEMBERS`,
+      id: memberID,
+      data: { role: "member" },
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+    return NextResponse.json({ status: true });
+  } else if (option === "remove-member") {
+    // remove member from group
+
+    // remove directly from group
+    const res = await dbHandler.delete({
+      col_name: `GROUPS/${groupID}/MEMBERS`,
+      id: memberID,
+    });
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    // remove from member joined groups
+    const resA = await dbHandler.delete({
+      col_name: `MEMBERS/${memberID}/GROUPS-JOINED`,
+      id: groupID,
+    });
+    if (!resA.status)
+      return NextResponse.json({ status: false, error: resA.error });
+
+    return NextResponse.json({ status: true });
   }
   return NextResponse.json({
     status: false,

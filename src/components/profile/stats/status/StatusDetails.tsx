@@ -1,0 +1,47 @@
+"use client";
+import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { twMerge } from "tailwind-merge";
+
+type StatusDetailType = {
+  active?: boolean;
+  curStatus: STATUS_SCHEMA;
+};
+export function StatusDetails({ active, curStatus }: StatusDetailType) {
+  const statusID = curStatus.statusID;
+  const router = useRouter();
+  return (
+    <div
+      onClick={() =>
+        router.push(`/members/${curStatus.memberID}/${curStatus.statusID}`)
+      }
+      className={twMerge(
+        "w-full flex items-start justify-center p-3 flex-col gap-2 hover:bg-custom-light-text duration-200",
+        active ? "bg-custom-light-red" : ""
+      )}
+      key={statusID}
+    >
+      <div className="flex flex-col items-start justify-center">
+        <p className="text-xs text-custom-grey-text">{curStatus.doctor}</p>
+        <h1 className="text-custom-dark-text font-semibold">
+          {curStatus.statusTitle}
+        </h1>
+        <h3 className="text-sm text-custom-dark-text">
+          {curStatus.statusDesc}
+        </h3>
+        <p className="text-custom-grey-text text-xs">
+          Start Date: {curStatus.startDate.split(" ")[0]}
+        </p>
+        <p className="text-custom-grey-text text-xs">
+          End Date: {curStatus.endDate.split(" ")[0]}
+        </p>
+      </div>
+      {!curStatus.endorsed.status && (
+        <p className="text-custom-orange font-bold text-sm text-center">
+          Pending Endorsement
+        </p>
+      )}
+    </div>
+  );
+}
