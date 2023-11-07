@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "next/navigation";
 import StatusDot from "../../utils/StatusDot";
@@ -18,6 +18,7 @@ export default function GroupMemberTab({
   groupID,
   className,
   curMember,
+  addOnline,
 }: {
   data: {
     dateJoined: string;
@@ -29,6 +30,7 @@ export default function GroupMemberTab({
   groupID: string;
   className?: string;
   curMember: GROUP_MEMBERS_SCHEMA;
+  addOnline: () => void;
 }) {
   const { host } = useHostname();
   const router = useRouter();
@@ -51,6 +53,11 @@ export default function GroupMemberTab({
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (bookedIn) {
+      addOnline();
+    }
+  }, [bookedIn]);
   const handleAdmin = async (admin: boolean) => {
     setLoading(true);
     try {
