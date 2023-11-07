@@ -102,7 +102,11 @@ export default async function CustomStatusPage({
             </div>
           </DefaultCard>
           <ActiveStatusSection active={active} />
-          {commanderRole && !sameMember && statusData.endorsed.status && (
+
+          {/* Commander's who do not own the status can view */}
+          {/* Anyone can only view once their status has been endorsed */}
+          {((commanderRole && !sameMember) ||
+            (sameMember && statusData.endorsed.status)) && (
             <EndorseSection
               adminID={adminID}
               memberID={memberID}
