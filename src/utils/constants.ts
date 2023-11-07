@@ -54,6 +54,21 @@ export const ROLES_HIERARCHY = {
   member: { rank: 1, title: "Tier 1", desc: [ROLES_DESC["join-groups"]] },
 } as { [role: string]: { rank: number; title: string; desc: string[] } };
 
+export const GROUP_ROLES_HEIRARCHY = {
+  owner: {
+    rank: 3,
+    title: "Group Owner",
+  },
+  admin: {
+    rank: 2,
+    title: "Group Admin",
+  },
+  member: {
+    rank: 1,
+    title: "Group Member",
+  },
+} as { [role: string]: { rank: number; title: string } };
+
 export const BADGE_COLORS = {
   Gold: "bg-orange-300",
   Sharpshooter: "bg-green-300",
