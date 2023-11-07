@@ -18,7 +18,6 @@ export default function StatusFeed({
   return (
     <div className="flex flex-col items-start justify-start gap-y-1 w-full">
       <h1 className="text-start font-semibold text-base">Statuses</h1>
-      <HRow />
       {!viewProfile && <AddStatusButton />}
       {!empty ? (
         <InnerContainer className="max-h-[100vh]">
