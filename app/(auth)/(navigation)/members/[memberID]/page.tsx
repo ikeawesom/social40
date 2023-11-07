@@ -65,11 +65,15 @@ export default async function MemberPage({
 
       const viewMemberData = dataA.data as MEMBER_SCHEMA;
 
+      const sameMember = viewMemberData.memberID === currentMemberData.memberID;
+
       const permission =
         ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
 
       const higher =
         ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY[viewMemberData.role].rank;
+
+      const normalMember = role === "member";
 
       const rankName =
         `${viewMemberData.rank} ${viewMemberData.displayName}`.trim();
@@ -103,18 +107,17 @@ export default async function MemberPage({
                 </div>
                 <MemberBadges badges={viewMemberData.badges} />
               </DefaultCard>
-              {permission && (
+              {(permission || sameMember) && (
                 <DefaultCard className="w-full">
                   <StatusFeed viewProfile status={statusList} />
                 </DefaultCard>
               )}
-              {higher && (
+              {higher && !sameMember && !normalMember && (
                 // global member permissions
                 <PermissionForm
                   currentMember={currentMemberData}
                   viewMember={viewMemberData}
                 />
-                // TODO: ADD GROUP PERMISSIONS
               )}
             </div>
           </div>

@@ -39,21 +39,33 @@ export default async function CustomStatusPage({
 
     if (!body.status) throw new Error(body.error);
 
+    // check role of current member
     const data = body.data as MEMBER_SCHEMA;
     const { role } = data;
 
     const commanderRole =
       ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
 
-    if (!commanderRole) return <RestrictedScreen />;
-
+    // check if status belongs to member
     const { memberID, statusID } = params;
-    const PostObj = GetPostObj({
+    const StatusPostObj = GetPostObj({
       memberID,
       statusID,
     });
 
-    const resA = await fetch(`${host}/api/profile/custom-status`, PostObj);
+    const resB = await fetch(
+      `${host}/api/profile/member-status`,
+      StatusPostObj
+    );
+    const bodyB = await resB.json();
+
+    // reject if status does not belong to member and member is not a commander
+    if (!commanderRole && !bodyB.status) return <RestrictedScreen />;
+
+    const resA = await fetch(
+      `${host}/api/profile/custom-status`,
+      StatusPostObj
+    );
     const bodyA = await resA.json();
 
     if (!bodyA.status) throw new Error(bodyA.error);
@@ -88,11 +100,13 @@ export default async function CustomStatusPage({
             </div>
           </DefaultCard>
           <ActiveStatusSection active={active} />
-          <EndorseSection
-            adminID={adminID}
-            memberID={memberID}
-            statusData={statusData}
-          />
+          {commanderRole && (
+            <EndorseSection
+              adminID={adminID}
+              memberID={memberID}
+              statusData={statusData}
+            />
+          )}
         </div>
       </>
     );
