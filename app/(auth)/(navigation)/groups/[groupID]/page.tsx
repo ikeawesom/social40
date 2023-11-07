@@ -12,7 +12,7 @@ import GroupMembers, {
 import GroupRequested from "@/src/components/groups/custom/GroupRequested";
 import SettingsSection from "@/src/components/groups/custom/settings/SettingsSection";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
-import { ROLES_HIERARCHY } from "@/src/utils/constants";
+import { GROUP_ROLES_HEIRARCHY } from "@/src/utils/constants";
 import GroupStatusSection, {
   GroupStatusType,
 } from "@/src/components/groups/custom/GroupStatusSection";
@@ -56,7 +56,8 @@ export default async function GroupPage({
 
       const { role } = body.data as GROUP_MEMBERS_SCHEMA;
       const owner = role === "owner";
-      const admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
+      const admin =
+        GROUP_ROLES_HEIRARCHY[role].rank >= GROUP_ROLES_HEIRARCHY["admin"].rank;
 
       // get group data
       const PostObj = GetPostObj({ groupID });
