@@ -2,8 +2,9 @@ import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import React from "react";
 import InnerContainer from "../../utils/InnerContainer";
 import AddStatusButton from "./status/AddStatusButton";
-import { twMerge } from "tailwind-merge";
 import { getActiveStatus } from "@/src/utils/getActiveStatus";
+import { StatusDetails } from "./status/StatusDetails";
+import HRow from "../../utils/HRow";
 
 export default function StatusFeed({
   status,
@@ -17,6 +18,7 @@ export default function StatusFeed({
   return (
     <div className="flex flex-col items-start justify-start gap-y-1 w-full">
       <h1 className="text-start font-semibold text-base">Statuses</h1>
+      <HRow />
       {!viewProfile && <AddStatusButton />}
       {!empty ? (
         <InnerContainer className="max-h-[100vh]">
@@ -45,44 +47,6 @@ export default function StatusFeed({
       ) : (
         <p className="text-start text-custom-grey-text text-xs">
           No status information recorded for this account.
-        </p>
-      )}
-    </div>
-  );
-}
-
-type StatusDetailType = {
-  active?: boolean;
-  curStatus: STATUS_SCHEMA;
-};
-export function StatusDetails({ active, curStatus }: StatusDetailType) {
-  const statusID = curStatus.statusID;
-  return (
-    <div
-      className={twMerge(
-        "w-full flex items-start justify-center p-3 flex-col gap-2 hover:bg-custom-light-text duration-200",
-        active ? "bg-custom-light-red" : ""
-      )}
-      key={statusID}
-    >
-      <div className="flex flex-col items-start justify-center">
-        <p className="text-xs text-custom-grey-text">{curStatus.doctor}</p>
-        <h1 className="text-custom-dark-text font-semibold">
-          {curStatus.statusTitle}
-        </h1>
-        <h3 className="text-sm text-custom-dark-text">
-          {curStatus.statusDesc}
-        </h3>
-        <p className="text-custom-grey-text text-xs">
-          Start Date: {curStatus.startDate.split(" ")[0]}
-        </p>
-        <p className="text-custom-grey-text text-xs">
-          End Date: {curStatus.endDate.split(" ")[0]}
-        </p>
-      </div>
-      {!curStatus.endorsed.status && (
-        <p className="text-custom-orange font-bold text-sm text-center">
-          Pending Endorsement
         </p>
       )}
     </div>
