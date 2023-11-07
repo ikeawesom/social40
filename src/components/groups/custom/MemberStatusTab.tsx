@@ -25,7 +25,7 @@ export default function MemberStatusTab({
     <Link
       href={`/members/${memberID}/${statusID}`}
       className={twMerge(
-        "w-full py-2 px-4 flex items-center gap-2 justify-between hover:bg-custom-light-text duration-200",
+        "w-full px-3 py-2 flex max-[320px]:flex-col max-[320px]:items-start items-center max-[320px]:gap-1 gap-2 justify-between hover:bg-custom-light-text duration-200",
         active ? "bg-custom-light-red" : ""
       )}
       key={statusID}

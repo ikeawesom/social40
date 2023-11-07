@@ -52,7 +52,7 @@ export default function GroupStatusSection({
                   key={memberID}
                   className="w-full flex-col flex items-start justify-center"
                 >
-                  <h1 className="p-2 font-semibold">{memberID}</h1>
+                  <h1 className="p-2 font-semibold text-sm">{memberID}</h1>
                   <HRow className="my-0" />
                   {Object.keys(memberStatus).map((statusID: string) => {
                     const statusData = memberStatus[statusID];
