@@ -92,7 +92,7 @@ export default function GroupMemberTab({
   return (
     <>
       {show && (
-        <Modal>
+        <Modal className="min-[400px]:p-4">
           {loading ? (
             <div className="w-full grid place-items-center">
               <LoadingIcon height={50} width={50} />
