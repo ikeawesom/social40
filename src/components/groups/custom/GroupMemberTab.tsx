@@ -12,6 +12,8 @@ import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
+import { Timestamp } from "firebase/firestore";
+import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 
 export default function GroupMemberTab({
   data,
@@ -21,7 +23,7 @@ export default function GroupMemberTab({
   addOnline,
 }: {
   data: {
-    dateJoined: string;
+    dateJoined: Timestamp;
     memberID: string;
     role: string;
     displayName?: string | undefined;
@@ -192,7 +194,7 @@ export default function GroupMemberTab({
               : groupMemberID}
           </p>
           <p className="text-xs text-custom-grey-text">
-            Joined on: {dateJoined}
+            Joined on: {TimestampToDateString(dateJoined)}
           </p>
         </div>
       </div>

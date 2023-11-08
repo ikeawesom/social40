@@ -3,7 +3,7 @@ import { StatusListType } from "@/src/components/profile/StatsSection";
 import { StatusInputType } from "@/src/components/status/CreateStatus";
 import { dbHandler } from "@/src/firebase/db";
 import { getMethod } from "@/src/utils/API/getAPIMethod";
-import getCurrentDate from "@/src/utils/getCurrentDate";
+import getCurrentDate, { StringToTimestamp } from "@/src/utils/getCurrentDate";
 import { getFriendsList } from "@/src/utils/profile/getFriendsList";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
@@ -97,6 +97,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ status: true });
   } else if (option === "set-status") {
     const data = fetchedData.status as StatusInputType;
+    const startTimestamp = StringToTimestamp(data.start);
+    const endTimestamp = StringToTimestamp(data.end);
+
+    if (!startTimestamp.status || !endTimestamp.status)
+      return NextResponse.json({
+        status: false,
+        error: startTimestamp.error ? startTimestamp.error : endTimestamp.error,
+      });
 
     const to_add = {
       statusID: "",
@@ -108,8 +116,8 @@ export async function POST(request: NextRequest) {
         status: false,
         endorsedBy: "",
       },
-      startDate: data.start,
-      endDate: data.end,
+      startDate: startTimestamp.data,
+      endDate: endTimestamp.data,
     } as STATUS_SCHEMA;
 
     const res = await dbHandler.addGeneral({

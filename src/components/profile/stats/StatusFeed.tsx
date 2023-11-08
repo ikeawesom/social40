@@ -2,9 +2,8 @@ import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import React from "react";
 import InnerContainer from "../../utils/InnerContainer";
 import AddStatusButton from "./status/AddStatusButton";
-import { getActiveStatus } from "@/src/utils/getActiveStatus";
 import { StatusDetails } from "./status/StatusDetails";
-import HRow from "../../utils/HRow";
+import { ActiveTimestamp } from "@/src/utils/getCurrentDate";
 
 export default function StatusFeed({
   status,
@@ -23,24 +22,13 @@ export default function StatusFeed({
         <InnerContainer className="max-h-[100vh]">
           {Object.keys(status).map((statusID: string) => {
             const curStatus = status[statusID];
-            const active = getActiveStatus(curStatus.endDate);
-
-            if (active)
-              return (
-                <StatusDetails
-                  active
-                  curStatus={curStatus}
-                  key={curStatus.statusID}
-                />
-              );
-          })}
-          {Object.keys(status).map((statusID: string) => {
-            const curStatus = status[statusID];
-            const active = getActiveStatus(curStatus.endDate);
-            if (!active)
-              return (
-                <StatusDetails curStatus={curStatus} key={curStatus.statusID} />
-              );
+            return (
+              <StatusDetails
+                active={ActiveTimestamp(curStatus.endDate)}
+                curStatus={curStatus}
+                key={curStatus.statusID}
+              />
+            );
           })}
         </InnerContainer>
       ) : (

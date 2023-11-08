@@ -3,8 +3,8 @@ import DefaultCard from "../../DefaultCard";
 import HRow from "../../utils/HRow";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import InnerContainer from "../../utils/InnerContainer";
-import { getActiveStatus } from "@/src/utils/getActiveStatus";
 import MemberStatusTab from "./MemberStatusTab";
+import { ActiveTimestamp } from "@/src/utils/getCurrentDate";
 
 export type GroupStatusType = {
   [memberID: string]: { [statusID: string]: STATUS_SCHEMA };
@@ -56,31 +56,16 @@ export default function GroupStatusSection({
                   <HRow className="my-0" />
                   {Object.keys(memberStatus).map((statusID: string) => {
                     const statusData = memberStatus[statusID];
-                    const active = getActiveStatus(statusData.endDate);
+                    const active = ActiveTimestamp(statusData.endDate);
 
-                    if (active)
-                      return (
-                        <MemberStatusTab
-                          active={active}
-                          adminID={adminID}
-                          memberID={memberID}
-                          statusData={statusData}
-                        />
-                      );
-                  })}
-                  {Object.keys(memberStatus).map((statusID: string) => {
-                    const statusData = memberStatus[statusID];
-
-                    const active = getActiveStatus(statusData.endDate);
-                    if (!active)
-                      return (
-                        <MemberStatusTab
-                          active={active}
-                          adminID={adminID}
-                          memberID={memberID}
-                          statusData={statusData}
-                        />
-                      );
+                    return (
+                      <MemberStatusTab
+                        active={active}
+                        adminID={adminID}
+                        memberID={memberID}
+                        statusData={statusData}
+                      />
+                    );
                   })}
                 </div>
               );

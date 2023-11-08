@@ -4,7 +4,7 @@ import DefaultCard from "../DefaultCard";
 import PrimaryButton from "../utils/PrimaryButton";
 import { LoadingIconBright } from "../utils/LoadingIcon";
 import SecondaryButton from "../utils/SecondaryButton";
-import getCurrentDate from "@/src/utils/getCurrentDate";
+import { getCurrentDateString } from "@/src/utils/getCurrentDate";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
@@ -165,7 +165,7 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
               onClick={() =>
                 setStatusDetails({
                   ...statusDetails,
-                  start: getCurrentDate().split(" ")[0],
+                  start: getCurrentDateString().split(" ")[0],
                 })
               }
             >
