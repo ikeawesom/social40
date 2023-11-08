@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 import getCurrentDate from "../getCurrentDate";
 
 export type WAITLIST_SCHEMA = {
@@ -5,7 +6,7 @@ export type WAITLIST_SCHEMA = {
   groupID: string; // group ID that waitlistee inputted
   displayName: string; // display name of waitlistee
   password?: string; // password of waitlistee
-  dateRequested: string; // date format
+  dateRequested: Timestamp; // date format
 };
 
 export function initWaitListee({

@@ -5,7 +5,7 @@ export type EVENT_SCHEMA = {
   eventID: string;
   eventTitle: string;
   eventDesc: string;
-  eventDate: string; // date format
+  eventDate: Timestamp; // date format
   createdBy: string; // memberID of owner
   createdOn: Timestamp; // date format
 };
