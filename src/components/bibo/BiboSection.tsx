@@ -4,6 +4,7 @@ import HRow from "../utils/HRow";
 import InnerContainer from "../utils/InnerContainer";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import BookSomeoneButton from "./BookSomeoneButton";
+import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 
 export default function BiboSection({
   memberData,
@@ -36,7 +37,9 @@ export default function BiboSection({
                   <div className="flex flex-col items-start justify-center gap-2 w-full">
                     {Object.keys(dateObj).map((memberID, indexA) => {
                       const memberObject = dateObj[memberID];
-                      const time = memberObject.bookInOn.split(" ")[1];
+                      const time = TimestampToDateString(
+                        memberObject.bookInOn
+                      ).split(" ")[1];
 
                       return (
                         <div

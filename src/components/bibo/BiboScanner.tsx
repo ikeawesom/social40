@@ -10,6 +10,7 @@ import Image from "next/image";
 import HRow from "../utils/HRow";
 import SecondaryButton from "../utils/SecondaryButton";
 import { toast } from "sonner";
+import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 
 export default function BiboScanner({ memberID }: { memberID: string }) {
   const [loading, setLoading] = useState(false);
@@ -23,7 +24,7 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
     if (!biboData) return;
 
     const bookInOn = biboData.bookInOn;
-    const bookInDate = bookInOn.split(" ")[0];
+    const bookInDate = TimestampToDateString(bookInOn).split(" ")[0];
 
     const memberBookIn = biboData.memberID;
 
