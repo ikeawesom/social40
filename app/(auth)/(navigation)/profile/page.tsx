@@ -45,7 +45,7 @@ export default async function Profile({
       const host = process.env.HOST;
 
       const PostObj = GetPostObj({
-        memberID: memberID,
+        memberID,
       });
       // fetch member data from server
       const res = await fetch(`${host}/api/profile/member`, PostObj);
@@ -91,7 +91,7 @@ export default async function Profile({
                 statuses={statusList}
                 statistics={{}}
               />
-              {cos && <BiboSection memberData={memberData} />}
+              {cos && <BiboSection />}
             </div>
             {/* TO DO */}
           </div>
