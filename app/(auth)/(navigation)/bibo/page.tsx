@@ -26,7 +26,10 @@ export default function BiboPage() {
       const data = doc.data() as MEMBER_SCHEMA;
       const biboStatus = data.bookedIn;
 
-      if (biboStatus === true) router.replace("/profile");
+      if (biboStatus === true) {
+        router.refresh();
+        router.replace("/profile");
+      }
     });
   }
   if (memberDetails)
