@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useMemberID } from "./useMemberID";
 import QRCode from "qrcode";
-import { MEMBER_BOOKED_IN } from "../utils/schemas/members";
-import getCurrentDate from "../utils/getCurrentDate";
+import getCurrentDate, { TimestampToDateString } from "../utils/getCurrentDate";
+import { BIBO_SCHEMA } from "../utils/schemas/bibo";
 
 export function useBiboQR() {
   const { memberID } = useMemberID();
@@ -18,10 +18,19 @@ export function useBiboQR() {
     };
 
     if (!dataURL && memberID !== "") {
+      const dateTimestamp = getCurrentDate();
+      const dateStr = TimestampToDateString(dateTimestamp);
+      const date = dateStr.split(" ")[0];
+      const time = dateStr.split(" ")[1];
       const toSend = {
-        memberID: memberID,
-        bookInOn: getCurrentDate(),
-      } as MEMBER_BOOKED_IN;
+        [time]: {
+          bookedIn: true,
+          verifiedBy: "",
+          bookedInDate: date,
+          bookedInTime: time,
+          memberID: memberID,
+        },
+      } as BIBO_SCHEMA;
 
       const toSendStr = JSON.stringify(toSend);
 

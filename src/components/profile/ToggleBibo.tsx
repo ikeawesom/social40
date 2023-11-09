@@ -8,6 +8,10 @@ import { useHostname } from "@/src/hooks/useHostname";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
+import {
+  TimestampToDateString,
+  getCurrentDateString,
+} from "@/src/utils/getCurrentDate";
 
 export default function ToggleBibo({
   fetchedBibo,
@@ -33,14 +37,29 @@ export default function ToggleBibo({
     if (bibo || aboveCOS) {
       setLoading(true);
       try {
-        const PostObj = GetPostObj({ memberID: memberID });
-        const res = await fetch(`${host}/api/bibo`, PostObj);
+        const date = getCurrentDateString();
+        const bookInDate = date.split(" ")[0];
+        const bookInTime = date.split(" ")[1];
 
-        if (res.status) router.refresh();
-        else
-          throw new Error(
-            "An unknown error occurred. Please restart the app and try again."
-          );
+        const PostObj = GetPostObj({ memberID });
+
+        const res = await fetch(`${host}/api/bibo/set`, PostObj);
+        const body = await res.json();
+        if (!body.status) throw new Error(body.error);
+
+        const PostObjA = GetPostObj({
+          memberID,
+          memberBookIn: memberID,
+          bookInDate,
+          bookInTime,
+        });
+
+        const resA = await fetch(`${host}/api/bibo/set-custom`, PostObjA);
+        const bodyA = await resA.json();
+
+        if (!bodyA.status) throw new Error(bodyA.error);
+
+        router.refresh();
       } catch (error: any) {
         toast.error(error.message);
       }

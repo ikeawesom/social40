@@ -1,71 +1,101 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import DefaultCard from "../DefaultCard";
-import HRow from "../utils/HRow";
 import InnerContainer from "../utils/InnerContainer";
-import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import BookSomeoneButton from "./BookSomeoneButton";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import { BIBO_DB_TYPE } from "@/src/utils/schemas/bibo";
+import PrimaryButton from "../utils/PrimaryButton";
+import Image from "next/image";
+import { toast } from "sonner";
+import { useHostname } from "@/src/hooks/useHostname";
+import { GetPostObj } from "@/src/utils/API/GetPostObj";
+import { LoadingIconBright } from "../utils/LoadingIcon";
+import BiboDownloadButton from "./BiboDownloadButton";
 
-export default function BiboSection({
-  memberData,
-}: {
-  memberData: MEMBER_SCHEMA;
-}) {
-  const membersBookedIn = memberData.bookedInMembers;
+export default function BiboSection() {
+  const [member, setMember] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [biboData, setBiboData] = useState<BIBO_DB_TYPE>();
+  const { host } = useHostname();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const PostObj = GetPostObj({ memberID: member });
+      const res = await fetch(`${host}/api/bibo/get`, PostObj);
+      const body = await res.json();
+
+      if (!body.status) throw new Error(body.error);
+
+      setBiboData(body.data);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+    setLoading(false);
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setMember((member) => e.target.value);
 
   return (
     <DefaultCard>
       <div className="flex flex-col items-start justify-start gap-y-1 w-full">
         <h1 className="text-start font-semibold text-base">Book in Members</h1>
         <BookSomeoneButton />
-        {membersBookedIn && Object.keys(membersBookedIn).length !== 0 ? (
-          <InnerContainer className="py-2 gap-4 max-h-[100vh]">
-            {Object.keys(membersBookedIn).map((date, index) => {
-              const dateObj = membersBookedIn[date];
-              return (
-                <div
-                  key={index}
-                  className="flex flex-col w-full items-start justify-center"
-                >
-                  <div className="flex flex-col items-start justify-center w-full px-3">
-                    <h1 className="text-sm text-custom-grey-text text-start">
-                      {date}
-                    </h1>
-                    <HRow />
-                  </div>
+        <p className="text-sm text-custom-grey-text">
+          Enter a member ID below to view their BIBO spreadsheet.
+        </p>
+        <form
+          className="flex w-full items-center justify-between gap-3 mb-1"
+          onSubmit={handleSubmit}
+        >
+          <input
+            type="text"
+            value={member}
+            onChange={handleChange}
+            required
+            placeholder="Enter a member ID here"
+          />
 
-                  <div className="flex flex-col items-start justify-center gap-2 w-full">
-                    {Object.keys(dateObj).map((memberID, indexA) => {
-                      const memberObject = dateObj[memberID];
-                      const time = TimestampToDateString(
-                        memberObject.bookInOn
-                      ).split(" ")[1];
-
-                      return (
-                        <div
-                          key={indexA}
-                          className="hover:bg-custom-light-text duration-200 w-full py-1 px-3"
-                        >
-                          <h1 className="text-custom-dark-text">
-                            {memberObject.memberID}
-                          </h1>
-                          <p className="text-sm text-custom-grey-text">
-                            Booked In member on: {time}
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </InnerContainer>
-        ) : (
-          <p className="text-start text-custom-grey-text text-xs">
-            You have not booked in anyone before.
-          </p>
-        )}
+          <PrimaryButton
+            className="w-fit self-stretch px-2 grid place-items-center"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? (
+              <LoadingIconBright width={25} height={25} />
+            ) : (
+              <Image
+                src="/icons/navigation/icon_search.svg"
+                alt="Search"
+                height={25}
+                width={25}
+              />
+            )}
+          </PrimaryButton>
+        </form>
+        {biboData &&
+          (Object.keys(biboData).length !== 0 ? (
+            <BiboDownloadButton biboData={biboData} />
+          ) : (
+            <p className="text-start text-custom-grey-text text-xs">
+              This member has yet to be booked in by commanders.
+            </p>
+          ))}
       </div>
     </DefaultCard>
   );
 }
+
+// (Object.keys(biboData).length === 0 ? (
+//   <InnerContainer className="py-2 gap-4 max-h-[100vh]">
+//     <p>Download BIBO spreadsheets below.</p>
+//     {Object.keys(biboData).map((date: string) => (
+//       <div>{date}</div>
+//     ))}
+//   </InnerContainer>
+// ) : (
+// <p className="text-start text-custom-grey-text text-xs">
+//   This member has yet to be booked in by commanders.
+// </p>
+// ))
