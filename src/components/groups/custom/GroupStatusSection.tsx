@@ -60,8 +60,8 @@ export default function GroupStatusSection({
 
                     return (
                       <MemberStatusTab
+                        key={statusData.statusID}
                         active={active}
-                        adminID={adminID}
                         memberID={memberID}
                         statusData={statusData}
                       />
