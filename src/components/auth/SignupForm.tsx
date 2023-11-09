@@ -5,6 +5,7 @@ import { dbHandler } from "@/src/firebase/db";
 import { initWaitListee } from "@/src/utils/schemas/waitlist";
 import getCurrentDate from "@/src/utils/getCurrentDate";
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
+import { LoadingIconBright } from "../utils/LoadingIcon";
 
 type userDetailsType = {
   admin: string;
@@ -122,8 +123,12 @@ export default function SignupForm({ setStatus }: statusType) {
           You can get this from your commanders.
         </p>
       </span>
-      <PrimaryButton type="submit" disabled={loading}>
-        {loading ? "Creating..." : "Sign up"}
+      <PrimaryButton
+        type="submit"
+        className="grid place-items-center"
+        disabled={loading}
+      >
+        {loading ? <LoadingIconBright height={20} width={20} /> : "Sign up"}
       </PrimaryButton>
     </form>
   );

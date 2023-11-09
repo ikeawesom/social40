@@ -9,6 +9,7 @@ import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { clearCookies } from "@/src/utils/clearCookies";
 import { useRouter } from "next/navigation";
+import { LoadingIconBright } from "../utils/LoadingIcon";
 
 type userDetailsType = {
   email: string;
@@ -91,8 +92,12 @@ export default function SigninForm({ setStatus }: statusType) {
           onChange={handleChange}
         />
       </div>
-      <PrimaryButton type="submit" disabled={loading}>
-        {loading ? "Working..." : "Sign in"}
+      <PrimaryButton
+        type="submit"
+        className="grid place-items-center"
+        disabled={loading}
+      >
+        {loading ? <LoadingIconBright height={20} width={20} /> : "Sign in"}
       </PrimaryButton>
     </form>
   );
