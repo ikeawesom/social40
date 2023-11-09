@@ -7,10 +7,10 @@ import HeaderBar from "@/src/components/navigation/HeaderBar";
 import { StatusListType } from "@/src/components/profile/StatsSection";
 import StatusFeed from "@/src/components/profile/stats/StatusFeed";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
-import HRow from "@/src/components/utils/HRow";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
+import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
 import React from "react";
@@ -102,7 +102,8 @@ export default async function MemberPage({
                     {viewMemberData.memberID}
                   </p>
                   <p className="text-sm text-custom-grey-text">
-                    Created on: {viewMemberData.createdOn}
+                    Created on:{" "}
+                    {TimestampToDateString(viewMemberData.createdOn)}
                   </p>
                 </div>
                 <MemberBadges badges={viewMemberData.badges} />
