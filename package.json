@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "encoding": "^0.1.13",
+    "file-saver": "^2.0.5",
     "firebase": "^10.5.0",
     "html5-qrcode": "^2.3.8",
     "next": "13.5.4",
@@ -18,6 +19,7 @@
     "react": "^18",
     "react-dom": "^18",
     "sharp": "^0.32.6",
+    "sheetjs-style": "^0.15.8",
     "sonner": "^1.0.3",
     "tailwind-merge": "^1.14.0"
   },
