@@ -3,19 +3,20 @@ import React, { useEffect, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import LoadingIcon, { LoadingIconBright } from "../utils/LoadingIcon";
 import { twMerge } from "tailwind-merge";
-import { MEMBER_BOOKED_IN } from "@/src/utils/schemas/members";
-import { dbHandler } from "@/src/firebase/db";
 import Modal from "../utils/Modal";
 import Image from "next/image";
 import HRow from "../utils/HRow";
 import SecondaryButton from "../utils/SecondaryButton";
 import { toast } from "sonner";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import { GetPostObj } from "@/src/utils/API/GetPostObj";
+import { useHostname } from "@/src/hooks/useHostname";
+import { BIBO_SCHEMA } from "@/src/utils/schemas/bibo";
 
 export default function BiboScanner({ memberID }: { memberID: string }) {
   const [loading, setLoading] = useState(false);
-  const [biboData, setBiboData] = useState<MEMBER_BOOKED_IN>();
+  const [biboData, setBiboData] = useState<BIBO_SCHEMA>();
   const [biboLoad, setBiboLoad] = useState(false);
+  const { host } = useHostname();
 
   let html5QrCode: Html5Qrcode;
 
@@ -23,38 +24,30 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
     setBiboLoad(true);
     if (!biboData) return;
 
-    const bookInOn = biboData.bookInOn;
-    const bookInDate = TimestampToDateString(bookInOn).split(" ")[0];
-
-    const memberBookIn = biboData.memberID;
-
     try {
-      const res = await dbHandler.edit({
-        col_name: "MEMBERS",
-        id: memberBookIn,
-        data: { bookedIn: true },
+      const bookInTime = Object.keys(biboData)[0];
+      const data = biboData[bookInTime];
+      const memberBookIn = data.memberID;
+
+      const PostObj = GetPostObj({ memberID: memberBookIn });
+      const res = await fetch(`${host}/api/bibo/set`, PostObj);
+
+      if (!res.status)
+        throw new Error(
+          "An unknown error occurred. Please restart the app and try again."
+        );
+
+      const globalBiboObj = GetPostObj({
+        memberID: memberID,
+        memberBookIn,
+        bookInDate: data.bookedInDate,
+        bookInTime: data.bookedInTime,
       });
 
-      if (!res.status) throw new Error("Member:", res.error);
+      const resA = await fetch(`${host}/api/bibo/set-custom`, globalBiboObj);
+      const bodyA = await resA.json();
 
-      const to_log = {
-        bookedInMembers: {
-          [bookInDate]: {
-            [memberBookIn]: {
-              memberID: memberBookIn,
-              bookInOn: bookInOn,
-            } as MEMBER_BOOKED_IN,
-          },
-        },
-      };
-
-      const resA = await dbHandler.edit({
-        col_name: "MEMBERS",
-        id: memberID,
-        data: to_log,
-      });
-
-      if (!resA.status) throw new Error("Current:", resA.error.message);
+      if (!bodyA.status) throw new Error(bodyA.error);
       toast.success(`Successfully booked in member: ${memberBookIn}`);
     } catch (err: any) {
       toast.error(err.message);
@@ -70,7 +63,7 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
 
   const successScan = async (text: string) => {
     setLoading(true);
-    const data = JSON.parse(text) as MEMBER_BOOKED_IN;
+    const data = JSON.parse(text) as BIBO_SCHEMA;
     setBiboData(data);
   };
 
@@ -120,7 +113,7 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
           <div className="flex flex-col items-center justify-center">
             <h1 className="text-center">Booking in member:</h1>
             <h1 className="text-center text-custom-primary font-semibold">
-              {biboData.memberID}
+              {biboData[Object.keys(biboData)[0]].memberID}
             </h1>
           </div>
           <div className="w-full items-stretch justify-between gap-2 flex">
@@ -136,7 +129,7 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
               className="text-sm grid place-items-center bg-custom-green text-custom-light-text border-custom-green"
             >
               {biboLoad ? (
-                <LoadingIconBright width={24} height={24} />
+                <LoadingIconBright width={20} height={20} />
               ) : (
                 "Accept"
               )}
