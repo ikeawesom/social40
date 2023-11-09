@@ -3,23 +3,19 @@ import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import Link from "next/link";
 import React from "react";
 import { twMerge } from "tailwind-merge";
-import { useRouter } from "next/navigation";
 import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 
 type MemberStatusType = {
-  adminID: string;
   memberID: string;
   active: boolean;
   statusData: STATUS_SCHEMA;
 };
 
 export default function MemberStatusTab({
-  adminID,
   memberID,
   active,
   statusData,
 }: MemberStatusType) {
-  const router = useRouter();
   const { endDate, startDate, statusTitle, statusDesc, endorsed, statusID } =
     statusData;
   return (
