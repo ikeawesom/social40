@@ -3,6 +3,7 @@ import HRow from "../utils/HRow";
 import { ownedGroupsType } from "@/src/utils/groups/getOwnedGroups";
 import GroupItem from "./GroupItem";
 import CreateGroupContainer from "./create/CreateGroupContainer";
+import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 
 export default function GroupsCreatedSection({
   ownedGroups,
@@ -17,13 +18,17 @@ export default function GroupsCreatedSection({
       <HRow className="bg-custom-grey-text mb-1 mt-0" />
       <CreateGroupContainer />
       {!empty ? (
-        Object.keys(ownedGroups).map((groupID: string) => (
-          <GroupItem
-            key={groupID}
-            title={groupID}
-            subtitle={`Created on: ${ownedGroups[groupID]["createdOn"]}`}
-          />
-        ))
+        Object.keys(ownedGroups).map((groupID: string) => {
+          const timestamp = ownedGroups[groupID]["createdOn"];
+          const stringDate = TimestampToDateString(timestamp);
+          return (
+            <GroupItem
+              key={groupID}
+              title={groupID}
+              subtitle={`Created on: ${stringDate}`}
+            />
+          );
+        })
       ) : (
         <>
           <h1 className="text-custom-grey-text text-sm">

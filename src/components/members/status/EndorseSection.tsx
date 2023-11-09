@@ -4,6 +4,7 @@ import DefaultCard from "../../DefaultCard";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import EndorseStatus from "../../status/EndorseStatus";
 import { useRouter } from "next/navigation";
+import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 
 export default function EndorseSection({
   statusData,
@@ -31,7 +32,7 @@ export default function EndorseSection({
             Endorsed by: {statusData.endorsed.endorsedBy}
           </p>
           <p className="text-custom-dark-text text-sm">
-            Endorsed on: {statusData.endorsed.endorsedOn}
+            Endorsed on: {TimestampToDateString(statusData.endorsed.endorsedOn)}
           </p>
         </>
       )}

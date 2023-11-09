@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 import getCurrentDate from "../getCurrentDate";
 
 export type MEMBER_SCHEMA = {
@@ -17,12 +18,12 @@ export type MEMBER_SCHEMA = {
     [dateBookedIn: string]: { [memberID: string]: MEMBER_BOOKED_IN };
   };
 
-  createdOn: string; // date format
+  createdOn: Timestamp; // date format
 };
 
 export type MEMBER_BOOKED_IN = {
   memberID: string;
-  bookInOn: string; // date format
+  bookInOn: Timestamp; // date format
 };
 
 export type BADGE_SCHEMA = {
@@ -32,18 +33,18 @@ export type BADGE_SCHEMA = {
 };
 
 export type FRIENDS_SCHEMA = {
-  acceptedOn: string; // date format
+  acceptedOn: Timestamp; // date format
   friendID: string; // memberID
 };
 
 export type MEMBER_CREATED_GROUPS_SCHEMA = {
   groupID: string;
-  createdOn: string; // date format
+  createdOn: Timestamp; // date format
 };
 
 export type MEMBER_JOINED_GROUPS_SCHEMA = {
   groupID: string;
-  dateJoined: string; // date format
+  dateJoined: Timestamp; // date format
 };
 
 export function initMemberObject({

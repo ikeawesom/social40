@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 import getCurrentDate from "../getCurrentDate";
 
 export type ACTIVITY_SCHEMA = {
@@ -8,7 +9,7 @@ export type ACTIVITY_SCHEMA = {
   likes: number;
   createdBy: string; // memberID of owner
   createdByName?: string;
-  createdOn: string; // date formate
+  createdOn: Timestamp; // date formate
 };
 
 export function initActivityObject({

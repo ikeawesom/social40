@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type STATUS_SCHEMA = {
   statusID: string;
   statusTitle: string;
@@ -7,10 +9,10 @@ export type STATUS_SCHEMA = {
   endorsed: {
     status: boolean;
     endorsedBy: string; // memberID of endorsed admin
-    endorsedOn: string; // date endorsed
+    endorsedOn: Timestamp; // date endorsed
   };
-  startDate: string; // date format
-  endDate: string; // date format
+  startDate: Timestamp; // date format
+  endDate: Timestamp; // date format
 };
 
 export function initStatusObject({

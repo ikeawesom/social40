@@ -9,11 +9,14 @@ import HRow from "@/src/components/utils/HRow";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
-import { getActiveStatus } from "@/src/utils/getActiveStatus";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import { cookies } from "next/headers";
 import { Metadata } from "next";
+import {
+  ActiveTimestamp,
+  TimestampToDateString,
+} from "@/src/utils/getCurrentDate";
 
 export const metadata: Metadata = {
   title: "Status",
@@ -73,7 +76,7 @@ export default async function CustomStatusPage({
     if (!bodyA.status) throw new Error(bodyA.error);
     const statusData = bodyA.data as STATUS_SCHEMA;
 
-    const active = getActiveStatus(statusData.endDate);
+    const active = ActiveTimestamp(statusData.endDate);
     return (
       <>
         <HeaderBar back text={`Status`} />
@@ -94,10 +97,12 @@ export default async function CustomStatusPage({
               </h1>
               <h3 className="text-custom-dark-text">{statusData.statusDesc}</h3>
               <p className="text-custom-grey-text text-sm">
-                Start Date: {statusData.startDate}
+                Start Date:{" "}
+                {TimestampToDateString(statusData.startDate).split(" ")[0]}
               </p>
               <p className="text-custom-grey-text text-sm">
-                End Date: {statusData.endDate}
+                End Date:{" "}
+                {TimestampToDateString(statusData.endDate).split(" ")[0]}
               </p>
             </div>
           </DefaultCard>

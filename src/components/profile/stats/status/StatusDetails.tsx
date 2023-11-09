@@ -1,4 +1,5 @@
 "use client";
+import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -31,10 +32,10 @@ export function StatusDetails({ active, curStatus }: StatusDetailType) {
           {curStatus.statusDesc}
         </h3>
         <p className="text-custom-grey-text text-xs">
-          Start Date: {curStatus.startDate.split(" ")[0]}
+          Start Date: {TimestampToDateString(curStatus.startDate).split(" ")[0]}
         </p>
         <p className="text-custom-grey-text text-xs">
-          End Date: {curStatus.endDate.split(" ")[0]}
+          End Date: {TimestampToDateString(curStatus.endDate).split(" ")[0]}
         </p>
       </div>
       {!curStatus.endorsed.status && (

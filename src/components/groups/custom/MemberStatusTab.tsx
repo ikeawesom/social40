@@ -3,22 +3,19 @@ import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import Link from "next/link";
 import React from "react";
 import { twMerge } from "tailwind-merge";
-import { useRouter } from "next/navigation";
+import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 
 type MemberStatusType = {
-  adminID: string;
   memberID: string;
   active: boolean;
   statusData: STATUS_SCHEMA;
 };
 
 export default function MemberStatusTab({
-  adminID,
   memberID,
   active,
   statusData,
 }: MemberStatusType) {
-  const router = useRouter();
   const { endDate, startDate, statusTitle, statusDesc, endorsed, statusID } =
     statusData;
   return (
@@ -37,10 +34,10 @@ export default function MemberStatusTab({
             {statusTitle}
           </h1>
           <p className="text-custom-grey-text text-xs">
-            Start Date: {startDate.split(" ")[0]}
+            Start Date: {TimestampToDateString(startDate).split(" ")[0]}
           </p>
           <p className="text-custom-grey-text text-xs">
-            End Date: {endDate.split(" ")[0]}
+            End Date: {TimestampToDateString(endDate).split(" ")[0]}
           </p>
         </div>
       </div>

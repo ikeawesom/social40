@@ -1,12 +1,13 @@
+import { Timestamp } from "firebase/firestore";
 import getCurrentDate from "../getCurrentDate";
 
 export type EVENT_SCHEMA = {
   eventID: string;
   eventTitle: string;
   eventDesc: string;
-  eventDate: string; // date format
+  eventDate: Timestamp; // date format
   createdBy: string; // memberID of owner
-  createdOn: string; // date format
+  createdOn: Timestamp; // date format
 };
 
 export type REMARKS_SCHEMA = {
