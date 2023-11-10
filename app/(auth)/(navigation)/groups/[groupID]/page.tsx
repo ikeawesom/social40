@@ -82,15 +82,8 @@ export default async function GroupPage({
         list: memberIDList,
       };
 
-      const resC = await fetch(`${host}/api/groups/statuses`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(to_send),
-        cache: "no-store" as "no-store",
-      });
-
+      const StatusObj = GetPostObj(to_send);
+      const resC = await fetch(`${host}/api/groups/statuses`, StatusObj);
       const bodyC = await resC.json();
 
       if (!bodyC.status) throw new Error(bodyC.error);
@@ -127,6 +120,9 @@ export default async function GroupPage({
       });
 
       const groupMembersData = groupMembersDataObj as MembersDataType;
+
+      // get group activities
+      const resD = await fetch(`${host}/api/groups/get-activities`, PostObj);
 
       return (
         <>
