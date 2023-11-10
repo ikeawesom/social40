@@ -18,7 +18,7 @@ export default function SecondaryButton(props: ButtonType) {
       type={props.type ? props.type : "button"}
       className={twMerge(
         "bg-white text-custom-dark-text border-[1px] border-custom-light-text",
-        `${props.disabled ? "opacity-70" : ""}`,
+        `${props.disabled ? "opacity-70 cursor-not-allowed" : ""}`,
         props.className
       )}
     >

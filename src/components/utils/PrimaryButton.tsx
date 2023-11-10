@@ -18,7 +18,11 @@ export default function PrimaryButton(props: ButtonType) {
       type={props.type ? props.type : "button"}
       className={twMerge(
         "shadow-sm text-sm duration-200 ease-in-out w-full rounded-lg bg-custom-primary text-custom-light-text px-6 py-2",
-        `${props.disabled ? "opacity-70" : "hover:brightness-95"}`,
+        `${
+          props.disabled
+            ? "opacity-70 cursor-not-allowed"
+            : "hover:brightness-95"
+        }`,
         props.className
       )}
     >
