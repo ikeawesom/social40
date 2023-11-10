@@ -32,8 +32,11 @@ export function TimestampToDate(timestamp: Timestamp) {
 // to register into firestore
 export default function getCurrentDate() {
   const currentdate = new Date();
-  const stamp = Timestamp.fromDate(currentdate);
-  return stamp;
+  return DateToTimestamp(currentdate);
+}
+
+export function DateToTimestamp(date: Date) {
+  return Timestamp.fromDate(date);
 }
 
 export function getCurrentDateString() {
@@ -41,32 +44,75 @@ export function getCurrentDateString() {
   return DateToString(date);
 }
 
-export function StringToTimestamp(str: string) {
-  const strArr = str.split("/");
-  if (strArr.length === 3) {
-    const day = strArr[0];
-    const month = strArr[1];
-    const year = strArr[2];
-    if (year.length === 4 && month.length === 2 && day.length === 2) {
-      const dayInt = Number.parseInt(day);
-      const monthInt = Number.parseInt(month);
-      const yearInt = Number.parseInt(year);
-      if (yearInt >= 2023 && monthInt >= 1 && monthInt <= 12 && dayInt >= 1) {
+export function StringToDate(str: string) {
+  try {
+    const strArr = str.split(" ");
+
+    if (strArr.length === 2) {
+      const dateStr = strArr[0];
+      const timeStr = strArr[1];
+      const timeArr = timeStr.split(":");
+      const dateArr = dateStr.split("/");
+      if (dateArr.length === 3 && timeArr.length === 2) {
+        const day = dateArr[0];
+        const month = dateArr[1];
+        const year = dateArr[2];
+
+        const hour = timeArr[0];
+        const minute = timeArr[1];
+
         if (
-          (monthInt === 2 && dayInt <= 29) ||
-          (monthInt !== 2 && dayInt <= 31)
+          year.length === 4 &&
+          month.length === 2 &&
+          day.length === 2 &&
+          hour.length === 2 &&
+          minute.length === 2
         ) {
-          const date = new Date(yearInt, monthInt - 1, dayInt, 23, 59);
-          const timestamp = Timestamp.fromDate(date) as Timestamp;
-          return handleResponses({ data: timestamp });
+          const dayInt = Number.parseInt(day);
+          const monthInt = Number.parseInt(month);
+          const yearInt = Number.parseInt(year);
+
+          const hourInt = Number.parseInt(hour);
+          const minuteInt = Number.parseInt(minute);
+          if (
+            yearInt >= 2023 &&
+            monthInt >= 1 &&
+            monthInt <= 12 &&
+            dayInt >= 1 &&
+            hourInt >= 0 &&
+            hourInt <= 23 &&
+            minuteInt >= 0 &&
+            minuteInt <= 59
+          ) {
+            if (
+              (monthInt === 2 && dayInt <= 29) ||
+              (monthInt !== 2 && dayInt <= 31)
+            ) {
+              const date = new Date(
+                yearInt,
+                monthInt - 1,
+                dayInt,
+                hourInt,
+                minuteInt
+              );
+              return handleResponses({ data: date });
+            }
+          }
         }
       }
     }
+    throw new Error("Invalid date format. Please check again.");
+  } catch (err: any) {
+    return handleResponses({
+      status: false,
+      error: err.message,
+    });
   }
-  return handleResponses({
-    status: false,
-    error: "Invalid date format. Please check again.",
-  });
+}
+export function StringToTimestamp(str: string) {
+  const res = StringToDate(str);
+  if (!res.status) return handleResponses({ status: false, error: res.error });
+  return handleResponses({ data: DateToTimestamp(res.data) });
 }
 
 export function ActiveTimestamp(timestamp: Timestamp) {
