@@ -3,6 +3,7 @@ import HRow from "../utils/HRow";
 import SearchGroups from "./SearchGroups";
 import GroupItem from "./GroupItem";
 import { MemberGroupsType } from "@/src/utils/groups/getJoinedGroups";
+import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 
 export default function GroupsJoinedSection({
   joinedGroups,
@@ -21,7 +22,9 @@ export default function GroupsJoinedSection({
           <GroupItem
             key={groupID}
             title={groupID}
-            subtitle={`Joined on: ${joinedGroups[groupID]["dateJoined"]}`}
+            subtitle={`Joined on: ${TimestampToDateString(
+              joinedGroups[groupID]["dateJoined"]
+            )}`}
           />
         ))
       ) : (
