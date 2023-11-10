@@ -20,7 +20,9 @@ import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import GroupLeaderboard, {
   MembersDataType,
 } from "@/src/components/groups/custom/GroupLeaderboard";
-import GroupActivities from "@/src/components/groups/custom/GroupActivities";
+import GroupActivities, {
+  GroupActivitiesType,
+} from "@/src/components/groups/custom/GroupActivities";
 
 export async function generateMetadata({
   params,
@@ -123,6 +125,11 @@ export default async function GroupPage({
 
       // get group activities
       const resD = await fetch(`${host}/api/groups/get-activities`, PostObj);
+      const bodyD = await resD.json();
+
+      if (!bodyD.status) throw new Error(bodyD.error);
+
+      const groupActivitiesData = bodyD.data as GroupActivitiesType;
 
       return (
         <>
@@ -142,7 +149,11 @@ export default async function GroupPage({
                   membersList={groupMembers}
                 />
                 <GroupLeaderboard memberData={groupMembersData} />
-                <GroupActivities />
+                <GroupActivities
+                  groupID={groupID}
+                  owner={owner}
+                  activitiesData={groupActivitiesData}
+                />
                 {admin && (
                   <GroupStatusSection
                     adminID={memberID}
