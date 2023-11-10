@@ -1,6 +1,7 @@
 import Hero from "@/src/components/Hero";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import InstallButton from "@/src/utils/InstallButton";
+import { VERSION_DESC, VERSION_NUMBER } from "@/src/utils/constants";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import Image from "next/image";
@@ -48,8 +49,7 @@ export default async function Home() {
           )}
         </div>
         <p className="text-custom-grey-text text-center text-sm">
-          v0.1.0: Please note that this is still a beta testing version. Some
-          features may still be unstable.
+          v{VERSION_NUMBER}: {VERSION_DESC}
         </p>
       </div>
     </div>

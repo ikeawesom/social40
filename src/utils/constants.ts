@@ -76,3 +76,46 @@ export const BADGE_COLORS = {
 } as { [key: string]: string };
 
 export const MAX_LENGTH = 30;
+
+export const VERSION_MAP = {
+  "0.1.0": {
+    version: "0.1.0",
+    desc: "Please note that this is still a beta testing version. Some features may still be unstable.",
+    updates: [],
+  },
+  "0.1.1": {
+    version: "0.1.1",
+    desc: "Please note that this is still a beta testing version. Some features may still be unstable.",
+    updates: [
+      "Status feature are now available for both members and groups.",
+      "Commanders and above can now endorse statuses of others, NOT themselves.",
+    ],
+  },
+  "0.1.1.1": {
+    version: "0.1.1.1",
+    desc: "Please note that this is still a beta testing version. Some features may still be unstable.",
+    updates: [
+      "COS, commanders and above can now view the BIBO statuses of members with a simple member ID search.",
+      "BIBO statuses can now be generated into excel sheets for easier references.",
+    ],
+  },
+  "0.1.2": {
+    version: "0.1.2",
+    desc: "Please note that this is still a beta testing version. Some features may still be unstable.",
+    updates: [
+      "Group activities can now be added via the group dashboard by the group owner",
+    ],
+  },
+} as {
+  [versionNumber: string]: {
+    version: string;
+    desc: string;
+    updates: string[];
+  };
+};
+
+export const VERSION_NUMBER = Object.keys(VERSION_MAP)[
+  Object.keys(VERSION_MAP).length - 1
+] as string;
+export const VERSION_DESC = VERSION_MAP[VERSION_NUMBER].desc;
+export const VERSION_UPDATES = VERSION_MAP[VERSION_NUMBER].updates;
