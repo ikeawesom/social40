@@ -46,13 +46,18 @@ export default async function ActivityPage({
       return (
         <>
           <HeaderBar back text={title} />
-          {view ? (
-            <GroupActivityData id={query["id"]} />
-          ) : (
-            <DefaultCard className="w-full max-w-[500px]">
-              <CreateGroupActivityForm memberID={memberID} groupID={groupID} />
-            </DefaultCard>
-          )}
+          <div className="w-full grid place-items-center">
+            {view ? (
+              <GroupActivityData id={query["id"]} />
+            ) : (
+              <DefaultCard className="w-full max-w-[500px]">
+                <CreateGroupActivityForm
+                  memberID={memberID}
+                  groupID={groupID}
+                />
+              </DefaultCard>
+            )}
+          </div>
         </>
       );
     } catch (err) {

@@ -80,44 +80,48 @@ export default async function CustomStatusPage({
     return (
       <>
         <HeaderBar back text={`Status`} />
-        <div className="flex flex-col items-start justify-center gap-4 w-full max-w-[500px]">
-          <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
-            <div className="w-full flex flex-col items-start justify-center">
-              <h1 className="text-custom-dark-text font-semibold text-start">
-                {memberID}
-              </h1>
-              <HRow />
-            </div>
-            <div className="flex flex-col w-full items-start justify-center">
-              <p className="text-custom-grey-text text-sm">
-                Prescribed by: {statusData.doctor}
-              </p>
-              <h1 className="text-custom-dark-text text-xl">
-                {statusData.statusTitle}
-              </h1>
-              <h3 className="text-custom-dark-text">{statusData.statusDesc}</h3>
-              <p className="text-custom-grey-text text-sm">
-                Start Date:{" "}
-                {TimestampToDateString(statusData.startDate).split(" ")[0]}
-              </p>
-              <p className="text-custom-grey-text text-sm">
-                End Date:{" "}
-                {TimestampToDateString(statusData.endDate).split(" ")[0]}
-              </p>
-            </div>
-          </DefaultCard>
-          <ActiveStatusSection active={active} />
+        <div className="w-full grid place-items-center">
+          <div className="flex flex-col items-start justify-center gap-4 w-full max-w-[500px]">
+            <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
+              <div className="w-full flex flex-col items-start justify-center">
+                <h1 className="text-custom-dark-text font-semibold text-start">
+                  {memberID}
+                </h1>
+                <HRow />
+              </div>
+              <div className="flex flex-col w-full items-start justify-center">
+                <p className="text-custom-grey-text text-sm">
+                  Prescribed by: {statusData.doctor}
+                </p>
+                <h1 className="text-custom-dark-text text-xl">
+                  {statusData.statusTitle}
+                </h1>
+                <h3 className="text-custom-dark-text">
+                  {statusData.statusDesc}
+                </h3>
+                <p className="text-custom-grey-text text-sm">
+                  Start Date:{" "}
+                  {TimestampToDateString(statusData.startDate).split(" ")[0]}
+                </p>
+                <p className="text-custom-grey-text text-sm">
+                  End Date:{" "}
+                  {TimestampToDateString(statusData.endDate).split(" ")[0]}
+                </p>
+              </div>
+            </DefaultCard>
+            <ActiveStatusSection active={active} />
 
-          {/* Commander's who do not own the status can view */}
-          {/* Anyone can only view once their status has been endorsed */}
-          {((commanderRole && !sameMember) ||
-            (sameMember && statusData.endorsed.status)) && (
-            <EndorseSection
-              adminID={adminID}
-              memberID={memberID}
-              statusData={statusData}
-            />
-          )}
+            {/* Commander's who do not own the status can view */}
+            {/* Anyone can only view once their status has been endorsed */}
+            {((commanderRole && !sameMember) ||
+              (sameMember && statusData.endorsed.status)) && (
+              <EndorseSection
+                adminID={adminID}
+                memberID={memberID}
+                statusData={statusData}
+              />
+            )}
+          </div>
         </div>
       </>
     );
