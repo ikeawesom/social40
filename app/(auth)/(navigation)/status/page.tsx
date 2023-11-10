@@ -20,7 +20,7 @@ export default async function StatusPage() {
     return (
       <>
         <HeaderBar back text="Add Status" />
-        <div className="flex flex-col items-start justify-center gap-4">
+        <div className="flex flex-col items-start justify-center gap-4 max-w-[500px]">
           <CreateStatus memberID={memberID} />
           <QuickStatusLinks />
         </div>
