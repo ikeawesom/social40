@@ -69,7 +69,7 @@ export default async function GroupActivityData({ id }: { id: string }) {
               <Link
                 key={memberID}
                 href={`/members/${memberID}`}
-                className="w-full flex flex-col items-start justify-center py-2 px-3"
+                className="w-full flex flex-col items-start justify-center py-2 px-3 duration-200 hover:bg-custom-light-text"
               >
                 <h1 className="text-custom-dark-text font-semibold">
                   {memberID}
