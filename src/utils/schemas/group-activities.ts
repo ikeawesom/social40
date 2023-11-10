@@ -10,8 +10,18 @@ export type GROUP_ACTIVITY_SCHEMA = {
   activityDate: Timestamp; // date format
   participants: string[]; // array of memberIDs of participants
 
+  duration: {
+    active: boolean;
+    dateCutOff: Timestamp;
+  };
+
   createdBy: string; // memberID of owner
   createdOn: Timestamp; // date format
+};
+
+export type GROUP_ACTIVITY_PARTICIPANT = {
+  memberID: string;
+  dateJoined: Timestamp;
 };
 
 export type REMARKS_SCHEMA = {
