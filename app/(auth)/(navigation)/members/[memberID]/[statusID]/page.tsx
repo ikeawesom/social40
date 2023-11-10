@@ -80,7 +80,7 @@ export default async function CustomStatusPage({
     return (
       <>
         <HeaderBar back text={`Status`} />
-        <div className="flex flex-col items-start justify-center gap-4">
+        <div className="flex flex-col items-start justify-center gap-4 w-full max-w-[500px]">
           <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
             <div className="w-full flex flex-col items-start justify-center">
               <h1 className="text-custom-dark-text font-semibold text-start">

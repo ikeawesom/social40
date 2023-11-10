@@ -20,7 +20,9 @@ import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import GroupLeaderboard, {
   MembersDataType,
 } from "@/src/components/groups/custom/GroupLeaderboard";
-import GroupActivities from "@/src/components/groups/custom/GroupActivities";
+import GroupActivities, {
+  GroupActivitiesType,
+} from "@/src/components/groups/custom/GroupActivities";
 
 export async function generateMetadata({
   params,
@@ -82,15 +84,8 @@ export default async function GroupPage({
         list: memberIDList,
       };
 
-      const resC = await fetch(`${host}/api/groups/statuses`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(to_send),
-        cache: "no-store" as "no-store",
-      });
-
+      const StatusObj = GetPostObj(to_send);
+      const resC = await fetch(`${host}/api/groups/statuses`, StatusObj);
       const bodyC = await resC.json();
 
       if (!bodyC.status) throw new Error(bodyC.error);
@@ -128,6 +123,14 @@ export default async function GroupPage({
 
       const groupMembersData = groupMembersDataObj as MembersDataType;
 
+      // get group activities
+      const resD = await fetch(`${host}/api/groups/get-activities`, PostObj);
+      const bodyD = await resD.json();
+
+      if (!bodyD.status) throw new Error(bodyD.error);
+
+      const groupActivitiesData = bodyD.data as GroupActivitiesType;
+
       return (
         <>
           <HeaderBar back text={groupID} />
@@ -146,7 +149,11 @@ export default async function GroupPage({
                   membersList={groupMembers}
                 />
                 <GroupLeaderboard memberData={groupMembersData} />
-                <GroupActivities />
+                <GroupActivities
+                  groupID={groupID}
+                  owner={owner}
+                  activitiesData={groupActivitiesData}
+                />
                 {admin && (
                   <GroupStatusSection
                     adminID={memberID}

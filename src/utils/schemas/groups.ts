@@ -9,9 +9,12 @@ export type GROUP_SCHEMA = {
   createdOn: Timestamp;
 };
 
-export type GROUP_EVENTS_SCHEMA = {
-  eventID: string; // eventID of event linked to group
-  groupID: string; // groupID of group containing event
+export type GROUP_ACTIVITIES_SCHEMA = {
+  activityID: string; // activityID of activity linked to group
+  groupID: string; // groupID of group
+  activityTitle: string; // title of activity
+  activityDesc: string; // description of activity
+  activityDate: Timestamp; // date of activity
 };
 
 export type GROUP_MEMBERS_SCHEMA = {

@@ -1,15 +1,13 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import ChangePasswordSection from "@/src/components/profile/edit/change-pass/ChangePasswordSection";
-import ChangePasswordForm from "@/src/components/profile/edit/change-pass/ChangePasswordForm";
-import CreateNewMemberForm from "@/src/components/profile/edit/new-member/CreateNewMemberForm";
 import EditProfileForm from "@/src/components/profile/edit/EditProfileForm";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import HRow from "@/src/components/utils/HRow";
 import SignoutButton from "@/src/components/utils/SignoutButton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import { ROLES_HIERARCHY } from "@/src/utils/constants";
+import { ROLES_HIERARCHY, VERSION_NUMBER } from "@/src/utils/constants";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
 import Image from "next/image";
@@ -74,7 +72,7 @@ export default async function EditProfilePage() {
             <SignoutButton />
           </div>
           <p className="text-custom-grey-text text-center text-sm my-6">
-            v0.1.0
+            v{VERSION_NUMBER}
           </p>
         </div>
       </>

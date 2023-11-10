@@ -97,8 +97,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ status: true });
   } else if (option === "set-status") {
     const data = fetchedData.status as StatusInputType;
-    const startTimestamp = StringToTimestamp(data.start);
-    const endTimestamp = StringToTimestamp(data.end);
+
+    const startDate = `${data.start} 23:59`;
+    const endDate = `${data.end} 23:59`;
+    const startTimestamp = StringToTimestamp(startDate);
+    const endTimestamp = StringToTimestamp(endDate);
 
     if (!startTimestamp.status || !endTimestamp.status)
       return NextResponse.json({
