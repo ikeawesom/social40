@@ -32,7 +32,7 @@ export default async function GroupActivityData({ id }: { id: string }) {
   const active = ActiveTimestamp(date);
   const dateStr = TimestampToDateString(date);
   return (
-    <div className="w-full flex flex-col items-start justify-center gap-4">
+    <div className="w-full flex flex-col items-start justify-center gap-4 max-w-[500px]">
       <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
         <div className="w-full flex flex-col items-start justify-center">
           <h1 className="text-custom-dark-text font-semibold text-xl">

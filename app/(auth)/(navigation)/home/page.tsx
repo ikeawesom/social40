@@ -17,7 +17,7 @@ export default async function Home() {
     return (
       <>
         <HeaderBar text="Home" />
-        <div className="flex flex-col w-full items-center justify-start gap-4">
+        <div className="flex flex-col w-full items-center justify-start gap-4 max-w-[500px]">
           <ComingSoonCard text="Group Activities" />
           <ComingSoonCard text="Friends Activities" />
         </div>
