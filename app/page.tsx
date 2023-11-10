@@ -48,9 +48,17 @@ export default async function Home() {
             </Link>
           )}
         </div>
-        <p className="text-custom-grey-text text-center text-sm">
-          v{VERSION_NUMBER}: {VERSION_DESC}
-        </p>
+        <div className="flex flex-col gap-2 items-center justify-center">
+          <p className="text-custom-grey-text text-center text-sm">
+            v{VERSION_NUMBER}: {VERSION_DESC}
+          </p>
+          <Link
+            href="/docs/updates"
+            className="text-custom-grey-text text-sm hover:underline duration-200"
+          >
+            View updates
+          </Link>
+        </div>
       </div>
     </div>
   );
