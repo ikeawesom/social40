@@ -11,10 +11,10 @@ export type GROUP_SCHEMA = {
 
 export type GROUP_ACTIVITIES_SCHEMA = {
   activityID: string; // activityID of activity linked to group
+  groupID: string; // groupID of group
   activityTitle: string; // title of activity
+  activityDesc: string; // description of activity
   activityDate: Timestamp; // date of activity
-  createdOn: Timestamp; // date created
-  createdBy: string; // memberID of owner
 };
 
 export type GROUP_MEMBERS_SCHEMA = {
