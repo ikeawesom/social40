@@ -194,6 +194,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ status: false, error: resA.error });
 
     return NextResponse.json({ status: true });
+  } else if (option === "get-activities") {
+    const res = await dbHandler.getSpecific({
+      path: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
+      orderCol: "activityDate",
+      ascending: true,
+    });
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    return NextResponse.json({ data: res.data, status: true });
   }
   return NextResponse.json({
     status: false,
