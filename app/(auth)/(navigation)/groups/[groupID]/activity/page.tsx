@@ -49,7 +49,7 @@ export default async function ActivityPage({
           {view ? (
             <GroupActivityData id={query["id"]} />
           ) : (
-            <DefaultCard className="w-full">
+            <DefaultCard className="w-full max-w-[500px]">
               <CreateGroupActivityForm memberID={memberID} groupID={groupID} />
             </DefaultCard>
           )}
