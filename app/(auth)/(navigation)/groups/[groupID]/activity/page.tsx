@@ -39,16 +39,18 @@ export default async function ActivityPage({
       const groupPostObj = GetPostObj({ groupID, memberID });
       const res = await fetch(`${host}/api/groups/memberof`, groupPostObj);
       const body = await res.json();
-      // make sure only owners can access page
-      if (!body.status || body.data.role !== "owner")
-        return <RestrictedScreen />;
 
+      let owner = false;
+      if (body.status) owner = body.data.role === "owner";
+
+      // only group owners can create new activities
+      if (!view && !owner) return <RestrictedScreen />;
       return (
         <>
           <HeaderBar back text={title} />
           <div className="w-full grid place-items-center">
             {view ? (
-              <GroupActivityData id={query["id"]} />
+              <GroupActivityData activityID={query["id"]} groupID={groupID} />
             ) : (
               <DefaultCard className="w-full max-w-[500px]">
                 <CreateGroupActivityForm
