@@ -198,6 +198,26 @@ export async function POST(req: NextRequest) {
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
     return NextResponse.json({ status: true });
+  } else if (option === "group-leave") {
+    // delete member from group subcollection
+    const res = await dbHandler.delete({
+      col_name: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
+      id: memberID,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    // delete group from member's joined activities
+    const resA = await dbHandler.delete({
+      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+      id: activityID,
+    });
+
+    if (!resA.status)
+      return NextResponse.json({ status: false, error: resA.error });
+
+    return NextResponse.json({ status: true });
   }
 
   return NextResponse.json({
