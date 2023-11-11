@@ -29,6 +29,7 @@ export default function CreateGroupActivityForm({
       endDate: "",
       endTime: "",
     },
+    restrict: false,
   });
   const [loading, setLoading] = useState(false);
 
@@ -115,7 +116,22 @@ export default function CreateGroupActivityForm({
           onChange={handleChange}
         />
       </FormInputContainer>
-
+      <div className="flex items-center justify-start gap-2">
+        <input
+          type="checkbox"
+          id="restrict"
+          className="h-fit flex-1"
+          onChange={() =>
+            setInput({
+              ...input,
+              restrict: !input.restrict,
+            })
+          }
+        />
+        <label htmlFor="restrict" className="flex-3 text-sm">
+          Restrict this activity for group members only
+        </label>
+      </div>
       <div className="flex items-center justify-start gap-2">
         <input
           type="checkbox"
@@ -129,7 +145,7 @@ export default function CreateGroupActivityForm({
           }
         />
         <label htmlFor="duration" className="flex-3 text-sm">
-          Set a time limit for members to join this activity.
+          Set a time limit for members to join this activity (Recommended)
         </label>
       </div>
       {input.duration.active && (

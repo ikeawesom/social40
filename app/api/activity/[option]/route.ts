@@ -7,6 +7,7 @@ import {
   GROUP_ACTIVITY_SCHEMA,
 } from "@/src/utils/schemas/group-activities";
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
+import { ACTIVITY_PARTICIPANT_SCHEMA } from "@/src/utils/schemas/members";
 import { Timestamp } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
   const { option } = getMethod(req.url);
   const fetchedData = await req.json();
 
-  const { memberID, groupID } = fetchedData;
+  const { memberID, groupID, activityID } = fetchedData;
 
   if (option === "group-create") {
     const { input } = fetchedData;
@@ -44,6 +45,7 @@ export async function POST(req: NextRequest) {
       createdOn,
       participants: [memberID],
       groupID,
+      groupRestriction: input.restrict,
       duration: {
         active: durationEnabled,
         dateCutOff: cutOff,
@@ -95,16 +97,17 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ status: true });
   } else if (option === "get") {
-    const { id } = fetchedData;
-
     // fetch activity data
-    const res = await dbHandler.get({ col_name: "GROUP-ACTIVITIES", id });
+    const res = await dbHandler.get({
+      col_name: "GROUP-ACTIVITIES",
+      id: activityID,
+    });
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
 
     // fetch participants data
     const resA = await dbHandler.getDocs({
-      col_name: `GROUP-ACTIVITIES/${id}/PARTICIPANTS`,
+      col_name: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
     });
     if (!resA.status)
       return NextResponse.json({ status: false, error: resA.error });
@@ -123,6 +126,33 @@ export async function POST(req: NextRequest) {
     const to_send = { activityData: res.data, participantsData: participants };
 
     return NextResponse.json({ status: true, data: to_send });
+  } else if (option === "group-participate") {
+    const date = getCurrentDate();
+    const to_add = {
+      memberID,
+      dateJoined: date,
+    } as GROUP_ACTIVITY_PARTICIPANT;
+
+    const res = await dbHandler.add({
+      col_name: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
+      id: memberID,
+      to_add,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    const to_addA = { dateJoined: date } as ACTIVITY_PARTICIPANT_SCHEMA;
+    const resA = await dbHandler.add({
+      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+      id: activityID,
+      to_add: to_addA,
+    });
+
+    if (!resA.status)
+      return NextResponse.json({ status: false, error: resA.error });
+
+    return NextResponse.json({ status: true });
   }
   return NextResponse.json({
     status: false,
