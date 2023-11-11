@@ -15,6 +15,8 @@ export type GROUP_ACTIVITY_SCHEMA = {
     dateCutOff: Timestamp;
   };
 
+  groupRestriction: boolean;
+
   createdBy: string; // memberID of owner
   createdOn: Timestamp; // date format
 };
