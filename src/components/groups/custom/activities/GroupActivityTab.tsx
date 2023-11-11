@@ -28,7 +28,7 @@ export default function GroupActivityTab({
         {activityData.activityDesc}
       </h4>
       <p className="text-custom-grey-text text-xs">
-        {active ? "Begins on: " : "Ends on: "}
+        {active ? "Begins on: " : "Ended on: "}
         {dateStr}
       </p>
     </Link>
