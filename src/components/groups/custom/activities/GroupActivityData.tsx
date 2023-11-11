@@ -114,22 +114,21 @@ export default async function GroupActivityData({
               </p>
             </div>
           </DefaultCard>
-          <DefaultCard className="w-full">
-            {!currrentParticipant ? (
-              <JoinGroupActivityButton
-                activityID={activityID}
-                memberID={memberID}
-                canJoin={canJoin}
-                requested={requested}
-              />
-            ) : (
+          {!currrentParticipant ? (
+            <JoinGroupActivityButton
+              activityID={activityID}
+              memberID={memberID}
+              canJoin={canJoin}
+              requested={requested}
+            />
+          ) : (
+            !owner && (
               <LeaveActivityButton
                 activityID={activityID}
                 memberID={memberID}
-                owner={owner}
               />
-            )}
-          </DefaultCard>
+            )
+          )}
           <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
             <div className="w-full flex flex-col items-start justify-center">
               <h1 className="text-custom-dark-text font-semibold">
