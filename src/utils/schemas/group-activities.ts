@@ -26,6 +26,11 @@ export type GROUP_ACTIVITY_PARTICIPANT = {
   dateJoined: Timestamp;
 };
 
+export type GROUP_ACTIVITY_WAITLIST = {
+  memberID: string;
+  dateRequested: Timestamp;
+};
+
 export type REMARKS_SCHEMA = {
   remarkID: string;
   memberID: string; // memberID of member who added the remark
