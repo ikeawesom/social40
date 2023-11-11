@@ -5,6 +5,7 @@ import handleResponses from "@/src/utils/handleResponses";
 import {
   GROUP_ACTIVITY_PARTICIPANT,
   GROUP_ACTIVITY_SCHEMA,
+  GROUP_ACTIVITY_WAITLIST,
 } from "@/src/utils/schemas/group-activities";
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
 import { ACTIVITY_PARTICIPANT_SCHEMA } from "@/src/utils/schemas/members";
@@ -96,7 +97,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: false, error: resB.error });
 
     return NextResponse.json({ status: true });
-  } else if (option === "get") {
+  } else if (option === "group-get") {
     // fetch activity data
     const res = await dbHandler.get({
       col_name: "GROUP-ACTIVITIES",
@@ -126,8 +127,35 @@ export async function POST(req: NextRequest) {
     const to_send = { activityData: res.data, participantsData: participants };
 
     return NextResponse.json({ status: true, data: to_send });
+  } else if (option === "group-get-requests") {
+    const res = await dbHandler.getSpecific({
+      path: `GROUP-ACTIVITIES/${activityID}/WAITLIST`,
+      orderCol: "dateRequested",
+      ascending: false,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    return NextResponse.json({ status: true, data: res.data });
+  } else if (option === "group-request") {
+    const date = getCurrentDate();
+    const to_add = {
+      memberID,
+      dateRequested: date,
+    } as GROUP_ACTIVITY_WAITLIST;
+
+    const res = await dbHandler.add({
+      col_name: `GROUP-ACTIVITIES/${activityID}/WAITLIST`,
+      id: memberID,
+      to_add,
+    });
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+    return NextResponse.json({ status: true });
   } else if (option === "group-participate") {
     const date = getCurrentDate();
+    // add to group participants subcollection
     const to_add = {
       memberID,
       dateJoined: date,
@@ -142,6 +170,15 @@ export async function POST(req: NextRequest) {
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
 
+    // remove from activity waitlist
+    const resB = await dbHandler.delete({
+      col_name: `GROUP-ACTIVITIES/${activityID}/WAITLIST`,
+      id: memberID,
+    });
+    if (!resB.status)
+      return NextResponse.json({ status: false, error: resB.error });
+
+    // add to member's group activities subcollection
     const to_addA = { dateJoined: date } as ACTIVITY_PARTICIPANT_SCHEMA;
     const resA = await dbHandler.add({
       col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
@@ -153,7 +190,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: false, error: resA.error });
 
     return NextResponse.json({ status: true });
+  } else if (option === "group-reject") {
+    const res = await dbHandler.delete({
+      col_name: `GROUP-ACTIVITIES/${activityID}/WAITLIST`,
+      id: memberID,
+    });
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+    return NextResponse.json({ status: true });
   }
+
   return NextResponse.json({
     status: false,
     error: "Invalid method provided to API request.",
