@@ -43,9 +43,11 @@ export default function CreateGroupActivityForm({
 
       if (!body.status) throw new Error(body.error);
 
-      toast.success("Created activity");
       router.refresh();
-      router.back();
+      router.replace(
+        `/groups/${groupID}/activity?${new URLSearchParams({ id: body.data })}`
+      );
+      toast.success("Created activity");
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -145,7 +147,7 @@ export default function CreateGroupActivityForm({
           }
         />
         <label htmlFor="duration" className="flex-3 text-sm">
-          Set a time limit for members to join this activity (Recommended)
+          Set a time limit for members to join this activity
         </label>
       </div>
       {input.duration.active && (
