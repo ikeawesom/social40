@@ -8,18 +8,15 @@ import {
   ActiveTimestamp,
   TimestampToDateString,
 } from "@/src/utils/getCurrentDate";
-import {
-  GROUP_ACTIVITY_PARTICIPANT,
-  GROUP_ACTIVITY_SCHEMA,
-} from "@/src/utils/schemas/group-activities";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import React from "react";
 import JoinGroupActivityButton from "./JoinGroupActivityButton";
-import ActivityWaitlist, { ActivityWaitlistType } from "./ActivityWaitlist";
+import ActivityWaitlist from "./ActivityWaitlist";
 import LeaveActivityButton from "./LeaveActivityButton";
 import GroupActivitySettings from "./GroupActivitySettings";
 import DeleteGroupActivity from "./DeleteGroupActivity";
+import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
 
 export default async function GroupActivityData({
   activityID,
@@ -32,64 +29,30 @@ export default async function GroupActivityData({
   const cookieStore = cookies();
 
   const data = cookieStore.get("memberID");
-  const host = process.env.HOST;
 
   if (data) {
     const memberID = data.value;
 
     try {
-      // check if logged in member is member of group
-      const UserObj = GetPostObj({ memberID, groupID });
-      const res = await fetch(`${host}/api/groups/memberof`, UserObj);
-      const body = await res.json();
+      const res = await FetchGroupActivityData({
+        activityID,
+        groupID,
+        memberID,
+      });
+      if (!res.status) throw new Error(res.error);
 
-      // get group activity data
-      const PostObjActivity = GetPostObj({ activityID });
-      const resA = await fetch(
-        `${host}/api/activity/group-get`,
-        PostObjActivity
-      );
-      const bodyA = await resA.json();
-
-      if (!bodyA.status) throw new Error(bodyA.error);
-
-      const activityData = bodyA.data.activityData as GROUP_ACTIVITY_SCHEMA;
-      const participantsData = bodyA.data.participantsData as {
-        [memberID: string]: GROUP_ACTIVITY_PARTICIPANT;
-      };
-
-      let currrentParticipant = false;
-
-      if (memberID in participantsData) currrentParticipant = true;
-
-      const date = activityData.activityDate;
-      const dateStr = TimestampToDateString(date);
-
-      const active = ActiveTimestamp(date);
-      const restrictionStatus = activityData.groupRestriction;
-      const currentMember = body.status;
-
-      const canJoin =
-        (!restrictionStatus || (currentMember && restrictionStatus)) &&
-        active &&
-        !currrentParticipant;
-
-      const owner = body.status ? body.data.role === "owner" : false;
-
-      // get group activity requests
-      const resB = await fetch(
-        `${host}/api/activity/group-get-requests`,
-        PostObjActivity
-      );
-      const bodyB = await resB.json();
-
-      if (!bodyB.status) throw new Error(bodyB.error);
-
-      const requestsData = bodyB.data as ActivityWaitlistType;
-      const noRequests = Object.keys(requestsData).length === 0;
-
-      // check if current member is in waiting list
-      const requested = memberID in requestsData;
+      const {
+        requested,
+        noRequests,
+        owner,
+        canJoin,
+        active,
+        dateStr,
+        requestsData,
+        activityData,
+        currentParticipant,
+        participantsData,
+      } = res.data;
 
       return (
         <div className="w-full flex flex-col items-start justify-center gap-4 max-w-[500px]">
@@ -122,7 +85,7 @@ export default async function GroupActivityData({
               </p>
             </div>
           </DefaultCard>
-          {!currrentParticipant ? (
+          {!currentParticipant ? (
             <JoinGroupActivityButton
               active={active}
               activityID={activityID}
