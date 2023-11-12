@@ -35,7 +35,7 @@ export default function LeaveActivityButton({
       if (!body.status) throw new Error(body.error);
       router.refresh();
       router.back();
-      toast.success("Left group");
+      toast.success("Left activity");
     } catch (err: any) {
       toast.error(err.message);
     }
