@@ -29,7 +29,7 @@ export default async function GroupFeedCard({
 
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-start">
-        <p className="text-sm text-custom-grey-text">{groupID}</p>
+        <p className="text-xs text-custom-grey-text">{groupID}</p>
         <HRow className="mb-2" />
         <Link
           href={`/groups/${activityData.groupID}/activity?${new URLSearchParams(
@@ -37,12 +37,12 @@ export default async function GroupFeedCard({
               id: activityID,
             }
           )}`}
-          className="text-start font-semibold text-xl text-custom-dark-text duration-200 hover:opacity-70"
+          className="text-start font-semibold text-lg text-custom-dark-text duration-200 hover:opacity-70"
         >
           {activityTitle}
         </Link>
-        <p className="text-custom-dark-text">{activityDesc}</p>
-        <p className="text-custom-grey-text text-sm">
+        <p className="text-custom-dark-text text-sm">{activityDesc}</p>
+        <p className="text-custom-grey-text text-xs">
           {active ? "Begins on: " : "Ended on: "}
           {dateStr}
         </p>
@@ -51,7 +51,7 @@ export default async function GroupFeedCard({
           {owner ? (
             <SecondaryButton
               disabled
-              className="border-custom-green text-custom-green"
+              className="border-custom-green text-custom-green text-xs"
             >
               {active
                 ? "You are participating in this activity"
@@ -64,11 +64,12 @@ export default async function GroupFeedCard({
               canJoin={canJoin}
               memberID={memberID}
               requested={requested}
+              className="text-xs"
             />
           ) : (
             <SecondaryButton
               disabled
-              className="border-custom-green text-custom-green"
+              className="border-custom-green text-custom-green text-xs"
             >
               {active
                 ? "You are participating in this activity"
