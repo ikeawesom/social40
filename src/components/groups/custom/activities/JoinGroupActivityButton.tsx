@@ -14,12 +14,14 @@ export default function JoinGroupActivityButton({
   activityID,
   memberID,
   requested,
+  className,
 }: {
   active: boolean;
   canJoin: boolean;
   activityID: string;
   memberID: string;
   requested: boolean;
+  className?: string;
 }) {
   const { host } = useHostname();
   const router = useRouter();
@@ -49,7 +51,8 @@ export default function JoinGroupActivityButton({
         "grid place-items-center w-full",
         !canJoin || !active
           ? "border-custom-red text-custom-red"
-          : "border-custom-orange text-custom-orange"
+          : "border-custom-orange text-custom-orange",
+        className
       )}
     >
       {!active ? (
