@@ -11,9 +11,11 @@ import { useRouter } from "next/navigation";
 export default function LeaveActivityButton({
   activityID,
   memberID,
+  active,
 }: {
   activityID: string;
   memberID: string;
+  active: boolean;
 }) {
   const router = useRouter();
   const { host } = useHostname();
@@ -43,12 +45,14 @@ export default function LeaveActivityButton({
   };
   return (
     <PrimaryButton
-      disabled={loading}
+      disabled={loading || active}
       type="submit"
       onClick={setAlert}
       className={twMerge("bg-custom-red grid place-items-center w-full")}
     >
-      {loading ? (
+      {active ? (
+        "This activity has ended"
+      ) : loading ? (
         <LoadingIconBright width={20} height={20} />
       ) : (
         "Leave activity"

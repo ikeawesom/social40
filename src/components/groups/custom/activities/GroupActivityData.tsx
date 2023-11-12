@@ -132,6 +132,7 @@ export default async function GroupActivityData({
           ) : (
             !owner && (
               <LeaveActivityButton
+                active={active}
                 activityID={activityID}
                 memberID={memberID}
               />
