@@ -10,7 +10,7 @@ export default function ServerErrorScreen({ eMsg }: { eMsg?: string }) {
 
   return (
     <div className="grid place-items-center h-[50vh]">
-      <div className="flex flex-col gap-5 items-center justify-center">
+      <div className="flex flex-col gap-5 items-center justify-center max-w-[500px]">
         <div className="flex flex-col gap-1 items-center justify-center">
           <Image
             src="/icons/icon_error.svg"

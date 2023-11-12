@@ -4,7 +4,7 @@ import ReturnHomeButton from "../utils/ReturnHomeButton";
 export default function NotFoundScreen({ error }: { error: string }) {
   return (
     <div className="grid place-items-center h-[50vh]">
-      <div className="flex flex-col gap-5 items-center justify-center">
+      <div className="flex flex-col gap-5 items-center justify-center max-w-[500px]">
         <div className="flex-flex-col gap-1 items-center justify-center">
           <h1 className="text-6xl text-custom-primary font-bold text-center">
             404
