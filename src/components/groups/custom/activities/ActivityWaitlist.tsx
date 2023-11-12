@@ -2,7 +2,7 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import HRow from "@/src/components/utils/HRow";
 import InnerContainer from "@/src/components/utils/InnerContainer";
-import LoadingIcon from "@/src/components/utils/LoadingIcon";
+import { LoadingIconBright } from "@/src/components/utils/LoadingIcon";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import { useHostname } from "@/src/hooks/useHostname";
@@ -90,7 +90,7 @@ export default function ActivityWaitlist({
         <InnerContainer className="w-full">
           {loading && (
             <div className="w-full absolute grid place-items-center h-full bg-black/25 z-30">
-              <LoadingIcon width={30} height={30} />
+              <LoadingIconBright width={30} height={30} />
             </div>
           )}
           {Object.keys(requestsData).map((memberID: string) => {
