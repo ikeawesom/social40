@@ -6,7 +6,7 @@ export default function PageWrapper({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-custom-background min-h-screen w-full lg:py-10 lg:px-28 md:px-8 p-4">
+    <div className="bg-custom-background min-h-screen w-full lg:px-28 md:px-8 p-4">
       {children}
     </div>
   );
