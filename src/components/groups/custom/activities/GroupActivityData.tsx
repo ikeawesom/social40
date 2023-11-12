@@ -63,10 +63,16 @@ export default async function GroupActivityData({
       if (memberID in participantsData) currrentParticipant = true;
 
       const date = activityData.activityDate;
-      const active = ActiveTimestamp(date);
       const dateStr = TimestampToDateString(date);
-      const restrictionStatus = activityData.groupRestriction && body.status;
-      const canJoin = restrictionStatus && active && !currrentParticipant;
+
+      const active = ActiveTimestamp(date);
+      const restrictionStatus = activityData.groupRestriction;
+      const currentMember = body.status;
+
+      const canJoin =
+        (!restrictionStatus || (currentMember && restrictionStatus)) &&
+        active &&
+        !currrentParticipant;
 
       const owner = body.status ? body.data.role === "owner" : false;
 
