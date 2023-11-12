@@ -9,11 +9,13 @@ import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { useHostname } from "@/src/hooks/useHostname";
 
 export default function JoinGroupActivityButton({
+  active,
   canJoin,
   activityID,
   memberID,
   requested,
 }: {
+  active: boolean;
   canJoin: boolean;
   activityID: string;
   memberID: string;
@@ -45,12 +47,14 @@ export default function JoinGroupActivityButton({
       disabled={!canJoin || loading || requested}
       className={twMerge(
         "grid place-items-center w-full",
-        !canJoin
+        !canJoin || !active
           ? "border-custom-red text-custom-red"
           : "border-custom-orange text-custom-orange"
       )}
     >
-      {loading ? (
+      {!active ? (
+        "This activity has ended"
+      ) : loading ? (
         <LoadingIcon height={20} width={20} />
       ) : requested ? (
         "Requested"

@@ -124,6 +124,7 @@ export default async function GroupActivityData({
           </DefaultCard>
           {!currrentParticipant ? (
             <JoinGroupActivityButton
+              active={active}
               activityID={activityID}
               memberID={memberID}
               canJoin={canJoin}

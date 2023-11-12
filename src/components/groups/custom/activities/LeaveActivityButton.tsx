@@ -45,12 +45,12 @@ export default function LeaveActivityButton({
   };
   return (
     <PrimaryButton
-      disabled={loading || active}
+      disabled={loading || !active}
       type="submit"
       onClick={setAlert}
       className={twMerge("bg-custom-red grid place-items-center w-full")}
     >
-      {active ? (
+      {!active ? (
         "This activity has ended"
       ) : loading ? (
         <LoadingIconBright width={20} height={20} />
