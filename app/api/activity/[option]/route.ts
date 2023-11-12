@@ -273,12 +273,22 @@ export async function POST(req: NextRequest) {
 
     const participantsPromiseList = Object.keys(participantsData).map(
       async (memberID: string) => {
+        // remove activity from participants group-activities subcollection
         const res = await dbHandler.delete({
           col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
           id: activityID,
         });
         if (!res.status)
           return handleResponses({ status: false, error: res.error });
+
+        // remove participants from group-activities participants subcollection
+        const resA = await dbHandler.delete({
+          col_name: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
+          id: memberID,
+        });
+        if (!resA.status)
+          return handleResponses({ status: false, error: resA.error });
+
         return handleResponses();
       }
     );
