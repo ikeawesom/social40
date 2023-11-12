@@ -61,9 +61,21 @@ export async function POST(req: NextRequest) {
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
 
-    // add participated member as a sub collection of root path
     const fetchedID = res.data.id as string;
 
+    // add activity ID to activity document
+    const resC = await dbHandler.edit({
+      col_name: `GROUP-ACTIVITIES`,
+      id: fetchedID,
+      data: {
+        activityID: fetchedID,
+      },
+    });
+
+    if (!resC.status)
+      return NextResponse.json({ status: false, error: resC.error });
+
+    // add participated member as a sub collection of root path
     const to_addA = {
       dateJoined: createdOn,
       memberID,
@@ -216,6 +228,31 @@ export async function POST(req: NextRequest) {
 
     if (!resA.status)
       return NextResponse.json({ status: false, error: resA.error });
+
+    return NextResponse.json({ status: true });
+  } else if (option === "group-edit") {
+    const { input } = fetchedData;
+
+    const newTitle = input.title;
+    const newDesc = input.desc;
+    const newRestriction = input.restrict;
+
+    const to_edit = {
+      activityTitle: newTitle,
+      activityDesc: newDesc,
+      groupRestriction: newRestriction,
+    };
+
+    console.log(activityID);
+
+    const res = await dbHandler.edit({
+      col_name: `GROUP-ACTIVITIES`,
+      id: activityID,
+      data: to_edit,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
 
     return NextResponse.json({ status: true });
   }
