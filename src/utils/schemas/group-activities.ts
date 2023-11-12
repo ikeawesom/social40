@@ -8,7 +8,6 @@ export type GROUP_ACTIVITY_SCHEMA = {
   activityTitle: string;
   activityDesc: string;
   activityDate: Timestamp; // date format
-  participants: string[]; // array of memberIDs of participants
 
   duration: {
     active: boolean;
@@ -51,7 +50,6 @@ export function initGroupActivityObject({
     activityTitle,
     activityDesc,
     activityDate,
-    participants: [createdBy],
     createdBy,
     createdOn: getCurrentDate(),
   } as GROUP_ACTIVITY_SCHEMA;

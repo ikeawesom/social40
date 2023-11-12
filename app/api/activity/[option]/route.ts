@@ -44,7 +44,6 @@ export async function POST(req: NextRequest) {
       activityTitle: input.title,
       createdBy: memberID,
       createdOn,
-      participants: [memberID],
       groupID,
       groupRestriction: input.restrict,
       duration: {
