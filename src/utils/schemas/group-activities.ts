@@ -22,6 +22,7 @@ export type GROUP_ACTIVITY_SCHEMA = {
 
 export type GROUP_ACTIVITY_PARTICIPANT = {
   memberID: string;
+  activityID: string;
   dateJoined: Timestamp;
 };
 
