@@ -18,6 +18,8 @@ import React from "react";
 import JoinGroupActivityButton from "./JoinGroupActivityButton";
 import ActivityWaitlist, { ActivityWaitlistType } from "./ActivityWaitlist";
 import LeaveActivityButton from "./LeaveActivityButton";
+import GroupActivitySettings from "./GroupActivitySettings";
+import DeleteGroupActivity from "./DeleteGroupActivity";
 
 export default async function GroupActivityData({
   activityID,
@@ -157,6 +159,8 @@ export default async function GroupActivityData({
               })}
             </InnerContainer>
           </DefaultCard>
+          {owner && <GroupActivitySettings activityData={activityData} />}
+          {owner && <DeleteGroupActivity activityData={activityData} />}
         </div>
       );
     } catch (err: any) {
