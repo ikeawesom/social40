@@ -40,7 +40,7 @@ export type MEMBER_JOINED_GROUPS_SCHEMA = {
 };
 
 export type ACTIVITY_PARTICIPANT_SCHEMA = {
-  memberID: string;
+  activityID: string;
   dateJoined: Timestamp; // date format
 };
 

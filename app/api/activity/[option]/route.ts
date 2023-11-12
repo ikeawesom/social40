@@ -190,7 +190,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: false, error: resB.error });
 
     // add to member's group activities subcollection
-    const to_addA = { dateJoined: date } as ACTIVITY_PARTICIPANT_SCHEMA;
+    const to_addA = {
+      activityID: activityID,
+      dateJoined: date,
+    } as ACTIVITY_PARTICIPANT_SCHEMA;
+
     const resA = await dbHandler.add({
       col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
       id: activityID,
