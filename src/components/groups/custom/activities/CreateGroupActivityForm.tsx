@@ -76,6 +76,7 @@ export default function CreateGroupActivityForm({
         <input
           type="text"
           name="title"
+          required
           placeholder="e.g. IPPT 1, SOC TEST, etc."
           value={input.title}
           onChange={handleChange}
@@ -88,6 +89,7 @@ export default function CreateGroupActivityForm({
         <input
           type="text"
           name="desc"
+          required
           placeholder="e.g. First IPPT conduct for 40SAR, etc."
           value={input.desc}
           onChange={handleChange}
@@ -100,6 +102,7 @@ export default function CreateGroupActivityForm({
         <input
           type="text"
           name="date"
+          required
           placeholder="DD/MM/YYYY"
           value={input.date}
           onChange={handleChange}
@@ -113,6 +116,7 @@ export default function CreateGroupActivityForm({
         <input
           type="text"
           name="time"
+          required
           placeholder="HH:MM"
           value={input.time}
           onChange={handleChange}
@@ -161,6 +165,7 @@ export default function CreateGroupActivityForm({
             <input
               type="text"
               name="endDate"
+              required
               placeholder="DD/MM/YYYY"
               value={input.duration.endDate}
               onChange={durationChange}
@@ -173,6 +178,7 @@ export default function CreateGroupActivityForm({
             <input
               type="text"
               name="endTime"
+              required
               placeholder="HH:MM"
               value={input.duration.endTime}
               onChange={durationChange}
