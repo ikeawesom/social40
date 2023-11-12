@@ -78,6 +78,7 @@ export async function POST(req: NextRequest) {
     const to_addA = {
       dateJoined: createdOn,
       memberID,
+      activityID: fetchedID,
     } as GROUP_ACTIVITY_PARTICIPANT;
 
     const resA = await dbHandler.add({
@@ -170,6 +171,7 @@ export async function POST(req: NextRequest) {
     const to_add = {
       memberID,
       dateJoined: date,
+      activityID,
     } as GROUP_ACTIVITY_PARTICIPANT;
 
     const res = await dbHandler.add({
@@ -322,6 +324,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: false, error: resB.error });
 
     return NextResponse.json({ status: true });
+  } else if (option === "global-group-get") {
+    const res = await dbHandler.getSpecific({
+      path: "GROUP-ACTIVITIES",
+      field: "groupID",
+      criteria: "==",
+      value: groupID,
+      orderCol: "activityDate",
+      ascending: false,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    return NextResponse.json({ data: res.data, status: true });
   }
 
   return NextResponse.json({
