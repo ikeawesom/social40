@@ -108,7 +108,7 @@ export async function POST(req: NextRequest) {
     if (!resB.status)
       return NextResponse.json({ status: false, error: resB.error });
 
-    return NextResponse.json({ status: true });
+    return NextResponse.json({ status: true, data: fetchedID });
   } else if (option === "group-get") {
     // fetch activity data
     const res = await dbHandler.get({
@@ -253,6 +253,60 @@ export async function POST(req: NextRequest) {
 
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
+
+    return NextResponse.json({ status: true });
+  } else if (option == "group-delete") {
+    // remove activity from all members first
+    // get all participants from group
+    const res = await dbHandler.getSpecific({
+      path: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
+      orderCol: "dateJoined",
+      ascending: true,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    const participantsData = res.data as {
+      [memberID: string]: GROUP_ACTIVITY_PARTICIPANT;
+    };
+
+    const participantsPromiseList = Object.keys(participantsData).map(
+      async (memberID: string) => {
+        const res = await dbHandler.delete({
+          col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+          id: activityID,
+        });
+        if (!res.status)
+          return handleResponses({ status: false, error: res.error });
+        return handleResponses();
+      }
+    );
+
+    const participantsPromise = await Promise.all(participantsPromiseList);
+
+    participantsPromise.forEach((item: any) => {
+      if (!item.status)
+        return NextResponse.json({ status: false, error: item.error });
+    });
+
+    // remove activity from group
+    const resA = await dbHandler.delete({
+      col_name: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
+      id: activityID,
+    });
+
+    if (!resA.status)
+      return NextResponse.json({ status: false, error: resA.error });
+
+    // remove activity from root collection
+    const resB = await dbHandler.delete({
+      col_name: "GROUP-ACTIVITIES",
+      id: activityID,
+    });
+
+    if (!resB.status)
+      return NextResponse.json({ status: false, error: resB.error });
 
     return NextResponse.json({ status: true });
   }
