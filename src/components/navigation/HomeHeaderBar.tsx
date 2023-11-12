@@ -15,7 +15,7 @@ export default function HomeHeaderBar({
   return (
     <div
       className={twMerge(
-        "w-full bg-white shadow-sm fixed top-0 left-0 flex items-center justify-start flex-col"
+        "w-full bg-white shadow-sm fixed top-0 left-0 flex items-center justify-start flex-col z-40"
       )}
     >
       <div className="flex items-center justify-center gap-x-2 z-40 w-full p-2">
