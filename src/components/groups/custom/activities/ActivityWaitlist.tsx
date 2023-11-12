@@ -84,7 +84,6 @@ export default function ActivityWaitlist({
             className={`duration-300 ease-in-out ${show ? "rotate-180" : ""}`}
           />
         </div>
-        <HRow />
       </div>
       {show && (
         <InnerContainer className="w-full">
