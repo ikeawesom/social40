@@ -24,8 +24,21 @@ export default async function GroupFeedCard({
     });
     if (!res.status) throw new Error(res.error);
 
-    const { requested, owner, canJoin, active, dateStr, currentParticipant } =
-      res.data;
+    const {
+      requested,
+      owner,
+      canJoin,
+      active,
+      dateStr,
+      currentParticipant,
+      participantsData,
+    } = res.data;
+
+    const participantNumber = Object.keys(participantsData).length;
+    const randomIndex = Math.floor(Math.random() * participantNumber);
+
+    const randomParticipant = Object.keys(participantsData)[randomIndex];
+    const oneParticipant = participantNumber - 1 === 0;
 
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-start">
@@ -47,6 +60,29 @@ export default async function GroupFeedCard({
           {dateStr}
         </p>
 
+        <Link
+          href={`/groups/${activityData.groupID}/activity?${new URLSearchParams(
+            {
+              id: activityID,
+            }
+          )}`}
+          className="text-sm text-custom-dark-text mt-2"
+        >
+          <span className="font-semibold">{randomParticipant} </span>
+          {oneParticipant ? (
+            "is "
+          ) : (
+            <span>
+              `and{" "}
+              <span className="font-semibold">
+                {participantNumber - 1} others
+              </span>{" "}
+              are{" "}
+            </span>
+          )}
+          participating.
+        </Link>
+
         <div className="w-full mt-2">
           {owner ? (
             <SecondaryButton
@@ -54,7 +90,7 @@ export default async function GroupFeedCard({
               className="border-custom-green text-custom-green text-xs"
             >
               {active
-                ? "You are participating in this activity"
+                ? "You created this activity"
                 : "You have participated in this activity"}
             </SecondaryButton>
           ) : !currentParticipant ? (
