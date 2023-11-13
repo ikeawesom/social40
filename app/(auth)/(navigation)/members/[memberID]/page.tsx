@@ -4,7 +4,7 @@ import MemberBadges from "@/src/components/members/MemberBadges";
 import MemberPoints from "@/src/components/members/MemberPoints";
 import PermissionForm from "@/src/components/members/PermissionForm";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
-import { StatusListType } from "@/src/components/profile/StatsSection";
+import JoinedActivities from "@/src/components/profile/activities/JoinedActivities";
 import StatusFeed from "@/src/components/profile/stats/StatusFeed";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
@@ -101,6 +101,9 @@ export default async function MemberPage({
                 </div>
                 <MemberBadges badges={viewMemberData.badges} />
               </DefaultCard>
+              <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
+                <JoinedActivities clickedMemberID={clickedMemberID} />
+              </Suspense>
               {(permission || sameMember) && (
                 <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
                   <DefaultCard className="w-full">
