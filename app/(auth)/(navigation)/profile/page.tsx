@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ProfileSection, {
   FriendsListType,
 } from "@/src/components/profile/ProfileSection";
@@ -15,6 +15,7 @@ import StatsSection, {
   StatusListType,
 } from "@/src/components/profile/StatsSection";
 import { redirect } from "next/navigation";
+import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 
 export const metadata: Metadata = {
   title: "Profile",
@@ -84,11 +85,13 @@ export default async function Profile({
                 friendsData={friendsList}
                 memberData={memberData}
               />
-              <StatsSection
-                className="sm:col-span-2"
-                option={option}
-                memberID={memberID}
-              />
+              <Suspense fallback={<DefaultSkeleton className="h-[30vh]" />}>
+                <StatsSection
+                  className="sm:col-span-2"
+                  option={option}
+                  memberID={memberID}
+                />
+              </Suspense>
               {cos && <BiboSection />}
             </div>
             {/* TO DO */}
