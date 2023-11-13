@@ -5,8 +5,10 @@ import handleResponses from "@/src/utils/handleResponses";
 import {
   GROUP_ACTIVITY_PARTICIPANT,
   GROUP_ACTIVITY_SCHEMA,
+  GROUP_ACTIVITY_WAITLIST,
 } from "@/src/utils/schemas/group-activities";
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
+import { ACTIVITY_PARTICIPANT_SCHEMA } from "@/src/utils/schemas/members";
 import { Timestamp } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,7 +16,7 @@ export async function POST(req: NextRequest) {
   const { option } = getMethod(req.url);
   const fetchedData = await req.json();
 
-  const { memberID, groupID } = fetchedData;
+  const { memberID, groupID, activityID } = fetchedData;
 
   if (option === "group-create") {
     const { input } = fetchedData;
@@ -42,8 +44,8 @@ export async function POST(req: NextRequest) {
       activityTitle: input.title,
       createdBy: memberID,
       createdOn,
-      participants: [memberID],
       groupID,
+      groupRestriction: input.restrict,
       duration: {
         active: durationEnabled,
         dateCutOff: cutOff,
@@ -58,12 +60,25 @@ export async function POST(req: NextRequest) {
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
 
-    // add participated member as a sub collection of root path
     const fetchedID = res.data.id as string;
 
+    // add activity ID to activity document
+    const resC = await dbHandler.edit({
+      col_name: `GROUP-ACTIVITIES`,
+      id: fetchedID,
+      data: {
+        activityID: fetchedID,
+      },
+    });
+
+    if (!resC.status)
+      return NextResponse.json({ status: false, error: resC.error });
+
+    // add participated member as a sub collection of root path
     const to_addA = {
       dateJoined: createdOn,
       memberID,
+      activityID: fetchedID,
     } as GROUP_ACTIVITY_PARTICIPANT;
 
     const resA = await dbHandler.add({
@@ -93,18 +108,34 @@ export async function POST(req: NextRequest) {
     if (!resB.status)
       return NextResponse.json({ status: false, error: resB.error });
 
-    return NextResponse.json({ status: true });
-  } else if (option === "get") {
-    const { id } = fetchedData;
+    // add to member's group activities subcollection
+    const to_addC = {
+      activityID: fetchedID,
+      dateJoined: createdOn,
+    } as ACTIVITY_PARTICIPANT_SCHEMA;
 
+    const resD = await dbHandler.add({
+      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+      id: fetchedID,
+      to_add: to_addC,
+    });
+
+    if (!resD.status)
+      return NextResponse.json({ status: false, error: resD.error });
+
+    return NextResponse.json({ status: true, data: fetchedID });
+  } else if (option === "group-get") {
     // fetch activity data
-    const res = await dbHandler.get({ col_name: "GROUP-ACTIVITIES", id });
+    const res = await dbHandler.get({
+      col_name: "GROUP-ACTIVITIES",
+      id: activityID,
+    });
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
 
     // fetch participants data
     const resA = await dbHandler.getDocs({
-      col_name: `GROUP-ACTIVITIES/${id}/PARTICIPANTS`,
+      col_name: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
     });
     if (!resA.status)
       return NextResponse.json({ status: false, error: resA.error });
@@ -123,7 +154,207 @@ export async function POST(req: NextRequest) {
     const to_send = { activityData: res.data, participantsData: participants };
 
     return NextResponse.json({ status: true, data: to_send });
+  } else if (option === "group-get-requests") {
+    const res = await dbHandler.getSpecific({
+      path: `GROUP-ACTIVITIES/${activityID}/WAITLIST`,
+      orderCol: "dateRequested",
+      ascending: false,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    return NextResponse.json({ status: true, data: res.data });
+  } else if (option === "group-request") {
+    const date = getCurrentDate();
+    const to_add = {
+      memberID,
+      dateRequested: date,
+    } as GROUP_ACTIVITY_WAITLIST;
+
+    const res = await dbHandler.add({
+      col_name: `GROUP-ACTIVITIES/${activityID}/WAITLIST`,
+      id: memberID,
+      to_add,
+    });
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+    return NextResponse.json({ status: true });
+  } else if (option === "group-participate") {
+    const date = getCurrentDate();
+    // add to group participants subcollection
+    const to_add = {
+      memberID,
+      dateJoined: date,
+      activityID,
+    } as GROUP_ACTIVITY_PARTICIPANT;
+
+    const res = await dbHandler.add({
+      col_name: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
+      id: memberID,
+      to_add,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    // remove from activity waitlist
+    const resB = await dbHandler.delete({
+      col_name: `GROUP-ACTIVITIES/${activityID}/WAITLIST`,
+      id: memberID,
+    });
+    if (!resB.status)
+      return NextResponse.json({ status: false, error: resB.error });
+
+    // add to member's group activities subcollection
+    const to_addA = {
+      activityID: activityID,
+      dateJoined: date,
+    } as ACTIVITY_PARTICIPANT_SCHEMA;
+
+    const resA = await dbHandler.add({
+      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+      id: activityID,
+      to_add: to_addA,
+    });
+
+    if (!resA.status)
+      return NextResponse.json({ status: false, error: resA.error });
+
+    return NextResponse.json({ status: true });
+  } else if (option === "group-reject") {
+    const res = await dbHandler.delete({
+      col_name: `GROUP-ACTIVITIES/${activityID}/WAITLIST`,
+      id: memberID,
+    });
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+    return NextResponse.json({ status: true });
+  } else if (option === "group-leave") {
+    // delete member from group subcollection
+    const res = await dbHandler.delete({
+      col_name: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
+      id: memberID,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    // delete group from member's joined activities
+    const resA = await dbHandler.delete({
+      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+      id: activityID,
+    });
+
+    if (!resA.status)
+      return NextResponse.json({ status: false, error: resA.error });
+
+    return NextResponse.json({ status: true });
+  } else if (option === "group-edit") {
+    const { input } = fetchedData;
+
+    const newTitle = input.title;
+    const newDesc = input.desc;
+    const newRestriction = input.restrict;
+
+    const to_edit = {
+      activityTitle: newTitle,
+      activityDesc: newDesc,
+      groupRestriction: newRestriction,
+    };
+
+    console.log(activityID);
+
+    const res = await dbHandler.edit({
+      col_name: `GROUP-ACTIVITIES`,
+      id: activityID,
+      data: to_edit,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    return NextResponse.json({ status: true });
+  } else if (option == "group-delete") {
+    // remove activity from all members first
+    // get all participants from group
+    const res = await dbHandler.getSpecific({
+      path: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
+      orderCol: "dateJoined",
+      ascending: true,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    const participantsData = res.data as {
+      [memberID: string]: GROUP_ACTIVITY_PARTICIPANT;
+    };
+
+    const participantsPromiseList = Object.keys(participantsData).map(
+      async (memberID: string) => {
+        // remove activity from participants group-activities subcollection
+        const res = await dbHandler.delete({
+          col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+          id: activityID,
+        });
+        if (!res.status)
+          return handleResponses({ status: false, error: res.error });
+
+        // remove participants from group-activities participants subcollection
+        const resA = await dbHandler.delete({
+          col_name: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
+          id: memberID,
+        });
+        if (!resA.status)
+          return handleResponses({ status: false, error: resA.error });
+
+        return handleResponses();
+      }
+    );
+
+    const participantsPromise = await Promise.all(participantsPromiseList);
+
+    participantsPromise.forEach((item: any) => {
+      if (!item.status)
+        return NextResponse.json({ status: false, error: item.error });
+    });
+
+    // remove activity from group
+    const resA = await dbHandler.delete({
+      col_name: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
+      id: activityID,
+    });
+
+    if (!resA.status)
+      return NextResponse.json({ status: false, error: resA.error });
+
+    // remove activity from root collection
+    const resB = await dbHandler.delete({
+      col_name: "GROUP-ACTIVITIES",
+      id: activityID,
+    });
+
+    if (!resB.status)
+      return NextResponse.json({ status: false, error: resB.error });
+
+    return NextResponse.json({ status: true });
+  } else if (option === "global-group-get") {
+    const res = await dbHandler.getSpecific({
+      path: "GROUP-ACTIVITIES",
+      field: "groupID",
+      criteria: "==",
+      value: groupID,
+      orderCol: "activityDate",
+      ascending: false,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    return NextResponse.json({ data: res.data, status: true });
   }
+
   return NextResponse.json({
     status: false,
     error: "Invalid method provided to API request.",

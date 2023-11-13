@@ -4,16 +4,17 @@ import MemberBadges from "@/src/components/members/MemberBadges";
 import MemberPoints from "@/src/components/members/MemberPoints";
 import PermissionForm from "@/src/components/members/PermissionForm";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
-import { StatusListType } from "@/src/components/profile/StatsSection";
+import JoinedActivities from "@/src/components/profile/activities/JoinedActivities";
 import StatusFeed from "@/src/components/profile/stats/StatusFeed";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
+import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
-import React from "react";
+import React, { Suspense } from "react";
 
 export async function generateMetadata({
   params,
@@ -78,14 +79,6 @@ export default async function MemberPage({
       const rankName =
         `${viewMemberData.rank} ${viewMemberData.displayName}`.trim();
 
-      // fetch statuses from member
-      const resB = await fetch(`${host}/api/profile/status`, PostObjA);
-      const dataB = await resB.json();
-
-      if (!dataB.status) throw new Error(dataB.error);
-
-      const statusList = dataB.data as StatusListType;
-
       return (
         <>
           <HeaderBar text={clickedMemberID} back />
@@ -108,10 +101,15 @@ export default async function MemberPage({
                 </div>
                 <MemberBadges badges={viewMemberData.badges} />
               </DefaultCard>
+              <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
+                <JoinedActivities clickedMemberID={clickedMemberID} />
+              </Suspense>
               {(permission || sameMember) && (
-                <DefaultCard className="w-full">
-                  <StatusFeed viewProfile status={statusList} />
-                </DefaultCard>
+                <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
+                  <DefaultCard className="w-full">
+                    <StatusFeed viewProfile memberID={clickedMemberID} />
+                  </DefaultCard>
+                </Suspense>
               )}
               {higher && !sameMember && !normalMember && (
                 // global member permissions

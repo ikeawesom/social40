@@ -39,6 +39,11 @@ export type MEMBER_JOINED_GROUPS_SCHEMA = {
   dateJoined: Timestamp; // date format
 };
 
+export type ACTIVITY_PARTICIPANT_SCHEMA = {
+  activityID: string;
+  dateJoined: Timestamp; // date format
+};
+
 export function initMemberObject({
   memberID,
   displayName,

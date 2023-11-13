@@ -8,12 +8,13 @@ export type GROUP_ACTIVITY_SCHEMA = {
   activityTitle: string;
   activityDesc: string;
   activityDate: Timestamp; // date format
-  participants: string[]; // array of memberIDs of participants
 
   duration: {
     active: boolean;
     dateCutOff: Timestamp;
   };
+
+  groupRestriction: boolean;
 
   createdBy: string; // memberID of owner
   createdOn: Timestamp; // date format
@@ -21,7 +22,13 @@ export type GROUP_ACTIVITY_SCHEMA = {
 
 export type GROUP_ACTIVITY_PARTICIPANT = {
   memberID: string;
+  activityID: string;
   dateJoined: Timestamp;
+};
+
+export type GROUP_ACTIVITY_WAITLIST = {
+  memberID: string;
+  dateRequested: Timestamp;
 };
 
 export type REMARKS_SCHEMA = {
@@ -44,7 +51,6 @@ export function initGroupActivityObject({
     activityTitle,
     activityDesc,
     activityDate,
-    participants: [createdBy],
     createdBy,
     createdOn: getCurrentDate(),
   } as GROUP_ACTIVITY_SCHEMA;

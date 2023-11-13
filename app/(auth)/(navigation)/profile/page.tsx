@@ -87,9 +87,7 @@ export default async function Profile({
               <StatsSection
                 className="sm:col-span-2"
                 option={option}
-                activities={{}}
-                statuses={statusList}
-                statistics={{}}
+                memberID={memberID}
               />
               {cos && <BiboSection />}
             </div>

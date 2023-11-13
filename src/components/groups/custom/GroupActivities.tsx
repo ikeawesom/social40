@@ -28,7 +28,7 @@ export default function GroupActivities({
       <HRow />
       <InnerContainer
         className={twMerge(
-          "min-h-[10vh] my-2",
+          "min-h-[10vh] my-2 max-h-[100vh]",
           empty && "grid place-items-center justify-center overflow-hidden"
         )}
       >

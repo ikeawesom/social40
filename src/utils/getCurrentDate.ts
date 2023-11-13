@@ -120,3 +120,12 @@ export function ActiveTimestamp(timestamp: Timestamp) {
   const today = new Date();
   return date >= today;
 }
+
+export function CompareTimestamp(timestampA: Timestamp, timestampB: Timestamp) {
+  const dateA = TimestampToDate(timestampA);
+  const dateB = TimestampToDate(timestampB);
+
+  const diff = dateA.getTime() - dateB.getTime();
+  const diffHours = diff / (1000 * 60 * 60);
+  return diffHours;
+}

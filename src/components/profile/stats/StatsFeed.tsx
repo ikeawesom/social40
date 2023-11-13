@@ -3,9 +3,11 @@ import React from "react";
 import ComingSoonIcon from "../../utils/ComingSoonIcon";
 
 export default function StatsFeed({
-  statistics,
+  viewProfile,
+  memberID,
 }: {
-  statistics: { [statisticID: string]: STATISTICS_SCHEMA } | undefined;
+  viewProfile?: boolean;
+  memberID: string;
 }) {
   return <ComingSoonIcon small width={60} height={60} />;
 }

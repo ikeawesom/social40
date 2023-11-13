@@ -29,6 +29,7 @@ export default function CreateGroupActivityForm({
       endDate: "",
       endTime: "",
     },
+    restrict: false,
   });
   const [loading, setLoading] = useState(false);
 
@@ -42,9 +43,11 @@ export default function CreateGroupActivityForm({
 
       if (!body.status) throw new Error(body.error);
 
-      toast.success("Created activity");
       router.refresh();
-      router.back();
+      router.replace(
+        `/groups/${groupID}/activity?${new URLSearchParams({ id: body.data })}`
+      );
+      toast.success("Created activity");
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -73,6 +76,7 @@ export default function CreateGroupActivityForm({
         <input
           type="text"
           name="title"
+          required
           placeholder="e.g. IPPT 1, SOC TEST, etc."
           value={input.title}
           onChange={handleChange}
@@ -85,6 +89,7 @@ export default function CreateGroupActivityForm({
         <input
           type="text"
           name="desc"
+          required
           placeholder="e.g. First IPPT conduct for 40SAR, etc."
           value={input.desc}
           onChange={handleChange}
@@ -97,6 +102,7 @@ export default function CreateGroupActivityForm({
         <input
           type="text"
           name="date"
+          required
           placeholder="DD/MM/YYYY"
           value={input.date}
           onChange={handleChange}
@@ -110,12 +116,28 @@ export default function CreateGroupActivityForm({
         <input
           type="text"
           name="time"
+          required
           placeholder="HH:MM"
           value={input.time}
           onChange={handleChange}
         />
       </FormInputContainer>
-
+      <div className="flex items-center justify-start gap-2">
+        <input
+          type="checkbox"
+          id="restrict"
+          className="h-fit flex-1"
+          onChange={() =>
+            setInput({
+              ...input,
+              restrict: !input.restrict,
+            })
+          }
+        />
+        <label htmlFor="restrict" className="flex-3 text-sm">
+          Restrict this activity for group members only
+        </label>
+      </div>
       <div className="flex items-center justify-start gap-2">
         <input
           type="checkbox"
@@ -129,7 +151,7 @@ export default function CreateGroupActivityForm({
           }
         />
         <label htmlFor="duration" className="flex-3 text-sm">
-          Set a time limit for members to join this activity.
+          Set a time limit for members to join this activity
         </label>
       </div>
       {input.duration.active && (
@@ -143,6 +165,7 @@ export default function CreateGroupActivityForm({
             <input
               type="text"
               name="endDate"
+              required
               placeholder="DD/MM/YYYY"
               value={input.duration.endDate}
               onChange={durationChange}
@@ -155,6 +178,7 @@ export default function CreateGroupActivityForm({
             <input
               type="text"
               name="endTime"
+              required
               placeholder="HH:MM"
               value={input.duration.endTime}
               onChange={durationChange}
