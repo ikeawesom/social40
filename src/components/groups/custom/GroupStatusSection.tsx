@@ -35,7 +35,6 @@ export default function GroupStatusSection({
         <h1 className="text-custom-dark-text font-semibold flex gap-1 items-center justify-start text-start">
           Group Statuses
         </h1>
-        <HRow className="mb-0" />
       </div>
       {empty ? (
         <p className="text-sm text-custom-grey-text">
