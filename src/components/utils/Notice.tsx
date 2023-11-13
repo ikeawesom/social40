@@ -34,7 +34,7 @@ export default function Notice({
           "text-sm"
         )}
       >
-        {text}
+        <span className="font-semibold">[{status.toUpperCase()}]</span> {text}
       </p>
     </div>
   );
