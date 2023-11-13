@@ -7,9 +7,9 @@ import {
   MEMBER_JOINED_GROUPS_SCHEMA,
 } from "@/src/utils/schemas/members";
 import handleResponses from "@/src/utils/handleResponses";
-import Image from "next/image";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import GroupFeedCard from "./GroupFeedCard";
+import ErrorActivities from "../screens/ErrorActivities";
 
 export default async function FeedGroup({ memberID }: { memberID: string }) {
   if (!memberID) return <SignInAgainScreen />;
@@ -43,21 +43,7 @@ export default async function FeedGroup({ memberID }: { memberID: string }) {
 
     // no groups involved
     if (groupsList.length === 0)
-      return (
-        <div className="grid place-items-center min-h-[30vh]">
-          <div className="flex w-full items-center justify-center gap-4 flex-col">
-            <Image
-              alt="Activities"
-              src="/icons/features/icon_activities_active.svg"
-              width={100}
-              height={100}
-            />
-            <h1 className="text-lg text-custom-dark-text text-center">
-              Looks like you have no groups joined.
-            </h1>
-          </div>
-        </div>
-      );
+      return <ErrorActivities text="Looks like you have no groups joined." />;
 
     // fetch activities with groups tagged
     const groupActivitiesPromise = groupsList.map(async (groupID: string) => {
@@ -90,6 +76,11 @@ export default async function FeedGroup({ memberID }: { memberID: string }) {
         groupActivitiesData[activityID] = data[activityID];
       });
     });
+
+    if (Object.keys(groupActivitiesData).length === 0)
+      return (
+        <ErrorActivities text="Well, looks like there are no activites here for you." />
+      );
 
     return (
       <div className="flex w-full flex-col items-start justify-start gap-4">
