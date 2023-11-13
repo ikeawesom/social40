@@ -1,17 +1,29 @@
-import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import React from "react";
 import InnerContainer from "../../utils/InnerContainer";
 import AddStatusButton from "./status/AddStatusButton";
 import { StatusDetails } from "./status/StatusDetails";
 import { ActiveTimestamp } from "@/src/utils/getCurrentDate";
+import { GetPostObj } from "@/src/utils/API/GetPostObj";
+import { StatusListType } from "../StatsSection";
 
-export default function StatusFeed({
-  status,
+export default async function StatusFeed({
   viewProfile,
+  clickedMemberID,
 }: {
-  status: { [statusID: string]: STATUS_SCHEMA };
   viewProfile?: boolean;
+  clickedMemberID: string;
 }) {
+  const host = process.env.HOST;
+  // fetch statuses from member
+  const PostObjA = GetPostObj({
+    memberID: clickedMemberID,
+  });
+  const resB = await fetch(`${host}/api/profile/status`, PostObjA);
+  const dataB = await resB.json();
+
+  if (!dataB.status) throw new Error(dataB.error);
+
+  const status = dataB.data as StatusListType;
   const empty = Object.keys(status).length === 0;
 
   return (
