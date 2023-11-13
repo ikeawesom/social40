@@ -28,6 +28,7 @@ export default function HeaderBar({
             console.log("Refreshed.");
           }}
           src="/icons/navigation/icon_back.svg"
+          className="cursor-pointer"
           alt="Back"
           width={30}
           height={30}
