@@ -38,18 +38,14 @@ export type StatisticsListType = { [statisticID: string]: STATISTICS_SCHEMA };
 
 type StatsSectionType = {
   className?: string;
-  activities: ActivityListType;
-  statistics: StatisticsListType;
-  statuses: StatusListType;
+  memberID: string;
   option: string;
 };
 
 export default function StatsSection({
   className,
-  statistics,
-  activities,
-  statuses,
   option,
+  memberID,
 }: StatsSectionType) {
   return (
     <DefaultCard
@@ -84,11 +80,11 @@ export default function StatsSection({
       </ul>
       <HRow />
       {option === "activity" ? (
-        <ActivityFeed activities={activities} />
+        <ActivityFeed memberID={memberID} />
       ) : option === "stats" ? (
-        <StatsFeed statistics={statistics} />
+        <StatsFeed memberID={memberID} />
       ) : option === "statuses" ? (
-        <StatusFeed status={statuses} />
+        <StatusFeed memberID={memberID} />
       ) : (
         <></>
       )}

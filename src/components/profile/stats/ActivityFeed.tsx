@@ -1,11 +1,12 @@
-import { ACTIVITY_SCHEMA } from "@/src/utils/schemas/activities";
 import React from "react";
 import ComingSoonIcon from "../../utils/ComingSoonIcon";
 
 export default function ActivityFeed({
-  activities,
+  viewProfile,
+  memberID,
 }: {
-  activities: { [activityID: string]: ACTIVITY_SCHEMA } | undefined;
+  viewProfile?: boolean;
+  memberID: string;
 }) {
   return <ComingSoonIcon small width={60} height={60} />;
   // const empty = Object.keys(activities).length === 0;

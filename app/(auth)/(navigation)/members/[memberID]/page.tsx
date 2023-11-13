@@ -107,7 +107,7 @@ export default async function MemberPage({
               {(permission || sameMember) && (
                 <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
                   <DefaultCard className="w-full">
-                    <StatusFeed viewProfile clickedMemberID={clickedMemberID} />
+                    <StatusFeed viewProfile memberID={clickedMemberID} />
                   </DefaultCard>
                 </Suspense>
               )}

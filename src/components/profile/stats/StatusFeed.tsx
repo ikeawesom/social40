@@ -9,15 +9,15 @@ import { twMerge } from "tailwind-merge";
 
 export default async function StatusFeed({
   viewProfile,
-  clickedMemberID,
+  memberID,
 }: {
   viewProfile?: boolean;
-  clickedMemberID: string;
+  memberID: string;
 }) {
   const host = process.env.HOST;
   // fetch statuses from member
   const PostObjA = GetPostObj({
-    memberID: clickedMemberID,
+    memberID,
   });
   const resB = await fetch(`${host}/api/profile/status`, PostObjA);
   const dataB = await resB.json();
