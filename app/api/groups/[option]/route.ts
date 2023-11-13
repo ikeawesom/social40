@@ -198,7 +198,7 @@ export async function POST(request: NextRequest) {
     const res = await dbHandler.getSpecific({
       path: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
       orderCol: "activityDate",
-      ascending: true,
+      ascending: false,
     });
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
