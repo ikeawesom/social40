@@ -5,6 +5,7 @@ import { StatusDetails } from "./status/StatusDetails";
 import { ActiveTimestamp } from "@/src/utils/getCurrentDate";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { StatusListType } from "../StatsSection";
+import { twMerge } from "tailwind-merge";
 
 export default async function StatusFeed({
   viewProfile,
@@ -27,12 +28,30 @@ export default async function StatusFeed({
   const empty = Object.keys(status).length === 0;
 
   return (
-    <div className="flex flex-col items-start justify-start gap-y-1 w-full">
-      <h1 className="text-start font-semibold text-base">Statuses</h1>
+    <div
+      className={twMerge(
+        "flex flex-col items-start justify-start w-full",
+        !viewProfile && "gap-y-1"
+      )}
+    >
+      <h1 className="text-start font-semibold text-custom-dark-text">
+        Statuses
+      </h1>
       {!viewProfile && <AddStatusButton />}
-      {!empty ? (
-        <InnerContainer className="max-h-[100vh]">
-          {Object.keys(status).map((statusID: string) => {
+
+      <InnerContainer
+        className={twMerge(
+          "max-h-[100vh] min-h-[10vh]",
+          empty && "grid place-items-center justify-center overflow-hidden",
+          viewProfile && "my-2"
+        )}
+      >
+        {empty ? (
+          <p className="text-start text-custom-grey-text text-sm">
+            No status information recorded for this account.
+          </p>
+        ) : (
+          Object.keys(status).map((statusID: string) => {
             const curStatus = status[statusID];
             return (
               <StatusDetails
@@ -41,13 +60,9 @@ export default async function StatusFeed({
                 key={curStatus.statusID}
               />
             );
-          })}
-        </InnerContainer>
-      ) : (
-        <p className="text-start text-custom-grey-text text-xs">
-          No status information recorded for this account.
-        </p>
-      )}
+          })
+        )}
+      </InnerContainer>
     </div>
   );
 }
