@@ -9,6 +9,7 @@ import LoadingIcon from "../utils/LoadingIcon";
 import StatusDot from "../utils/StatusDot";
 import ToggleBibo from "./ToggleBibo";
 import EditProfileButton from "./edit/EditProfileButton";
+import ViewProfileButton from "./ViewProfileButton";
 
 export type FriendsListType = { [key: string]: MEMBER_SCHEMA };
 
@@ -59,7 +60,10 @@ export default async function ProfileSection({
             </div>
           </div>
           <div className="w-full flex gap-3 flex-col">
-            <EditProfileButton />
+            <div className="w-full flex items-center justify-between gap-3">
+              <EditProfileButton />
+              <ViewProfileButton memberID={memberID} />
+            </div>
             <ToggleBibo memberID={memberID} role={role} fetchedBibo={bibo} />
           </div>
           <HRow />
