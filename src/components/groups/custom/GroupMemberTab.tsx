@@ -14,6 +14,7 @@ import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
 import { Timestamp } from "firebase/firestore";
 import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import Link from "next/link";
 
 export default function GroupMemberTab({
   data,
@@ -98,6 +99,7 @@ export default function GroupMemberTab({
     }
     setLoading(false);
   };
+  const route = `/members/${groupMemberID}`;
   return (
     <>
       {show && (
@@ -126,14 +128,12 @@ export default function GroupMemberTab({
               </div>
               <HRow />
               <div className="flex flex-col items-center justify-start mt-2 gap-1">
-                <div
+                <Link
                   className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
-                  onClick={() =>
-                    router.push(`/members/${groupMemberID}`, { scroll: false })
-                  }
+                  href={route}
                 >
                   View Profile
-                </div>
+                </Link>
                 {curAdmin &&
                   !owner &&
                   !same &&

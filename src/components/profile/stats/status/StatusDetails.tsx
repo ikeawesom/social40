@@ -1,7 +1,7 @@
 "use client";
 import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -11,14 +11,12 @@ type StatusDetailType = {
 };
 export function StatusDetails({ active, curStatus }: StatusDetailType) {
   const statusID = curStatus.statusID;
-  const router = useRouter();
+  const route = `/members/${curStatus.memberID}/${curStatus.statusID}`;
   return (
-    <div
-      onClick={() =>
-        router.push(`/members/${curStatus.memberID}/${curStatus.statusID}`)
-      }
+    <Link
+      href={route}
       className={twMerge(
-        "w-full flex items-start justify-center p-3 flex-col gap-2 hover:bg-custom-light-text duration-200",
+        "w-full flex items-start justify-center p-3 flex-col gap-2 hover:brightness-95 duration-200",
         active ? "bg-custom-light-red" : ""
       )}
       key={statusID}
@@ -43,6 +41,6 @@ export function StatusDetails({ active, curStatus }: StatusDetailType) {
           Pending Endorsement
         </p>
       )}
-    </div>
+    </Link>
   );
 }

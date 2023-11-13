@@ -25,7 +25,6 @@ export default function GroupActivities({
   return (
     <DefaultCard className="w-full">
       <h1 className="text-custom-dark-text font-semibold">Group Activities</h1>
-      <HRow />
       <InnerContainer
         className={twMerge(
           "min-h-[10vh] my-2 max-h-[100vh]",

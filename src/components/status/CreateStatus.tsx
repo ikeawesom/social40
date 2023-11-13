@@ -74,7 +74,7 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
       if (!body.status) throw new Error(body.error);
       toast.success("Added new status.");
       setTimeout(() => {
-        router.push("/profile");
+        router.push("/profile", { scroll: false });
       }, 1000);
     } catch (err: any) {
       toast.error(err.message);

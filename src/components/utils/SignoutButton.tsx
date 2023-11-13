@@ -31,7 +31,9 @@ export default function SignoutButton({
       toast.error(res.data);
       setLoading(false);
     } else {
-      router.push(`/auth?${new URLSearchParams({ new_user: "false" })}`);
+      router.push(`/auth?${new URLSearchParams({ new_user: "false" })}`, {
+        scroll: false,
+      });
     }
   };
   return (

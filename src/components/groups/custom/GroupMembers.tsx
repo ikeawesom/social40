@@ -36,7 +36,6 @@ export default function GroupMembers({
             <StatusDot className="w-1 h-1" status />
           </div>
         </div>
-        <HRow />
       </div>
       <InnerContainer className="max-h-[90vh]">
         {Object.keys(membersList).map((item) => (
