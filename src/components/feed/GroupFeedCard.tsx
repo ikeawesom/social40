@@ -42,7 +42,12 @@ export default async function GroupFeedCard({
 
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-start">
-        <p className="text-xs text-custom-grey-text">{groupID}</p>
+        <Link
+          href={`/groups/${groupID}`}
+          className="text-xs text-custom-grey-text duration-200 hover:opacity-70"
+        >
+          {groupID}
+        </Link>
         <HRow className="mb-2" />
         <Link
           href={`/groups/${activityData.groupID}/activity?${new URLSearchParams(

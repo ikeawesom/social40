@@ -25,7 +25,7 @@ export default function CreateActivityButton({
   return (
     <PrimaryButton
       className={twMerge("flex items-center justify-center w-fit", className)}
-      onClick={() => router.push(route)}
+      onClick={() => router.push(route, { scroll: false })}
     >
       Create Activity
       <Image src="/icons/icon_right_bright.svg" alt="" width={20} height={20} />

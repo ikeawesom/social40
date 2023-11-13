@@ -20,7 +20,7 @@ export default function BiboPage() {
     const aboveAdmin =
       ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
 
-    if (aboveAdmin) router.replace("/profile");
+    if (aboveAdmin) router.replace("/profile", { scroll: false });
 
     const unsub = onSnapshot(doc(FIREBASE_DB, "MEMBERS", memberID), (doc) => {
       const data = doc.data() as MEMBER_SCHEMA;
@@ -28,7 +28,7 @@ export default function BiboPage() {
 
       if (biboStatus === true) {
         router.refresh();
-        router.replace("/profile");
+        router.replace("/profile", { scroll: false });
       }
     });
   }

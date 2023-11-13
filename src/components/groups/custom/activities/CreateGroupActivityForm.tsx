@@ -45,7 +45,8 @@ export default function CreateGroupActivityForm({
 
       router.refresh();
       router.replace(
-        `/groups/${groupID}/activity?${new URLSearchParams({ id: body.data })}`
+        `/groups/${groupID}/activity?${new URLSearchParams({ id: body.data })}`,
+        { scroll: false }
       );
       toast.success("Created activity");
     } catch (err: any) {

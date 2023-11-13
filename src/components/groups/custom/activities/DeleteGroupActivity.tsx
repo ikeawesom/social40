@@ -45,7 +45,7 @@ export default function DeleteGroupActivity({
       if (!body.status) throw new Error(body.error);
 
       router.refresh();
-      router.replace(`/groups/${groupID}`);
+      router.replace(`/groups/${groupID}`, { scroll: false });
       toast.success("Group activity deleted successfully.");
     } catch (err: any) {
       toast.error(err.message);

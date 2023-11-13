@@ -13,12 +13,16 @@ export default function QuickStatusLinks() {
       <HRow />
       <PrimaryButton
         className="bg-violet-500"
-        onClick={() => router.push("https://bit.ly/IR-generator")}
+        onClick={() =>
+          router.push("https://bit.ly/IR-generator", { scroll: false })
+        }
       >
         Incident Report Generator
       </PrimaryButton>
       <PrimaryButton
-        onClick={() => router.push("https://bit.ly/40SAR-MC")}
+        onClick={() =>
+          router.push("https://bit.ly/40SAR-MC", { scroll: false })
+        }
         className="bg-green-600"
       >
         Medical Leave Declaration
