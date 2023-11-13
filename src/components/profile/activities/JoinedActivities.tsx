@@ -6,6 +6,7 @@ import InnerContainer from "../../utils/InnerContainer";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import { twMerge } from "tailwind-merge";
 import GroupActivityTab from "../../groups/custom/activities/GroupActivityTab";
+import { handleHA } from "@/src/utils/activities/handleHA";
 
 export default async function JoinedActivities({
   clickedMemberID,
@@ -24,7 +25,7 @@ export default async function JoinedActivities({
       [activityID: string]: GROUP_ACTIVITY_SCHEMA;
     };
 
-    const empty = Object.keys(activitiesData).length === 0;
+    const { HA, empty } = handleHA(activitiesData);
     return (
       <DefaultCard className="w-full">
         <h1 className="text-custom-dark-text font-semibold">
