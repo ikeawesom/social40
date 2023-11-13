@@ -4,8 +4,13 @@ import { StatusInputType } from "@/src/components/status/CreateStatus";
 import { dbHandler } from "@/src/firebase/db";
 import { getMethod } from "@/src/utils/API/getAPIMethod";
 import getCurrentDate, { StringToTimestamp } from "@/src/utils/getCurrentDate";
+import handleResponses from "@/src/utils/handleResponses";
 import { getFriendsList } from "@/src/utils/profile/getFriendsList";
-import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
+import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
+import {
+  ACTIVITY_PARTICIPANT_SCHEMA,
+  MEMBER_SCHEMA,
+} from "@/src/utils/schemas/members";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -184,6 +189,47 @@ export async function POST(request: NextRequest) {
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
     return NextResponse.json({ status: true });
+  } else if (option === "group-activities") {
+    const res = await dbHandler.getSpecific({
+      path: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+      orderCol: "dateJoined",
+      ascending: true,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    const joinedActivities = res.data as {
+      [activityID: string]: ACTIVITY_PARTICIPANT_SCHEMA;
+    };
+
+    const activitesDataPromise = Object.keys(joinedActivities).map(
+      async (activityID: string) => {
+        const res = await dbHandler.get({
+          col_name: `GROUP-ACTIVITIES`,
+          id: activityID,
+        });
+        if (!res.status)
+          return handleResponses({ status: false, error: res.error });
+        return handleResponses({ data: res.data });
+      }
+    );
+
+    const activitiesDataList = await Promise.all(activitesDataPromise);
+
+    const activitiesDataObj = {} as {
+      [activityID: string]: GROUP_ACTIVITY_SCHEMA;
+    };
+
+    activitiesDataList.forEach((item: any) => {
+      if (!item.status)
+        return NextResponse.json({ status: false, error: item.error });
+      const data = item.data as GROUP_ACTIVITY_SCHEMA;
+      const activityID = data.activityID;
+      activitiesDataObj[activityID] = data;
+    });
+
+    return NextResponse.json({ status: true, data: activitiesDataObj });
   }
 
   return NextResponse.json({
