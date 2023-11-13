@@ -108,6 +108,21 @@ export async function POST(req: NextRequest) {
     if (!resB.status)
       return NextResponse.json({ status: false, error: resB.error });
 
+    // add to member's group activities subcollection
+    const to_addC = {
+      activityID: fetchedID,
+      dateJoined: createdOn,
+    } as ACTIVITY_PARTICIPANT_SCHEMA;
+
+    const resD = await dbHandler.add({
+      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+      id: fetchedID,
+      to_add: to_addC,
+    });
+
+    if (!resD.status)
+      return NextResponse.json({ status: false, error: resD.error });
+
     return NextResponse.json({ status: true, data: fetchedID });
   } else if (option === "group-get") {
     // fetch activity data
