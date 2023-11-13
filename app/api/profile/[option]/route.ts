@@ -193,7 +193,7 @@ export async function POST(request: NextRequest) {
     const res = await dbHandler.getSpecific({
       path: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
       orderCol: "dateJoined",
-      ascending: true,
+      ascending: false,
     });
 
     if (!res.status)
