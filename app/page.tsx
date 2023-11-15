@@ -54,7 +54,7 @@ export default async function Home() {
           </p>
           <Link
             href="/docs/updates"
-            className="text-custom-grey-text text-sm hover:underline duration-200"
+            className="text-custom-primary font-semibold text-sm hover:underline duration-200"
           >
             View updates
           </Link>
