@@ -39,10 +39,22 @@ export function handleHA(activitiesData: {
   if (!empty) {
     const today = getCurrentDate();
     const curTimestamp = getLatestTimestamp(today, activitiesData);
-    console.log(TimestampToDateString(curTimestamp));
-    const diffHours = CompareTimestamp(today, curTimestamp);
-    const daysDiff = Math.floor(diffHours / 24);
-    HA = handleResponses({ status: daysDiff <= 14, data: daysDiff.toString() });
+    // never particiapte in activity before
+    if (curTimestamp === today) {
+      HA = handleResponses({
+        status: false,
+        data: "This member has not tracked their participated activities before.",
+      });
+    } else {
+      const diffHours = CompareTimestamp(today, curTimestamp);
+      const daysDiff = Math.floor(diffHours / 24);
+
+      const good = daysDiff <= 14;
+      HA = handleResponses({
+        status: good,
+        data: `${daysDiff.toString()} days ${good ? "ahead" : "behind"}.`,
+      });
+    }
   }
   return { empty, HA };
 }
