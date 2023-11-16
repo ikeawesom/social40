@@ -2,6 +2,7 @@ import { Timestamp } from "firebase/firestore";
 import getCurrentDate, {
   ActiveTimestamp,
   CompareTimestamp,
+  TimestampToDateString,
 } from "../getCurrentDate";
 import { GROUP_ACTIVITY_SCHEMA } from "../schemas/group-activities";
 import handleResponses from "../handleResponses";
@@ -12,14 +13,23 @@ function getLatestTimestamp(
     [activityID: string]: GROUP_ACTIVITY_SCHEMA;
   }
 ) {
-  let curTimestamp = today;
-  Object.keys(activitiesData).forEach((activitiyID: string) => {
-    const tempTimestamp = activitiesData[activitiyID].activityDate;
-    if (ActiveTimestamp(tempTimestamp)) return curTimestamp;
-    curTimestamp = tempTimestamp;
+  const test = Object.keys(activitiesData).map((activityID: string) => {
+    const tempTimestamp = activitiesData[activityID].activityDate;
+    if (!ActiveTimestamp(tempTimestamp)) {
+      return { status: true, data: tempTimestamp };
+    }
+
+    return { status: false, data: today };
   });
-  return curTimestamp;
+
+  for (const activity of test) {
+    const { data } = activity;
+    if (data !== today) return data;
+  }
+
+  return today;
 }
+
 export function handleHA(activitiesData: {
   [activityID: string]: GROUP_ACTIVITY_SCHEMA;
 }) {
@@ -29,10 +39,10 @@ export function handleHA(activitiesData: {
   if (!empty) {
     const today = getCurrentDate();
     const curTimestamp = getLatestTimestamp(today, activitiesData);
-    const diff = CompareTimestamp(today, curTimestamp);
-    const daysDiff = Math.floor(diff / 24);
-    HA = handleResponses({ status: daysDiff <= 14, data: daysDiff });
+    console.log(TimestampToDateString(curTimestamp));
+    const diffHours = CompareTimestamp(today, curTimestamp);
+    const daysDiff = Math.floor(diffHours / 24);
+    HA = handleResponses({ status: daysDiff <= 14, data: daysDiff.toString() });
   }
-
   return { empty, HA };
 }
