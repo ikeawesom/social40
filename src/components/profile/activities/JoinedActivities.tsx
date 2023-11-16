@@ -36,16 +36,31 @@ export default async function JoinedActivities({
         {HA.data && (
           <div className="w-full my-2">
             {HA.status ? (
-              <Notice
-                noHeader
-                status="success"
-                text={`This member is currently Heat Acclimatised (HA): ${HA.data} days ahead.`}
-              />
+              <>
+                <Notice
+                  noHeader
+                  status="success"
+                  text={`This member is currently Heat Acclimatised (HA).`}
+                />
+                <Notice
+                  containerClassName="mt-2"
+                  status="success"
+                  noHeader
+                  text={`COMMENTS: ${HA.data}`}
+                />
+              </>
             ) : (
-              <Notice
-                status="warning"
-                text={`This member is currently not Heat Acclimatised (HA): ${HA.data} days behind.`}
-              />
+              <>
+                <Notice
+                  status="warning"
+                  text={`This member is currently not Heat Acclimatised (HA).`}
+                />
+                <Notice
+                  status="warning"
+                  containerClassName="mt-2"
+                  text={`${HA.data}`}
+                />
+              </>
             )}
           </div>
         )}
