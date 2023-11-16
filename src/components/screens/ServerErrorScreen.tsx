@@ -20,16 +20,13 @@ export default function ServerErrorScreen({ eMsg }: { eMsg?: string }) {
           />
           <p className="text-center text-custom-grey-text">
             Seems like we ran into a server error. Please contact the
-            administrator or try again later.
+            administrator or restart the app.
           </p>
           <p className="text-center text-custom-grey-text">
             {eMsg && `ERROR: ${eMsg}`}
           </p>
         </div>
         <div className="flex flex-col items-center justify-center w-full gap-2">
-          <SecondaryButton onClick={() => router.refresh()}>
-            Refresh
-          </SecondaryButton>
           <ReturnHomeButton />
         </div>
       </div>
