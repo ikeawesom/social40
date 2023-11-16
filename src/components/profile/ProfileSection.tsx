@@ -62,9 +62,9 @@ export default async function ProfileSection({
           <div className="w-full flex gap-3 flex-col">
             <div className="w-full flex items-center justify-between gap-3">
               <EditProfileButton />
-              <ViewProfileButton memberID={memberID} />
+              <ToggleBibo memberID={memberID} role={role} fetchedBibo={bibo} />
             </div>
-            <ToggleBibo memberID={memberID} role={role} fetchedBibo={bibo} />
+            <ViewProfileButton memberID={memberID} />
           </div>
           <HRow />
           <FriendsList friendsData={friendsData} />
