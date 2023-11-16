@@ -78,6 +78,17 @@ export const BADGE_COLORS = {
 export const MAX_LENGTH = 30;
 
 export const VERSION_MAP = {
+  "0.1.3": {
+    version: "0.1.3",
+    desc: "Please note that this is still a beta testing version. Some features may still be unstable.",
+    updates: [
+      "Activities feed now can be split between groups and friends",
+      "Group activities created will be displayed on activity feed of group members",
+      "Group activities created can have restricitions (restrict to group members only and a deadline to join activity)",
+      "Members can request to participate in the activity, which will be tracked on their public profile",
+      "Their latest activities will be monitored to track their HA statuses",
+    ],
+  },
   "0.1.2": {
     version: "0.1.2",
     desc: "Please note that this is still a beta testing version. Some features may still be unstable.",
