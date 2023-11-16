@@ -215,11 +215,11 @@ export async function POST(req: NextRequest) {
     if (!resC.status)
       return NextResponse.json({ status: false, error: resC.error });
 
-    const { activityDate } = res.data as GROUP_ACTIVITY_SCHEMA;
+    const { activityDate } = resC.data as GROUP_ACTIVITY_SCHEMA;
 
     // add to member's group activities subcollection
     const to_addA = {
-      activityID: activityID,
+      activityID,
       dateJoined: date,
       activityDate,
     } as ACTIVITY_PARTICIPANT_SCHEMA;
