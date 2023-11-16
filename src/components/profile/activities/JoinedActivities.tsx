@@ -33,19 +33,21 @@ export default async function JoinedActivities({
         <h1 className="text-custom-dark-text font-semibold">
           Group Activities Participated
         </h1>
-        <div className="w-full my-2">
-          {HA.status && HA.data ? (
-            <Notice
-              status="success"
-              text={`This member is currently Heat Acclimatised (HA): ${HA.data} days ahead.`}
-            />
-          ) : (
-            <Notice
-              status="warning"
-              text={`This member is currently not Heat Acclimatised (HA): ${HA.data} days behind.`}
-            />
-          )}
-        </div>
+        {HA.data && (
+          <div className="w-full my-2">
+            {HA.status ? (
+              <Notice
+                status="success"
+                text={`This member is currently Heat Acclimatised (HA): ${HA.data} days ahead.`}
+              />
+            ) : (
+              <Notice
+                status="warning"
+                text={`This member is currently not Heat Acclimatised (HA): ${HA.data} days behind.`}
+              />
+            )}
+          </div>
+        )}
         <InnerContainer
           className={twMerge(
             "min-h-[5vh] my-2",
