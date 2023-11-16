@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 
-const PROD = true;
+const PROD = false;
 
 const CONFIG_DEV = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -26,7 +26,7 @@ const CONFIG_PROD = {
 // Initialize Firebase
 let config = CONFIG_DEV;
 if (PROD) config = CONFIG_PROD;
-
+console.log("PRODUCTION FIREBASE:", PROD);
 export const FIREBASE_APP = initializeApp(config);
 console.log("Initializing Primary Firebase App");
 export const SECONDARY_FIREBASE_APP = initializeApp(config, "SECONDARY");
