@@ -6,12 +6,14 @@ type NoticeType = {
   text: string;
   containerClassName?: string;
   textClassName?: string;
+  noHeader?: boolean;
 };
 export default function Notice({
   status,
   text,
   containerClassName,
   textClassName,
+  noHeader,
 }: NoticeType) {
   return (
     <div
@@ -34,7 +36,10 @@ export default function Notice({
           "text-sm"
         )}
       >
-        <span className="font-semibold">[{status.toUpperCase()}]</span> {text}
+        {!noHeader && (
+          <span className="font-semibold">[{status.toUpperCase()}]</span>
+        )}{" "}
+        {text}
       </p>
     </div>
   );

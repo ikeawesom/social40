@@ -37,6 +37,7 @@ export default async function JoinedActivities({
           <div className="w-full my-2">
             {HA.status ? (
               <Notice
+                noHeader
                 status="success"
                 text={`This member is currently Heat Acclimatised (HA): ${HA.data} days ahead.`}
               />
