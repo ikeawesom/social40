@@ -112,6 +112,7 @@ export async function POST(req: NextRequest) {
     const to_addC = {
       activityID: fetchedID,
       dateJoined: createdOn,
+      activityDate: timestamp,
     } as ACTIVITY_PARTICIPANT_SCHEMA;
 
     const resD = await dbHandler.add({
@@ -206,10 +207,21 @@ export async function POST(req: NextRequest) {
     if (!resB.status)
       return NextResponse.json({ status: false, error: resB.error });
 
+    const resC = await dbHandler.get({
+      col_name: `GROUP-ACTIVITIES`,
+      id: activityID,
+    });
+
+    if (!resC.status)
+      return NextResponse.json({ status: false, error: resC.error });
+
+    const { activityDate } = res.data as GROUP_ACTIVITY_SCHEMA;
+
     // add to member's group activities subcollection
     const to_addA = {
       activityID: activityID,
       dateJoined: date,
+      activityDate,
     } as ACTIVITY_PARTICIPANT_SCHEMA;
 
     const resA = await dbHandler.add({

@@ -192,7 +192,7 @@ export async function POST(request: NextRequest) {
   } else if (option === "group-activities") {
     const res = await dbHandler.getSpecific({
       path: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
-      orderCol: "dateJoined",
+      orderCol: "activityDate",
       ascending: false,
     });
 
