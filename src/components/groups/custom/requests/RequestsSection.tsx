@@ -3,7 +3,7 @@ import DefaultCard from "../../../DefaultCard";
 import Image from "next/image";
 import RequestedUser from "./RequestedUser";
 import { WaitListData } from "@/src/hooks/groups/custom/requests/useGroupRequests";
-import LoadingIcon from "@/src/components/utils/LoadingIcon";
+import { LoadingIconBright } from "@/src/components/utils/LoadingIcon";
 import { toast } from "sonner";
 import { dbHandler } from "@/src/firebase/db";
 import InnerContainer from "@/src/components/utils/InnerContainer";
@@ -114,7 +114,7 @@ export default function RequestsSection({
           <InnerContainer>
             {loading && (
               <div className="w-full absolute grid place-items-center h-full bg-black/25 z-30">
-                <LoadingIcon width={30} height={30} />
+                <LoadingIconBright width={30} height={30} />
               </div>
             )}
             {Object.keys(data).map((item) => (
