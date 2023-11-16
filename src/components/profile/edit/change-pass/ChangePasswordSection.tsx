@@ -10,12 +10,7 @@ export default function ChangePasswordSection() {
   const [show, setShow] = useState(false);
   return (
     <DefaultCard className="w-full">
-      <Link
-        href=""
-        scroll={false}
-        className="flex items-center justify-between w-full"
-        onClick={() => setShow(!show)}
-      >
+      <div className="flex items-center justify-between w-full">
         <h1 className="text-custom-dark-text font-semibold text-start">
           Change Password
         </h1>
@@ -24,9 +19,10 @@ export default function ChangePasswordSection() {
           width={30}
           height={30}
           alt="Show"
+          onClick={() => setShow(!show)}
           className={`duration-300 ease-in-out ${show ? "rotate-180" : ""}`}
         />
-      </Link>
+      </div>
       {show && (
         <>
           <HRow />
