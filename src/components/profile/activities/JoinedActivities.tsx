@@ -51,7 +51,8 @@ export default async function JoinedActivities({
         <InnerContainer
           className={twMerge(
             "min-h-[5vh] my-2",
-            empty && "grid place-items-center justify-center overflow-hidden"
+            empty &&
+              "grid place-items-center justify-center overflow-hidden p-4"
           )}
         >
           {empty ? (

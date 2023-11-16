@@ -5,6 +5,7 @@ import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import InnerContainer from "../../utils/InnerContainer";
 import MemberStatusTab from "./MemberStatusTab";
 import { ActiveTimestamp } from "@/src/utils/getCurrentDate";
+import { twMerge } from "tailwind-merge";
 
 export type GroupStatusType = {
   [memberID: string]: { [statusID: string]: STATUS_SCHEMA };
@@ -36,13 +37,18 @@ export default function GroupStatusSection({
           Group Statuses
         </h1>
       </div>
-      {empty ? (
-        <p className="text-sm text-custom-grey-text">
-          Looks like nobody in this groups have statuses recorded.
-        </p>
-      ) : (
-        <InnerContainer className="max-h-[80vh]">
-          {Object.keys(GroupStatusList).map((memberID: string) => {
+      <InnerContainer
+        className={twMerge(
+          "min-h-[10vh] max-h-[100vh]",
+          empty && "grid place-items-center justify-center overflow-hidden p-4"
+        )}
+      >
+        {empty ? (
+          <p className="text-sm text-custom-grey-text">
+            Looks like nobody in this groups have statuses recorded.
+          </p>
+        ) : (
+          Object.keys(GroupStatusList).map((memberID: string) => {
             const memberStatus = GroupStatusList[memberID];
             const memberEmpty = Object.keys(memberStatus).length === 0;
             if (!memberEmpty)
@@ -68,9 +74,9 @@ export default function GroupStatusSection({
                   })}
                 </div>
               );
-          })}
-        </InnerContainer>
-      )}
+          })
+        )}
+      </InnerContainer>
     </DefaultCard>
   );
 }
