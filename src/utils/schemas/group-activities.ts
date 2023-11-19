@@ -37,6 +37,10 @@ export type REMARKS_SCHEMA = {
   memberID: string; // memberID of member who added the remark
   remarkTitle: string; // remark title
   remarks: string;
+  read: {
+    status: boolean;
+    readOn: Timestamp;
+  };
   createdOn: Timestamp;
 };
 
