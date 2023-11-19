@@ -56,7 +56,7 @@ export default async function GroupActivityJoinSection({
           )
         )}
         {currentParticipant && !active && (
-          <div className="flex flex-col items-start justify-start w-full gap-1">
+          <div className="flex flex-col items-start justify-start w-full gap-2">
             <AddRemarkButton activityID={activityID} memberID={memberID} />
             <p className="text-custom-grey-text text-sm text-start">
               This helps provide feedback for future trainings.
