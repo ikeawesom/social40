@@ -38,8 +38,9 @@ export default async function ActivityRemarks({
     if (!body.status) throw new Error(body.error);
 
     const remarksData = body.data as { [remarkID: string]: REMARKS_SCHEMA };
-
     const unread = GetUnread(remarksData);
+    const empty = Object.keys(remarksData).length === 0;
+
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
         <div className="flex w-full items-center justify-between">
@@ -58,41 +59,54 @@ export default async function ActivityRemarks({
           </p>
         </div>
 
-        <InnerContainer className="w-full max-h-[100vh]">
-          {Object.keys(remarksData).map((remarkID: string) => {
-            const data = remarksData[remarkID];
-            const { createdOn, memberID, remarkTitle, activityID, read } = data;
-            const { status, readOn } = read;
-            return (
-              <Link
-                key={remarkID}
-                href={`/groups/${groupID}/activity?${new URLSearchParams({
-                  id: activityID,
-                })}&${new URLSearchParams({
-                  remarkid: remarkID,
-                })}`}
-                className={twMerge(
-                  "w-full flex flex-col items-start justify-center py-2 px-3 duration-200 ",
-                  !status
-                    ? "bg-custom-light-red hover:brightness-95"
-                    : "hover:bg-custom-light-text"
-                )}
-              >
-                <h1 className="text-custom-dark-text font-semibold">
-                  {remarkTitle}
-                </h1>
-                <p className="text-custom-grey-text text-sm">{memberID}</p>
-                <p className="text-custom-grey-text text-xs">
-                  Date submitted: {TimestampToDateString(createdOn)}
-                </p>
-                {status && (
+        <InnerContainer
+          className={twMerge(
+            "w-full max-h-[100vh]",
+            empty &&
+              "grid place-items-center justify-center overflow-hidden p-4"
+          )}
+        >
+          {empty ? (
+            <p className="text-sm text-custom-grey-text text-center">
+              No remarks recorded by participants for now!
+            </p>
+          ) : (
+            Object.keys(remarksData).map((remarkID: string) => {
+              const data = remarksData[remarkID];
+              const { createdOn, memberID, remarkTitle, activityID, read } =
+                data;
+              const { status, readOn } = read;
+              return (
+                <Link
+                  key={remarkID}
+                  href={`/groups/${groupID}/activity?${new URLSearchParams({
+                    id: activityID,
+                  })}&${new URLSearchParams({
+                    remarkid: remarkID,
+                  })}`}
+                  className={twMerge(
+                    "w-full flex flex-col items-start justify-center py-2 px-3 duration-200 ",
+                    !status
+                      ? "bg-custom-light-red hover:brightness-95"
+                      : "hover:bg-custom-light-text"
+                  )}
+                >
+                  <h1 className="text-custom-dark-text font-semibold">
+                    {remarkTitle}
+                  </h1>
+                  <p className="text-custom-grey-text text-sm">{memberID}</p>
                   <p className="text-custom-grey-text text-xs">
-                    Read on: {TimestampToDateString(readOn)}
+                    Date submitted: {TimestampToDateString(createdOn)}
                   </p>
-                )}
-              </Link>
-            );
-          })}
+                  {status && (
+                    <p className="text-custom-grey-text text-xs">
+                      Read on: {TimestampToDateString(readOn)}
+                    </p>
+                  )}
+                </Link>
+              );
+            })
+          )}
         </InnerContainer>
       </DefaultCard>
     );
