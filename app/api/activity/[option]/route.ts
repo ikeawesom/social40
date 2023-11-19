@@ -399,6 +399,15 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ status: true });
   } else if (option === "group-get-remarks") {
+    const res = await dbHandler.getSpecific({
+      path: `GROUP-ACTIVITIES/${activityID}/REMARKS`,
+      orderCol: "createdOn",
+      ascending: false,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ error: res.error, status: false });
+    return NextResponse.json({ status: true, data: res.data });
   }
 
   return NextResponse.json({
