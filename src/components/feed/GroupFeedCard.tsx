@@ -17,15 +17,18 @@ export default async function GroupFeedCard({
 }) {
   try {
     const { activityID, groupID, activityDesc, activityTitle } = activityData;
-    const res = await FetchGroupActivityData({
+    const host = process.env.HOST as string;
+
+    const res = await FetchGroupActivityData.getMain({
       activityID,
       groupID,
+      host,
       memberID,
     });
+
     if (!res.status) throw new Error(res.error);
 
     const {
-      requested,
       owner,
       canJoin,
       active,
@@ -33,6 +36,17 @@ export default async function GroupFeedCard({
       currentParticipant,
       participantsData,
     } = res.data;
+
+    const resA = await FetchGroupActivityData.getRequests({
+      activityID,
+      groupID,
+      host,
+      memberID,
+    });
+
+    if (!resA.status) throw new Error(resA.error);
+
+    const { requested } = resA.data;
 
     const participantNumber = Object.keys(participantsData).length;
     const randomIndex = Math.floor(Math.random() * participantNumber);
