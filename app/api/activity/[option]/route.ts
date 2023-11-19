@@ -6,6 +6,7 @@ import {
   GROUP_ACTIVITY_PARTICIPANT,
   GROUP_ACTIVITY_SCHEMA,
   GROUP_ACTIVITY_WAITLIST,
+  REMARKS_SCHEMA,
 } from "@/src/utils/schemas/group-activities";
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
 import { ACTIVITY_PARTICIPANT_SCHEMA } from "@/src/utils/schemas/members";
@@ -365,6 +366,80 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: false, error: res.error });
 
     return NextResponse.json({ data: res.data, status: true });
+  } else if (option === "group-set-remark") {
+    const remarks = fetchedData.remarks as string;
+    const remarkTitle = fetchedData.remarkTitle as string;
+
+    const to_add = {
+      activityID,
+      createdOn: getCurrentDate(),
+      memberID,
+      remarkTitle,
+      remarks,
+      read: {
+        readOn: getCurrentDate(),
+        status: false,
+      },
+    } as REMARKS_SCHEMA;
+
+    const res = await dbHandler.addGeneral({
+      path: `GROUP-ACTIVITIES/${activityID}/REMARKS`,
+      to_add,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ error: res.error, status: false });
+
+    const remarkID = res.data.id as string;
+
+    const resA = await dbHandler.edit({
+      col_name: `GROUP-ACTIVITIES/${activityID}/REMARKS`,
+      id: remarkID,
+      data: { remarkID },
+    });
+
+    if (!resA.status)
+      return NextResponse.json({ error: resA.error, status: false });
+
+    return NextResponse.json({ status: true });
+  } else if (option === "group-get-remarks") {
+    const res = await dbHandler.getSpecific({
+      path: `GROUP-ACTIVITIES/${activityID}/REMARKS`,
+      orderCol: "createdOn",
+      ascending: false,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ error: res.error, status: false });
+    return NextResponse.json({ status: true, data: res.data });
+  } else if (option === "group-get-specific-remark") {
+    const { remarkID } = fetchedData;
+
+    const res = await dbHandler.get({
+      col_name: `GROUP-ACTIVITIES/${activityID}/REMARKS`,
+      id: remarkID,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    return NextResponse.json({ status: true, data: res.data });
+  } else if (option === "group-set-remark-read") {
+    const { remarkID } = fetchedData;
+    const res = await dbHandler.edit({
+      col_name: `GROUP-ACTIVITIES/${activityID}/REMARKS`,
+      id: remarkID,
+      data: {
+        read: {
+          status: true,
+          readOn: getCurrentDate(),
+        },
+      },
+    });
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    return NextResponse.json({ status: true });
   }
 
   return NextResponse.json({

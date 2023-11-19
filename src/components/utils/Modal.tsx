@@ -17,10 +17,7 @@ export default function Modal({ children, className, loading }: ModalProps) {
         <LoadingIcon />
       ) : (
         <DefaultCard
-          className={twMerge(
-            "max-w-[600px] w-[90vw] min-[400px]:p-6 p-4",
-            className
-          )}
+          className={twMerge("max-w-[600px] w-[90vw] p-4", className)}
         >
           {children}
         </DefaultCard>
