@@ -80,6 +80,7 @@ export const MAX_LENGTH = 30;
 export const VERSION_MAP = {
   "0.2.3": {
     version: "0.2.3",
+    title: "Activity Remarks",
     desc: "Please note that this is still a beta testing version. Some features may still be unstable.",
     updates: [
       "Members can now make remarks to activities that have ended",
@@ -90,6 +91,7 @@ export const VERSION_MAP = {
   },
   "0.2.2": {
     version: "0.2.2",
+    title: "Activity Feed for Groups",
     desc: "Please note that this is still a beta testing version. Some features may still be unstable.",
     updates: [
       "Activities feed now can be split between groups and friends",
@@ -101,13 +103,15 @@ export const VERSION_MAP = {
   },
   "0.2.1": {
     version: "0.2.1",
+    title: "Group Activities",
     desc: "Please note that this is still a beta testing version. Some features may still be unstable.",
     updates: [
       "Group activities can now be added via the group dashboard by the group owner",
     ],
   },
   "0.1.2": {
-    version: "0.1.1.1",
+    version: "0.1.2",
+    title: "Specific BIBO Statuses",
     desc: "Please note that this is still a beta testing version. Some features may still be unstable.",
     updates: [
       "COS, commanders and above can now view the BIBO statuses of members with a simple member ID search.",
@@ -116,6 +120,7 @@ export const VERSION_MAP = {
   },
   "0.1.1": {
     version: "0.1.1",
+    title: "Statuses",
     desc: "Please note that this is still a beta testing version. Some features may still be unstable.",
     updates: [
       "Status feature are now available for both members and groups.",
@@ -124,12 +129,14 @@ export const VERSION_MAP = {
   },
   "0.1.0": {
     version: "0.1.0",
+    title: "First Release",
     desc: "Please note that this is still a beta testing version. Some features may still be unstable.",
     updates: [],
   },
 } as {
   [versionNumber: string]: {
     version: string;
+    title: string;
     desc: string;
     updates: string[];
   };
