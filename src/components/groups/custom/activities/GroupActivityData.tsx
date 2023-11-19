@@ -45,8 +45,7 @@ export default async function GroupActivityData({
 
       if (!res.status) throw new Error(res.error);
 
-      const { activityData, owner, canJoin, active, currentParticipant } =
-        res.data;
+      const { activityData, owner, active } = res.data;
 
       const resA = await FetchGroupActivityData.getRequests({
         activityID,
@@ -60,7 +59,7 @@ export default async function GroupActivityData({
       const { noRequests, requestsData } = resA.data;
 
       return (
-        <div className="w-full flex flex-col items-start justify-center gap-4 max-w-[500px]">
+        <div className="w-full flex flex-col items-start justify-center gap-4">
           {!noRequests && owner && (
             <ActivityWaitlist
               requestsData={requestsData}
