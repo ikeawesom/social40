@@ -7,82 +7,106 @@ import {
 } from "../../schemas/group-activities";
 import handleResponses from "../../handleResponses";
 
-export async function FetchGroupActivityData({
-  memberID,
-  groupID,
-  activityID,
-}: {
+type GroupActivityClassType = {
   memberID: string;
   groupID: string;
   activityID: string;
-}) {
-  try {
-    const host = process.env.HOST;
-    // check if logged in member is member of group
-    const UserObj = GetPostObj({ memberID, groupID });
-    const res = await fetch(`${host}/api/groups/memberof`, UserObj);
-    const body = await res.json();
+  host: string;
+};
 
-    // get group activity data
-    const PostObjActivity = GetPostObj({ activityID });
-    const resA = await fetch(`${host}/api/activity/group-get`, PostObjActivity);
-    const bodyA = await resA.json();
+class FetchGroupActivityClass {
+  async getMain({
+    memberID,
+    groupID,
+    activityID,
+    host,
+  }: GroupActivityClassType) {
+    try {
+      // check if logged in member is member of group
+      const UserObj = GetPostObj({
+        memberID: memberID,
+        groupID: groupID,
+      });
+      const res = await fetch(`${host}/api/groups/memberof`, UserObj);
+      const body = await res.json();
 
-    if (!bodyA.status) throw new Error(bodyA.error);
+      // get group activity data
+      const PostObjActivity = GetPostObj({ activityID: activityID });
+      const resA = await fetch(
+        `${host}/api/activity/group-get`,
+        PostObjActivity
+      );
+      const bodyA = await resA.json();
 
-    const activityData = bodyA.data.activityData as GROUP_ACTIVITY_SCHEMA;
-    const participantsData = bodyA.data.participantsData as {
-      [memberID: string]: GROUP_ACTIVITY_PARTICIPANT;
-    };
+      if (!bodyA.status) throw new Error(bodyA.error);
 
-    let currentParticipant = false;
+      const activityData = bodyA.data.activityData as GROUP_ACTIVITY_SCHEMA;
+      const participantsData = bodyA.data.participantsData as {
+        [memberID: string]: GROUP_ACTIVITY_PARTICIPANT;
+      };
 
-    if (memberID in participantsData) currentParticipant = true;
+      let currentParticipant = false;
 
-    const date = activityData.activityDate;
-    const dateStr = TimestampToDateString(date);
+      if (memberID in participantsData) currentParticipant = true;
 
-    const active = ActiveTimestamp(date);
-    const restrictionStatus = activityData.groupRestriction;
-    const currentMember = body.status;
+      const date = activityData.activityDate;
+      const dateStr = TimestampToDateString(date);
 
-    const canJoin =
-      (!restrictionStatus || (currentMember && restrictionStatus)) &&
-      active &&
-      !currentParticipant;
+      const active = ActiveTimestamp(date);
+      const restrictionStatus = activityData.groupRestriction;
+      const currentMember = body.status;
 
-    const owner = body.status ? body.data.role === "owner" : false;
+      const canJoin =
+        (!restrictionStatus || (currentMember && restrictionStatus)) &&
+        active &&
+        !currentParticipant;
 
-    // get group activity requests
-    const resB = await fetch(
-      `${host}/api/activity/group-get-requests`,
-      PostObjActivity
-    );
-    const bodyB = await resB.json();
+      const owner = body.status ? body.data.role === "owner" : false;
+      return handleResponses({
+        data: {
+          activityData,
+          owner,
+          canJoin,
+          active,
+          dateStr,
+          currentParticipant,
+          participantsData,
+        },
+      });
+    } catch (err: any) {
+      return handleResponses({ status: false, error: err });
+    }
+  }
 
-    if (!bodyB.status) throw new Error(bodyB.error);
+  async getRequests({ memberID, activityID, host }: GroupActivityClassType) {
+    try {
+      // get group activity requests
+      const PostObjActivity = GetPostObj({ activityID: activityID });
+      const resB = await fetch(
+        `${host}/api/activity/group-get-requests`,
+        PostObjActivity
+      );
+      const bodyB = await resB.json();
 
-    const requestsData = bodyB.data as ActivityWaitlistType;
-    const noRequests = Object.keys(requestsData).length === 0;
+      if (!bodyB.status) throw new Error(bodyB.error);
 
-    // check if current member is in waiting list
-    const requested = memberID in requestsData;
+      const requestsData = bodyB.data as ActivityWaitlistType;
+      const noRequests = Object.keys(requestsData).length === 0;
 
-    return handleResponses({
-      data: {
-        activityData,
-        requested,
-        noRequests,
-        owner,
-        canJoin,
-        active,
-        dateStr,
-        requestsData,
-        currentParticipant,
-        participantsData,
-      },
-    });
-  } catch (err: any) {
-    return handleResponses({ status: false, error: err.message });
+      // check if current member is in waiting list
+      const requested = memberID in requestsData;
+
+      return handleResponses({
+        data: {
+          requested,
+          noRequests,
+          requestsData,
+        },
+      });
+    } catch (err: any) {
+      return handleResponses({ status: false, error: err });
+    }
   }
 }
+
+export const FetchGroupActivityData = new FetchGroupActivityClass();
