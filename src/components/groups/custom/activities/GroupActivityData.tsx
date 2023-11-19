@@ -2,12 +2,8 @@ import DefaultCard from "@/src/components/DefaultCard";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import HRow from "@/src/components/utils/HRow";
 import InnerContainer from "@/src/components/utils/InnerContainer";
-import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import {
-  ActiveTimestamp,
-  TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
+import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import React from "react";
@@ -17,6 +13,7 @@ import LeaveActivityButton from "./LeaveActivityButton";
 import GroupActivitySettings from "./GroupActivitySettings";
 import DeleteGroupActivity from "./DeleteGroupActivity";
 import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
+import AddRemarkButton from "./AddRemarkButton";
 
 export default async function GroupActivityData({
   activityID,
@@ -101,6 +98,14 @@ export default async function GroupActivityData({
                 memberID={memberID}
               />
             )
+          )}
+          {currentParticipant && !active && (
+            <div className="flex flex-col items-start justify-start w-full gap-1">
+              <AddRemarkButton activityID={activityID} memberID={memberID} />
+              <p className="text-custom-grey-text text-sm text-start">
+                This helps provide feedback for future trainings.
+              </p>
+            </div>
           )}
           <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
             <div className="w-full flex flex-col items-start justify-center">
