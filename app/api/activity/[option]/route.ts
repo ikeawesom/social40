@@ -408,6 +408,18 @@ export async function POST(req: NextRequest) {
     if (!res.status)
       return NextResponse.json({ error: res.error, status: false });
     return NextResponse.json({ status: true, data: res.data });
+  } else if (option === "group-get-specific-remark") {
+    const { remarkID } = fetchedData;
+
+    const res = await dbHandler.get({
+      col_name: `GROUP-ACTIVITIES/${activityID}/REMARKS`,
+      id: remarkID,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    return NextResponse.json({ status: true, data: res.data });
   }
 
   return NextResponse.json({
