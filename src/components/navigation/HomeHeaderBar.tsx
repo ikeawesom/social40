@@ -25,7 +25,7 @@ export default function HomeHeaderBar({
             : text}
         </h1>
         <Image
-          src="/pwa/icons/icon-512x512.png"
+          src="/icons/icon_coin.svg"
           alt="Social40"
           width={30}
           height={30}
