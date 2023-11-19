@@ -24,7 +24,9 @@ export default function PatchNotesPage() {
               <p className="text-custom-dark-text">{desc}</p>
               {!emptyUpdates && (
                 <ul className="mt-3 list-disc">
-                  <h4 className="text-custom-dark-text text-lg">What's New?</h4>
+                  <h4 className="text-custom-dark-text text-lg font-semibold">
+                    What's New?
+                  </h4>
                   {updates.map((update: string, index: number) => (
                     <li key={index} className="text-custom-dark-text ml-4">
                       {update}
