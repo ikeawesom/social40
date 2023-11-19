@@ -33,8 +33,10 @@ export type GROUP_ACTIVITY_WAITLIST = {
 
 export type REMARKS_SCHEMA = {
   remarkID: string;
+  activityID: string;
   memberID: string; // memberID of member who added the remark
   remarks: string; // remarks made
+  createdOn: Timestamp;
 };
 
 export function initGroupActivityObject({
