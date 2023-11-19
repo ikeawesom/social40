@@ -57,6 +57,14 @@ export default async function ActivityRemarkData({
 
     const { activityTitle } = activityData as GROUP_ACTIVITY_SCHEMA;
 
+    const resB = await fetch(
+      `${host}/api/activity/group-set-remark-read`,
+      RemarkObj
+    );
+    const bodyB = await resB.json();
+
+    if (!bodyB.status) throw new Error(bodyB.error);
+
     return (
       <div className="w-full flex flex-col items-start justify-center gap-4">
         <DefaultCard className="w-full flex flex-col items-start justify-start">
