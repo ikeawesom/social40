@@ -86,7 +86,7 @@ export default async function ActivityRemarks({
                   Date submitted: {TimestampToDateString(createdOn)}
                 </p>
                 {status && (
-                  <p className="text-custom-grey-text text-xs mt-2">
+                  <p className="text-custom-grey-text text-xs">
                     Read on: {TimestampToDateString(readOn)}
                   </p>
                 )}

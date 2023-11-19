@@ -52,21 +52,25 @@ export default async function ActivityRemarkData({
 
     if (!bodyA.status) throw new Error(bodyA.error);
 
-    const { createdOn, memberID, remarkTitle, remarks } =
+    const { createdOn, memberID, remarkTitle, remarks, read } =
       bodyA.data as REMARKS_SCHEMA;
+
+    const { readOn, status } = read;
 
     const { activityTitle } = activityData as GROUP_ACTIVITY_SCHEMA;
 
-    const resB = await fetch(
-      `${host}/api/activity/group-set-remark-read`,
-      RemarkObj
-    );
-    const bodyB = await resB.json();
+    if (!status) {
+      const resB = await fetch(
+        `${host}/api/activity/group-set-remark-read`,
+        RemarkObj
+      );
+      const bodyB = await resB.json();
 
-    if (!bodyB.status) throw new Error(bodyB.error);
+      if (!bodyB.status) throw new Error(bodyB.error);
+    }
 
     return (
-      <div className="w-full flex flex-col items-start justify-center gap-4">
+      <div className="w-full flex flex-col items-center justify-start gap-2">
         <DefaultCard className="w-full flex flex-col items-start justify-start">
           <Link
             href={`/groups/${groupID}/activity?${new URLSearchParams({
@@ -90,6 +94,11 @@ export default async function ActivityRemarkData({
             </p>
           </div>
         </DefaultCard>
+        {status && (
+          <p className="text-center text-custom-grey-text text-sm">
+            Read on: {TimestampToDateString(readOn)}
+          </p>
+        )}
       </div>
     );
   }
