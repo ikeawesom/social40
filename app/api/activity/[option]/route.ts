@@ -376,6 +376,10 @@ export async function POST(req: NextRequest) {
       memberID,
       remarkTitle,
       remarks,
+      read: {
+        readOn: getCurrentDate(),
+        status: false,
+      },
     } as REMARKS_SCHEMA;
 
     const res = await dbHandler.addGeneral({
@@ -420,6 +424,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: false, error: res.error });
 
     return NextResponse.json({ status: true, data: res.data });
+  } else if (option === "group-set-remark-read") {
+    const { remarkID } = fetchedData;
+    const res = await dbHandler.edit({
+      col_name: `GROUP-ACTIVITIES/${activityID}/REMARKS`,
+      id: remarkID,
+      data: {
+        read: {
+          status: true,
+          readOn: getCurrentDate(),
+        },
+      },
+    });
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    return NextResponse.json({ status: true });
   }
 
   return NextResponse.json({
