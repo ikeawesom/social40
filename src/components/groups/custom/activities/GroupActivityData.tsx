@@ -45,7 +45,7 @@ export default async function GroupActivityData({
 
       if (!res.status) throw new Error(res.error);
 
-      const { activityData, owner, active, admin } = res.data;
+      const { activityData, active, admin } = res.data;
 
       const resA = await FetchGroupActivityData.getRequests({
         activityID,
@@ -60,7 +60,7 @@ export default async function GroupActivityData({
 
       return (
         <div className="w-full flex flex-col items-start justify-center gap-4">
-          {!noRequests && owner && (
+          {!noRequests && admin && (
             <ActivityWaitlist
               requestsData={requestsData}
               activityID={activityID}
@@ -94,8 +94,8 @@ export default async function GroupActivityData({
               <ActivityRemarks activityID={activityID} groupID={groupID} />
             </Suspense>
           )}
-          {owner && <GroupActivitySettings activityData={activityData} />}
-          {owner && <DeleteGroupActivity activityData={activityData} />}
+          {admin && <GroupActivitySettings activityData={activityData} />}
+          {admin && <DeleteGroupActivity activityData={activityData} />}
         </div>
       );
     } catch (err: any) {
