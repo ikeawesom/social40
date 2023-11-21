@@ -6,6 +6,7 @@ import {
   GROUP_ACTIVITY_PARTICIPANT,
 } from "../../schemas/group-activities";
 import handleResponses from "../../handleResponses";
+import { ROLES_HIERARCHY } from "../../constants";
 
 type GroupActivityClassType = {
   memberID: string;
@@ -62,6 +63,13 @@ class FetchGroupActivityClass {
         !currentParticipant;
 
       const owner = body.status ? body.data.role === "owner" : false;
+
+      let admin = false;
+      if (body.status) {
+        const role = body.data.role;
+        admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
+      }
+
       return handleResponses({
         data: {
           activityData,
@@ -71,6 +79,7 @@ class FetchGroupActivityClass {
           dateStr,
           currentParticipant,
           participantsData,
+          admin,
         },
       });
     } catch (err: any) {

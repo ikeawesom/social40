@@ -45,7 +45,7 @@ export default async function GroupActivityData({
 
       if (!res.status) throw new Error(res.error);
 
-      const { activityData, owner, active } = res.data;
+      const { activityData, owner, active, admin } = res.data;
 
       const resA = await FetchGroupActivityData.getRequests({
         activityID,
@@ -89,7 +89,7 @@ export default async function GroupActivityData({
             />
           </Suspense>
 
-          {owner && !active && (
+          {admin && !active && (
             <Suspense fallback={<DefaultSkeleton />}>
               <ActivityRemarks activityID={activityID} groupID={groupID} />
             </Suspense>
