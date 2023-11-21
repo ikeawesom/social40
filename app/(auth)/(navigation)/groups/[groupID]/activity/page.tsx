@@ -8,6 +8,7 @@ import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { cookies } from "next/headers";
 import React, { Suspense } from "react";
 
@@ -44,11 +45,14 @@ export default async function ActivityPage({
       const res = await fetch(`${host}/api/groups/memberof`, groupPostObj);
       const body = await res.json();
 
-      let owner = false;
-      if (body.status) owner = body.data.role === "owner";
+      let admin = false;
+      if (body.status) {
+        const role = body.data.role;
+        admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
+      }
 
       // only group owners can create new activities
-      if (!view && !owner) return <RestrictedScreen />;
+      if (!view && !admin) return <RestrictedScreen />;
       return (
         <>
           <HeaderBar back text={title} />
