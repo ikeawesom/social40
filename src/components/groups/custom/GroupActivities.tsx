@@ -13,11 +13,11 @@ export type GroupActivitiesType = {
 
 export default function GroupActivities({
   activitiesData,
-  owner,
+  admin,
   groupID,
 }: {
   activitiesData: GroupActivitiesType;
-  owner: boolean;
+  admin: boolean;
   groupID: string;
 }) {
   const empty = Object.keys(activitiesData).length === 0;
@@ -33,7 +33,7 @@ export default function GroupActivities({
       >
         {empty ? (
           <p className="text-sm text-custom-grey-text text-center">
-            Group owner has not added any activities...
+            No activities have been created in this group...
           </p>
         ) : (
           Object.keys(activitiesData).map((activityID: string) => {
@@ -44,7 +44,7 @@ export default function GroupActivities({
           })
         )}
       </InnerContainer>
-      {owner && (
+      {admin && (
         <div className="w-full flex items-center justify-end">
           <CreateActivityButton group groupID={groupID} />
         </div>

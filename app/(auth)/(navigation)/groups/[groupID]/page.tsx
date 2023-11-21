@@ -151,7 +151,7 @@ export default async function GroupPage({
                 <GroupLeaderboard memberData={groupMembersData} />
                 <GroupActivities
                   groupID={groupID}
-                  owner={owner}
+                  admin={admin}
                   activitiesData={groupActivitiesData}
                 />
                 {admin && (
