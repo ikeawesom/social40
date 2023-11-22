@@ -1,7 +1,7 @@
 import { dbHandler } from "@/src/firebase/db";
 import { getMethod } from "@/src/utils/API/getAPIMethod";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
-import { BIBO_DB_TYPE, BIBO_SCHEMA } from "@/src/utils/schemas/bibo";
+import { DateToTimestamp } from "@/src/utils/getCurrentDate";
+import { BIBO_SCHEMA } from "@/src/utils/schemas/bibo";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -26,26 +26,15 @@ export async function POST(request: NextRequest) {
           "No member exists with that member ID. Please try again."
         );
 
-      const res = await dbHandler.getDocs({
-        col_name: `MEMBERS/${memberID}/BIBO`,
+      const res = await dbHandler.getSpecific({
+        path: `MEMBERS/${memberID}/BIBO`,
+        orderCol: "timestamp",
+        ascending: true,
       });
 
       if (!res.status) throw new Error(res.error);
 
-      const biboArr = res.data as any;
-      var obj = {} as BIBO_DB_TYPE;
-      var empty = biboArr.length === 0;
-
-      if (empty) return NextResponse.json({ status: true, data: {} });
-
-      biboArr.forEach((doc: any) => {
-        const dateData = doc.data() as BIBO_SCHEMA;
-        const tempKey = Object.keys(dateData)[0] as string;
-        const date = dateData[tempKey].bookedInDate;
-        obj[date] = dateData;
-      });
-
-      return NextResponse.json({ status: true, data: obj });
+      return NextResponse.json({ status: true, data: res.data });
     } catch (err: any) {
       return NextResponse.json({ status: false, error: err.message });
     }
@@ -71,7 +60,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ status: false, error: err.message });
     }
   } else if (option === "set-custom") {
-    const { memberBookIn, bookInDate, bookInTime, timestamp } = fetchedData;
+    const { memberBookIn, bookInDate, bookInTime } = fetchedData;
 
     try {
       // fetch current bibo record
@@ -85,23 +74,37 @@ export async function POST(request: NextRequest) {
       const { bookedIn } = memberData;
 
       // log bibo record for member who booked in
+      const dateTimeStr = `${bookInDate} ${bookInTime}`;
+      const yearInt = Number.parseInt(bookInDate.split("/")[2]);
+      const monthInt = Number.parseInt(bookInDate.split("/")[1]);
+      const dayInt = Number.parseInt(bookInDate.split("/")[0]);
+      const hourInt = Number.parseInt(bookInTime.split(":")[0]);
+      const minuteInt = Number.parseInt(bookInTime.split(":")[1]);
+      const secondInt = Number.parseInt(bookInTime.split(":")[2]);
+
+      const date = new Date(
+        yearInt,
+        monthInt - 1,
+        dayInt,
+        hourInt,
+        minuteInt,
+        secondInt
+      );
+      const timestamp = DateToTimestamp(date);
       const dashedDate = bookInDate.split("/").join("-");
 
       const to_add = {
-        [bookInTime]: {
-          verifiedBy: memberID,
-          bookedInDate: dashedDate,
-          bookedInTime: bookInTime,
-          bookedIn: bookedIn,
-          memberID: memberBookIn,
-          timestamp,
-        },
+        verifiedBy: memberID,
+        bookedInDate: dashedDate,
+        bookedInTime: bookInTime,
+        bookedIn: bookedIn,
+        memberID: memberBookIn,
+        timestamp,
       } as BIBO_SCHEMA;
 
-      const res = await dbHandler.edit({
-        col_name: `MEMBERS/${memberBookIn}/BIBO`,
-        id: dashedDate,
-        data: to_add,
+      const res = await dbHandler.addGeneral({
+        path: `MEMBERS/${memberBookIn}/BIBO`,
+        to_add,
       });
 
       if (!res.status) throw new Error(res.error);
