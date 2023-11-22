@@ -90,10 +90,11 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
       }
     }
     if (memberID !== "") startQR();
-
-    return () => {
-      html5QrCode.stop();
-    };
+    else {
+      return () => {
+        html5QrCode.stop();
+      };
+    }
   }, [memberID]);
   return (
     <>
