@@ -8,10 +8,7 @@ import { useHostname } from "@/src/hooks/useHostname";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import {
-  TimestampToDateString,
-  getCurrentDateString,
-} from "@/src/utils/getCurrentDate";
+import { getCurrentDateString } from "@/src/utils/getCurrentDate";
 
 export default function ToggleBibo({
   fetchedBibo,
@@ -37,15 +34,15 @@ export default function ToggleBibo({
     if (bibo || aboveCOS) {
       setLoading(true);
       try {
-        const date = getCurrentDateString();
-        const bookInDate = date.split(" ")[0];
-        const bookInTime = date.split(" ")[1];
-
         const PostObj = GetPostObj({ memberID });
 
         const res = await fetch(`${host}/api/bibo/set`, PostObj);
         const body = await res.json();
         if (!body.status) throw new Error(body.error);
+
+        const date = getCurrentDateString();
+        const bookInDate = date.split(" ")[0];
+        const bookInTime = date.split(" ")[1];
 
         const PostObjA = GetPostObj({
           memberID,

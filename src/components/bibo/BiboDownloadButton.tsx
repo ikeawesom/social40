@@ -20,22 +20,23 @@ export default function BiboDownloadButton({
   const download = () => {
     let memberID = "";
     let biboArr = [] as BiboArrType[];
-    Object.keys(biboData).forEach((date: string) => {
-      Object.keys(biboData[date]).forEach((time: string) => {
-        const status = biboData[date][time].bookedIn;
-        if (memberID === "") {
-          memberID = biboData[date][time].memberID;
-        }
-        const to_push = {
-          Date: date,
-          Time: time,
-          "Member ID": memberID,
-          "BIBO Status": status ? "Booked In" : "Booked Out",
-          "Verified By": biboData[date][time].verifiedBy,
-        };
-        biboArr.push(to_push);
-      });
+    Object.keys(biboData).forEach((id: string) => {
+      const data = biboData[id];
+      const status = data.bookedIn;
+      if (memberID === "") {
+        memberID = data.memberID;
+      }
+
+      const to_push = {
+        Date: data.bookedInDate,
+        Time: data.bookedInTime,
+        "Member ID": memberID,
+        "BIBO Status": status ? "Booked In" : "Booked Out",
+        "Verified By": data.verifiedBy,
+      };
+      biboArr.push(to_push);
     });
+
     const filename = `${memberID}-bibo-logs`;
     ExportExcel({ excelData: biboArr, filename });
   };

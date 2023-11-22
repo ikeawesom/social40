@@ -25,8 +25,7 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
     if (!biboData) return;
 
     try {
-      const bookInTime = Object.keys(biboData)[0];
-      const data = biboData[bookInTime];
+      const data = biboData;
       const memberBookIn = data.memberID;
 
       const PostObj = GetPostObj({ memberID: memberBookIn });
@@ -64,7 +63,11 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
   const successScan = async (text: string) => {
     setLoading(true);
     const data = JSON.parse(text) as BIBO_SCHEMA;
-    setBiboData(data);
+    try {
+      setBiboData(data);
+    } catch (err: any) {
+      toast.error("Invalid BIBO QR Code. Please try again.");
+    }
   };
 
   const config = {
@@ -86,7 +89,13 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
       }
     }
     if (memberID !== "") startQR();
+    else {
+      return () => {
+        html5QrCode.stop();
+      };
+    }
   }, [memberID]);
+
   return (
     <>
       {biboData && (
@@ -113,7 +122,7 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
           <div className="flex flex-col items-center justify-center">
             <h1 className="text-center">Booking in member:</h1>
             <h1 className="text-center text-custom-primary font-semibold">
-              {biboData[Object.keys(biboData)[0]].memberID}
+              {biboData.memberID}
             </h1>
           </div>
           <div className="w-full items-stretch justify-between gap-2 flex">

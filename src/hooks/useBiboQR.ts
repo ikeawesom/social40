@@ -23,13 +23,11 @@ export function useBiboQR() {
       const date = dateStr.split(" ")[0];
       const time = dateStr.split(" ")[1];
       const toSend = {
-        [time]: {
-          bookedIn: true,
-          verifiedBy: "",
-          bookedInDate: date,
-          bookedInTime: time,
-          memberID: memberID,
-        },
+        bookedIn: true,
+        verifiedBy: "",
+        bookedInDate: date,
+        bookedInTime: time,
+        memberID: memberID,
       } as BIBO_SCHEMA;
 
       const toSendStr = JSON.stringify(toSend);
