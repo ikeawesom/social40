@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ status: false, error: err.message });
     }
   } else if (option === "set-custom") {
-    const { memberBookIn, bookInDate, bookInTime } = fetchedData;
+    const { memberBookIn, bookInDate, bookInTime, timestamp } = fetchedData;
 
     try {
       // fetch current bibo record
@@ -94,6 +94,7 @@ export async function POST(request: NextRequest) {
           bookedInTime: bookInTime,
           bookedIn: bookedIn,
           memberID: memberBookIn,
+          timestamp,
         },
       } as BIBO_SCHEMA;
 
