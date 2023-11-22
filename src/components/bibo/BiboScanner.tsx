@@ -25,8 +25,7 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
     if (!biboData) return;
 
     try {
-      const bookInTime = Object.keys(biboData)[0];
-      const data = biboData[bookInTime];
+      const data = biboData;
       const memberBookIn = data.memberID;
 
       const PostObj = GetPostObj({ memberID: memberBookIn });
@@ -96,6 +95,7 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
       };
     }
   }, [memberID]);
+
   return (
     <>
       {biboData && (
@@ -122,7 +122,7 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
           <div className="flex flex-col items-center justify-center">
             <h1 className="text-center">Booking in member:</h1>
             <h1 className="text-center text-custom-primary font-semibold">
-              {biboData[Object.keys(biboData)[0]].memberID}
+              {biboData.memberID}
             </h1>
           </div>
           <div className="w-full items-stretch justify-between gap-2 flex">
