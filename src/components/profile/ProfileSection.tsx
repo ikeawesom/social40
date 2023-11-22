@@ -26,7 +26,10 @@ export default async function ProfileSection({
   const role = memberData.role as string;
   const memberID = memberData.memberID as string;
 
-  const rankName = `${memberData.rank} ${memberData.displayName}`.trim();
+  const rankName = `${memberData.rank} ${memberData.displayName} ${
+    role === "cos" && "(COS)"
+  }`.trim();
+
   return (
     <DefaultCard
       className={twMerge(
