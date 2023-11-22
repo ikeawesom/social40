@@ -27,7 +27,7 @@ export default async function ProfileSection({
   const memberID = memberData.memberID as string;
 
   const rankName = `${memberData.rank} ${memberData.displayName} ${
-    role === "cos" && "(COS)"
+    role === "cos" ? "(COS)" : ""
   }`.trim();
 
   return (
