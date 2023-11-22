@@ -64,7 +64,11 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
   const successScan = async (text: string) => {
     setLoading(true);
     const data = JSON.parse(text) as BIBO_SCHEMA;
-    setBiboData(data);
+    try {
+      setBiboData(data);
+    } catch (err: any) {
+      toast.error("Invalid BIBO QR Code. Please try again.");
+    }
   };
 
   const config = {
@@ -86,6 +90,10 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
       }
     }
     if (memberID !== "") startQR();
+
+    return () => {
+      html5QrCode.stop();
+    };
   }, [memberID]);
   return (
     <>
