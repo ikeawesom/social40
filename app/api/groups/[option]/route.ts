@@ -97,7 +97,8 @@ export async function POST(request: NextRequest) {
       const res = await dbHandler.get({ col_name: "MEMBERS", id: memberID });
       if (res.status) {
         const memberData = res.data as MEMBER_SCHEMA;
-        const displayName = memberData.displayName;
+        const displayName =
+          `${memberData.rank} ${memberData.displayName}`.trim();
         const bookedIn = memberData.bookedIn;
 
         return {
