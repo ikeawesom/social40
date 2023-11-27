@@ -78,6 +78,12 @@ export const BADGE_COLORS = {
 export const MAX_LENGTH = 30;
 
 export const VERSION_MAP = {
+  "0.3.0": {
+    version: "0.3.0",
+    title: "Beta Release",
+    desc: "First stable beta release. Some features may still be unstable.",
+    updates: [],
+  },
   "0.2.3": {
     version: "0.2.3",
     title: "Activity Remarks",
