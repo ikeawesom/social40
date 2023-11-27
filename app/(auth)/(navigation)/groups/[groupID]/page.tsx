@@ -142,7 +142,7 @@ export default async function GroupPage({
                   title={groupName}
                   desc={groupDesc}
                 />
-                {owner && <GroupRequested groupID={groupID} />}
+                {admin && <GroupRequested groupID={groupID} />}
                 <GroupMembers
                   curMember={currentMember}
                   groupID={groupID}
