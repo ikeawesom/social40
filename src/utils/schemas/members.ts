@@ -15,6 +15,9 @@ export type MEMBER_SCHEMA = {
   shootingID: string;
   statisticsID: string;
 
+  // feedback
+  feedback?: false;
+
   createdOn: Timestamp; // date format
 };
 
