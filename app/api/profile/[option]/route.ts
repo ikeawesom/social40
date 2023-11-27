@@ -230,6 +230,17 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ status: true, data: activitiesDataObj });
+  } else if (option === "feedback-done") {
+    const res = await dbHandler.edit({
+      col_name: "MEMBERS",
+      id: memberID,
+      data: { feedback: true },
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    return NextResponse.json({ status: true });
   }
 
   return NextResponse.json({
