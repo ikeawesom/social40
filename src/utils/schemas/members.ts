@@ -3,6 +3,7 @@ import getCurrentDate from "../getCurrentDate";
 
 export type MEMBER_SCHEMA = {
   memberID: string;
+  password: string;
   displayName: string;
   bookedIn: boolean;
   points: number;
@@ -51,14 +52,17 @@ export type ACTIVITY_PARTICIPANT_SCHEMA = {
 export function initMemberObject({
   memberID,
   displayName,
+  password,
   role,
 }: {
   memberID: string;
   displayName: string;
+  password: string;
   role: string;
 }) {
   return {
     memberID,
+    password,
     displayName,
     bookedIn: false,
     points: 0,
