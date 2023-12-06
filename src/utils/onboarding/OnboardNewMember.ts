@@ -31,6 +31,7 @@ export async function OnboardNewMember({
       memberID,
       displayName,
       role: role ? role : "member",
+      password,
     });
 
     if (!memberDBStatus.status) throw new Error(memberDBStatus.error);
@@ -45,13 +46,15 @@ export async function AddMember({
   memberID,
   displayName,
   role,
+  password,
 }: OnboardMemberTypes) {
-  if (memberID && displayName && role) {
+  if (memberID && displayName && role && password) {
     try {
       const to_add = initMemberObject({
         memberID,
         displayName,
         role: role,
+        password,
       });
 
       const resB = await dbHandler.add({
@@ -67,7 +70,7 @@ export async function AddMember({
     }
   }
   return handleResponses({
-    error: "MemberID, Display Name or Role not provided!",
+    error: "MemberID, Display Name, Role or Password not provided!",
     status: false,
   });
 }

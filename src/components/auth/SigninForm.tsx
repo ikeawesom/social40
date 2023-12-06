@@ -10,6 +10,7 @@ import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { clearCookies } from "@/src/utils/clearCookies";
 import { useRouter } from "next/navigation";
 import { LoadingIconBright } from "../utils/LoadingIcon";
+import { dbHandler } from "@/src/firebase/db";
 
 type userDetailsType = {
   email: string;
@@ -61,6 +62,15 @@ export default function SigninForm({ setStatus }: statusType) {
       );
 
       if (!res.status) throw new Error(res.error);
+
+      const resA = await dbHandler.edit({
+        col_name: `MEMBERS`,
+        data: { password: userDetails.password },
+        id: userDetails.email,
+      });
+
+      if (!resA.status) throw new Error(resA.error);
+
       router.refresh();
       setMember(memberID);
     } catch (e: any) {
