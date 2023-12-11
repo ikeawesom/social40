@@ -66,7 +66,7 @@ export default function SigninForm({ setStatus }: statusType) {
       const resA = await dbHandler.edit({
         col_name: `MEMBERS`,
         data: { password: userDetails.password },
-        id: userDetails.email,
+        id: memberID,
       });
 
       if (!resA.status) throw new Error(resA.error);
