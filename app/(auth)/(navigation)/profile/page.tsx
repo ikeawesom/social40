@@ -16,6 +16,7 @@ import StatsSection, {
 } from "@/src/components/profile/StatsSection";
 import { redirect } from "next/navigation";
 import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
+import GuidebookDownload from "@/src/components/utils/GuidebookDownload";
 
 export const metadata: Metadata = {
   title: "Profile",
@@ -93,6 +94,7 @@ export default async function Profile({
                 />
               </Suspense>
               {cos && <BiboSection />}
+              <GuidebookDownload />
             </div>
             {/* TO DO */}
           </div>

@@ -1,6 +1,7 @@
 import Hero from "@/src/components/Hero";
 import PageWrapper from "@/src/components/PageWrapper";
 import FeedbackModal from "@/src/components/feedback/FeedbackModal";
+import GuidebookDownload from "@/src/components/utils/GuidebookDownload";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import InstallButton from "@/src/utils/InstallButton";
 import { VERSION_DESC, VERSION_NUMBER } from "@/src/utils/constants";
@@ -26,6 +27,7 @@ export default async function Home() {
         <div className="grid place-items-center h-[80vh]">
           <div className="flex flex-col gap-y-4 items-center justify-center">
             <Hero />
+
             <div className="flex items-center justify-between gap-3 w-full max-[400px]:flex-col">
               <InstallButton />
               {!data ? (
@@ -58,12 +60,17 @@ export default async function Home() {
               <p className="text-custom-grey-text text-center text-sm">
                 v{VERSION_NUMBER}: {VERSION_DESC}
               </p>
-              <Link
-                href="/docs/updates"
-                className="text-custom-primary font-semibold text-sm hover:underline duration-200"
-              >
-                View updates
-              </Link>
+              <div className="flex gap-x-6 gap-y-2 items-center justify-center flex-wrap">
+                <div className="flex flex-col gap-2 items-center justify-center">
+                  <Link
+                    href="/docs/updates"
+                    className="text-custom-primary font-semibold text-sm hover:underline duration-200"
+                  >
+                    View updates
+                  </Link>
+                </div>
+                <GuidebookDownload />
+              </div>
             </div>
           </div>
         </div>
