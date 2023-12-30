@@ -12,6 +12,7 @@ import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import NewMemberSection from "@/src/components/profile/edit/new-member/NewMemberSection";
+import Link from "next/link";
 
 export default async function EditProfilePage() {
   const cookieStore = cookies();
@@ -65,6 +66,24 @@ export default async function EditProfilePage() {
                 <EditProfileForm memberData={memberData} />
               </div>
             </DefaultCard>
+            {/* View Hidden Activities */}
+            <Link href="/hidden-activities" className="w-full">
+              <DefaultCard className="w-full">
+                <div className="flex items-center justify-between w-full">
+                  <h1 className="text-custom-dark-text font-semibold text-start">
+                    View Hidden Activities
+                  </h1>
+                  <Image
+                    src="/icons/icon_arrow-down.svg"
+                    width={30}
+                    height={30}
+                    alt="Show"
+                    className="-rotate-90"
+                  />
+                </div>
+              </DefaultCard>
+            </Link>
+
             {/* Change password */}
             <ChangePasswordSection />
             {/* Create Member */}
