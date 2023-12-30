@@ -9,7 +9,10 @@ import {
   REMARKS_SCHEMA,
 } from "@/src/utils/schemas/group-activities";
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
-import { ACTIVITY_PARTICIPANT_SCHEMA } from "@/src/utils/schemas/members";
+import {
+  ACTIVITY_PARTICIPANT_SCHEMA,
+  MEMBER_SCHEMA,
+} from "@/src/utils/schemas/members";
 import { Timestamp } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -440,6 +443,82 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: false, error: res.error });
 
     return NextResponse.json({ status: true });
+  } else if (option === "get-hidden") {
+    const res = await dbHandler.get({ col_name: "MEMBERS", id: memberID });
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    const data = res.data as MEMBER_SCHEMA;
+
+    const { hiddenActivities } = data;
+    if (hiddenActivities === undefined)
+      return NextResponse.json({ status: true, data: [] });
+    return NextResponse.json({ status: true, data: hiddenActivities });
+  } else if (option === "set-dismiss") {
+    const { activityID } = fetchedData;
+    const res = await dbHandler.get({ col_name: "MEMBERS", id: memberID });
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    const data = res.data as MEMBER_SCHEMA;
+
+    const { hiddenActivities } = data;
+
+    var arr = [] as string[];
+    if (hiddenActivities === undefined) {
+      arr.push(activityID);
+    } else {
+      arr = hiddenActivities;
+      if (!arr.includes(activityID)) arr.push(activityID);
+    }
+
+    console.log("New Hidden Activities:", arr);
+
+    const resA = await dbHandler.edit({
+      col_name: "MEMBERS",
+      id: memberID,
+      data: {
+        hiddenActivities: arr,
+      },
+    });
+
+    if (!resA.status)
+      return NextResponse.json({ status: false, error: resA.error });
+
+    return NextResponse.json({ status: true, data: arr });
+  } else if (option === "reset-dismiss") {
+    const { activityID } = fetchedData;
+    const res = await dbHandler.get({ col_name: "MEMBERS", id: memberID });
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    const data = res.data as MEMBER_SCHEMA;
+
+    const { hiddenActivities } = data;
+
+    var arr = [] as string[];
+    if (hiddenActivities !== undefined && hiddenActivities.length > 0) {
+      arr = hiddenActivities;
+      if (arr.includes(activityID)) {
+        const index = arr.indexOf(activityID);
+        arr.splice(index, 1);
+      }
+    }
+
+    console.log("New Hidden Activities:", arr);
+
+    const resA = await dbHandler.edit({
+      col_name: "MEMBERS",
+      id: memberID,
+      data: {
+        hiddenActivities: arr,
+      },
+    });
+
+    if (!resA.status)
+      return NextResponse.json({ status: false, error: resA.error });
+
+    return NextResponse.json({ status: true, data: arr });
   }
 
   return NextResponse.json({
