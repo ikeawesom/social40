@@ -35,7 +35,7 @@ export default function ShowButton({
 
   return (
     <SecondaryButton
-      className={"w-1/3 self-stretch grid place-items-center"}
+      className={"w-1/4 self-stretch grid place-items-center"}
       disabled={loading}
       onClick={handleDismiss}
     >
