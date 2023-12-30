@@ -7,13 +7,19 @@ import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import JoinGroupActivityButton from "../groups/custom/activities/JoinGroupActivityButton";
 import SecondaryButton from "../utils/SecondaryButton";
+import { toast } from "sonner";
+import { GetPostObj } from "@/src/utils/API/GetPostObj";
+import DismissButton from "./DismissButton";
+import ShowButton from "./ShowButton";
 
 export default async function GroupFeedCard({
   activityData,
   memberID,
+  show,
 }: {
   activityData: GROUP_ACTIVITY_SCHEMA;
   memberID: string;
+  show?: boolean;
 }) {
   try {
     const { activityID, groupID, activityDesc, activityTitle } = activityData;
@@ -102,7 +108,7 @@ export default async function GroupFeedCard({
           participating.
         </Link>
 
-        <div className="w-full mt-2">
+        <div className="w-full mt-2 flex items-center justify-between gap-3">
           {owner ? (
             <SecondaryButton
               disabled
@@ -130,6 +136,19 @@ export default async function GroupFeedCard({
                 ? "You are participating in this activity"
                 : "You have participated in this activity"}
             </SecondaryButton>
+          )}
+          {show ? (
+            <ShowButton
+              activityID={activityID}
+              host={host}
+              memberID={memberID}
+            />
+          ) : (
+            <DismissButton
+              activityID={activityID}
+              host={host}
+              memberID={memberID}
+            />
           )}
         </div>
       </DefaultCard>
