@@ -1,9 +1,10 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import SecondaryButton from "../utils/SecondaryButton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import LoadingIcon from "../utils/LoadingIcon";
 
 export default function ShowButton({
   activityID,
@@ -14,8 +15,10 @@ export default function ShowButton({
   activityID: string;
   host: string;
 }) {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const handleDismiss = async () => {
+    setLoading(true);
     try {
       const MemberObj = GetPostObj({ memberID, activityID });
       const res = await fetch(`${host}/api/activity/reset-dismiss`, MemberObj);
@@ -27,11 +30,16 @@ export default function ShowButton({
     } catch (err: any) {
       toast.error(err.message);
     }
+    setLoading(false);
   };
 
   return (
-    <SecondaryButton className="w-fit" onClick={handleDismiss}>
-      Show
+    <SecondaryButton
+      className={"w-1/3 self-stretch grid place-items-center"}
+      disabled={loading}
+      onClick={handleDismiss}
+    >
+      {loading ? <LoadingIcon width={20} height={20} /> : "Show"}
     </SecondaryButton>
   );
 }
