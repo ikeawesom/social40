@@ -82,10 +82,34 @@ export default async function FeedGroup({ memberID }: { memberID: string }) {
         <ErrorActivities text="Well, looks like there are no activites here for you." />
       );
 
+    // get all hidden activity IDs from member data
+    const resB = await fetch(`${host}/api/activity/get-hidden`, MemberObj);
+    const bodyB = await resB.json();
+
+    if (!bodyB.status) throw new Error(bodyB.error);
+
+    // filter hidden activity IDs from all activities keys
+    const filteredActivityKeys = Object.keys(groupActivitiesData).filter(
+      (activityID: string) => !bodyB.data.includes(activityID)
+    );
+
+    // convert array of activity IDs to objects of activityIDs activity data
+    var filteredActivities = {} as {
+      [activityID: string]: GROUP_ACTIVITY_SCHEMA;
+    };
+    filteredActivityKeys.forEach((activityID: string) => {
+      filteredActivities[activityID] = groupActivitiesData[activityID];
+    });
+
+    if (Object.keys(filteredActivities).length === 0)
+      return (
+        <ErrorActivities text="Well, looks like there are no activites here for you." />
+      );
+
     return (
       <div className="flex w-full flex-col items-start justify-start gap-4">
-        {Object.keys(groupActivitiesData).map((activityID: string) => {
-          const data = groupActivitiesData[activityID] as GROUP_ACTIVITY_SCHEMA;
+        {Object.keys(filteredActivities).map((activityID: string) => {
+          const data = filteredActivities[activityID] as GROUP_ACTIVITY_SCHEMA;
           return (
             <GroupFeedCard
               key={activityID}
