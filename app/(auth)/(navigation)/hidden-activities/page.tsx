@@ -75,20 +75,22 @@ export default async function EditProfilePage() {
     return (
       <>
         <HeaderBar text="Hidden Activities" back />
-        <div className="flex w-full flex-col items-start justify-start gap-4">
-          {Object.keys(groupActivitiesData).map((activityID: string) => {
-            const data = groupActivitiesData[
-              activityID
-            ] as GROUP_ACTIVITY_SCHEMA;
-            return (
-              <GroupFeedCard
-                show
-                key={activityID}
-                memberID={memberID}
-                activityData={data}
-              />
-            );
-          })}
+        <div className="grid place-items-center">
+          <div className="max-w-[500px] flex w-full flex-col items-start justify-start gap-4">
+            {Object.keys(groupActivitiesData).map((activityID: string) => {
+              const data = groupActivitiesData[
+                activityID
+              ] as GROUP_ACTIVITY_SCHEMA;
+              return (
+                <GroupFeedCard
+                  show
+                  key={activityID}
+                  memberID={memberID}
+                  activityData={data}
+                />
+              );
+            })}
+          </div>
         </div>
       </>
     );
