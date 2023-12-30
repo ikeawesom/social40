@@ -16,6 +16,9 @@ export type MEMBER_SCHEMA = {
   shootingID: string;
   statisticsID: string;
 
+  // hidden activities
+  hiddenActivities?: string[];
+
   // feedback
   feedback?: false;
 
