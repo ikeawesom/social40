@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import DefaultCard from "../DefaultCard";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import Link from "next/link";
@@ -7,12 +8,12 @@ import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import JoinGroupActivityButton from "../groups/custom/activities/JoinGroupActivityButton";
 import SecondaryButton from "../utils/SecondaryButton";
-import { toast } from "sonner";
-import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import DismissButton from "./DismissButton";
 import ShowButton from "./ShowButton";
+import { useHostname } from "@/src/hooks/useHostname";
+import DefaultSkeleton from "../utils/DefaultSkeleton";
 
-export default async function GroupFeedCard({
+export default function GroupFeedCard({
   activityData,
   memberID,
   show,
@@ -21,43 +22,49 @@ export default async function GroupFeedCard({
   memberID: string;
   show?: boolean;
 }) {
-  try {
-    const { activityID, groupID, activityDesc, activityTitle } = activityData;
-    const host = process.env.HOST as string;
+  const { host } = useHostname();
+  const [error, setError] = useState("");
+  const [res, setRes] = useState<any>();
+  const [resA, setResA] = useState<any>();
+  const { activityID, groupID, activityDesc, activityTitle } = activityData;
 
-    const res = await FetchGroupActivityData.getMain({
-      activityID,
-      groupID,
-      host,
-      memberID,
-    });
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const res = await FetchGroupActivityData.getMain({
+          activityID,
+          groupID,
+          host,
+          memberID,
+        });
 
-    if (!res.status) throw new Error(res.error);
+        if (!res.status) throw new Error(res.error);
+        setRes(res.data);
 
-    const {
-      owner,
-      canJoin,
-      active,
-      dateStr,
-      currentParticipant,
-      participantsData,
-    } = res.data;
+        const resA = await FetchGroupActivityData.getRequests({
+          activityID,
+          groupID,
+          host,
+          memberID,
+        });
 
-    const resA = await FetchGroupActivityData.getRequests({
-      activityID,
-      groupID,
-      host,
-      memberID,
-    });
+        if (!resA.status) throw new Error(resA.error);
+        setResA(resA.data);
+      } catch (err: any) {
+        setError(err.message);
+      }
+    };
 
-    if (!resA.status) throw new Error(resA.error);
+    init();
+  }, []);
 
-    const { requested } = resA.data;
+  if (res && resA) {
+    const { requested } = resA;
 
-    const participantNumber = Object.keys(participantsData).length;
+    const participantNumber = Object.keys(res.participantsData).length;
     const randomIndex = Math.floor(Math.random() * participantNumber);
 
-    const randomParticipant = Object.keys(participantsData)[randomIndex];
+    const randomParticipant = Object.keys(res.participantsData)[randomIndex];
     const oneParticipant = participantNumber - 1 === 0;
 
     return (
@@ -81,8 +88,8 @@ export default async function GroupFeedCard({
         </Link>
         <p className="text-custom-dark-text text-sm">{activityDesc}</p>
         <p className="text-custom-grey-text text-xs">
-          {active ? "Begins on: " : "Ended on: "}
-          {dateStr}
+          {res.active ? "Begins on: " : "Ended on: "}
+          {res.dateStr}
         </p>
 
         <Link
@@ -109,20 +116,20 @@ export default async function GroupFeedCard({
         </Link>
 
         <div className="w-full mt-2 flex items-center justify-between gap-3">
-          {owner ? (
+          {res.owner ? (
             <SecondaryButton
               disabled
               className="border-custom-green text-custom-green text-xs"
             >
-              {active
+              {res.active
                 ? "You created this activity"
                 : "You have participated in this activity"}
             </SecondaryButton>
-          ) : !currentParticipant ? (
+          ) : !res.currentParticipant ? (
             <JoinGroupActivityButton
-              active={active}
+              active={res.active}
               activityID={activityID}
-              canJoin={canJoin}
+              canJoin={res.canJoin}
               memberID={memberID}
               requested={requested}
               className="text-xs"
@@ -132,7 +139,7 @@ export default async function GroupFeedCard({
               disabled
               className="border-custom-green text-custom-green text-xs"
             >
-              {active
+              {res.active
                 ? "You are participating in this activity"
                 : "You have participated in this activity"}
             </SecondaryButton>
@@ -153,7 +160,9 @@ export default async function GroupFeedCard({
         </div>
       </DefaultCard>
     );
-  } catch (err: any) {
-    return ErrorScreenHandler(err);
+  } else if (error !== "") {
+    return ErrorScreenHandler(error);
+  } else {
+    return <DefaultSkeleton />;
   }
 }
