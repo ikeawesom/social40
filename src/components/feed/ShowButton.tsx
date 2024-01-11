@@ -35,11 +35,11 @@ export default function ShowButton({
 
   return (
     <SecondaryButton
-      className={"w-1/4 self-stretch grid place-items-center"}
+      className={"w-fit self-stretch flex items-center justify-center"}
       disabled={loading}
       onClick={handleDismiss}
     >
-      {loading ? <LoadingIcon width={20} height={20} /> : "Show"}
+      {loading ? <LoadingIcon width={30} height={30} /> : "Show"}
     </SecondaryButton>
   );
 }
