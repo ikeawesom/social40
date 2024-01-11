@@ -1,11 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import DefaultCard from "../../DefaultCard";
-import HRow from "../../utils/HRow";
 import InnerContainer from "../../utils/InnerContainer";
 import GroupMemberTab from "./GroupMemberTab";
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
 import StatusDot from "../../utils/StatusDot";
+import useQueryObj from "@/src/hooks/useQueryObj";
+import QueryInput from "../../utils/QueryInput";
 
 export type GroupDetailsType = {
   [memberID: string]: GROUP_MEMBERS_SCHEMA;
@@ -21,7 +22,9 @@ export default function GroupMembers({
   curMember: GROUP_MEMBERS_SCHEMA;
 }) {
   const [online, setOnline] = useState(0);
-  const length = Object.keys(membersList).length;
+  const { itemList, search, handleSearch } = useQueryObj({ obj: membersList });
+
+  const length = Object.keys(itemList).length;
 
   const addOnline = () => setOnline((online) => online + 1);
   return (
@@ -37,14 +40,19 @@ export default function GroupMembers({
           </div>
         </div>
       </div>
+      <QueryInput
+        placeholder="Search for Member ID"
+        handleSearch={handleSearch}
+        search={search}
+      />
       <InnerContainer className="max-h-[90vh]">
-        {Object.keys(membersList).map((item) => (
+        {Object.keys(itemList).map((item) => (
           <GroupMemberTab
             addOnline={addOnline}
             curMember={curMember}
             groupID={groupID}
             key={item}
-            data={membersList[item]}
+            data={itemList[item]}
           />
         ))}
       </InnerContainer>
