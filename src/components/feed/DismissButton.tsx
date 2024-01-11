@@ -36,11 +36,11 @@ export default function DismissButton({
 
   return (
     <SecondaryButton
-      className={"w-1/4 self-stretch grid place-items-center"}
+      className={"w-1/4 self-stretch flex items-center justify-center"}
       disabled={loading}
       onClick={handleDismiss}
     >
-      {loading ? <LoadingIcon width={20} height={20} /> : "Dismiss"}
+      {loading ? <LoadingIcon width={30} height={30} /> : "Dismiss"}
     </SecondaryButton>
   );
 }

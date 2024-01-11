@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
 import DefaultCard from "../../DefaultCard";
@@ -6,6 +7,8 @@ import InnerContainer from "../../utils/InnerContainer";
 import { twMerge } from "tailwind-merge";
 import GroupActivityTab from "./activities/GroupActivityTab";
 import CreateActivityButton from "./activities/CreateActivityButton";
+import useQueryObj from "@/src/hooks/useQueryObj";
+import QueryInput from "../../utils/QueryInput";
 
 export type GroupActivitiesType = {
   [activityID: string]: GROUP_ACTIVITIES_SCHEMA;
@@ -20,11 +23,21 @@ export default function GroupActivities({
   admin: boolean;
   groupID: string;
 }) {
-  const empty = Object.keys(activitiesData).length === 0;
-
+  const { handleSearch, itemList, search } = useQueryObj({
+    obj: activitiesData,
+    type: "activityTitle",
+  });
+  const empty = Object.keys(itemList).length === 0;
   return (
     <DefaultCard className="w-full">
-      <h1 className="text-custom-dark-text font-semibold">Group Activities</h1>
+      <h1 className="text-custom-dark-text font-semibold mb-2">
+        Group Activities ( {Object.keys(itemList).length} )
+      </h1>
+      <QueryInput
+        handleSearch={handleSearch}
+        placeholder="Search activity name"
+        search={search}
+      />
       <InnerContainer
         className={twMerge(
           "min-h-[10vh] my-2 max-h-[100vh]",
@@ -33,11 +46,13 @@ export default function GroupActivities({
       >
         {empty ? (
           <p className="text-sm text-custom-grey-text text-center">
-            No activities have been created in this group...
+            {search === ""
+              ? "No activities have been created in this group..."
+              : "Nothing found here..."}
           </p>
         ) : (
-          Object.keys(activitiesData).map((activityID: string) => {
-            const activityData = activitiesData[activityID];
+          Object.keys(itemList).map((activityID: string) => {
+            const activityData = itemList[activityID];
             return (
               <GroupActivityTab activityData={activityData} key={activityID} />
             );

@@ -7,8 +7,6 @@ import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import JoinGroupActivityButton from "../groups/custom/activities/JoinGroupActivityButton";
 import SecondaryButton from "../utils/SecondaryButton";
-import { toast } from "sonner";
-import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import DismissButton from "./DismissButton";
 import ShowButton from "./ShowButton";
 
