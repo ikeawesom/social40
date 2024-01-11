@@ -8,8 +8,8 @@ import {
 } from "@/src/utils/schemas/members";
 import handleResponses from "@/src/utils/handleResponses";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
-import GroupFeedCard from "./GroupFeedCard";
 import ErrorActivities from "../screens/ErrorActivities";
+import FeedGroupList from "./FeedGroupList";
 
 export default async function FeedGroup({ memberID }: { memberID: string }) {
   if (!memberID) return <SignInAgainScreen />;
@@ -108,16 +108,10 @@ export default async function FeedGroup({ memberID }: { memberID: string }) {
 
     return (
       <div className="flex w-full flex-col items-start justify-start gap-4">
-        {Object.keys(filteredActivities).map((activityID: string) => {
-          const data = filteredActivities[activityID] as GROUP_ACTIVITY_SCHEMA;
-          return (
-            <GroupFeedCard
-              key={activityID}
-              memberID={memberID}
-              activityData={data}
-            />
-          );
-        })}
+        <FeedGroupList
+          filteredActivities={filteredActivities}
+          memberID={memberID}
+        />
       </div>
     );
   } catch (err) {
