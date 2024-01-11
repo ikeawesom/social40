@@ -2,12 +2,8 @@ import React from "react";
 import DefaultCard from "../../DefaultCard";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import InnerContainer from "../../utils/InnerContainer";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
-import { twMerge } from "tailwind-merge";
-import GroupActivityTab from "../../groups/custom/activities/GroupActivityTab";
-import { handleHA } from "@/src/utils/activities/handleHA";
-import Notice from "../../utils/Notice";
+import JoinedActivitiesList from "./JoinedActivitiesList";
 
 export default async function JoinedActivities({
   clickedMemberID,
@@ -26,67 +22,9 @@ export default async function JoinedActivities({
       [activityID: string]: GROUP_ACTIVITY_SCHEMA;
     };
 
-    const { HA, empty } = handleHA(activitiesData);
-
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-start">
-        <h1 className="text-custom-dark-text font-semibold">
-          Group Activities Participated
-        </h1>
-        {HA.data && (
-          <div className="w-full my-2">
-            {HA.status ? (
-              <>
-                <Notice
-                  noHeader
-                  status="success"
-                  text={`This member is currently Heat Acclimatised (HA).`}
-                />
-                <Notice
-                  containerClassName="mt-2"
-                  status="success"
-                  noHeader
-                  text={`COMMENTS: ${HA.data}`}
-                />
-              </>
-            ) : (
-              <>
-                <Notice
-                  status="warning"
-                  text={`This member is currently not Heat Acclimatised (HA).`}
-                />
-                <Notice
-                  status="warning"
-                  containerClassName="mt-2"
-                  text={`${HA.data}`}
-                />
-              </>
-            )}
-          </div>
-        )}
-        <InnerContainer
-          className={twMerge(
-            "min-h-[5vh] my-2",
-            empty &&
-              "grid place-items-center justify-center overflow-hidden p-4"
-          )}
-        >
-          {empty ? (
-            <p className="text-sm text-custom-grey-text text-center">
-              Hmm, this member has not participated in any group activities...
-            </p>
-          ) : (
-            Object.keys(activitiesData).map((activityID: string) => {
-              const activityData = activitiesData[activityID];
-              return (
-                <GroupActivityTab
-                  activityData={activityData}
-                  key={activityID}
-                />
-              );
-            })
-          )}
-        </InnerContainer>
+        <JoinedActivitiesList activitiesData={activitiesData} />
       </DefaultCard>
     );
   } catch (err: any) {
