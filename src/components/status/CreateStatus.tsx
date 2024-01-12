@@ -1,11 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DefaultCard from "../DefaultCard";
 import PrimaryButton from "../utils/PrimaryButton";
 import { LoadingIconBright } from "../utils/LoadingIcon";
-import SecondaryButton from "../utils/SecondaryButton";
-import { getCurrentDateString } from "@/src/utils/getCurrentDate";
-import Link from "next/link";
 import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { useRouter } from "next/navigation";
@@ -33,18 +30,37 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
   const [checked, setChecked] = useState({
     status: false,
     ess: false,
-    sheets: false,
-    ir: false,
+    // sheets: false,
+    // ir: false,
     cfm: false,
     consent: false,
   });
 
-  const readyMC = checked.ess && checked.sheets;
+  const [startD, setStartD] = useState({
+    day: "01",
+    month: "01",
+    year: "2024",
+  });
+  const [endD, setEndD] = useState({
+    day: "01",
+    month: "01",
+    year: "2024",
+  });
+
+  useEffect(() => {
+    setStatusDetails({
+      ...statusDetails,
+      start: `${startD.day}/${startD.month}/${startD.year}`,
+      end: `${endD.day}/${endD.month}/${endD.year}`,
+    });
+  }, [startD, endD]);
+
+  const readyMC = checked.ess;
 
   var ready =
     checked.cfm &&
     checked.consent &&
-    checked.ir &&
+    // checked.ir &&
     (checked.status ? readyMC : true);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -72,6 +88,7 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
 
       const body = await res.json();
       if (!body.status) throw new Error(body.error);
+      router.refresh();
       toast.success("Added new status.");
       setTimeout(() => {
         router.push("/profile", { scroll: false });
@@ -153,36 +170,145 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
           <p className="text-custom-dark-text text-sm">Start Date</p>
 
           <div className="flex items-center justify-between gap-2 w-full">
-            <input
+            {/* <input
               placeholder="DD/MM/YYYY"
               name="start"
               required
               value={statusDetails.start}
               onChange={handleChange}
-            />
-            <SecondaryButton
-              className="w-fit self-stretch border-custom-orange text-custom-orange"
-              onClick={() =>
-                setStatusDetails({
-                  ...statusDetails,
-                  start: getCurrentDateString().split(" ")[0],
-                })
-              }
-            >
-              Today
-            </SecondaryButton>
+            /> */}
+            <div className="flex items-center gap-2 justify-between w-full">
+              <select
+                className="w-full"
+                id="day"
+                name="day"
+                required
+                value={startD.day}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  setStartD({ ...startD, day: e.target.value });
+                }}
+              >
+                {new Array(31).fill(1).map((item: number, index: number) => (
+                  <option
+                    key={index}
+                    value={`${index + 1 < 10 ? `0${index + 1}` : index + 1}`}
+                  >
+                    {`${index + 1 < 10 ? `0${index + 1}` : index + 1}`}
+                  </option>
+                ))}
+              </select>
+              <select
+                className="w-full"
+                id="months"
+                name="months"
+                required
+                value={startD.month}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  setStartD({ ...startD, month: e.target.value });
+                }}
+              >
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+              </select>
+
+              <select
+                id="year"
+                name="year"
+                required
+                value={startD.year}
+                className="w-full"
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  setStartD({ ...startD, year: e.target.value });
+                }}
+              >
+                {new Array(5).fill(1).map((item: number, index: number) => (
+                  <option key={index} value={index + 2024}>
+                    {index + 2024}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
         <div className="w-full flex flex-col items-start justify-center gap-1">
           <p className="text-custom-dark-text text-sm">End Date</p>
 
-          <input
+          {/* <input
             placeholder="DD/MM/YYYY"
             name="end"
             required
             value={statusDetails.end}
             onChange={handleChange}
-          />
+          /> */}
+
+          <div className="flex items-center gap-2 justify-between w-full">
+            <select
+              className="w-full"
+              id="day"
+              name="day"
+              required
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                setEndD({ ...endD, day: e.target.value });
+              }}
+            >
+              {new Array(31).fill(1).map((item: number, index: number) => (
+                <option
+                  key={index}
+                  value={`${index + 1 < 10 ? `0${index + 1}` : index + 1}`}
+                >
+                  {`${index + 1 < 10 ? `0${index + 1}` : index + 1}`}
+                </option>
+              ))}
+            </select>
+            <select
+              className="w-full"
+              id="months"
+              name="months"
+              required
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                setEndD({ ...endD, month: e.target.value });
+              }}
+            >
+              <option value="01">01</option>
+              <option value="02">02</option>
+              <option value="03">03</option>
+              <option value="04">04</option>
+              <option value="05">05</option>
+              <option value="06">06</option>
+              <option value="07">07</option>
+              <option value="08">08</option>
+              <option value="09">09</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+            </select>
+
+            <select
+              id="year"
+              name="year"
+              required
+              className="w-full"
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                setEndD({ ...endD, year: e.target.value });
+              }}
+            >
+              {new Array(5).fill(1).map((item: number, index: number) => (
+                <option key={index} value={index + 2024}>
+                  {index + 2024}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div className="items-start justify-center flex flex-col gap-1">
@@ -202,7 +328,7 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
                   <span className="text-custom-primary">ESS app</span>.
                 </label>
               </div>
-              <div className="flex items-center justify-start gap-4">
+              {/* <div className="flex items-center justify-start gap-4">
                 <input
                   type="checkbox"
                   required
@@ -222,10 +348,10 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
                   </Link>
                   .
                 </label>
-              </div>
+              </div> */}
             </>
           )}
-          <div className="flex items-center justify-start gap-4">
+          {/* <div className="flex items-center justify-start gap-4">
             <input
               type="checkbox"
               required
@@ -239,7 +365,7 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
               <span className="text-custom-primary">Incident Report</span> to my
               commanders.
             </label>
-          </div>
+          </div> */}
           <div className="flex items-center justify-start gap-4">
             <input
               type="checkbox"
