@@ -17,6 +17,7 @@ import {
   ActiveTimestamp,
   TimestampToDateString,
 } from "@/src/utils/getCurrentDate";
+import RevokeStatus from "@/src/components/status/RevokeStatus";
 
 export const metadata: Metadata = {
   title: "Status",
@@ -77,6 +78,7 @@ export default async function CustomStatusPage({
     const statusData = bodyA.data as STATUS_SCHEMA;
 
     const active = ActiveTimestamp(statusData.endDate);
+
     return (
       <>
         <HeaderBar back text={`Status`} />
@@ -121,6 +123,13 @@ export default async function CustomStatusPage({
                 statusData={statusData}
               />
             )}
+
+            <RevokeStatus
+              commander={commanderRole}
+              own={sameMember}
+              memberID={memberID}
+              statusID={statusID}
+            />
           </div>
         </div>
       </>
