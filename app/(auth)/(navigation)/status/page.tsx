@@ -23,7 +23,7 @@ export default async function StatusPage() {
         <div className="w-full grid place-items-center">
           <div className="flex flex-col items-start justify-center gap-4 max-w-[500px]">
             <CreateStatus memberID={memberID} />
-            <QuickStatusLinks />
+            {/* <QuickStatusLinks /> */}
           </div>
         </div>
       </>
