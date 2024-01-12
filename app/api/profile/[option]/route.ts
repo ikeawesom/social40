@@ -189,6 +189,17 @@ export async function POST(request: NextRequest) {
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
     return NextResponse.json({ status: true });
+  } else if (option === "revoke-status") {
+    const { statusID } = fetchedData;
+
+    const res = await dbHandler.delete({
+      col_name: `MEMBERS/${memberID}/STATUSES`,
+      id: statusID,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+    return NextResponse.json({ status: true });
   } else if (option === "group-activities") {
     const res = await dbHandler.getSpecific({
       path: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
