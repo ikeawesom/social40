@@ -92,7 +92,7 @@ export default function RequestsSection({
   };
 
   return (
-    <DefaultCard className="py-2 px-3 max-h-[80vh]">
+    <DefaultCard className="py-2 px-3">
       <div className="flex flex-col items-center justify-start w-full">
         <div className="flex items-center justify-between w-full">
           <h1 className="text-custom-dark-text font-semibold flex gap-1 items-center justify-start text-start">
@@ -111,7 +111,7 @@ export default function RequestsSection({
           />
         </div>
         {show && (
-          <InnerContainer>
+          <InnerContainer className="max-h-[80vh]">
             {loading && (
               <div className="w-full absolute grid place-items-center h-full bg-black/25 z-30">
                 <LoadingIconBright width={30} height={30} />
