@@ -110,7 +110,7 @@ export default function GroupActivitySettings({
               />
             </FormInputContainer>
 
-            <div className="flex items-center justify-start gap-2">
+            {/* <div className="flex items-center justify-start gap-2">
               <input
                 type="checkbox"
                 id="restrict"
@@ -126,7 +126,7 @@ export default function GroupActivitySettings({
               <label htmlFor="restrict" className="flex-3 text-sm">
                 Restrict this activity for group members only
               </label>
-            </div>
+            </div> */}
             {!noChanges && (
               <FormInputContainer
                 inputName="desc"
