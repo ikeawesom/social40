@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { useHostname } from "@/src/hooks/useHostname";
+import SecondaryButton from "@/src/components/utils/SecondaryButton";
 
 export default function DeleteGroupActivity({
   activityData,
@@ -75,43 +76,34 @@ export default function DeleteGroupActivity({
           onSubmit={handleSubmit}
           className="w-full flex flex-col items-start justify-start gap-3"
         >
-          <div className="flex items-center justify-start gap-2">
-            <input
-              type="checkbox"
-              name="check1"
-              className="h-fit flex-1"
-              onChange={() => setChecks({ ...checks, check1: !checks.check1 })}
-            />
-            <label htmlFor="check1" className="flex-3 text-sm">
-              I understand that deleting this activity will forfeit the
-              participation of every member
-            </label>
-          </div>
+          <SecondaryButton
+            className={
+              checks.check1 ? "border-custom-red bg-custom-light-red" : ""
+            }
+            onClick={() => setChecks({ ...checks, check1: !checks.check1 })}
+          >
+            I understand that deleting this activity will forfeit the
+            participation of every member
+          </SecondaryButton>
 
-          <div className="flex items-center justify-start gap-2">
-            <input
-              type="checkbox"
-              name="check2"
-              className="h-fit flex-1"
-              onChange={() => setChecks({ ...checks, check2: !checks.check2 })}
-            />
-            <label htmlFor="check2" className="flex-3 text-sm">
-              I understand that this action is irreversible and may affect heat
-              acclimatisation (HA) tracking
-            </label>
-          </div>
+          <SecondaryButton
+            className={
+              checks.check2 ? "border-custom-red bg-custom-light-red" : ""
+            }
+            onClick={() => setChecks({ ...checks, check2: !checks.check2 })}
+          >
+            I understand that this action is irreversible and may affect heat
+            acclimatisation (HA) tracking
+          </SecondaryButton>
 
-          <div className="flex items-center justify-start gap-2">
-            <input
-              type="checkbox"
-              name="check3"
-              className="h-fit flex-1"
-              onChange={() => setChecks({ ...checks, check3: !checks.check3 })}
-            />
-            <label htmlFor="check3" className="flex-3 text-sm">
-              I want to delete this activity
-            </label>
-          </div>
+          <SecondaryButton
+            className={
+              checks.check3 ? "border-custom-red bg-custom-light-red" : ""
+            }
+            onClick={() => setChecks({ ...checks, check3: !checks.check3 })}
+          >
+            I want to delete this activity
+          </SecondaryButton>
 
           {allChecked && (
             <FormInputContainer
