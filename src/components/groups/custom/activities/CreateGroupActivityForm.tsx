@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormInputContainer from "@/src/components/utils/FormInputContainer";
 import { LoadingIconBright } from "@/src/components/utils/LoadingIcon";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
@@ -7,8 +7,6 @@ import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import HRow from "@/src/components/utils/HRow";
-import Notice from "@/src/components/utils/Notice";
 
 export default function CreateGroupActivityForm({
   groupID,
@@ -32,6 +30,26 @@ export default function CreateGroupActivityForm({
     restrict: false,
   });
   const [loading, setLoading] = useState(false);
+  const [startD, setStartD] = useState({
+    day: "01",
+    month: "01",
+    year: "2024",
+  });
+  const [startT, setStartT] = useState({
+    hour: "00",
+    min: "00",
+  });
+
+  useEffect(() => {
+    setInput({
+      ...input,
+      date: `${startD.day}/${startD.month}/${startD.year}`,
+    });
+  }, [startD]);
+
+  useEffect(() => {
+    setInput({ ...input, time: `${startT.hour}:${startT.min}` });
+  }, [startT]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,98 +118,117 @@ export default function CreateGroupActivityForm({
         inputName="date"
         labelText="When will this activity take place?"
       >
-        <input
+        <div className="flex items-center gap-2 justify-between w-full">
+          <select
+            className="w-full"
+            id="day"
+            name="day"
+            required
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              setStartD({ ...startD, day: e.target.value });
+            }}
+          >
+            {new Array(31).fill(1).map((item: number, index: number) => (
+              <option
+                key={index}
+                value={`${index + 1 < 10 ? `0${index + 1}` : index + 1}`}
+              >
+                {`${index + 1 < 10 ? `0${index + 1}` : index + 1}`}
+              </option>
+            ))}
+          </select>
+          <select
+            className="w-full"
+            id="month"
+            name="month"
+            required
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              setStartD({ ...startD, month: e.target.value });
+            }}
+          >
+            {new Array(12).fill(1).map((item: number, index: number) => (
+              <option
+                key={index}
+                value={`${index + 1 < 10 ? `0${index + 1}` : index + 1}`}
+              >
+                {`${index + 1 < 10 ? `0${index + 1}` : index + 1}`}
+              </option>
+            ))}
+          </select>
+          <select
+            className="w-full"
+            id="year"
+            name="year"
+            required
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              setStartD({ ...startD, year: e.target.value });
+            }}
+          >
+            {new Array(5).fill(1).map((item: number, index: number) => (
+              <option key={index} value={index + 2024}>
+                {index + 2024}
+              </option>
+            ))}
+          </select>
+        </div>
+        {/* <input
           type="text"
           name="date"
           required
           placeholder="DD/MM/YYYY"
           value={input.date}
           onChange={handleChange}
-        />
+        /> */}
       </FormInputContainer>
 
       <FormInputContainer
         inputName="time"
         labelText="What time will this activity begin?"
       >
-        <input
+        <div className="flex items-center gap-2 justify-between w-full">
+          <select
+            className="w-full"
+            id="hour"
+            name="hour"
+            required
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              setStartT({ ...startT, hour: e.target.value });
+            }}
+          >
+            {new Array(24).fill(1).map((item: number, index: number) => (
+              <option key={index} value={`${index < 10 ? `0${index}` : index}`}>
+                {`${index < 10 ? `0${index}` : index}`}
+              </option>
+            ))}
+          </select>
+          <select
+            className="w-full"
+            id="min"
+            name="min"
+            required
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              setStartT({ ...startT, min: e.target.value });
+            }}
+          >
+            {new Array(12).fill(1).map((item: number, index: number) => (
+              <option
+                key={index}
+                value={`${index * 5 < 10 ? `0${index * 5}` : index * 5}`}
+              >
+                {`${index * 5 < 10 ? `0${index * 5}` : index * 5}`}
+              </option>
+            ))}
+          </select>
+        </div>
+        {/* <input
           type="text"
           name="time"
           required
           placeholder="HH:MM"
           value={input.time}
           onChange={handleChange}
-        />
+        /> */}
       </FormInputContainer>
-      <div className="flex items-center justify-start gap-2">
-        <input
-          type="checkbox"
-          id="restrict"
-          className="h-fit flex-1"
-          onChange={() =>
-            setInput({
-              ...input,
-              restrict: !input.restrict,
-            })
-          }
-        />
-        <label htmlFor="restrict" className="flex-3 text-sm">
-          Restrict this activity for group members only
-        </label>
-      </div>
-      <div className="flex items-center justify-start gap-2">
-        <input
-          type="checkbox"
-          id="duration"
-          className="h-fit flex-1"
-          onChange={() =>
-            setInput({
-              ...input,
-              duration: { ...input.duration, active: !input.duration.active },
-            })
-          }
-        />
-        <label htmlFor="duration" className="flex-3 text-sm">
-          Set a time limit for members to join this activity
-        </label>
-      </div>
-      {input.duration.active && (
-        <>
-          <HRow />
-
-          <FormInputContainer
-            inputName="endDate"
-            labelText="Last date that members can join this activity"
-          >
-            <input
-              type="text"
-              name="endDate"
-              required
-              placeholder="DD/MM/YYYY"
-              value={input.duration.endDate}
-              onChange={durationChange}
-            />
-          </FormInputContainer>
-          <FormInputContainer
-            inputName="endTime"
-            labelText="Last time that members can join this activity"
-          >
-            <input
-              type="text"
-              name="endTime"
-              required
-              placeholder="HH:MM"
-              value={input.duration.endTime}
-              onChange={durationChange}
-            />
-          </FormInputContainer>
-          <Notice
-            status="warning"
-            text="Members will not be able to join this activity anymore after this
-            time."
-          />
-        </>
-      )}
       <PrimaryButton
         disabled={loading}
         type="submit"
@@ -205,4 +242,76 @@ export default function CreateGroupActivityForm({
       </PrimaryButton>
     </form>
   );
+}
+{
+  // remove options temporarily
+  /* <div className="flex items-center justify-start gap-2">
+  <input
+    type="checkbox"
+    id="restrict"
+    className="h-fit flex-1"
+    onChange={() =>
+      setInput({
+        ...input,
+        restrict: !input.restrict,
+      })
+    }
+  />
+  <label htmlFor="restrict" className="flex-3 text-sm">
+    Restrict this activity for group members only
+  </label>
+</div>
+<div className="flex items-center justify-start gap-2">
+  <input
+    type="checkbox"
+    id="duration"
+    className="h-fit flex-1"
+    onChange={() =>
+      setInput({
+        ...input,
+        duration: { ...input.duration, active: !input.duration.active },
+      })
+    }
+  />
+  <label htmlFor="duration" className="flex-3 text-sm">
+    Set a time limit for members to join this activity
+  </label>
+</div>
+{input.duration.active && (
+  <>
+    <HRow />
+
+    <FormInputContainer
+      inputName="endDate"
+      labelText="Last date that members can join this activity"
+    >
+      <input
+        type="text"
+        name="endDate"
+        required
+        placeholder="DD/MM/YYYY"
+        value={input.duration.endDate}
+        onChange={durationChange}
+      />
+    </FormInputContainer>
+    <FormInputContainer
+      inputName="endTime"
+      labelText="Last time that members can join this activity"
+    >
+      <input
+        type="text"
+        name="endTime"
+        required
+        placeholder="HH:MM"
+        value={input.duration.endTime}
+        onChange={durationChange}
+      />
+    </FormInputContainer>
+    <Notice
+      status="warning"
+      text="Members will not be able to join this activity anymore after this
+      time."
+    />
+  </>
+)} */
 }
