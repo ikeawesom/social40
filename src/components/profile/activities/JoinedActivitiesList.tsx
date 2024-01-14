@@ -32,37 +32,7 @@ export default function JoinedActivitiesList({
         placeholder="Search for activity name"
         search={search}
       />
-      {HA.data && (
-        <div className="w-full my-2">
-          {HA.status ? (
-            <>
-              <Notice
-                noHeader
-                status="success"
-                text={`This member is currently Heat Acclimatised (HA).`}
-              />
-              <Notice
-                containerClassName="mt-2"
-                status="success"
-                noHeader
-                text={`COMMENTS: ${HA.data}`}
-              />
-            </>
-          ) : (
-            <>
-              <Notice
-                status="warning"
-                text={`This member is currently not Heat Acclimatised (HA).`}
-              />
-              <Notice
-                status="warning"
-                containerClassName="mt-2"
-                text={`${HA.data}`}
-              />
-            </>
-          )}
-        </div>
-      )}
+
       <InnerContainer
         className={twMerge(
           "min-h-[5vh] my-2",
@@ -87,3 +57,35 @@ export default function JoinedActivitiesList({
     </>
   );
 }
+// Pause HA calculation
+// {HA.data && (
+//   <div className="w-full my-2">
+//     {HA.status ? (
+//       <>
+//         <Notice
+//           noHeader
+//           status="success"
+//           text={`This member is currently Heat Acclimatised (HA).`}
+//         />
+//         <Notice
+//           containerClassName="mt-2"
+//           status="success"
+//           noHeader
+//           text={`COMMENTS: ${HA.data}`}
+//         />
+//       </>
+//     ) : (
+//       <>
+//         <Notice
+//           status="warning"
+//           text={`This member is currently not Heat Acclimatised (HA).`}
+//         />
+//         <Notice
+//           status="warning"
+//           containerClassName="mt-2"
+//           text={`${HA.data}`}
+//         />
+//       </>
+//     )}
+//   </div>
+// )}
