@@ -62,7 +62,7 @@ class FetchGroupActivityClass {
         active &&
         !currentParticipant;
 
-      const owner = body.status ? body.data.role === "owner" : false;
+      const owner = activityData.createdBy === memberID;
 
       let admin = false;
       if (body.status) {
