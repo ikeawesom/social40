@@ -311,10 +311,10 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
           </div>
         </div>
 
-        <div className="items-start justify-center flex flex-col gap-1">
+        <div className="items-start justify-center flex flex-col gap-1 w-full">
           {checked.status && (
             <>
-              <div className="flex items-center justify-start gap-4">
+              <div className="flex items-center justify-start gap-4 w-full">
                 <input
                   type="checkbox"
                   required
@@ -366,7 +366,7 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
               commanders.
             </label>
           </div> */}
-          <div className="flex items-center justify-start gap-4">
+          <div className="flex items-center justify-start gap-4 w-full">
             <input
               type="checkbox"
               required
