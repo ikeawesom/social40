@@ -6,6 +6,8 @@ import { LoadingIconBright } from "../utils/LoadingIcon";
 import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { useRouter } from "next/navigation";
+import SecondaryButton from "../utils/SecondaryButton";
+import { twMerge } from "tailwind-merge";
 
 export type StatusInputType = {
   title: string;
@@ -311,23 +313,30 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
           </div>
         </div>
 
-        <div className="items-start justify-center flex flex-col gap-1 w-full">
+        <div className="items-start justify-center flex flex-col gap-1">
           {checked.status && (
             <>
-              <div className="flex items-center justify-start gap-4 w-full">
-                <input
+              {/* <input
                   type="checkbox"
                   required
                   id="ess"
-                  className="h-fit flex-1"
+                  // className="h-fit flex-1"
                   name="ess"
                   onChange={handleCheck}
                 />
-                <label htmlFor="ess" className="flex-3 text-sm">
-                  I have applied for my medical leave via the{" "}
-                  <span className="text-custom-primary">ESS app</span>.
-                </label>
-              </div>
+                <label htmlFor="ess" className="flex-3 text-sm"></label> */}
+              <SecondaryButton
+                className={twMerge(
+                  "text-sm",
+                  checked.ess && "border-custom-green bg-custom-light-green"
+                )}
+                onClick={() => {
+                  setChecked({ ...checked, ess: !checked.ess });
+                }}
+              >
+                I have applied for my medical leave via the{" "}
+                <span className="text-custom-primary">ESS app</span>.
+              </SecondaryButton>
               {/* <div className="flex items-center justify-start gap-4">
                 <input
                   type="checkbox"
@@ -366,33 +375,53 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
               commanders.
             </label>
           </div> */}
-          <div className="flex items-center justify-start gap-4 w-full">
-            <input
+          <div className="flex items-center justify-start gap-4">
+            {/* <input
               type="checkbox"
               required
               id="cfm"
-              className="h-fit flex-1"
+              // className="h-fit flex-1"
               name="cfm"
               onChange={handleCheck}
             />
             <label htmlFor="cfm" className="flex-3 text-sm">
               I have confirmed that the details provided above is accurate to
               the best of my knowledge.
-            </label>
+            </label> */}
+            <SecondaryButton
+              className={twMerge(
+                "text-sm",
+                checked.cfm && "border-custom-green bg-custom-light-green"
+              )}
+              onClick={() => {
+                setChecked({ ...checked, cfm: !checked.cfm });
+              }}
+            >
+              I have confirmed that the details provided above is accurate to
+              the best of my knowledge.
+            </SecondaryButton>
           </div>
           <div className="flex items-center justify-start gap-4">
-            <input
+            {/* <input
               type="checkbox"
               required
               id="consent"
-              className="h-fit flex-1"
+              className="w-1/6"
               name="consent"
               onChange={handleCheck}
-            />
-            <label htmlFor="consent" className="flex-3 text-sm">
+            /> */}
+            <SecondaryButton
+              className={twMerge(
+                "text-sm",
+                checked.consent && "border-custom-green bg-custom-light-green"
+              )}
+              onClick={() => {
+                setChecked({ ...checked, consent: !checked.consent });
+              }}
+            >
               I consent that this information can be used for tracking when
               needed.
-            </label>
+            </SecondaryButton>
           </div>
         </div>
         <PrimaryButton
