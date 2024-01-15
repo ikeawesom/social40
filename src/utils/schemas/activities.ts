@@ -16,6 +16,7 @@ export type FALLOUTS_SCHEMA = {
   memberID: string;
   activityID: string;
   reason: string;
+  verifiedBy: string;
 };
 
 export function initActivityObject({
