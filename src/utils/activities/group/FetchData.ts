@@ -58,9 +58,20 @@ class FetchGroupActivityClass {
       const restrictionStatus = activityData.groupRestriction;
       const currentMember = body.status;
 
+      const resB = await dbHandler.getSpecific({
+        path: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
+        orderCol: "memberID",
+        ascending: true,
+      });
+
+      if (!resB.status) throw new Error(resB.error);
+
+      const fallouts = resB.data;
+
       const canJoin =
         (!restrictionStatus || (currentMember && restrictionStatus)) &&
-        !currentParticipant;
+        !Object.keys(fallouts).includes(memberID);
+      !currentParticipant;
 
       const owner = activityData.createdBy === memberID;
 
@@ -69,14 +80,6 @@ class FetchGroupActivityClass {
         const role = body.data.role;
         admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
       }
-
-      const resB = await dbHandler.getSpecific({
-        path: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
-        orderCol: "memberID",
-        ascending: true,
-      });
-
-      if (!resB.status) throw new Error(resB.error);
 
       return handleResponses({
         data: {
@@ -88,7 +91,7 @@ class FetchGroupActivityClass {
           currentParticipant,
           participantsData,
           admin,
-          fallouts: resB.data,
+          fallouts,
         },
       });
     } catch (err: any) {

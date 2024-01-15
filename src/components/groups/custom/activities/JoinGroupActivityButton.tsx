@@ -9,7 +9,7 @@ import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { useHostname } from "@/src/hooks/useHostname";
 
 export default function JoinGroupActivityButton({
-  active,
+  fallout,
   canJoin,
   activityID,
   memberID,
@@ -22,6 +22,7 @@ export default function JoinGroupActivityButton({
   memberID: string;
   requested: boolean;
   className?: string;
+  fallout?: boolean;
 }) {
   const { host } = useHostname();
   const router = useRouter();
@@ -59,6 +60,8 @@ export default function JoinGroupActivityButton({
         <LoadingIcon height={20} width={20} />
       ) : requested ? (
         "Requested"
+      ) : fallout ? (
+        "You have fallen out from this activity"
       ) : canJoin ? (
         "Request to participate"
       ) : (
