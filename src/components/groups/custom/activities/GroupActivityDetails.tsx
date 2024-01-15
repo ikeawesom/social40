@@ -1,41 +1,34 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import HRow from "@/src/components/utils/HRow";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import {
+  ActiveTimestamp,
+  TimestampToDateString,
+} from "@/src/utils/getCurrentDate";
 import React from "react";
 import { SuspenseGroupActivityFetchType } from "./GroupActivityData";
 import ActivityStatusTab from "@/src/components/feed/ActivityStatusTab";
 import Link from "next/link";
 
 export default async function GroupActivityDetails({
-  groupID,
-  activityID,
   memberID,
+  activityData,
 }: SuspenseGroupActivityFetchType) {
   try {
-    const host = process.env.HOST as string;
+    const date = activityData.activityDate;
+    const dateStr = TimestampToDateString(date);
+    const active = ActiveTimestamp(date);
 
-    const res = await FetchGroupActivityData.getMain({
-      activityID,
-      groupID,
-      host,
-      memberID,
-    });
-
-    if (!res.status) throw new Error(res.error);
-
-    const { activityData, active, dateStr } = res.data;
     console.log("Activity Date:", dateStr);
 
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
         <div className="w-full flex flex-col items-start justify-center">
           <Link
-            href={`/groups/${groupID}`}
+            href={`/groups/${activityData.groupID}`}
             className="text-xs text-custom-grey-text duration-200 hover:opacity-70 mb-1"
           >
-            {groupID}
+            {activityData.groupID}
           </Link>
           <div className="flex items-center justify-between gap-x-4 flex-wrap w-full">
             <h1 className="text-custom-dark-text font-semibold text-2xl">
