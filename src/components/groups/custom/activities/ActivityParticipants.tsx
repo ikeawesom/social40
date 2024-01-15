@@ -6,16 +6,15 @@ import { SuspenseGroupActivityFetchType } from "./GroupActivityData";
 import ActivityParticipantsList from "./ActivityParticipantsList";
 
 export default async function ActivityParticipants({
-  groupID,
-  activityID,
+  activityData,
   memberID,
 }: SuspenseGroupActivityFetchType) {
   try {
     const host = process.env.HOST as string;
 
     const res = await FetchGroupActivityData.getMain({
-      activityID,
-      groupID,
+      activityID: activityData.activityID,
+      groupID: activityData.groupID,
       host,
       memberID,
     });
@@ -28,7 +27,7 @@ export default async function ActivityParticipants({
       <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
         <ActivityParticipantsList
           memberID={memberID}
-          activityID={activityID}
+          activityID={activityData.activityID}
           participantsData={participantsData}
           admin={admin}
         />

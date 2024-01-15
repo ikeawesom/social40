@@ -11,11 +11,11 @@ import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 import ActivityParticipants from "./ActivityParticipants";
 import GroupActivityDetails from "./GroupActivityDetails";
 import GroupActivityJoinSection from "./GroupActivityJoinSection";
+import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 
 export type SuspenseGroupActivityFetchType = {
-  groupID: string;
-  activityID: string;
   memberID: string;
+  activityData: GROUP_ACTIVITY_SCHEMA;
 };
 
 export default async function GroupActivityData({
@@ -68,23 +68,20 @@ export default async function GroupActivityData({
           )}
           <Suspense fallback={<DefaultSkeleton />}>
             <GroupActivityDetails
-              activityID={activityID}
-              groupID={groupID}
+              activityData={activityData}
               memberID={memberID}
             />
           </Suspense>
           <Suspense fallback={<DefaultSkeleton className="h-[5vh]" />}>
             <GroupActivityJoinSection
-              activityID={activityID}
-              groupID={groupID}
+              activityData={activityData}
               memberID={memberID}
             />
           </Suspense>
 
           <Suspense fallback={<DefaultSkeleton />}>
             <ActivityParticipants
-              activityID={activityID}
-              groupID={groupID}
+              activityData={activityData}
               memberID={memberID}
             />
           </Suspense>

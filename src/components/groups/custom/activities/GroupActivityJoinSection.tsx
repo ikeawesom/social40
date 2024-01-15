@@ -7,16 +7,15 @@ import LeaveActivityButton from "./LeaveActivityButton";
 import AddRemarkButton from "./AddRemarkButton";
 
 export default async function GroupActivityJoinSection({
-  groupID,
-  activityID,
   memberID,
+  activityData,
 }: SuspenseGroupActivityFetchType) {
   try {
     const host = process.env.HOST as string;
 
     const res = await FetchGroupActivityData.getMain({
-      activityID,
-      groupID,
+      activityID: activityData.activityID,
+      groupID: activityData.groupID,
       host,
       memberID,
     });
@@ -26,8 +25,8 @@ export default async function GroupActivityJoinSection({
     const { owner, canJoin, active, currentParticipant } = res.data;
 
     const resA = await FetchGroupActivityData.getRequests({
-      activityID,
-      groupID,
+      activityID: activityData.activityID,
+      groupID: activityData.groupID,
       host,
       memberID,
     });
@@ -41,7 +40,7 @@ export default async function GroupActivityJoinSection({
         {!currentParticipant ? (
           <JoinGroupActivityButton
             active={active}
-            activityID={activityID}
+            activityID={activityData.activityID}
             memberID={memberID}
             canJoin={canJoin}
             requested={requested}
@@ -50,14 +49,17 @@ export default async function GroupActivityJoinSection({
           !owner && (
             <LeaveActivityButton
               active={active}
-              activityID={activityID}
+              activityID={activityData.activityID}
               memberID={memberID}
             />
           )
         )}
         {currentParticipant && !active && (
           <div className="flex flex-col items-start justify-start w-full gap-2">
-            <AddRemarkButton activityID={activityID} memberID={memberID} />
+            <AddRemarkButton
+              activityID={activityData.activityID}
+              memberID={memberID}
+            />
             <p className="text-custom-grey-text text-sm text-start">
               This helps provide feedback for future trainings.
             </p>
