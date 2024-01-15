@@ -268,12 +268,13 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ status: true });
   } else if (option === "group-fallout") {
-    const { fallReason } = fetchedData;
+    const { fallReason, verifiedBy } = fetchedData;
 
     const to_add = {
       activityID,
       memberID,
       reason: fallReason,
+      verifiedBy,
     } as FALLOUTS_SCHEMA;
 
     const res = await dbHandler.add({
