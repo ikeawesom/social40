@@ -6,10 +6,11 @@ import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
+import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 
 export default function GroupActivitySettings({
   activityData,
@@ -19,6 +20,10 @@ export default function GroupActivitySettings({
   const oldTitle = activityData.activityTitle;
   const oldDesc = activityData.activityDesc;
   const oldRestrict = activityData.groupRestriction;
+  const oldDateTimestamp = activityData.activityDate;
+  const oldTimestampStr = TimestampToDateString(oldDateTimestamp);
+  const oldDate = oldTimestampStr.split(" ")[0];
+  const oldTime = oldTimestampStr.split(" ")[1];
 
   const router = useRouter();
   const { host } = useHostname();
@@ -30,14 +35,36 @@ export default function GroupActivitySettings({
     desc: oldDesc,
     restrict: oldRestrict,
     user: "",
+    date: oldTimestampStr,
   });
+
+  const [newD, setNewD] = useState({
+    day: oldDate.split("/")[0],
+    month: oldDate.split("/")[1],
+    year: oldDate.split("/")[2],
+  });
+
+  const [newTime, setNewTime] = useState({
+    hour: oldTime.split(":")[0],
+    min: oldTime.split(":")[1],
+  });
+
+  useEffect(() => {
+    const dateStr = `${newD.day}/${newD.month}/${newD.year} ${newTime.hour}:${newTime.min}`;
+    console.log(dateStr);
+    setInput({
+      ...input,
+      date: dateStr,
+    });
+  }, [newD, newTime]);
 
   const invalidUser = activityData.createdBy !== input.user;
 
   const noChanges =
     oldTitle === input.title &&
     oldDesc === input.desc &&
-    oldRestrict === input.restrict;
+    oldRestrict === input.restrict &&
+    oldTimestampStr === input.date;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -109,28 +136,118 @@ export default function GroupActivitySettings({
                 onChange={handleChange}
               />
             </FormInputContainer>
+            <FormInputContainer
+              inputName="date"
+              labelText="When will this activity take place?"
+            >
+              <div className="flex items-center gap-2 justify-between w-full">
+                <select
+                  className="w-full"
+                  id="day"
+                  name="day"
+                  required
+                  value={newD.day}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    setNewD({ ...newD, day: e.target.value });
+                  }}
+                >
+                  {new Array(31).fill(1).map((item: number, index: number) => (
+                    <option
+                      key={index}
+                      value={`${index + 1 < 10 ? `0${index + 1}` : index + 1}`}
+                    >
+                      {`${index + 1 < 10 ? `0${index + 1}` : index + 1}`}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  className="w-full"
+                  id="month"
+                  name="month"
+                  required
+                  value={newD.month}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    setNewD({ ...newD, month: e.target.value });
+                  }}
+                >
+                  {new Array(12).fill(1).map((item: number, index: number) => (
+                    <option
+                      key={index}
+                      value={`${index + 1 < 10 ? `0${index + 1}` : index + 1}`}
+                    >
+                      {`${index + 1 < 10 ? `0${index + 1}` : index + 1}`}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  className="w-full"
+                  id="year"
+                  name="year"
+                  required
+                  value={newD.year}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    setNewD({ ...newD, year: e.target.value });
+                  }}
+                >
+                  {new Array(5).fill(1).map((item: number, index: number) => (
+                    <option key={index} value={index + 2024}>
+                      {index + 2024}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </FormInputContainer>
 
-            {/* <div className="flex items-center justify-start gap-2">
-              <input
-                type="checkbox"
-                id="restrict"
-                className="h-fit flex-1"
-                checked={input.restrict}
-                onChange={() =>
-                  setInput({
-                    ...input,
-                    restrict: !input.restrict,
-                  })
-                }
-              />
-              <label htmlFor="restrict" className="flex-3 text-sm">
-                Restrict this activity for group members only
-              </label>
-            </div> */}
+            <FormInputContainer
+              inputName="time"
+              labelText="What time will this activity begin?"
+            >
+              <div className="flex items-center gap-2 justify-between w-full">
+                <select
+                  className="w-full"
+                  id="hour"
+                  name="hour"
+                  required
+                  value={newTime.hour}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    setNewTime({ ...newTime, hour: e.target.value });
+                  }}
+                >
+                  {new Array(24).fill(1).map((item: number, index: number) => (
+                    <option
+                      key={index}
+                      value={`${index < 10 ? `0${index}` : index}`}
+                    >
+                      {`${index < 10 ? `0${index}` : index}`}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  className="w-full"
+                  id="min"
+                  name="min"
+                  required
+                  value={newTime.min}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    setNewTime({ ...newTime, min: e.target.value });
+                  }}
+                >
+                  {new Array(12).fill(1).map((item: number, index: number) => (
+                    <option
+                      key={index}
+                      value={`${index * 5 < 10 ? `0${index * 5}` : index * 5}`}
+                    >
+                      {`${index * 5 < 10 ? `0${index * 5}` : index * 5}`}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </FormInputContainer>
+
             {!noChanges && (
               <FormInputContainer
                 inputName="desc"
-                labelText="Enter your member ID to confirm the changes"
+                labelText="Enter owner's member ID to confirm the changes"
               >
                 <input
                   type="text"
@@ -157,4 +274,25 @@ export default function GroupActivitySettings({
       )}
     </DefaultCard>
   );
+}
+
+// removed option temporarily
+{
+  /* <div className="flex items-center justify-start gap-2">
+              <input
+                type="checkbox"
+                id="restrict"
+                className="h-fit flex-1"
+                checked={input.restrict}
+                onChange={() =>
+                  setInput({
+                    ...input,
+                    restrict: !input.restrict,
+                  })
+                }
+              />
+              <label htmlFor="restrict" className="flex-3 text-sm">
+                Restrict this activity for group members only
+              </label>
+            </div> */
 }
