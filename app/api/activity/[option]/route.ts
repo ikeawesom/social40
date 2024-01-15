@@ -272,14 +272,20 @@ export async function POST(req: NextRequest) {
     const newTitle = input.title;
     const newDesc = input.desc;
     const newRestriction = input.restrict;
+    const newDateStr = input.date;
+    const timeRes = StringToTimestamp(newDateStr);
+
+    if (!timeRes.status)
+      return NextResponse.json({ status: false, error: timeRes.error });
+
+    const newDateTimestamp = timeRes.data;
 
     const to_edit = {
       activityTitle: newTitle,
       activityDesc: newDesc,
       groupRestriction: newRestriction,
+      activityDate: newDateTimestamp,
     };
-
-    console.log(activityID);
 
     const res = await dbHandler.edit({
       col_name: `GROUP-ACTIVITIES`,
