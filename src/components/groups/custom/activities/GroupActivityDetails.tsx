@@ -26,6 +26,7 @@ export default async function GroupActivityDetails({
     if (!res.status) throw new Error(res.error);
 
     const { activityData, active, dateStr } = res.data;
+    console.log("Activity Date:", dateStr);
 
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">

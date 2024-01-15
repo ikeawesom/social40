@@ -59,6 +59,7 @@ export default async function GroupFeedCard({
     const randomParticipant = Object.keys(participantsData)[randomIndex];
     const oneParticipant = participantNumber - 1 === 0;
 
+    console.log("Date:", dateStr);
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-start">
         <Link

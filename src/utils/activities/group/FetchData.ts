@@ -52,8 +52,6 @@ class FetchGroupActivityClass {
 
       const date = activityData.activityDate;
       const dateStr = TimestampToDateString(date);
-      console.log("date:", date);
-      console.log("str:", dateStr);
 
       const active = ActiveTimestamp(date);
       const restrictionStatus = activityData.groupRestriction;
