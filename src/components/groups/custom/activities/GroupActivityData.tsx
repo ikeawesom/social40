@@ -12,6 +12,7 @@ import ActivityParticipants from "./ActivityParticipants";
 import GroupActivityDetails from "./GroupActivityDetails";
 import GroupActivityJoinSection from "./GroupActivityJoinSection";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
+import FalloutsCard from "./FalloutsCard";
 
 export type SuspenseGroupActivityFetchType = {
   memberID: string;
@@ -45,7 +46,7 @@ export default async function GroupActivityData({
 
       if (!res.status) throw new Error(res.error);
 
-      const { activityData, active, admin } = res.data;
+      const { activityData, active, admin, fallouts } = res.data;
 
       const resA = await FetchGroupActivityData.getRequests({
         activityID,
@@ -58,6 +59,7 @@ export default async function GroupActivityData({
 
       const { noRequests, requestsData } = resA.data;
 
+      const falloutsLength = Object.keys(fallouts).length;
       return (
         <div className="w-full flex flex-col items-start justify-center gap-4">
           {!noRequests && admin && (
@@ -91,6 +93,7 @@ export default async function GroupActivityData({
               <ActivityRemarks activityID={activityID} groupID={groupID} />
             </Suspense>
           )}
+          {admin && falloutsLength > 0 && <FalloutsCard fallouts={fallouts} />}
           {admin && <GroupActivitySettings activityData={activityData} />}
           {admin && <DeleteGroupActivity activityData={activityData} />}
         </div>
