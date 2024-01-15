@@ -2,20 +2,19 @@ import { Timestamp } from "firebase/firestore";
 import handleResponses from "./handleResponses";
 
 export function DateToString(date: Date) {
-  var datetime =
-    date.getDate() +
-    "/" +
-    (date.getMonth() + 1) +
-    "/" +
-    date.getFullYear() +
-    " " +
-    date.getHours() +
-    ":" +
-    date.getMinutes() +
-    ":" +
-    date.getSeconds();
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  const hour = date.getHours();
+  const minute = date.getMinutes();
 
-  return datetime;
+  const res = `${day < 10 ? `0${day}` : day}/${
+    month < 10 ? `0${month}` : month
+  }/${year} ${hour < 10 ? `0${hour}` : hour}:${
+    minute < 10 ? `0${minute}` : minute
+  }`;
+
+  return res;
 }
 
 // to fetch from firestore
