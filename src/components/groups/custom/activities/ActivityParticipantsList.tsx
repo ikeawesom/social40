@@ -49,6 +49,7 @@ export default function ActivityParticipantsList({
         activityID,
         memberID: curMember,
         fallReason: fall.reason,
+        verifiedBy: memberID,
       });
       if (fall.status) {
         const resA = await fetch(
