@@ -125,19 +125,15 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
             value={statusDetails.title}
             onChange={handleChange}
           />
-          <div className="flex items-center justify-start gap-4 mt-1">
-            <input
-              type="checkbox"
-              id="mc"
-              className="h-fit flex-1"
-              onChange={() =>
-                setChecked({ ...checked, status: !checked.status })
-              }
-            />
-            <label htmlFor="mc" className="flex-3 text-sm">
-              Medical Leave
-            </label>
-          </div>
+          <SecondaryButton
+            className={twMerge(
+              "w-fit justify-self-start text-sm mt-1",
+              checked.status && "bg-custom-light-orange border-custom-orange"
+            )}
+            onClick={() => setChecked({ ...checked, status: !checked.status })}
+          >
+            Medical Leave
+          </SecondaryButton>
         </div>
 
         <div className="w-full flex flex-col items-start justify-center gap-1">
