@@ -1,18 +1,22 @@
 "use client";
 import HRow from "@/src/components/utils/HRow";
 import InnerContainer from "@/src/components/utils/InnerContainer";
-import LoadingIcon from "@/src/components/utils/LoadingIcon";
+import LoadingIcon, {
+  LoadingIconBright,
+} from "@/src/components/utils/LoadingIcon";
 import Modal from "@/src/components/utils/Modal";
 import QueryInput from "@/src/components/utils/QueryInput";
 import useQueryObj from "@/src/hooks/useQueryObj";
 import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import Image from "next/image";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { useRouter } from "next/navigation";
+import { twMerge } from "tailwind-merge";
+import PrimaryButton from "@/src/components/utils/PrimaryButton";
 
 export default function ActivityParticipantsList({
   participantsData,
@@ -29,31 +33,130 @@ export default function ActivityParticipantsList({
   const { host } = useHostname();
   const [loading, setLoading] = useState(false);
   const [curMember, setCurMember] = useState("");
+  const [cfm, setCfm] = useState(false);
+  const [fall, setFall] = useState({ status: false, reason: "" });
   const { handleSearch, itemList, search } = useQueryObj({
     obj: participantsData,
   });
 
   const route = `/members/${curMember}`;
 
+  const handleFallout = async (e: FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const ActivityObj = GetPostObj({
+        activityID,
+        memberID: curMember,
+        fallReason: fall.reason,
+      });
+      if (fall.status) {
+        const resA = await fetch(
+          `${host}/api/activity/group-fallout`,
+          ActivityObj
+        );
+        const bodyA = await resA.json();
+        if (!bodyA.status) throw new Error(bodyA.error);
+        await handleKick();
+      }
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+    setLoading(false);
+  };
   const handleKick = async () => {
     setLoading(true);
     try {
-      const ActivityObj = GetPostObj({ activityID, memberID: curMember });
+      const ActivityObj = GetPostObj({
+        activityID,
+        memberID: curMember,
+      });
+
       const res = await fetch(`${host}/api/activity/group-leave`, ActivityObj);
       const body = await res.json();
       if (!body.status) throw new Error(body.error);
-      router.refresh();
       router.back();
       setCurMember("");
       toast.success(`Kicked ${curMember} from activity`);
     } catch (err: any) {
       toast.error(err.message);
     }
+    setCfm(false);
     setLoading(false);
   };
+
   return (
     <>
-      {curMember !== "" && (
+      {cfm && (
+        <Modal className="min-[400px]:p-4">
+          <div className="flex items-center justify-between w-full">
+            <h1 className="text-custom-dark-text font-semibold">
+              Why are you kicking {curMember}?
+            </h1>
+            <button
+              onClick={() => setCfm(false)}
+              className="hover:opacity-75 duration-200"
+            >
+              <Image
+                src="/icons/icon_close.svg"
+                alt="Close"
+                width={15}
+                height={15}
+              />
+            </button>
+          </div>
+          <HRow />
+          <div className="flex flex-col items-center justify-start mt-2 gap-1">
+            <div
+              className={twMerge(
+                "w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200",
+                fall.status && "bg-custom-light-text"
+              )}
+              onClick={() => setFall({ ...fall, status: !fall.status })}
+            >
+              Fell Out
+            </div>
+            {fall.status && (
+              <form
+                className="w-full flex items-center justify-start gap-2 mb-2"
+                onSubmit={handleFallout}
+              >
+                <input
+                  type="text"
+                  className="text-sm"
+                  required
+                  placeholder="Reason for falling out"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFall({ ...fall, reason: e.target.value })
+                  }
+                  value={fall.reason}
+                />
+                <PrimaryButton
+                  disabled={loading}
+                  type="submit"
+                  className="w-fit grid place-items-center"
+                >
+                  {loading ? (
+                    <LoadingIconBright height={20} width={20} />
+                  ) : (
+                    "Submit"
+                  )}
+                </PrimaryButton>
+              </form>
+            )}
+          </div>
+          <div
+            className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
+            onClick={async () => {
+              setCfm(false);
+              await handleKick();
+            }}
+          >
+            Others
+          </div>
+        </Modal>
+      )}
+      {curMember !== "" && !cfm && (
         <Modal className="min-[400px]:p-4">
           {loading ? (
             <div className="w-full grid place-items-center">
@@ -90,7 +193,7 @@ export default function ActivityParticipantsList({
                 <div className="flex flex-col items-center justify-start mt-2 gap-1">
                   <div
                     className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
-                    onClick={handleKick}
+                    onClick={() => setCfm(true)}
                   >
                     Kick From Activity
                   </div>
