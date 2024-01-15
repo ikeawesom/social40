@@ -52,6 +52,8 @@ class FetchGroupActivityClass {
 
       const date = activityData.activityDate;
       const dateStr = TimestampToDateString(date);
+      console.log("date:", date);
+      console.log("str:", dateStr);
 
       const active = ActiveTimestamp(date);
       const restrictionStatus = activityData.groupRestriction;
@@ -59,7 +61,6 @@ class FetchGroupActivityClass {
 
       const canJoin =
         (!restrictionStatus || (currentMember && restrictionStatus)) &&
-        active &&
         !currentParticipant;
 
       const owner = activityData.createdBy === memberID;
