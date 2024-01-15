@@ -49,15 +49,13 @@ export default function JoinGroupActivityButton({
       disabled={!canJoin || loading || requested}
       className={twMerge(
         "grid place-items-center w-full",
-        !canJoin || !active
+        !canJoin
           ? "border-custom-red text-custom-red"
           : "border-custom-orange text-custom-orange",
         className
       )}
     >
-      {!active ? (
-        "This activity has ended"
-      ) : loading ? (
+      {loading ? (
         <LoadingIcon height={20} width={20} />
       ) : requested ? (
         "Requested"
