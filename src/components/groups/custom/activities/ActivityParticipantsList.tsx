@@ -18,10 +18,12 @@ export default function ActivityParticipantsList({
   participantsData,
   activityID,
   memberID,
+  admin,
 }: {
   participantsData: any;
   activityID: string;
   memberID: string;
+  admin: boolean;
 }) {
   const router = useRouter();
   const { host } = useHostname();
@@ -84,14 +86,16 @@ export default function ActivityParticipantsList({
                   View Profile
                 </Link>
               </div>
-              <div className="flex flex-col items-center justify-start mt-2 gap-1">
-                <div
-                  className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
-                  onClick={handleKick}
-                >
-                  Kick From Activity
+              {admin && (
+                <div className="flex flex-col items-center justify-start mt-2 gap-1">
+                  <div
+                    className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
+                    onClick={handleKick}
+                  >
+                    Kick From Activity
+                  </div>
                 </div>
-              </div>
+              )}
             </>
           )}
         </Modal>

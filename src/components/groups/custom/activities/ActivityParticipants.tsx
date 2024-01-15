@@ -22,7 +22,7 @@ export default async function ActivityParticipants({
 
     if (!res.status) throw new Error(res.error);
 
-    const { participantsData } = res.data;
+    const { participantsData, admin } = res.data;
 
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
@@ -30,6 +30,7 @@ export default async function ActivityParticipants({
           memberID={memberID}
           activityID={activityID}
           participantsData={participantsData}
+          admin={admin}
         />
       </DefaultCard>
     );
