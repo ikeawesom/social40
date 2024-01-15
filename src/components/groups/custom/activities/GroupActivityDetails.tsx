@@ -5,6 +5,7 @@ import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
 import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 import React from "react";
 import { SuspenseGroupActivityFetchType } from "./GroupActivityData";
+import ActivityStatusTab from "@/src/components/feed/ActivityStatusTab";
 
 export default async function GroupActivityDetails({
   groupID,
@@ -28,9 +29,12 @@ export default async function GroupActivityDetails({
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
         <div className="w-full flex flex-col items-start justify-center">
-          <h1 className="text-custom-dark-text font-semibold text-2xl">
-            {activityData.activityTitle}
-          </h1>
+          <div className="flex items-center justify-between gap-x-4 flex-wrap w-full">
+            <h1 className="text-custom-dark-text font-semibold text-2xl">
+              {activityData.activityTitle}
+            </h1>
+            <ActivityStatusTab active={active} />
+          </div>
           <h4 className="text-custom-dark-text text-lg">
             {activityData.activityDesc}
           </h4>

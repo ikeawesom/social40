@@ -9,6 +9,7 @@ import JoinGroupActivityButton from "../groups/custom/activities/JoinGroupActivi
 import SecondaryButton from "../utils/SecondaryButton";
 import DismissButton from "./DismissButton";
 import ShowButton from "./ShowButton";
+import ActivityStatusTab from "./ActivityStatusTab";
 
 export default async function GroupFeedCard({
   activityData,
@@ -67,16 +68,19 @@ export default async function GroupFeedCard({
           {groupID}
         </Link>
         <HRow className="mb-2" />
-        <Link
-          href={`/groups/${activityData.groupID}/activity?${new URLSearchParams(
-            {
+        <div className="w-full flex items-center justify-between flex-wrap gap-x-4 gap-y-2">
+          <Link
+            href={`/groups/${
+              activityData.groupID
+            }/activity?${new URLSearchParams({
               id: activityID,
-            }
-          )}`}
-          className="text-start font-semibold text-lg text-custom-dark-text duration-200 hover:opacity-70"
-        >
-          {activityTitle}
-        </Link>
+            })}`}
+            className="text-start font-semibold text-lg text-custom-dark-text duration-200 hover:opacity-70"
+          >
+            {activityTitle}
+          </Link>
+          <ActivityStatusTab active={active} />
+        </div>
         <p className="text-custom-dark-text text-sm">{activityDesc}</p>
         <p className="text-custom-grey-text text-xs">
           {active ? "Begins on: " : "Ended on: "}
@@ -106,7 +110,7 @@ export default async function GroupFeedCard({
           participating.
         </Link>
 
-        <div className="w-full mt-2 flex items-center justify-between gap-3">
+        <div className="w-full mt-2 flex items-center justify-between gap-3 max-[300px]:flex-wrap">
           {owner ? (
             <SecondaryButton
               disabled
