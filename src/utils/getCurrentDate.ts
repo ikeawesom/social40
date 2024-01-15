@@ -5,7 +5,7 @@ export function DateToString(date: Date) {
   const day = date.getDate();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
-  const hour = date.getHours();
+  const hour = date.getHours() - 8;
   const minute = date.getMinutes();
 
   const res = `${day < 10 ? `0${day}` : day}/${
@@ -91,7 +91,7 @@ export function StringToDate(str: string) {
                 yearInt,
                 monthInt - 1,
                 dayInt,
-                hourInt,
+                hourInt + 8,
                 minuteInt
               );
               return handleResponses({ data: date });
