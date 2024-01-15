@@ -35,7 +35,9 @@ export default function ShowButton({
 
   return (
     <SecondaryButton
-      className={"w-fit self-stretch flex items-center justify-center"}
+      className={
+        "max-[300px]:w-full w-fit self-stretch flex items-center justify-center text-xs"
+      }
       disabled={loading}
       onClick={handleDismiss}
     >

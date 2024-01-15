@@ -36,7 +36,9 @@ export default function DismissButton({
 
   return (
     <SecondaryButton
-      className={"w-1/4 self-stretch flex items-center justify-center"}
+      className={
+        "max-[300px]:w-full w-fit self-stretch flex items-center justify-center text-xs"
+      }
       disabled={loading}
       onClick={handleDismiss}
     >
