@@ -59,6 +59,7 @@ class FetchGroupActivityClass {
 
       const canJoin =
         (!restrictionStatus || (currentMember && restrictionStatus)) &&
+        active &&
         !currentParticipant;
 
       const owner = activityData.createdBy === memberID;
