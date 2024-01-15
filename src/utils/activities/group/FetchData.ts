@@ -7,6 +7,7 @@ import {
 } from "../../schemas/group-activities";
 import handleResponses from "../../handleResponses";
 import { ROLES_HIERARCHY } from "../../constants";
+import { dbHandler } from "@/src/firebase/db";
 
 type GroupActivityClassType = {
   memberID: string;
@@ -69,6 +70,14 @@ class FetchGroupActivityClass {
         admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
       }
 
+      const resB = await dbHandler.getSpecific({
+        path: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
+        orderCol: "memberID",
+        ascending: true,
+      });
+
+      if (!resB.status) throw new Error(resB.error);
+
       return handleResponses({
         data: {
           activityData,
@@ -79,6 +88,7 @@ class FetchGroupActivityClass {
           currentParticipant,
           participantsData,
           admin,
+          fallouts: resB.data,
         },
       });
     } catch (err: any) {
