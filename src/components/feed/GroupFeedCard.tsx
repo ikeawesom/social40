@@ -40,6 +40,7 @@ export default async function GroupFeedCard({
       dateStr,
       currentParticipant,
       participantsData,
+      fallouts,
     } = res.data;
 
     const resA = await FetchGroupActivityData.getRequests({
@@ -123,6 +124,7 @@ export default async function GroupFeedCard({
             </SecondaryButton>
           ) : !currentParticipant ? (
             <JoinGroupActivityButton
+              fallout={Object.keys(fallouts).includes(memberID)}
               active={active}
               activityID={activityID}
               canJoin={canJoin}

@@ -7,6 +7,7 @@ import {
 } from "../../schemas/group-activities";
 import handleResponses from "../../handleResponses";
 import { ROLES_HIERARCHY } from "../../constants";
+import { dbHandler } from "@/src/firebase/db";
 
 type GroupActivityClassType = {
   memberID: string;
@@ -57,9 +58,20 @@ class FetchGroupActivityClass {
       const restrictionStatus = activityData.groupRestriction;
       const currentMember = body.status;
 
+      const resB = await dbHandler.getSpecific({
+        path: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
+        orderCol: "memberID",
+        ascending: true,
+      });
+
+      if (!resB.status) throw new Error(resB.error);
+
+      const fallouts = resB.data;
+
       const canJoin =
         (!restrictionStatus || (currentMember && restrictionStatus)) &&
-        !currentParticipant;
+        !Object.keys(fallouts).includes(memberID);
+      !currentParticipant;
 
       const owner = activityData.createdBy === memberID;
 
@@ -79,6 +91,7 @@ class FetchGroupActivityClass {
           currentParticipant,
           participantsData,
           admin,
+          fallouts,
         },
       });
     } catch (err: any) {

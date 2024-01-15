@@ -12,6 +12,13 @@ export type ACTIVITY_SCHEMA = {
   createdOn: Timestamp; // date formate
 };
 
+export type FALLOUTS_SCHEMA = {
+  memberID: string;
+  activityID: string;
+  reason: string;
+  verifiedBy: string;
+};
+
 export function initActivityObject({
   activityID,
   activityTitle,

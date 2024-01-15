@@ -2,6 +2,7 @@ import { dbHandler } from "@/src/firebase/db";
 import { getMethod } from "@/src/utils/API/getAPIMethod";
 import getCurrentDate, { StringToTimestamp } from "@/src/utils/getCurrentDate";
 import handleResponses from "@/src/utils/handleResponses";
+import { FALLOUTS_SCHEMA } from "@/src/utils/schemas/activities";
 import {
   GROUP_ACTIVITY_PARTICIPANT,
   GROUP_ACTIVITY_SCHEMA,
@@ -264,6 +265,26 @@ export async function POST(req: NextRequest) {
 
     if (!resA.status)
       return NextResponse.json({ status: false, error: resA.error });
+
+    return NextResponse.json({ status: true });
+  } else if (option === "group-fallout") {
+    const { fallReason, verifiedBy } = fetchedData;
+
+    const to_add = {
+      activityID,
+      memberID,
+      reason: fallReason,
+      verifiedBy,
+    } as FALLOUTS_SCHEMA;
+
+    const res = await dbHandler.add({
+      col_name: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
+      id: memberID,
+      to_add,
+    });
+
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
 
     return NextResponse.json({ status: true });
   } else if (option === "group-edit") {

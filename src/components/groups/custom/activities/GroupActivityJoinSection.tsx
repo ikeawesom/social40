@@ -22,7 +22,7 @@ export default async function GroupActivityJoinSection({
 
     if (!res.status) throw new Error(res.error);
 
-    const { owner, canJoin, active, currentParticipant } = res.data;
+    const { owner, canJoin, active, currentParticipant, fallouts } = res.data;
 
     const resA = await FetchGroupActivityData.getRequests({
       activityID: activityData.activityID,
@@ -39,6 +39,7 @@ export default async function GroupActivityJoinSection({
       <>
         {!currentParticipant ? (
           <JoinGroupActivityButton
+            fallout={Object.keys(fallouts).includes(memberID)}
             active={active}
             activityID={activityData.activityID}
             memberID={memberID}
