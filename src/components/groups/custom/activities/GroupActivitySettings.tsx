@@ -57,7 +57,6 @@ export default function GroupActivitySettings({
 
   useEffect(() => {
     const dateStr = `${newD.day}/${newD.month}/${newD.year} ${newTime.hour}:${newTime.min}`;
-    console.log(dateStr);
     setInput({
       ...input,
       date: dateStr,
@@ -80,8 +79,8 @@ export default function GroupActivitySettings({
     e.preventDefault();
     setLoading(true);
     try {
-      const activityID = activityData.activityID;
-      const ActivityObj = GetPostObj({ activityID, input });
+      const { activityID, groupID } = activityData;
+      const ActivityObj = GetPostObj({ activityID, input, groupID });
       const res = await fetch(`${host}/api/activity/group-edit`, ActivityObj);
       const body = await res.json();
 
