@@ -6,6 +6,7 @@ import { getMethod } from "@/src/utils/API/getAPIMethod";
 import getCurrentDate, { StringToTimestamp } from "@/src/utils/getCurrentDate";
 import handleResponses from "@/src/utils/handleResponses";
 import { getFriendsList } from "@/src/utils/profile/getFriendsList";
+import resetPassword from "@/src/utils/profile/resetPassword";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import {
   ACTIVITY_PARTICIPANT_SCHEMA,
@@ -250,6 +251,31 @@ export async function POST(request: NextRequest) {
 
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
+
+    return NextResponse.json({ status: true });
+  } else if (option === "reset-password") {
+    const { newPassword } = fetchedData;
+
+    // get password from DB
+    const res = await dbHandler.get({ col_name: `MEMBERS`, id: memberID });
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+
+    const { password } = res.data as MEMBER_SCHEMA;
+
+    // reset auth password
+    const resA = await resetPassword(memberID, password, newPassword);
+    if (!resA.status)
+      return NextResponse.json({ status: false, error: resA.error });
+
+    // reset password in DB
+    const resB = await dbHandler.edit({
+      col_name: `MEMBERS`,
+      data: { password: newPassword },
+      id: memberID,
+    });
+    if (!resB.status)
+      return NextResponse.json({ status: false, error: resB.error });
 
     return NextResponse.json({ status: true });
   }
