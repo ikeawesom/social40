@@ -3,7 +3,11 @@ import HRow from "../utils/HRow";
 import SearchGroups from "./SearchGroups";
 import GroupItem from "./GroupItem";
 import { MemberGroupsType } from "@/src/utils/groups/getJoinedGroups";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import {
+  DateToString,
+  TimestampToDate,
+  TimestampToDateString,
+} from "@/src/utils/getCurrentDate";
 
 export default function GroupsJoinedSection({
   joinedGroups,
@@ -18,15 +22,19 @@ export default function GroupsJoinedSection({
       <HRow className="bg-custom-grey-text mb-1 mt-0" />
       <SearchGroups />
       {!empty ? (
-        Object.keys(joinedGroups).map((groupID: string) => (
-          <GroupItem
-            key={groupID}
-            title={groupID}
-            subtitle={`Joined on: ${TimestampToDateString(
-              joinedGroups[groupID]["dateJoined"]
-            )}`}
-          />
-        ))
+        Object.keys(joinedGroups).map((groupID: string) => {
+          const timestamp = joinedGroups[groupID]["dateJoined"];
+          const localDate = TimestampToDate(timestamp);
+          localDate.setHours(localDate.getHours() - 8);
+          const stringDate = DateToString(localDate);
+          return (
+            <GroupItem
+              key={groupID}
+              title={groupID}
+              subtitle={`Joined on: ${stringDate}`}
+            />
+          );
+        })
       ) : (
         <>
           <h1 className="text-custom-grey-text text-sm">
