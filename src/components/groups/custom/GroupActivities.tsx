@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
 import DefaultCard from "../../DefaultCard";
 import HRow from "../../utils/HRow";
@@ -23,15 +23,10 @@ export default function GroupActivities({
   admin: boolean;
   groupID: string;
 }) {
-  const { handleSearch, itemList, search, setItemList } = useQueryObj({
+  const { handleSearch, itemList, search } = useQueryObj({
     obj: activitiesData,
     type: "activityTitle",
   });
-
-  useEffect(() => {
-    setItemList(activitiesData);
-  }, [activitiesData]);
-
   const empty = Object.keys(itemList).length === 0;
   return (
     <DefaultCard className="w-full">
