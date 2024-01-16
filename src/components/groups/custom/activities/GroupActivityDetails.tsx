@@ -18,6 +18,8 @@ export default async function GroupActivityDetails({
     const date = activityData.activityDate;
     const dateStr = TimestampToDateString(date);
     const active = ActiveTimestamp(date);
+    const dateA = activityData.createdOn;
+    const dateStrA = TimestampToDateString(dateA);
 
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
@@ -48,7 +50,7 @@ export default async function GroupActivityDetails({
             Created by: {activityData.createdBy}
           </p>
           <p className="text-custom-grey-text text-sm">
-            Created on: {TimestampToDateString(activityData.createdOn)}
+            Created on: {dateStrA}
           </p>
         </div>
       </DefaultCard>
