@@ -21,7 +21,7 @@ export default function GroupsCreatedSection({
         Object.keys(ownedGroups).map((groupID: string) => {
           const timestamp = ownedGroups[groupID]["createdOn"];
           const localDate = TimestampToDate(timestamp);
-          localDate.setHours(localDate.getHours() - 8);
+          localDate.setHours(localDate.getHours() + 8);
           const stringDate = DateToString(localDate);
           return (
             <GroupItem

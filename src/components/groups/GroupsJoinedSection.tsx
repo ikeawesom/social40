@@ -25,7 +25,7 @@ export default function GroupsJoinedSection({
         Object.keys(joinedGroups).map((groupID: string) => {
           const timestamp = joinedGroups[groupID]["dateJoined"];
           const localDate = TimestampToDate(timestamp);
-          localDate.setHours(localDate.getHours() - 8);
+          localDate.setHours(localDate.getHours() + 8);
           const stringDate = DateToString(localDate);
           return (
             <GroupItem
