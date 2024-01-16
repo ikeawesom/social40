@@ -35,7 +35,7 @@ export default function JoinedActivitiesList({
 
       <InnerContainer
         className={twMerge(
-          "min-h-[5vh] my-2",
+          "min-h-[5vh] my-2 max-h-[80vh]",
           empty && "grid place-items-center justify-center overflow-hidden p-4"
         )}
       >

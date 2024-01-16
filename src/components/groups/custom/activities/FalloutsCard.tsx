@@ -42,7 +42,7 @@ export default function FalloutsCard({
             placeholder="Search for Member ID"
             search={search}
           />
-          <InnerContainer className="w-full">
+          <InnerContainer className="w-full max-h-[80vh]">
             {Object.keys(itemList).map((id: string) => {
               const { memberID, reason, verifiedBy } = itemList[
                 id

@@ -156,7 +156,7 @@ export default function ActivityWaitlist({
       </div>
       {show && (
         <>
-          <InnerContainer className="w-full">
+          <InnerContainer className="w-full max-h-[80vh]">
             {loading && (
               <div className="w-full absolute grid place-items-center h-full bg-black/25 z-30">
                 <LoadingIconBright width={30} height={30} />
