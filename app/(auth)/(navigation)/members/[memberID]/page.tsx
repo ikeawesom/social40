@@ -3,6 +3,7 @@ import BookedStatus from "@/src/components/members/BookedStatus";
 import MemberBadges from "@/src/components/members/MemberBadges";
 import MemberPoints from "@/src/components/members/MemberPoints";
 import PermissionForm from "@/src/components/members/PermissionForm";
+import ResetPasswordButton from "@/src/components/members/ResetPasswordButton";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import JoinedActivities from "@/src/components/profile/activities/JoinedActivities";
 import StatusFeed from "@/src/components/profile/stats/StatusFeed";
@@ -117,6 +118,9 @@ export default async function MemberPage({
                   currentMember={currentMemberData}
                   viewMember={viewMemberData}
                 />
+              )}
+              {permission && higher && !sameMember && (
+                <ResetPasswordButton memberID={viewMemberData.memberID} />
               )}
             </div>
           </div>
