@@ -286,6 +286,14 @@ export async function POST(req: NextRequest) {
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
 
+    const resA = await dbHandler.delete({
+      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+      id: activityID,
+    });
+
+    if (!resA.status)
+      return NextResponse.json({ status: false, error: resA.error });
+
     return NextResponse.json({ status: true });
   } else if (option === "group-edit") {
     const { input } = fetchedData;
