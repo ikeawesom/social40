@@ -70,7 +70,7 @@ export default async function GroupFeedCard({
           {groupID}
         </Link>
         <HRow className="mb-2" />
-        <div className="w-full flex items-center justify-between flex-wrap gap-x-4 gap-y-2">
+        <div className="w-full flex items-center justify-between flex-wrap gap-x-2">
           <Link
             href={`/groups/${
               activityData.groupID
