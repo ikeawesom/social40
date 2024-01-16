@@ -317,6 +317,19 @@ export async function POST(req: NextRequest) {
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
 
+    const resA = await dbHandler.edit({
+      col_name: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
+      id: activityID,
+      data: {
+        activityTitle: newTitle,
+        activityDesc: newDesc,
+        activityDate: newDateTimestamp,
+      },
+    });
+
+    if (!resA.status)
+      return NextResponse.json({ status: false, error: resA.error });
+
     return NextResponse.json({ status: true });
   } else if (option == "group-delete") {
     // remove activity from all members first
