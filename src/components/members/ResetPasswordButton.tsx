@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import SecondaryButton from "../utils/SecondaryButton";
 import { useHostname } from "@/src/hooks/useHostname";
-import LoadingIcon from "../utils/LoadingIcon";
+import { LoadingIconBright } from "../utils/LoadingIcon";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { toast } from "sonner";
 import DefaultCard from "../DefaultCard";
@@ -53,11 +53,11 @@ export default function ResetPasswordButton({
       </p>
       <SecondaryButton
         onClick={handleReset}
-        className="grid place-items-center text-center border-red-500 text-red-500"
+        className="grid place-items-center text-centerborder-custom-red text-custom-red font-semibold hover:bg-custom-red hover:text-custom-light-text duration-200"
         disabled={loading}
       >
         {loading ? (
-          <LoadingIcon width={20} height={20} />
+          <LoadingIconBright width={20} height={20} />
         ) : (
           "Reset Member Password"
         )}
