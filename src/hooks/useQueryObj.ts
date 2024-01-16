@@ -45,5 +45,5 @@ export default function useQueryObj({
     }, 400);
   }, [search]);
 
-  return { search, handleSearch, itemList };
+  return { search, handleSearch, itemList, setItemList };
 }
