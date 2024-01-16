@@ -3,6 +3,8 @@ import HRow from "@/src/components/utils/HRow";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import {
   ActiveTimestamp,
+  DateToString,
+  TimestampToDate,
   TimestampToDateString,
 } from "@/src/utils/getCurrentDate";
 import React from "react";
@@ -18,8 +20,10 @@ export default async function GroupActivityDetails({
     const date = activityData.activityDate;
     const dateStr = TimestampToDateString(date);
     const active = ActiveTimestamp(date);
-    const dateA = activityData.createdOn;
-    const dateStrA = TimestampToDateString(dateA);
+    const dateLocal = activityData.createdOn;
+    const dateA = TimestampToDate(dateLocal);
+    dateA.setHours(dateA.getHours() + 8);
+    const dateStrA = DateToString(dateA);
 
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
