@@ -21,7 +21,6 @@ export function DateToString(date: Date) {
 // to fetch from firestore
 export function TimestampToDateString(timestamp: Timestamp) {
   const date = TimestampToDate(timestamp);
-  date.setHours(date.getHours() - 8);
   return DateToString(date);
 }
 
@@ -33,7 +32,6 @@ export function TimestampToDate(timestamp: Timestamp) {
 // to register into firestore
 export default function getCurrentDate() {
   const currentdate = new Date();
-  currentdate.setHours(currentdate.getHours() - 8);
   return DateToTimestamp(currentdate);
 }
 
