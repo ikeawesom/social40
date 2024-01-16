@@ -160,7 +160,7 @@ export default async function GroupPage({
                     GroupStatusList={groupStatusList}
                   />
                 )}
-                {owner && <SettingsSection groupID={groupID} />}
+                {admin && <SettingsSection groupID={groupID} />}
               </div>
             </div>
           </div>
