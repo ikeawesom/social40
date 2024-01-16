@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 
-const PROD = true;
+const PROD = false;
 
 const CONFIG_DEV = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
