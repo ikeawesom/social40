@@ -25,9 +25,10 @@ export default function GroupActivitySettings({
   const oldDesc = activityData.activityDesc;
   const oldRestrict = activityData.groupRestriction;
   const oldDateTimestamp = activityData.activityDate;
-  const oldLocalDate = TimestampToDate(oldDateTimestamp);
-  oldLocalDate.setHours(oldLocalDate.getHours() - 8);
-  const oldTimestampStr = DateToString(oldLocalDate);
+  // const oldLocalDate = TimestampToDate(oldDateTimestamp);
+  // oldLocalDate.setHours(oldLocalDate.getHours() - 8);
+  // const oldTimestampStr = DateToString(oldLocalDate);
+  const oldTimestampStr = TimestampToDateString(oldDateTimestamp);
   const oldDate = oldTimestampStr.split(" ")[0];
   const oldTime = oldTimestampStr.split(" ")[1];
 
