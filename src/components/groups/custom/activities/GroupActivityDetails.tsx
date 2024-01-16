@@ -19,8 +19,6 @@ export default async function GroupActivityDetails({
     const dateStr = TimestampToDateString(date);
     const active = ActiveTimestamp(date);
 
-    console.log("Activity Date:", dateStr);
-
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
         <div className="w-full flex flex-col items-start justify-center">
