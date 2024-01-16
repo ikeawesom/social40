@@ -5,7 +5,6 @@ export function DateToString(date: Date) {
   const day = date.getDate();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
-  date.setHours(date.getHours() - 8);
   const hour = date.getHours();
   const minute = date.getMinutes();
 
@@ -92,7 +91,7 @@ export function StringToDate(str: string) {
                 yearInt,
                 monthInt - 1,
                 dayInt,
-                hourInt - 8,
+                hourInt,
                 minuteInt
               );
               return handleResponses({ data: date });
