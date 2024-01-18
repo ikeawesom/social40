@@ -25,7 +25,6 @@ export default function HeaderBar({
           onClick={() => {
             router.back();
             router.refresh();
-            console.log("Refreshed.");
           }}
           src="/icons/navigation/icon_back.svg"
           className="cursor-pointer"

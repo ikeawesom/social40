@@ -520,8 +520,6 @@ export async function POST(req: NextRequest) {
       if (!arr.includes(activityID)) arr.push(activityID);
     }
 
-    console.log("New Hidden Activities:", arr);
-
     const resA = await dbHandler.edit({
       col_name: "MEMBERS",
       id: memberID,
@@ -552,8 +550,6 @@ export async function POST(req: NextRequest) {
         arr.splice(index, 1);
       }
     }
-
-    console.log("New Hidden Activities:", arr);
 
     const resA = await dbHandler.edit({
       col_name: "MEMBERS",
