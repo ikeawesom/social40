@@ -2,6 +2,7 @@ import GroupFeedCard from "@/src/components/feed/GroupFeedCard";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import ErrorActivities from "@/src/components/screens/ErrorActivities";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
+import { dbHandler } from "@/src/firebase/db";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import handleResponses from "@/src/utils/handleResponses";
@@ -55,7 +56,19 @@ export default async function EditProfilePage() {
             ActivityObj
           );
           const body = await res.json();
-          if (!body.status) throw new Error(body.error);
+          if (!body.status) {
+            // activity deleted
+            // remove from hidden activities list
+            hiddenActivities.filter((value: string) => value !== activityID);
+            const resA = await dbHandler.edit({
+              col_name: "MEMBERS",
+              id: memberID,
+              data: {
+                hiddenActivities,
+              },
+            });
+            if (!resA.status) throw new Error(resA.error);
+          }
 
           return handleResponses({ data: body.data });
         } catch (err: any) {
@@ -68,8 +81,10 @@ export default async function EditProfilePage() {
 
     activitiesArr.forEach((item: any) => {
       if (!item.status) throw new Error(item.error);
-      const activityData = item.data.activityData as GROUP_ACTIVITY_SCHEMA;
-      groupActivitiesData[activityData.activityID] = activityData;
+      if (item.data) {
+        const activityData = item.data.activityData as GROUP_ACTIVITY_SCHEMA;
+        groupActivitiesData[activityData.activityID] = activityData;
+      }
     });
 
     return (
