@@ -102,9 +102,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ status: false, error: res.error });
     return NextResponse.json({ status: true });
   } else if (option === "set-status") {
+    const { mc } = fetchedData;
     const data = fetchedData.status as StatusInputType;
 
-    const startDate = `${data.start} 23:59`;
+    const startDate = `${data.start} 00:00`;
     const endDate = `${data.end} 23:59`;
     const startTimestamp = StringToTimestamp(startDate);
     const endTimestamp = StringToTimestamp(endDate);
@@ -127,6 +128,7 @@ export async function POST(request: NextRequest) {
       },
       startDate: startTimestamp.data,
       endDate: endTimestamp.data,
+      mc,
     } as STATUS_SCHEMA;
 
     const res = await dbHandler.addGeneral({

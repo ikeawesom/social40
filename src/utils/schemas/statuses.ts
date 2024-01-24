@@ -11,6 +11,7 @@ export type STATUS_SCHEMA = {
     endorsedBy: string; // memberID of endorsed admin
     endorsedOn: Timestamp; // date endorsed
   };
+  mc?: boolean;
   startDate: Timestamp; // date format
   endDate: Timestamp; // date format
 };
