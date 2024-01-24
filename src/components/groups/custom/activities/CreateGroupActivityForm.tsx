@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import FormInputContainer from "@/src/components/utils/FormInputContainer";
 import { LoadingIconBright } from "@/src/components/utils/LoadingIcon";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
@@ -8,6 +9,9 @@ import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { ACTIVITY_TYPE } from "@/src/utils/constants";
+import SecondaryButton from "@/src/components/utils/SecondaryButton";
+import { twMerge } from "tailwind-merge";
+import SelectMembers from "./SelectMembers";
 
 export default function CreateGroupActivityForm({
   groupID,
@@ -42,6 +46,12 @@ export default function CreateGroupActivityForm({
     min: "00",
   });
 
+  const [advancedMode, setMode] = useState(false);
+  const [addMembers, setAddMembers] = useState({
+    check: false,
+    members: [] as string[],
+  });
+
   useEffect(() => {
     setInput({
       ...input,
@@ -57,7 +67,7 @@ export default function CreateGroupActivityForm({
     e.preventDefault();
     setLoading(true);
     try {
-      const PostObj = GetPostObj({ groupID, memberID, input });
+      const PostObj = GetPostObj({ groupID, memberID, input, addMembers });
       const res = await fetch(`${host}/api/activity/group-create`, PostObj);
       const body = await res.json();
 
@@ -226,26 +236,72 @@ export default function CreateGroupActivityForm({
         /> */}
       </FormInputContainer>
 
-      <FormInputContainer
-        inputName="type"
-        labelText="What kind of activity is this?"
-      >
-        <select
-          className="w-full"
-          id="type"
-          name="type"
-          required
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-            setInput({ ...input, level: e.target.value });
-          }}
-        >
-          {ACTIVITY_TYPE.map((item: string) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
-      </FormInputContainer>
+      <div className="w-full flex items-center justify-between">
+        <h1 className="text-sm text-custom-dark-text font-bold">
+          Advanced Settings
+        </h1>
+
+        <Image
+          onClick={() => setMode(!advancedMode)}
+          src="/icons/icon_arrow-down.svg"
+          alt="Show"
+          width={30}
+          height={30}
+          className={`duration-300 ease-in-out ${
+            advancedMode ? "rotate-180" : ""
+          }`}
+        />
+      </div>
+      {advancedMode && (
+        <>
+          <FormInputContainer
+            inputName="type"
+            labelText="What kind of activity is this?"
+          >
+            <select
+              className="w-full"
+              id="type"
+              name="type"
+              required
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                setInput({ ...input, level: e.target.value });
+              }}
+            >
+              {ACTIVITY_TYPE.map((item: string) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </FormInputContainer>
+          <div className="w-full flex items-center justify-between gap-2 flex-wrap">
+            <SecondaryButton
+              className={twMerge(
+                !addMembers.check &&
+                  "bg-custom-light-orange border-custom-orange"
+              )}
+              onClick={() => setAddMembers({ ...addMembers, check: false })}
+            >
+              Select All Members (Default)
+            </SecondaryButton>
+            <SecondaryButton
+              className={twMerge(
+                addMembers.check &&
+                  "bg-custom-light-orange border-custom-orange"
+              )}
+              onClick={() => setAddMembers({ ...addMembers, check: true })}
+            >
+              Select Custom Members{" "}
+              {addMembers.check &&
+                addMembers.members.length > 0 &&
+                `( ${addMembers.members.length} )`}
+            </SecondaryButton>
+          </div>
+          {addMembers.check && (
+            <SelectMembers addMembers={addMembers} setMembers={setAddMembers} />
+          )}
+        </>
+      )}
       <PrimaryButton
         disabled={loading}
         type="submit"

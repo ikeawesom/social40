@@ -84,6 +84,7 @@ export const VERSION_MAP = {
     desc: "You are part of Social40's beginning. Feel free to provide your feedback.",
     updates: [
       "Members will now be automatically added into activities upon creation except those on MC and statuses on the start date of the activity",
+      "Commanders can also opt out of the previous option and choose to custom-select who to join the activity",
       "Commanders can now kick members from activities and categorise according to falling out",
       "Commanders can more easily manage participation as present fall outs are already automatically not added",
       "Commanders can view Strengths, MCs and Statuses distinctively",
