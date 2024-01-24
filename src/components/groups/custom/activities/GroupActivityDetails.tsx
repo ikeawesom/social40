@@ -47,21 +47,23 @@ export default async function GroupActivityDetails({
             {activityData.activityDesc}
           </h4>
 
-          <h4 className="text-custom-dark-text">
-            Activity Level:{" "}
-            <span
-              className={twMerge(
-                "font-bold",
-                activityLevel === "Light"
-                  ? "text-custom-green"
-                  : activityLevel === "Moderate"
-                  ? "text-custom-orange"
-                  : "text-custom-red"
-              )}
-            >
-              {activityLevel.toUpperCase()}
-            </span>
-          </h4>
+          {activityLevel !== undefined && (
+            <h4 className="text-custom-dark-text">
+              Activity Level:{" "}
+              <span
+                className={twMerge(
+                  "font-bold",
+                  activityLevel === "Light"
+                    ? "text-custom-green"
+                    : activityLevel === "Moderate"
+                    ? "text-custom-orange"
+                    : "text-custom-red"
+                )}
+              >
+                {activityLevel.toUpperCase()}
+              </span>
+            </h4>
+          )}
           <p className="text-custom-dark-text text-sm">
             {active ? "Begins on: " : "Ended on: "}
             {dateStr}
