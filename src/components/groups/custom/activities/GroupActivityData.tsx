@@ -96,6 +96,9 @@ export default async function GroupActivityData({
           {admin && falloutsLength > 0 && <FalloutsCard fallouts={fallouts} />}
           {admin && <GroupActivitySettings activityData={activityData} />}
           {admin && <DeleteGroupActivity activityData={activityData} />}
+          <p className="text-center self-center justify-center text-xs text-custom-grey-text">
+            Activity ID: {activityData.activityID}
+          </p>
         </div>
       );
     } catch (err: any) {

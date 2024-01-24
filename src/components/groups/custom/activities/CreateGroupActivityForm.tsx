@@ -7,6 +7,7 @@ import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { ACTIVITY_TYPE } from "@/src/utils/constants";
 
 export default function CreateGroupActivityForm({
   groupID,
@@ -28,6 +29,7 @@ export default function CreateGroupActivityForm({
       endTime: "",
     },
     restrict: false,
+    level: "Light",
   });
   const [loading, setLoading] = useState(false);
   const [startD, setStartD] = useState({
@@ -77,12 +79,6 @@ export default function CreateGroupActivityForm({
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
-  const durationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput({
-      ...input,
-      duration: { ...input.duration, [e.target.name]: e.target.value },
-    });
-  };
   return (
     <form
       onSubmit={handleSubmit}
@@ -228,6 +224,27 @@ export default function CreateGroupActivityForm({
           value={input.time}
           onChange={handleChange}
         /> */}
+      </FormInputContainer>
+
+      <FormInputContainer
+        inputName="type"
+        labelText="What kind of activity is this?"
+      >
+        <select
+          className="w-full"
+          id="type"
+          name="type"
+          required
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            setInput({ ...input, level: e.target.value });
+          }}
+        >
+          {ACTIVITY_TYPE.map((item: string) => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
+        </select>
       </FormInputContainer>
       <PrimaryButton
         disabled={loading}

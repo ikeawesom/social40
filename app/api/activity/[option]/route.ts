@@ -68,12 +68,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: false, error: timestampResA.error });
     const cutOff = timestampResA.data as Timestamp;
 
+    const activityLevel = input.level;
+
     // add activity record to root path
     const createdOn = getCurrentDate();
     const to_add = {
       activityDate: timestamp,
       activityDesc: input.desc,
       activityTitle: input.title,
+      activityLevel,
       createdBy: memberID,
       createdOn,
       groupID,

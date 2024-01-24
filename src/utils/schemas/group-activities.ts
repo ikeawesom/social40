@@ -8,6 +8,7 @@ export type GROUP_ACTIVITY_SCHEMA = {
   activityTitle: string;
   activityDesc: string;
   activityDate: Timestamp; // date format
+  activityLevel: string; // Light, Moderate or Strenuous
 
   duration: {
     active: boolean;
