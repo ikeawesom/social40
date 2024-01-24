@@ -11,6 +11,7 @@ import React from "react";
 import { SuspenseGroupActivityFetchType } from "./GroupActivityData";
 import ActivityStatusTab from "@/src/components/feed/ActivityStatusTab";
 import Link from "next/link";
+import { twMerge } from "tailwind-merge";
 
 export default async function GroupActivityDetails({
   memberID,
@@ -24,6 +25,8 @@ export default async function GroupActivityDetails({
     const dateA = TimestampToDate(dateLocal);
     dateA.setHours(dateA.getHours() + 8);
     const dateStrA = DateToString(dateA);
+
+    const { activityLevel } = activityData;
 
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
@@ -42,6 +45,22 @@ export default async function GroupActivityDetails({
           </div>
           <h4 className="text-custom-dark-text text-lg">
             {activityData.activityDesc}
+          </h4>
+
+          <h4 className="text-custom-dark-text">
+            Activity Level:{" "}
+            <span
+              className={twMerge(
+                "font-bold",
+                activityLevel === "Light"
+                  ? "text-custom-green"
+                  : activityLevel === "Moderate"
+                  ? "text-custom-orange"
+                  : "text-custom-red"
+              )}
+            >
+              {activityLevel.toUpperCase()}
+            </span>
           </h4>
           <p className="text-custom-dark-text text-sm">
             {active ? "Begins on: " : "Ended on: "}
