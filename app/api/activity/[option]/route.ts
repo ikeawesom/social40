@@ -1,6 +1,12 @@
+import { GroupDetailsType } from "@/src/components/groups/custom/GroupMembers";
 import { dbHandler } from "@/src/firebase/db";
+import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { getMethod } from "@/src/utils/API/getAPIMethod";
-import getCurrentDate, { StringToTimestamp } from "@/src/utils/getCurrentDate";
+import getCurrentDate, {
+  StringToTimestamp,
+  TimestampToDate,
+  TimestampToDateString,
+} from "@/src/utils/getCurrentDate";
 import handleResponses from "@/src/utils/handleResponses";
 import { FALLOUTS_SCHEMA } from "@/src/utils/schemas/activities";
 import {
@@ -14,8 +20,29 @@ import {
   ACTIVITY_PARTICIPANT_SCHEMA,
   MEMBER_SCHEMA,
 } from "@/src/utils/schemas/members";
+import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import { Timestamp } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
+
+async function helperParticipate(memberID: string, activityID: string) {
+  try {
+    const HOST = process.env.HOST;
+    const postObj = GetPostObj({ memberID, activityID });
+    const resA = await fetch(`${HOST}/api/activity/group-participate`, postObj);
+    const body = await resA.json();
+    if (!body.status) throw new Error(body.error);
+    return handleResponses();
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
+}
+
+function isActive(a: Timestamp, start: Timestamp, end: Timestamp) {
+  const date = TimestampToDate(a);
+  const startDate = TimestampToDate(start);
+  const endDate = TimestampToDate(end);
+  return date <= endDate && date >= startDate;
+}
 
 export async function POST(req: NextRequest) {
   const { option } = getMethod(req.url);
@@ -79,21 +106,86 @@ export async function POST(req: NextRequest) {
     if (!resC.status)
       return NextResponse.json({ status: false, error: resC.error });
 
-    // add participated member as a sub collection of root path
-    const to_addA = {
-      dateJoined: createdOn,
-      memberID,
-      activityID: fetchedID,
-    } as GROUP_ACTIVITY_PARTICIPANT;
-
-    const resA = await dbHandler.add({
-      col_name: `GROUP-ACTIVITIES/${fetchedID}/PARTICIPANTS`,
-      id: memberID,
-      to_add: to_addA,
+    // get list of group members
+    const resX = await dbHandler.getSpecific({
+      path: `GROUPS/${groupID}/MEMBERS`,
+      orderCol: "dateJoined",
+      ascending: true,
     });
 
-    if (!resA.status)
-      return NextResponse.json({ status: false, error: resA.error });
+    if (!resX.status)
+      return NextResponse.json({ status: false, error: resX.error });
+
+    const membersData = resX.data as GroupDetailsType;
+
+    const promiseList = Object.keys(membersData).map(async (item: string) => {
+      const selectedMemberID = membersData[item].memberID;
+      const res = await dbHandler.getSpecific({
+        path: `MEMBERS/${selectedMemberID}/STATUSES`,
+        orderCol: "endDate",
+        ascending: false,
+      });
+      if (!res.status)
+        return handleResponses({ status: false, error: res.error });
+
+      // get status data from current member
+      const statusData = res.data as { [statusID: string]: STATUS_SCHEMA };
+      if (Object.keys(statusData).length > 0) {
+        console.log("Checking:", selectedMemberID);
+        const { startDate, endDate, statusTitle } =
+          statusData[Object.keys(statusData)[0]];
+        console.log(
+          "Latest status:",
+          TimestampToDate(startDate),
+          TimestampToDate(endDate),
+          statusTitle
+        );
+        console.log(
+          "Start:",
+          TimestampToDate(startDate),
+          "End:",
+          TimestampToDate(endDate)
+        );
+
+        if (!isActive(timestamp, startDate, endDate)) {
+          // if status is over, add as participant
+          const res = await helperParticipate(selectedMemberID, fetchedID);
+          if (!res.status)
+            return handleResponses({ status: false, error: res.error });
+        } else {
+          // status is current, add to fall out
+          const to_add = {
+            activityID: fetchedID,
+            memberID: selectedMemberID,
+            reason: `${statusTitle} (${
+              TimestampToDateString(startDate).split(" ")[0]
+            }-${TimestampToDateString(endDate).split(" ")[0]})`,
+            verifiedBy: memberID,
+          } as FALLOUTS_SCHEMA;
+
+          const res = await dbHandler.add({
+            col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
+            id: selectedMemberID,
+            to_add,
+          });
+
+          console.log(res);
+          if (!res.status)
+            return handleResponses({ status: false, error: res.error });
+        }
+      } else {
+        // if no statuses, add as participant
+        const res = await helperParticipate(selectedMemberID, fetchedID);
+        if (!res.status)
+          return handleResponses({ status: false, error: res.error });
+      }
+      return handleResponses();
+    });
+
+    const promiseRes = await Promise.all(promiseList);
+    promiseRes.forEach((item: any) => {
+      if (!item.status) console.log(item.error);
+    });
 
     // add group activity to sub collection of group path
     const to_addB = {
@@ -112,22 +204,6 @@ export async function POST(req: NextRequest) {
 
     if (!resB.status)
       return NextResponse.json({ status: false, error: resB.error });
-
-    // add to member's group activities subcollection
-    const to_addC = {
-      activityID: fetchedID,
-      dateJoined: createdOn,
-      activityDate: timestamp,
-    } as ACTIVITY_PARTICIPANT_SCHEMA;
-
-    const resD = await dbHandler.add({
-      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
-      id: fetchedID,
-      to_add: to_addC,
-    });
-
-    if (!resD.status)
-      return NextResponse.json({ status: false, error: resD.error });
 
     return NextResponse.json({ status: true, data: fetchedID });
   } else if (option === "group-get") {
