@@ -78,6 +78,7 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
           start: statusDetails.start,
           end: statusDetails.end,
         },
+        mc: checked.status,
       };
 
       const res = await fetch(`${host}/api/profile/set-status`, {

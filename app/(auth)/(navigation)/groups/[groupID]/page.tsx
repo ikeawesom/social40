@@ -13,9 +13,9 @@ import GroupRequested from "@/src/components/groups/custom/GroupRequested";
 import SettingsSection from "@/src/components/groups/custom/settings/SettingsSection";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import { GROUP_ROLES_HEIRARCHY } from "@/src/utils/constants";
-import GroupStatusSection, {
+import GroupStrengthSection, {
   GroupStatusType,
-} from "@/src/components/groups/custom/GroupStatusSection";
+} from "@/src/components/groups/custom/GroupStrengthSection";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import GroupLeaderboard, {
   MembersDataType,
@@ -143,23 +143,22 @@ export default async function GroupPage({
                   desc={groupDesc}
                 />
                 {admin && <GroupRequested groupID={groupID} />}
-                <GroupMembers
-                  curMember={currentMember}
-                  groupID={groupID}
-                  membersList={groupMembers}
-                />
+                {admin && (
+                  <GroupStrengthSection
+                    adminID={memberID}
+                    GroupStatusList={groupStatusList}
+                    curMember={currentMember}
+                    groupID={groupID}
+                    membersList={groupMembers}
+                  />
+                )}
+
                 <GroupLeaderboard memberData={groupMembersData} />
                 <GroupActivities
                   groupID={groupID}
                   admin={admin}
                   activitiesData={groupActivitiesData}
                 />
-                {admin && (
-                  <GroupStatusSection
-                    adminID={memberID}
-                    GroupStatusList={groupStatusList}
-                  />
-                )}
                 {admin && <SettingsSection groupID={groupID} />}
               </div>
             </div>
