@@ -52,6 +52,11 @@ export async function POST(req: NextRequest) {
 
   if (option === "group-create") {
     const { input } = fetchedData;
+    const addMembers = fetchedData.addMembers as {
+      check: boolean;
+      members: string[];
+    };
+
     // get timestamp object from time and date strings
     const timestampRes = StringToTimestamp(`${input.date} ${input.time}`);
 
@@ -110,19 +115,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: false, error: resC.error });
 
     // get list of group members
-    const resX = await dbHandler.getSpecific({
-      path: `GROUPS/${groupID}/MEMBERS`,
-      orderCol: "dateJoined",
-      ascending: true,
-    });
+    let membersData: string[];
 
-    if (!resX.status)
-      return NextResponse.json({ status: false, error: resX.error });
+    if (!addMembers.check) {
+      const resX = await dbHandler.getSpecific({
+        path: `GROUPS/${groupID}/MEMBERS`,
+        orderCol: "dateJoined",
+        ascending: true,
+      });
 
-    const membersData = resX.data as GroupDetailsType;
+      if (!resX.status)
+        return NextResponse.json({ status: false, error: resX.error });
 
-    const promiseList = Object.keys(membersData).map(async (item: string) => {
-      const selectedMemberID = membersData[item].memberID;
+      membersData = Object.keys(resX.data);
+    } else {
+      membersData = addMembers.members;
+    }
+
+    const promiseList = membersData.map(async (selectedMemberID: string) => {
       const res = await dbHandler.getSpecific({
         path: `MEMBERS/${selectedMemberID}/STATUSES`,
         orderCol: "endDate",
