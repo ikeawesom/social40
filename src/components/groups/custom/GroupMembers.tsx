@@ -44,10 +44,10 @@ export default function GroupMembers({
             handleSearch={handleSearch}
             search={search}
           />
-          <div className="flex items-center justify-end gap-1 w-fit">
+          {/* <div className="flex items-center justify-end gap-1 w-fit">
             <p className="text-xs text-custom-grey-text">{online} in camp</p>
             <StatusDot className="w-1 h-1" status />
-          </div>
+          </div> */}
           <InnerContainer className="max-h-[90vh]">
             {Object.keys(itemList).map((item) => (
               <GroupMemberTab
