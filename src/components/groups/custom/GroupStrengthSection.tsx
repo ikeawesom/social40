@@ -114,7 +114,7 @@ export default function GroupStrengthSection({
           <>
             <InnerContainer
               className={twMerge(
-                "min-h-[10vh] max-h-[100vh]",
+                "min-h-[10vh] max-h-[60vh]",
                 empty &&
                   "grid place-items-center justify-center overflow-hidden p-4"
               )}

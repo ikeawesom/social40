@@ -191,7 +191,7 @@ export default function RequestsSection({
         </div>
         {show && (
           <>
-            <InnerContainer className="max-h-[80vh]">
+            <InnerContainer className="max-h-[60vh]">
               {loading && (
                 <div className="w-full absolute grid place-items-center h-full bg-black/25 z-30">
                   <LoadingIconBright width={30} height={30} />

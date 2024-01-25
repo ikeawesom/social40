@@ -61,7 +61,7 @@ export default async function ActivityRemarks({
 
         <InnerContainer
           className={twMerge(
-            "w-full max-h-[100vh]",
+            "w-full max-h-[60vh]",
             empty &&
               "grid place-items-center justify-center overflow-hidden p-4"
           )}

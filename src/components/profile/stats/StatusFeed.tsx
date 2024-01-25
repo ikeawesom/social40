@@ -41,7 +41,7 @@ export default async function StatusFeed({
 
       <InnerContainer
         className={twMerge(
-          "max-h-[100vh] min-h-[10vh]",
+          "max-h-[60vh] min-h-[10vh]",
           empty && "grid place-items-center justify-center overflow-hidden p-4",
           viewProfile && "my-2"
         )}
