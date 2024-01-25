@@ -33,32 +33,34 @@ export default function ToggleBibo({
   const handleBibo = async () => {
     if (bibo || aboveCOS) {
       setLoading(true);
-      try {
-        const PostObj = GetPostObj({ memberID });
+      if (confirm("Are you sure you want to book out?")) {
+        try {
+          const PostObj = GetPostObj({ memberID });
 
-        const res = await fetch(`${host}/api/bibo/set`, PostObj);
-        const body = await res.json();
-        if (!body.status) throw new Error(body.error);
+          const res = await fetch(`${host}/api/bibo/set`, PostObj);
+          const body = await res.json();
+          if (!body.status) throw new Error(body.error);
 
-        const date = getCurrentDateString();
-        const bookInDate = date.split(" ")[0];
-        const bookInTime = date.split(" ")[1];
+          const date = getCurrentDateString();
+          const bookInDate = date.split(" ")[0];
+          const bookInTime = date.split(" ")[1];
 
-        const PostObjA = GetPostObj({
-          memberID,
-          memberBookIn: memberID,
-          bookInDate,
-          bookInTime,
-        });
+          const PostObjA = GetPostObj({
+            memberID,
+            memberBookIn: memberID,
+            bookInDate,
+            bookInTime,
+          });
 
-        const resA = await fetch(`${host}/api/bibo/set-custom`, PostObjA);
-        const bodyA = await resA.json();
+          const resA = await fetch(`${host}/api/bibo/set-custom`, PostObjA);
+          const bodyA = await resA.json();
 
-        if (!bodyA.status) throw new Error(bodyA.error);
+          if (!bodyA.status) throw new Error(bodyA.error);
 
-        router.refresh();
-      } catch (error: any) {
-        toast.error(error.message);
+          router.refresh();
+        } catch (error: any) {
+          toast.error(error.message);
+        }
       }
       setLoading(false);
     } else {
