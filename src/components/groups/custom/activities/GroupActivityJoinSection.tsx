@@ -35,17 +35,26 @@ export default async function GroupActivityJoinSection({
 
     const { requested } = resA.data;
 
+    const isFallout = Object.keys(fallouts).includes(memberID);
+
     return (
       <>
         {!currentParticipant ? (
-          <JoinGroupActivityButton
-            fallout={Object.keys(fallouts).includes(memberID)}
-            active={active}
-            activityID={activityData.activityID}
-            memberID={memberID}
-            canJoin={canJoin}
-            requested={requested}
-          />
+          <div className="flex w-full flex-col gap-y-1 items-center justify-center">
+            {isFallout && (
+              <p className="text-center text-xs text-custom-grey-text">
+                You have fallen out of this activity.
+              </p>
+            )}
+            <JoinGroupActivityButton
+              fallout={isFallout}
+              active={active}
+              activityID={activityData.activityID}
+              memberID={memberID}
+              canJoin={canJoin}
+              requested={requested}
+            />
+          </div>
         ) : (
           !owner && (
             <LeaveActivityButton
