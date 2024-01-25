@@ -16,6 +16,25 @@ import { toast } from "sonner";
 import Image from "next/image";
 import handleResponses from "@/src/utils/handleResponses";
 
+export const acceptLogic = async (
+  memberID: string,
+  activityID: string,
+  host: string
+) => {
+  try {
+    const ActivityObj = GetPostObj({ memberID, activityID });
+    const res = await fetch(
+      `${host}/api/activity/group-participate`,
+      ActivityObj
+    );
+    const body = await res.json();
+    if (!body.status) throw new Error(body.error);
+    return handleResponses();
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
+};
+
 export type ActivityWaitlistType = {
   [memberID: string]: GROUP_ACTIVITY_WAITLIST;
 };
@@ -58,7 +77,7 @@ export default function ActivityWaitlist({
   const handleAccept = async (memberID: string) => {
     setLoading(true);
     try {
-      const res = await acceptLogic(memberID);
+      const res = await acceptLogic(memberID, activityID, host);
       if (!res.status) throw new Error(res.error);
       router.refresh();
       toast.success(`Accepted ${memberID}`);
@@ -68,27 +87,12 @@ export default function ActivityWaitlist({
     setLoading(false);
   };
 
-  const acceptLogic = async (memberID: string) => {
-    try {
-      const ActivityObj = GetPostObj({ memberID, activityID });
-      const res = await fetch(
-        `${host}/api/activity/group-participate`,
-        ActivityObj
-      );
-      const body = await res.json();
-      if (!body.status) throw new Error(body.error);
-      return handleResponses();
-    } catch (err: any) {
-      return handleResponses({ status: false, error: err.message });
-    }
-  };
-
   const massAccept = async () => {
     setLoading(true);
     try {
       const promiseList = Object.keys(requestsData).map(
         async (memberID: string) => {
-          const res = await acceptLogic(memberID);
+          const res = await acceptLogic(memberID, activityID, host);
           if (!res.status)
             return handleResponses({ status: false, error: res.error });
           return handleResponses();
@@ -156,7 +160,7 @@ export default function ActivityWaitlist({
       </div>
       {show && (
         <>
-          <InnerContainer className="w-full max-h-[80vh]">
+          <InnerContainer className="w-full max-h-[60vh]">
             {loading && (
               <div className="w-full absolute grid place-items-center h-full bg-black/25 z-30">
                 <LoadingIconBright width={30} height={30} />

@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import InnerContainer from "../../utils/InnerContainer";
 import GroupMemberTab from "./GroupMemberTab";
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
-import StatusDot from "../../utils/StatusDot";
 import useQueryObj from "@/src/hooks/useQueryObj";
 import QueryInput from "../../utils/QueryInput";
 import { twMerge } from "tailwind-merge";
+import { GROUP_ROLES_HEIRARCHY } from "@/src/utils/constants";
+import InviteMemberForm from "./InviteMemberForm";
+import HRow from "../../utils/HRow";
 
 export type GroupDetailsType = {
   [memberID: string]: GROUP_MEMBERS_SCHEMA;
@@ -24,6 +26,9 @@ export default function GroupMembers({
   const [show, setShow] = useState(false);
   const [online, setOnline] = useState(0);
   const { itemList, search, handleSearch } = useQueryObj({ obj: membersList });
+  const admin =
+    GROUP_ROLES_HEIRARCHY[curMember.role].rank >=
+    GROUP_ROLES_HEIRARCHY["admin"].rank;
 
   const addOnline = () => setOnline((online) => online + 1);
   return (
@@ -48,7 +53,7 @@ export default function GroupMembers({
             <p className="text-xs text-custom-grey-text">{online} in camp</p>
             <StatusDot className="w-1 h-1" status />
           </div> */}
-          <InnerContainer className="max-h-[90vh]">
+          <InnerContainer className="max-h-[60vh]">
             {Object.keys(itemList).map((item) => (
               <GroupMemberTab
                 addOnline={addOnline}
@@ -59,6 +64,12 @@ export default function GroupMembers({
               />
             ))}
           </InnerContainer>
+          {admin && (
+            <>
+              <HRow />
+              <InviteMemberForm groupID={groupID} />
+            </>
+          )}
         </>
       )}
     </div>

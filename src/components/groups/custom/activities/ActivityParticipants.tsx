@@ -4,6 +4,8 @@ import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
 import React from "react";
 import { SuspenseGroupActivityFetchType } from "./GroupActivityData";
 import ActivityParticipantsList from "./ActivityParticipantsList";
+import InviteMemberForm from "./InviteMemberActivityForm";
+import HRow from "@/src/components/utils/HRow";
 
 export default async function ActivityParticipants({
   activityData,
@@ -31,6 +33,15 @@ export default async function ActivityParticipants({
           participantsData={participantsData}
           admin={admin}
         />
+        {admin && (
+          <>
+            <HRow />
+            <InviteMemberForm
+              activityID={activityData.activityID}
+              host={host}
+            />
+          </>
+        )}
       </DefaultCard>
     );
   } catch (err: any) {
