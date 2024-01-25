@@ -69,8 +69,7 @@ class FetchGroupActivityClass {
       const fallouts = resB.data;
 
       const canJoin =
-        (!restrictionStatus || (currentMember && restrictionStatus)) &&
-        !Object.keys(fallouts).includes(memberID);
+        !restrictionStatus || (currentMember && restrictionStatus);
       !currentParticipant;
 
       const owner = activityData.createdBy === memberID;

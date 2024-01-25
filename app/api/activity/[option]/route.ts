@@ -311,6 +311,12 @@ export async function POST(req: NextRequest) {
 
     const { activityDate } = resC.data as GROUP_ACTIVITY_SCHEMA;
 
+    // see if member fell out
+    await dbHandler.delete({
+      col_name: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
+      id: memberID,
+    });
+
     // add to member's group activities subcollection
     const to_addA = {
       activityID,

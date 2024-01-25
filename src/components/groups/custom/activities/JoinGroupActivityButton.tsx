@@ -60,8 +60,6 @@ export default function JoinGroupActivityButton({
         <LoadingIcon height={20} width={20} />
       ) : requested ? (
         "Requested"
-      ) : fallout ? (
-        "You have fallen out from this activity"
       ) : canJoin ? (
         "Request to participate"
       ) : (
