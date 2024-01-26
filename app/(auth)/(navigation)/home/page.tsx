@@ -79,9 +79,9 @@ export default async function Home({
               <ErrorActivities text="Looks like you have no groups joined." />
             ) : (
               <div className="flex flex-col w-full items-center justify-start gap-4 max-w-[500px] overflow-x-hidden">
-                <div className="flex items-center justify-start gap-x-4 overflow-x-scroll py-2 pr-6 pl-2 w-full">
-                  {groupsList.length > 1 &&
-                    groupsList.map((groupID: string) => {
+                {groupsList.length > 1 && (
+                  <div className="flex items-center justify-start gap-x-4 overflow-x-scroll py-2 pr-6 pl-2 w-full">
+                    {groupsList.map((groupID: string) => {
                       return (
                         <Link
                           key={groupID}
@@ -100,7 +100,8 @@ export default async function Home({
                         </Link>
                       );
                     })}
-                </div>
+                  </div>
+                )}
                 <Suspense fallback={<FeedSkeleton />}>
                   <FeedGroup
                     memberID={memberID}
