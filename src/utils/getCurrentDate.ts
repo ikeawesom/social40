@@ -117,8 +117,7 @@ export function StringToTimestamp(str: string) {
 export function ActiveTimestamp(timestamp: Timestamp) {
   const date = TimestampToDate(timestamp);
   const today = new Date();
-  date.setHours(today.getHours() - 8);
-  return date > today;
+  return date >= today;
 }
 
 export function CompareTimestamp(timestampA: Timestamp, timestampB: Timestamp) {
