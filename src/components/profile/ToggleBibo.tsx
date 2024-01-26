@@ -33,7 +33,7 @@ export default function ToggleBibo({
   const handleBibo = async () => {
     if (bibo || aboveCOS) {
       setLoading(true);
-      if (confirm("Are you sure you want to book out?")) {
+      if (confirm("Press OK to confirm")) {
         try {
           const PostObj = GetPostObj({ memberID });
 
