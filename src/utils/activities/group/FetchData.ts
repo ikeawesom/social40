@@ -62,7 +62,8 @@ class FetchGroupActivityClass {
       // modify to manage UTC time difference
       const localDate = TimestampToDate(date);
       localDate.setHours(localDate.getHours() + 8);
-      const active = DateToTimestamp(localDate);
+      const localTimestamp = DateToTimestamp(localDate);
+      const active = ActiveTimestamp(localTimestamp);
 
       const restrictionStatus = activityData.groupRestriction;
       const currentMember = body.status;

@@ -4,6 +4,7 @@ import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import {
   ActiveTimestamp,
   DateToString,
+  DateToTimestamp,
   TimestampToDate,
   TimestampToDateString,
 } from "@/src/utils/getCurrentDate";
@@ -20,8 +21,16 @@ export default async function GroupActivityDetails({
   try {
     const date = activityData.activityDate;
     const dateStr = TimestampToDateString(date);
-    const active = ActiveTimestamp(date);
+
+    // modify to manage UTC time difference
+    const localDate = TimestampToDate(date);
+    localDate.setHours(localDate.getHours() + 8);
+    const localTimestamp = DateToTimestamp(localDate);
+    const active = ActiveTimestamp(localTimestamp);
+
     const dateLocal = activityData.createdOn;
+
+    // modify to manage UTC time difference
     const dateA = TimestampToDate(dateLocal);
     dateA.setHours(dateA.getHours() + 8);
     const dateStrA = DateToString(dateA);
