@@ -26,7 +26,7 @@ export default async function GroupActivityDetails({
     const localDate = TimestampToDate(date);
     localDate.setHours(localDate.getHours() + 8);
     const localTimestamp = DateToTimestamp(localDate);
-    const active = ActiveTimestamp(localTimestamp);
+    const active = ActiveTimestamp(date);
 
     const dateLocal = activityData.createdOn;
 
