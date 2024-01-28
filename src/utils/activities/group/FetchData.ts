@@ -61,7 +61,7 @@ class FetchGroupActivityClass {
 
       // modify to manage UTC time difference
       const localDate = TimestampToDate(date);
-      localDate.setHours(localDate.getHours() + 8);
+      localDate.setHours(localDate.getHours() - 8);
       const localTimestamp = DateToTimestamp(localDate);
       const active = ActiveTimestamp(localTimestamp);
 
