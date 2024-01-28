@@ -24,9 +24,9 @@ export default async function GroupActivityDetails({
 
     // modify to manage UTC time difference
     const localDate = TimestampToDate(date);
-    localDate.setHours(localDate.getHours() + 8);
+    localDate.setHours(localDate.getHours() - 8);
     const localTimestamp = DateToTimestamp(localDate);
-    const active = ActiveTimestamp(date);
+    const active = ActiveTimestamp(localTimestamp);
 
     const dateLocal = activityData.createdOn;
 
