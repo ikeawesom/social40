@@ -120,8 +120,9 @@ export async function POST(req: NextRequest) {
     if (!addMembers.check) {
       const resX = await dbHandler.getSpecific({
         path: `GROUPS/${groupID}/MEMBERS`,
-        orderCol: "dateJoined",
-        ascending: true,
+        criteria: "==",
+        field: "role",
+        value: "member"
       });
 
       if (!resX.status)
