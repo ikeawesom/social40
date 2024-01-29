@@ -76,7 +76,7 @@ export default function ActivityParticipantsList({
       const res = await fetch(`${host}/api/activity/group-leave`, ActivityObj);
       const body = await res.json();
       if (!body.status) throw new Error(body.error);
-      router.back();
+      router.refresh();
       setCurMember("");
       toast.success(`Kicked ${curMember} from activity`);
     } catch (err: any) {
