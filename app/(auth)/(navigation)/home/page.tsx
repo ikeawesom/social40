@@ -81,7 +81,10 @@ export default async function Home({
                 {groupsList.length > 1 && (
                   <GroupsScrollSection groupsList={groupsList} />
                 )}
-                <Suspense fallback={<FeedSkeleton />}>
+                <Suspense
+                  key={searchParams.groupID}
+                  fallback={<FeedSkeleton />}
+                >
                   <FeedGroup
                     memberID={memberID}
                     groupID={searchParams.groupID}
