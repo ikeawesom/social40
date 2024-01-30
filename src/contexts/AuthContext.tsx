@@ -31,10 +31,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setMember(localMemberID);
         console.log("set member");
 
-        if (pathname.includes("auth")) {
-          router.push("/home", { scroll: false });
-        }
-
         try {
           if (localMemberID) {
             const postObj = GetPostObj({
@@ -55,6 +51,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             );
             const body = await res.json();
             if (!body.status) throw new Error(body.error);
+          }
+          if (pathname.includes("auth")) {
+            router.push("/home", { scroll: false });
           }
         } catch (err: any) {
           console.log("UID ERROR:", err.message);
