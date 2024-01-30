@@ -3,6 +3,7 @@ import FeedGroup from "@/src/components/feed/FeedGroup";
 import GroupsScrollSection from "@/src/components/feed/GroupsScrollSection";
 import HomeHeaderBar from "@/src/components/navigation/HomeHeaderBar";
 import ErrorActivities from "@/src/components/screens/ErrorActivities";
+import LoadingScreenSmall from "@/src/components/screens/LoadingScreenSmall";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import ComingSoonIcon from "@/src/components/utils/ComingSoonIcon";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
@@ -100,7 +101,7 @@ export default async function Home({
       </>
     );
   }
-  return <SignInAgainScreen />;
+  return <LoadingScreenSmall />;
 }
 // {groupsList.length !== 1 && (
 //                     <>
