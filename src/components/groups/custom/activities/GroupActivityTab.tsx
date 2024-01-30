@@ -1,5 +1,7 @@
 import {
   ActiveTimestamp,
+  DateToString,
+  TimestampToDate,
   TimestampToDateString,
   handleUTC,
 } from "@/src/utils/getCurrentDate";
@@ -14,11 +16,14 @@ export default function GroupActivityTab({
   activityData: GROUP_ACTIVITIES_SCHEMA;
 }) {
   const date = activityData.activityDate;
-  const dateStr = TimestampToDateString(date);
 
   // modify to manage UTC time difference
   const localTimestamp = handleUTC(date);
   const active = ActiveTimestamp(localTimestamp);
+
+  const localDate = TimestampToDate(date);
+  localDate.setHours(localDate.getHours() + 8);
+  const dateStr = DateToString(localDate);
 
   return (
     <Link
