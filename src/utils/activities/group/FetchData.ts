@@ -12,6 +12,7 @@ import {
 import handleResponses from "../../handleResponses";
 import { ROLES_HIERARCHY } from "../../constants";
 import { dbHandler } from "@/src/firebase/db";
+import { MEMBER_SCHEMA } from "../../schemas/members";
 
 type GroupActivityClassType = {
   memberID: string;
@@ -50,6 +51,32 @@ class FetchGroupActivityClass {
       const participantsData = bodyA.data.participantsData as {
         [memberID: string]: GROUP_ACTIVITY_PARTICIPANT;
       };
+
+      const memberIDArr = Object.keys(participantsData);
+
+      const promiseArr = memberIDArr.map(async (memberID: string) => {
+        const res = await dbHandler.get({ col_name: "MEMBERS", id: memberID });
+        const data = res.data as MEMBER_SCHEMA;
+        if (!res.status)
+          return handleResponses({ status: false, error: res.error });
+        return handleResponses({
+          data: {
+            id: memberID,
+            display: `${data.rank} ${data.displayName}`.trim(),
+          },
+        });
+      });
+
+      const arrPromise = await Promise.all(promiseArr);
+
+      arrPromise.forEach((item: any) => {
+        if (!item.status) throw new Error(item.error);
+        const data = item.data as any;
+        participantsData[data.id] = {
+          ...participantsData[data.id],
+          displayName: data.display,
+        };
+      });
 
       let currentParticipant = false;
 
