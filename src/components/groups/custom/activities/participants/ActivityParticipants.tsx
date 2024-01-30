@@ -37,6 +37,7 @@ export default async function ActivityParticipants({
           <>
             <HRow />
             <InviteMemberForm
+              participants={participantsData}
               activityID={activityData.activityID}
               host={host}
             />

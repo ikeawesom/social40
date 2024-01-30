@@ -67,7 +67,7 @@ export default function GroupMembers({
           {admin && (
             <>
               <HRow />
-              <InviteMemberForm groupID={groupID} />
+              <InviteMemberForm membersList={membersList} groupID={groupID} />
             </>
           )}
         </>

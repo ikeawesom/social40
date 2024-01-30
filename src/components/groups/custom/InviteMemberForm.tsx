@@ -3,16 +3,36 @@ import { toast } from "sonner";
 import PrimaryButton from "../../utils/PrimaryButton";
 import { LoadingIconBright } from "../../utils/LoadingIcon";
 import { Onboarding } from "@/src/utils/onboarding";
+import { useHostname } from "@/src/hooks/useHostname";
+import { GetPostObj } from "@/src/utils/API/GetPostObj";
+import { GroupDetailsType } from "./GroupMembers";
 
-export default function InviteMemberForm({ groupID }: { groupID: string }) {
+export default function InviteMemberForm({
+  groupID,
+  membersList,
+}: {
+  groupID: string;
+  membersList: GroupDetailsType;
+}) {
   const [loading, setLoading] = useState(false);
   const [member, setMember] = useState("");
+  const { host } = useHostname();
 
   const handleSubmit = async (e: React.FormEvent) => {
     setLoading(true);
     try {
       e.preventDefault();
       if (confirm(`Are you sure you want to invite ${member}?`)) {
+        // check if valid member
+        const memberObj = GetPostObj({ memberID: member });
+        const resA = await fetch(`${host}/api/profile/member`, memberObj);
+        const bodyA = await resA.json();
+        if (!bodyA.status) throw new Error(bodyA.error);
+
+        // check if member is already in the group
+        if (Object.keys(membersList).includes(member))
+          throw new Error(`${member} has already joined the group.`);
+
         const res = await Onboarding.GroupMember({
           groupID,
           memberID: member,
@@ -22,7 +42,13 @@ export default function InviteMemberForm({ groupID }: { groupID: string }) {
         toast.success("Successfully invited member to group");
       }
     } catch (err: any) {
-      toast.error(err.message);
+      if (err.message.includes("not found")) {
+        toast.error(
+          "A user with that memberID does not exist. Please try again."
+        );
+      } else {
+        toast.error(err.message);
+      }
     }
     setLoading(false);
   };
