@@ -66,6 +66,48 @@ export async function POST(request: NextRequest) {
         status: false,
       });
 
+    // update group members details
+
+    // get groups
+    const resB = await dbHandler.getSpecific({
+      path: `MEMBERS/${memberID}/GROUPS-JOINED`,
+      orderCol: "dateJoined",
+      ascending: true,
+    });
+
+    if (!resB.status)
+      return NextResponse.json({ status: false, error: resB.error });
+
+    const resC = await dbHandler.getSpecific({
+      path: `MEMBERS/${memberID}/GROUPS-CREATED`,
+      orderCol: "createdOn",
+      ascending: true,
+    });
+
+    if (!resC.status)
+      return NextResponse.json({ status: false, error: resC.error });
+
+    const groupIDArr = Object.keys(resB.data).concat(Object.keys(resC.data));
+
+    const arrPromise = groupIDArr.map(async (groupID: string) => {
+      const res = await dbHandler.edit({
+        col_name: `GROUPS/${groupID}/MEMBERS`,
+        id: memberID,
+        data: {
+          displayName: `${rank} ${name}`.trim(),
+        },
+      });
+      if (!res.status)
+        return handleResponses({ status: false, error: res.error });
+      return handleResponses();
+    });
+    const promiseArr = await Promise.all(arrPromise);
+
+    promiseArr.forEach((item: any) => {
+      if (!item.status)
+        return NextResponse.json({ status: false, error: item.error });
+    });
+
     return NextResponse.json({ status: true });
   } else if (option === "friends") {
     const res = await getFriendsList({ memberID });
