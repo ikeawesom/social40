@@ -2,6 +2,8 @@
 import Hero from "@/src/components/Hero";
 import SigninForm from "@/src/components/auth/SigninForm";
 import SignupForm from "@/src/components/auth/SignupForm";
+import LoadingScreen from "@/src/components/screens/LoadingScreen";
+import { useAuth } from "@/src/contexts/AuthContext";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -13,7 +15,7 @@ export default function AuthPage({
 }) {
   const [status, setStatus] = useState("");
   const newUser = searchParams["new_user"];
-
+  const { memberID } = useAuth();
   useEffect(() => {
     if (status === "success-signup")
       toast.success(
@@ -26,6 +28,8 @@ export default function AuthPage({
     else if (status !== "" && status !== "success-signin") toast.error(status); // error message
     if (status !== "") setStatus("");
   }, [status]);
+
+  if (memberID === null) return <LoadingScreen />;
 
   return (
     <div className="grid place-items-center min-h-[80vh]">
