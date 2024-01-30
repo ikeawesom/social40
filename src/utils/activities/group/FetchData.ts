@@ -3,8 +3,7 @@ import { GetPostObj } from "../../API/GetPostObj";
 import {
   TimestampToDateString,
   ActiveTimestamp,
-  TimestampToDate,
-  DateToTimestamp,
+  handleUTC,
 } from "../../getCurrentDate";
 import {
   GROUP_ACTIVITY_SCHEMA,
@@ -60,9 +59,7 @@ class FetchGroupActivityClass {
       const dateStr = TimestampToDateString(date);
 
       // modify to manage UTC time difference
-      const localDate = TimestampToDate(date);
-      localDate.setHours(localDate.getHours() - 8);
-      const localTimestamp = DateToTimestamp(localDate);
+      const localTimestamp = handleUTC(date);
       const active = ActiveTimestamp(localTimestamp);
 
       const restrictionStatus = activityData.groupRestriction;

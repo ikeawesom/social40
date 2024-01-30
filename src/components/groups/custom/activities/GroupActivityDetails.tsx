@@ -4,9 +4,9 @@ import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import {
   ActiveTimestamp,
   DateToString,
-  DateToTimestamp,
   TimestampToDate,
   TimestampToDateString,
+  handleUTC,
 } from "@/src/utils/getCurrentDate";
 import React from "react";
 import { SuspenseGroupActivityFetchType } from "./GroupActivityData";
@@ -23,9 +23,7 @@ export default async function GroupActivityDetails({
     const dateStr = TimestampToDateString(date);
 
     // modify to manage UTC time difference
-    const localDate = TimestampToDate(date);
-    localDate.setHours(localDate.getHours() - 8);
-    const localTimestamp = DateToTimestamp(localDate);
+    const localTimestamp = handleUTC(date);
     const active = ActiveTimestamp(localTimestamp);
 
     const dateLocal = activityData.createdOn;
