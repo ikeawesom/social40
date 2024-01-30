@@ -38,8 +38,9 @@ export default function SelectMemberTab({
       )}
     >
       <h1 className="text-custom-dark-text font-semibold text-sm">
-        {memberData.memberID}
+        {memberData.displayName}
       </h1>
+      <h4 className="text-custom-grey-text text-xs">{memberData.memberID}</h4>
       <h4 className="text-custom-grey-text text-xs">
         Date Joined: {TimestampToDateString(memberData.dateJoined)}
       </h4>
