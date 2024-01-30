@@ -7,7 +7,6 @@ import LoadingIcon, {
 import Modal from "@/src/components/utils/Modal";
 import QueryInput from "@/src/components/utils/QueryInput";
 import useQueryObj from "@/src/hooks/useQueryObj";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 import Link from "next/link";
 import React, { FormEvent, useState } from "react";
 import Image from "next/image";
@@ -17,6 +16,7 @@ import { useHostname } from "@/src/hooks/useHostname";
 import { useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
+import ParticipantContainer from "./ParticipantContainer";
 
 export default function ActivityParticipantsList({
   participantsData,
@@ -37,6 +37,7 @@ export default function ActivityParticipantsList({
   const [fall, setFall] = useState({ status: false, reason: "" });
   const { handleSearch, itemList, search } = useQueryObj({
     obj: participantsData,
+    type: "displayName",
   });
 
   const route = `/members/${curMember}`;
@@ -65,6 +66,7 @@ export default function ActivityParticipantsList({
     }
     setLoading(false);
   };
+
   const handleKick = async () => {
     setLoading(true);
     try {
@@ -212,33 +214,12 @@ export default function ActivityParticipantsList({
         placeholder="Search for Member ID"
         search={search}
       />
-      <InnerContainer className="w-full max-h-[60vh]">
-        {Object.keys(itemList).map((mem: string) => {
-          const date = itemList[mem].dateJoined;
-          const dateStr = TimestampToDateString(date);
-          return (
-            <div
-              key={mem}
-              onClick={() => {
-                if (mem !== memberID) {
-                  setCurMember(mem);
-                } else {
-                  router.push(`/members/${memberID}`);
-                }
-              }}
-              className="cursor-pointer w-full flex flex-col items-start justify-center py-2 px-3 duration-200 hover:bg-custom-light-text"
-            >
-              <h1 className="text-custom-dark-text font-semibold text-sm">
-                {itemList[mem].displayName}
-              </h1>
-              <h4 className="text-custom-grey-text text-xs">{mem}</h4>
-              <h4 className="text-custom-grey-text text-xs">
-                Participated on: {dateStr}
-              </h4>
-            </div>
-          );
-        })}
-      </InnerContainer>{" "}
+      <ParticipantContainer
+        activityID={activityID}
+        itemList={itemList}
+        memberID={memberID}
+        setCurMember={setCurMember}
+      />
     </>
   );
 }
