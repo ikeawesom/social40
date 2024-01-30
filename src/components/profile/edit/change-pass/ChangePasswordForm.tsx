@@ -4,17 +4,14 @@ import PrimaryButton from "../../../utils/PrimaryButton";
 import { LoadingIconBright } from "../../../utils/LoadingIcon";
 import SecondaryButton from "../../../utils/SecondaryButton";
 import { toast } from "sonner";
-import { useHostname } from "@/src/hooks/useHostname";
-import { handleSignOut } from "@/src/contexts/AuthContext";
+import { handleSignOut, useAuth } from "@/src/contexts/AuthContext";
 import { authHandler } from "@/src/firebase/auth";
 import Image from "next/image";
 import { dbHandler } from "@/src/firebase/db";
-import { useMemberID } from "@/src/hooks/useMemberID";
 
 export default function ChangePasswordForm() {
-  const { host } = useHostname();
   const [loading, setLoading] = useState(false);
-  const { memberID } = useMemberID();
+  const { memberID } = useAuth();
   const [passDetails, setPassDetails] = useState({
     pass: "",
     passCfm: "",
@@ -29,7 +26,8 @@ export default function ChangePasswordForm() {
     e.preventDefault();
     setLoading(true);
     try {
-      if (memberID === "") throw new Error("Please refresh and try again.");
+      if (memberID === null || memberID === "")
+        throw new Error("Please refresh and try again.");
 
       const res = await authHandler.changePassword(passDetails.passCfm);
       if (!res.status) throw new Error(res.error);
@@ -43,7 +41,7 @@ export default function ChangePasswordForm() {
       if (!resA.status) throw new Error(resA.error);
 
       toast.success("Password changed successfully. Please log in again.");
-      await handleSignOut(host);
+      await handleSignOut();
     } catch (err: any) {
       toast.error(err.message);
     }

@@ -4,10 +4,9 @@ import { authHandler } from "@/src/firebase/auth";
 import PrimaryButton from "../utils/PrimaryButton";
 import { getAuth } from "firebase/auth";
 import { FIREBASE_APP } from "@/src/firebase/config";
-import { useAuth } from "@/src/contexts/AuthContext";
+import { clearCookies, useAuth } from "@/src/contexts/AuthContext";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import { clearCookies } from "@/src/utils/clearCookies";
 import { useRouter } from "next/navigation";
 import { LoadingIconBright } from "../utils/LoadingIcon";
 import { dbHandler } from "@/src/firebase/db";
@@ -48,6 +47,8 @@ export default function SigninForm({ setStatus }: statusType) {
       // setting cookie for memberID
       const PostMember = GetPostObj({ memberID });
       const resB = await fetch(`${host}/api/auth/cookiemember`, PostMember);
+
+      localStorage.setItem("localMemberID", memberID);
 
       const { status, error } = await resB.json();
 

@@ -1,14 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import { authHandler } from "@/src/firebase/auth";
-import { toast } from "sonner";
-import { getAuth } from "firebase/auth";
-import { FIREBASE_APP } from "@/src/firebase/config";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import SecondaryButton from "./SecondaryButton";
 import { LoadingIconBright } from "./LoadingIcon";
 import { twMerge } from "tailwind-merge";
+import { handleSignOut } from "@/src/contexts/AuthContext";
 
 export default function SignoutButton({
   height,
@@ -23,23 +20,19 @@ export default function SignoutButton({
 }) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const handleSignout = async () => {
+
+  const signOutFunction = async () => {
     setLoading(true);
-    const auth = getAuth(FIREBASE_APP);
-    const res = await authHandler.signOutUser(auth);
-    if (!res.status) {
-      toast.error(res.data);
-      setLoading(false);
-    } else {
-      router.push(`/auth?${new URLSearchParams({ new_user: "false" })}`, {
-        scroll: false,
-      });
-    }
+    await handleSignOut();
+    router.push(`/auth?${new URLSearchParams({ new_user: "false" })}`, {
+      scroll: false,
+    });
   };
+
   return (
     <SecondaryButton
       className="grid place-items-center bg-custom-red border-0"
-      onClick={handleSignout}
+      onClick={signOutFunction}
       disabled={loading}
     >
       {loading ? (
