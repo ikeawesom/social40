@@ -228,8 +228,11 @@ export default function ActivityParticipantsList({
               }}
               className="cursor-pointer w-full flex flex-col items-start justify-center py-2 px-3 duration-200 hover:bg-custom-light-text"
             >
-              <h1 className="text-custom-dark-text font-semibold">{mem}</h1>
-              <h4 className="text-custom-grey-text text-sm">
+              <h1 className="text-custom-dark-text font-semibold text-sm">
+                {itemList[mem].displayName}
+              </h1>
+              <h4 className="text-custom-grey-text text-xs">{mem}</h4>
+              <h4 className="text-custom-grey-text text-xs">
                 Participated on: {dateStr}
               </h4>
             </div>

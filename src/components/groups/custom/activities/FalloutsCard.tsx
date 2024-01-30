@@ -44,7 +44,7 @@ export default function FalloutsCard({
           />
           <InnerContainer className="w-full max-h-[60vh]">
             {Object.keys(itemList).map((id: string) => {
-              const { memberID, reason, verifiedBy } = itemList[
+              const { memberID, reason, verifiedBy, displayName } = itemList[
                 id
               ] as FALLOUTS_SCHEMA;
               return (
@@ -52,11 +52,12 @@ export default function FalloutsCard({
                   key={memberID}
                   className="w-full flex flex-col items-start justify-center py-2 px-3 duration-200 hover:bg-custom-light-text"
                 >
-                  <h1 className="text-custom-dark-text font-semibold">
-                    {memberID}
+                  <h1 className="text-custom-dark-text font-semibold text-sm">
+                    {displayName}
                   </h1>
-                  <p className="text-sm text-custom-grey-text">{reason}</p>
-                  <p className="text-sm text-custom-grey-text">
+                  {/* <p className="text-xs text-custom-grey-text">{memberID}</p> */}
+                  <p className="text-xs text-custom-grey-text">{reason}</p>
+                  <p className="text-xs text-custom-grey-text">
                     Verified by: {verifiedBy}
                   </p>
                 </div>

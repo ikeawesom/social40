@@ -6,12 +6,14 @@ import { LoadingIconBright } from "../../utils/LoadingIcon";
 import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
+import { useRouter } from "next/navigation";
 
 export default function EditProfileForm({
   memberData,
 }: {
   memberData: MEMBER_SCHEMA;
 }) {
+  const router = useRouter();
   const { host } = useHostname();
   const oldName = memberData.displayName;
   const oldRank = memberData.rank;
@@ -42,6 +44,7 @@ export default function EditProfileForm({
       const body = await res.json();
       if (!body.status) throw new Error(body.error);
       toast.success("Changes saved successfully.");
+      router.refresh();
     } catch (err: any) {
       toast.error(err.message);
     }

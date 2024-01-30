@@ -12,6 +12,7 @@ import {
 import handleResponses from "../../handleResponses";
 import { ROLES_HIERARCHY } from "../../constants";
 import { dbHandler } from "@/src/firebase/db";
+import { MEMBER_SCHEMA } from "../../schemas/members";
 
 type GroupActivityClassType = {
   memberID: string;
@@ -19,6 +20,39 @@ type GroupActivityClassType = {
   activityID: string;
   host: string;
 };
+
+async function addDisplayName(obj: any) {
+  try {
+    const memberIDArr = Object.keys(obj);
+
+    const promiseArr = memberIDArr.map(async (memberID: string) => {
+      const res = await dbHandler.get({ col_name: "MEMBERS", id: memberID });
+      const data = res.data as MEMBER_SCHEMA;
+      if (!res.status)
+        return handleResponses({ status: false, error: res.error });
+      return handleResponses({
+        data: {
+          id: memberID,
+          display: `${data.rank} ${data.displayName}`.trim(),
+        },
+      });
+    });
+
+    const arrPromise = await Promise.all(promiseArr);
+
+    arrPromise.forEach((item: any) => {
+      if (!item.status) throw new Error(item.error);
+      const data = item.data as any;
+      obj[data.id] = {
+        ...obj[data.id],
+        displayName: data.display,
+      };
+    });
+    return handleResponses({ data: obj });
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
+}
 
 class FetchGroupActivityClass {
   async getMain({
@@ -47,7 +81,13 @@ class FetchGroupActivityClass {
       if (!bodyA.status) throw new Error(bodyA.error);
 
       const activityData = bodyA.data.activityData as GROUP_ACTIVITY_SCHEMA;
-      const participantsData = bodyA.data.participantsData as {
+      const participantsDataRes = await addDisplayName(
+        bodyA.data.participantsData
+      );
+      if (!participantsDataRes.status)
+        throw new Error(participantsDataRes.error);
+
+      const participantsData = participantsDataRes.data as {
         [memberID: string]: GROUP_ACTIVITY_PARTICIPANT;
       };
 
@@ -72,8 +112,10 @@ class FetchGroupActivityClass {
       });
 
       if (!resB.status) throw new Error(resB.error);
+      const falloutsRes = await addDisplayName(resB.data);
+      if (!falloutsRes.status) throw new Error(falloutsRes.error);
 
-      const fallouts = resB.data;
+      const fallouts = falloutsRes.data;
 
       const canJoin =
         !restrictionStatus || (currentMember && restrictionStatus);

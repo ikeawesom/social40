@@ -13,6 +13,7 @@ export type ACTIVITY_SCHEMA = {
 };
 
 export type FALLOUTS_SCHEMA = {
+  displayName: string;
   memberID: string;
   activityID: string;
   reason: string;

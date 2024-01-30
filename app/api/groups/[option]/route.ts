@@ -5,6 +5,7 @@ import { WaitListData } from "@/src/hooks/groups/custom/requests/useGroupRequest
 import { getMethod } from "@/src/utils/API/getAPIMethod";
 import { getJoinedGroups } from "@/src/utils/groups/getJoinedGroups";
 import { getOwnedGroups } from "@/src/utils/groups/getOwnedGroups";
+import handleResponses from "@/src/utils/handleResponses";
 import { GROUP_MEMBERS_SCHEMA, GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { WAITLIST_SCHEMA } from "@/src/utils/schemas/waitlist";
@@ -205,6 +206,40 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ status: false, error: res.error });
 
     return NextResponse.json({ data: res.data, status: true });
+  } else if (option === "display-update") {
+    // debugging purposes only
+    const { groupMembers } = fetchedData;
+
+    const promiseArr = Object.keys(groupMembers).map(
+      async (curMemberID: string) => {
+        const res = await dbHandler.get({
+          col_name: "MEMBERS",
+          id: curMemberID,
+        });
+        if (!res.status)
+          return handleResponses({ status: false, error: res.error });
+        const memberData = res.data as MEMBER_SCHEMA;
+        const { displayName, rank } = memberData;
+
+        const resA = await dbHandler.edit({
+          col_name: `GROUPS/${groupID}/MEMBERS`,
+          id: curMemberID,
+          data: {
+            displayName: `${rank} ${displayName}`.trim(),
+          },
+        });
+        if (!resA.status)
+          return handleResponses({ status: false, error: resA.error });
+        return handleResponses();
+      }
+    );
+
+    const arrPromises = await Promise.all(promiseArr);
+
+    arrPromises.forEach((item: any) => {
+      if (!item.status) NextResponse.json({ status: false, error: item.error });
+    });
+    return NextResponse.json({ status: true });
   }
   return NextResponse.json({
     status: false,
