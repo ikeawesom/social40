@@ -2,9 +2,9 @@ import DefaultCard from "@/src/components/DefaultCard";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
 import React from "react";
-import { SuspenseGroupActivityFetchType } from "./GroupActivityData";
+import { SuspenseGroupActivityFetchType } from "../settings/GroupActivityData";
 import ActivityParticipantsList from "./ActivityParticipantsList";
-import InviteMemberForm from "./InviteMemberActivityForm";
+import InviteMemberForm from "../InviteMemberActivityForm";
 import HRow from "@/src/components/utils/HRow";
 
 export default async function ActivityParticipants({

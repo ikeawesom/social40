@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { twMerge } from "tailwind-merge";
-import GroupActivityTab from "../../groups/custom/activities/GroupActivityTab";
+import GroupActivityTab from "../../groups/custom/activities/settings/GroupActivityTab";
 import InnerContainer from "../../utils/InnerContainer";
 import Notice from "../../utils/Notice";
 import { handleHA } from "@/src/utils/activities/handleHA";

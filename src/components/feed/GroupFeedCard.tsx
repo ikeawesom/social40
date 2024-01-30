@@ -5,7 +5,7 @@ import Link from "next/link";
 import HRow from "../utils/HRow";
 import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import JoinGroupActivityButton from "../groups/custom/activities/JoinGroupActivityButton";
+import JoinGroupActivityButton from "../groups/custom/activities/settings/JoinGroupActivityButton";
 import SecondaryButton from "../utils/SecondaryButton";
 import DismissButton from "./DismissButton";
 import ShowButton from "./ShowButton";

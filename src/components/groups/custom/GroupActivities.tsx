@@ -5,8 +5,8 @@ import DefaultCard from "../../DefaultCard";
 import HRow from "../../utils/HRow";
 import InnerContainer from "../../utils/InnerContainer";
 import { twMerge } from "tailwind-merge";
-import GroupActivityTab from "./activities/GroupActivityTab";
-import CreateActivityButton from "./activities/CreateActivityButton";
+import GroupActivityTab from "./activities/settings/GroupActivityTab";
+import CreateActivityButton from "./activities/settings/CreateActivityButton";
 import useQueryObj from "@/src/hooks/useQueryObj";
 import QueryInput from "../../utils/QueryInput";
 

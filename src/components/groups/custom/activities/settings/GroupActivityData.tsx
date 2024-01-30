@@ -2,17 +2,17 @@ import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { cookies } from "next/headers";
 import React, { Suspense } from "react";
-import ActivityWaitlist from "./ActivityWaitlist";
+import ActivityWaitlist from "../ActivityWaitlist";
 import GroupActivitySettings from "./GroupActivitySettings";
 import DeleteGroupActivity from "./DeleteGroupActivity";
 import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
-import ActivityRemarks from "./ActivityRemarks";
+import ActivityRemarks from "../ActivityRemarks";
 import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
-import ActivityParticipants from "./ActivityParticipants";
+import ActivityParticipants from "../participants/ActivityParticipants";
 import GroupActivityDetails from "./GroupActivityDetails";
 import GroupActivityJoinSection from "./GroupActivityJoinSection";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
-import FalloutsCard from "./FalloutsCard";
+import FalloutsCard from "../participants/FalloutsCard";
 
 export type SuspenseGroupActivityFetchType = {
   memberID: string;

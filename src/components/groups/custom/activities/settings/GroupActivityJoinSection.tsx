@@ -4,7 +4,7 @@ import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import JoinGroupActivityButton from "./JoinGroupActivityButton";
 import LeaveActivityButton from "./LeaveActivityButton";
-import AddRemarkButton from "./AddRemarkButton";
+import AddRemarkButton from "../AddRemarkButton";
 
 export default async function GroupActivityJoinSection({
   memberID,
