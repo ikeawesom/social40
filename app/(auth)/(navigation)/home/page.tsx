@@ -1,5 +1,6 @@
 import FeedSkeleton from "@/src/components/FeedSkeleton";
 import FeedGroup from "@/src/components/feed/FeedGroup";
+import GroupsScrollSection from "@/src/components/feed/GroupsScrollSection";
 import HomeHeaderBar from "@/src/components/navigation/HomeHeaderBar";
 import ErrorActivities from "@/src/components/screens/ErrorActivities";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
@@ -11,10 +12,8 @@ import {
 } from "@/src/utils/schemas/members";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { twMerge } from "tailwind-merge";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -80,27 +79,7 @@ export default async function Home({
             ) : (
               <div className="flex flex-col w-full items-center justify-start gap-4 max-w-[500px] overflow-x-hidden">
                 {groupsList.length > 1 && (
-                  <div className="flex items-center justify-start gap-x-4 overflow-x-scroll py-2 pr-6 pl-2 w-full">
-                    {groupsList.map((groupID: string) => {
-                      return (
-                        <Link
-                          key={groupID}
-                          href={`/home?${new URLSearchParams({
-                            activity: "groups",
-                            groupID,
-                          })}`}
-                          className={twMerge(
-                            "self-stretch w-fit rounded-lg px-2 py-1 flex text-sm items-center justify-center text-center bg-white text-custom-dark-text shadow-md duration-150",
-                            searchParams.groupID === groupID
-                              ? "bg-custom-primary text-custom-light-text hover:brightness-105"
-                              : "hover:bg-custom-light-text"
-                          )}
-                        >
-                          {groupID}
-                        </Link>
-                      );
-                    })}
-                  </div>
+                  <GroupsScrollSection groupsList={groupsList} />
                 )}
                 <Suspense fallback={<FeedSkeleton />}>
                   <FeedGroup
