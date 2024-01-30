@@ -22,7 +22,7 @@ export default function GroupActivityTab({
   const active = ActiveTimestamp(localTimestamp);
 
   const localDate = TimestampToDate(date);
-  localDate.setHours(localDate.getHours() + 8);
+  localDate.setHours(localDate.getHours() - 8);
   const dateStr = DateToString(localDate);
 
   return (
