@@ -12,13 +12,15 @@ export default function InviteMemberForm({ groupID }: { groupID: string }) {
     setLoading(true);
     try {
       e.preventDefault();
-      const res = await Onboarding.GroupMember({
-        groupID,
-        memberID: member,
-        role: "member",
-      });
-      if (!res.status) throw new Error(res.error);
-      toast.success("Successfully invited member to group");
+      if (confirm(`Are you sure you want to invite ${member}?`)) {
+        const res = await Onboarding.GroupMember({
+          groupID,
+          memberID: member,
+          role: "member",
+        });
+        if (!res.status) throw new Error(res.error);
+        toast.success("Successfully invited member to group");
+      }
     } catch (err: any) {
       toast.error(err.message);
     }
