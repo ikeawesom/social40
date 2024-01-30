@@ -128,3 +128,9 @@ export function CompareTimestamp(timestampA: Timestamp, timestampB: Timestamp) {
   const diffHours = diff / (1000 * 60 * 60);
   return diffHours;
 }
+
+export function handleUTC(date: Timestamp) {
+  const localDate = TimestampToDate(date);
+  localDate.setHours(localDate.getHours() - 8);
+  return DateToTimestamp(localDate);
+}
