@@ -2,20 +2,15 @@ import { cookies } from "next/headers";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { NextRequest, NextResponse } from "next/server";
 import { getMethod } from "@/src/utils/API/getAPIMethod";
-import { authHandler } from "@/src/firebase/auth";
-import { FIREBASE_APP } from "@/src/firebase/config";
-import { getAuth } from "firebase/auth";
+import { dbHandler } from "@/src/firebase/db";
 
 export async function POST(request: NextRequest) {
   const cookieStore = cookies();
   const { option } = getMethod(request.url);
-
+  const fetchedData = await request.json();
   // methods are: signin, signup, clear
   if (option === "cookiemember") {
     // get sign in data
-    const fetchedData = (await request.json()) as {
-      memberID: string;
-    };
 
     // assign cookies
     const { memberID } = fetchedData;
@@ -30,6 +25,16 @@ export async function POST(request: NextRequest) {
       cookieStore.delete(cookie.name);
     });
     console.log("Cleared all cookies.");
+  } else if (option === "handle-uid") {
+    const { uid, memberID } = fetchedData;
+    const res = await dbHandler.add({
+      col_name: "MEMBERS-UID",
+      id: uid,
+      to_add: { uid, memberID },
+    });
+    if (!res.status)
+      return NextResponse.json({ status: false, error: res.error });
+    cookieStore.set("uid", uid);
   }
 
   return NextResponse.json({ status: true });
