@@ -6,9 +6,8 @@ import { getAuth } from "firebase/auth";
 import { FIREBASE_APP } from "../firebase/config";
 import { authHandler } from "../firebase/auth";
 import { useHostname } from "../hooks/useHostname";
-import { clearCookies } from "../utils/clearCookies";
 import handleResponses from "../utils/handleResponses";
-import { toast } from "sonner";
+import { GetPostObj } from "../utils/API/GetPostObj";
 
 type AuthContextType = {
   memberID: string | null;
@@ -28,9 +27,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (userAuth) {
         console.log("logged in");
         const pathname = window.location.pathname;
+        const localMemberID = localStorage.getItem("localMemberID");
 
         if (pathname.includes("auth")) {
           router.push("/home", { scroll: false });
+        }
+        if (localMemberID) {
+          try {
+            const postObj = GetPostObj({
+              uid: userAuth.uid,
+              memberID: localMemberID,
+            });
+            const res = await fetch(`${host}/api/auth/handle-uid`, postObj);
+            const body = await res.json();
+            if (!body.status) throw new Error(body.error);
+            localStorage.removeItem("localMemberID");
+          } catch (err: any) {
+            console.log("UID ERROR:", err.message);
+          }
         }
       } else {
         console.log("signed out");
@@ -59,18 +73,17 @@ export function useAuth() {
   return context;
 }
 
-export async function handleSignOut(host: string) {
+export async function handleSignOut() {
   try {
-    await fetch(`${host}/api/auth/clear`, {
-      method: "POST",
-    });
     const auth = getAuth(FIREBASE_APP);
     await authHandler.signOutUser(auth);
-
-    await clearCookies(host);
-
     return handleResponses();
   } catch (err: any) {
     return handleResponses({ error: err.message, status: false });
   }
+}
+
+export async function clearCookies(host: string) {
+  const postObj = GetPostObj({});
+  await fetch(`${host}/api/auth/clear`, postObj);
 }
