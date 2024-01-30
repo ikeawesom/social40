@@ -77,6 +77,15 @@ export default async function GroupPage({
       if (!bodyB.status) throw new Error(bodyB.error);
       const groupMembers = bodyB.data as GroupDetailsType;
 
+      // // debugging purposes only
+      // const membersPostObj = GetPostObj({ groupMembers });
+      // const nameUpdateRes = await fetch(
+      //   `${host}/api/groups/display-update`,
+      //   membersPostObj
+      // );
+      // const nameUpdateBody = await nameUpdateRes.json();
+      // if (!nameUpdateBody.status) throw new Error(nameUpdateBody.error);
+
       // get group statuses
       const memberIDList = Object.keys(groupMembers);
       const to_send = {
