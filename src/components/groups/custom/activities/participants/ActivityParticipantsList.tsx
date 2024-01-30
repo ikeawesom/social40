@@ -215,6 +215,7 @@ export default function ActivityParticipantsList({
         search={search}
       />
       <ParticipantContainer
+        admin={admin}
         activityID={activityID}
         itemList={itemList}
         memberID={memberID}

@@ -17,11 +17,13 @@ export default function ParticipantContainer({
   itemList,
   memberID,
   activityID,
+  admin,
 }: {
   activityID: string;
   setCurMember: React.Dispatch<React.SetStateAction<string>>;
   itemList: any;
   memberID: string;
+  admin: boolean;
 }) {
   const router = useRouter();
   const { host } = useHostname();
@@ -111,66 +113,68 @@ export default function ParticipantContainer({
         </p>
       ) : (
         <>
-          <div className="self-start py-3 px-3 flex items-center justify-between w-full gap-2 flex-wrap">
-            <div className="flex items-center justify-start gap-3 w-full">
-              <SecondaryButton
-                className={twMerge(
-                  "border-custom-primary text-custom-primary min-[330px]:w-fit",
-                  selected.state && "bg-custom-primary text-custom-light-text"
+          {admin && (
+            <div className="self-start py-3 px-3 flex items-center justify-between w-full gap-2 flex-wrap">
+              <div className="flex items-center justify-start gap-3 w-full">
+                <SecondaryButton
+                  className={twMerge(
+                    "border-custom-primary text-custom-primary min-[330px]:w-fit",
+                    selected.state && "bg-custom-primary text-custom-light-text"
+                  )}
+                  onClick={() => {
+                    setSelect({
+                      ...selected,
+                      state: !selected.state,
+                      selectedIDs: [],
+                    });
+                  }}
+                >
+                  {selected.state ? "Cancel" : "Kick Multiple"}
+                </SecondaryButton>
+                {selected.state && (
+                  <p className="text-sm text-custom-grey-text text-start">
+                    Selecting ( {selected.selectedIDs.length} )
+                  </p>
                 )}
-                onClick={() => {
-                  setSelect({
-                    ...selected,
-                    state: !selected.state,
-                    selectedIDs: [],
-                  });
-                }}
-              >
-                {selected.state ? "Cancel" : "Kick Multiple"}
-              </SecondaryButton>
+              </div>
               {selected.state && (
-                <p className="text-sm text-custom-grey-text text-start">
-                  Selecting ( {selected.selectedIDs.length} )
-                </p>
+                <>
+                  <form
+                    onSubmit={handleSelectedFallouts}
+                    className="w-full flex items-end justify-between gap-2 max-[500px]:flex-wrap"
+                  >
+                    <FormInputContainer
+                      className="min-[500px]:flex-[2]"
+                      inputName="reason"
+                      labelText="Reason for kicking"
+                    >
+                      <input
+                        type="text"
+                        value={reason}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setReason(e.target.value);
+                        }}
+                        placeholder="e.g. Guard Duty, RSI, etc."
+                        required
+                      />
+                    </FormInputContainer>
+                    <SecondaryButton
+                      type="submit"
+                      disabled={selected.selectedIDs.length === 0}
+                      className="min-[500px]:w-fit flex items-center justify-center border-custom-red text-custom-red px-3 flex-1"
+                    >
+                      {loading ? (
+                        <LoadingIcon height={20} width={20} />
+                      ) : (
+                        "Kick Selected"
+                      )}
+                    </SecondaryButton>
+                  </form>
+                  <HRow />
+                </>
               )}
             </div>
-            {selected.state && (
-              <>
-                <form
-                  onSubmit={handleSelectedFallouts}
-                  className="w-full flex items-end justify-between gap-2 max-[500px]:flex-wrap"
-                >
-                  <FormInputContainer
-                    className="min-[500px]:flex-[2]"
-                    inputName="reason"
-                    labelText="Reason for kicking"
-                  >
-                    <input
-                      type="text"
-                      value={reason}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setReason(e.target.value);
-                      }}
-                      placeholder="e.g. Guard Duty, RSI, etc."
-                      required
-                    />
-                  </FormInputContainer>
-                  <SecondaryButton
-                    type="submit"
-                    disabled={selected.selectedIDs.length === 0}
-                    className="min-[500px]:w-fit flex items-center justify-center border-custom-red text-custom-red px-3 flex-1"
-                  >
-                    {loading ? (
-                      <LoadingIcon height={20} width={20} />
-                    ) : (
-                      "Kick Selected"
-                    )}
-                  </SecondaryButton>
-                </form>
-                <HRow />
-              </>
-            )}
-          </div>
+          )}
           {Object.keys(itemList).map((mem: string) => {
             const date = itemList[mem].dateJoined;
             const dateStr = TimestampToDateString(date);
