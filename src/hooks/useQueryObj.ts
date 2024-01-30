@@ -36,6 +36,12 @@ export default function useQueryObj({
             if (propertyValue.toLowerCase().includes(search.toLowerCase())) {
               filteredObj[key] = obj[key];
             }
+            const filtered = Object.keys(obj).filter((memberID) =>
+              memberID.toLowerCase().includes(search.toLowerCase())
+            );
+            filtered.forEach((item: string) => {
+              filteredObj[item] = obj[item];
+            });
           });
           setItemList(filteredObj);
         }
