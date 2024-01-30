@@ -28,12 +28,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.log("logged in");
         const pathname = window.location.pathname;
         const localMemberID = localStorage.getItem("localMemberID");
+        setMember(localMemberID);
+        console.log("set member");
 
         if (pathname.includes("auth")) {
           router.push("/home", { scroll: false });
         }
-        if (localMemberID) {
-          try {
+
+        try {
+          if (localMemberID) {
             const postObj = GetPostObj({
               uid: userAuth.uid,
               memberID: localMemberID,
@@ -42,16 +45,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const body = await res.json();
             if (!body.status) throw new Error(body.error);
             localStorage.removeItem("localMemberID");
-          } catch (err: any) {
-            console.log("UID ERROR:", err.message);
+          } else {
+            const postObj = GetPostObj({
+              uid: userAuth.uid,
+            });
+            const res = await fetch(
+              `${host}/api/auth/handle-uid-member`,
+              postObj
+            );
+            const body = await res.json();
+            if (!body.status) throw new Error(body.error);
           }
+        } catch (err: any) {
+          console.log("UID ERROR:", err.message);
         }
       } else {
         console.log("signed out");
         const route = `/auth?${new URLSearchParams({
           new_user: "false",
         })}`;
-        setMember(null);
+        setMember("");
         await clearCookies(host);
         router.push(route, { scroll: false });
       }

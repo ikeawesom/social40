@@ -26,7 +26,8 @@ export default function ChangePasswordForm() {
     e.preventDefault();
     setLoading(true);
     try {
-      if (memberID === "") throw new Error("Please refresh and try again.");
+      if (memberID === null || memberID === "")
+        throw new Error("Please refresh and try again.");
 
       const res = await authHandler.changePassword(passDetails.passCfm);
       if (!res.status) throw new Error(res.error);
