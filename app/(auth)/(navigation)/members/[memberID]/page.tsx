@@ -17,6 +17,7 @@ import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
 import React, { Suspense } from "react";
 import Image from "next/image";
+import { contentfulImageLoader } from "@/src/components/profile/edit/ProfilePicSection";
 
 export async function generateMetadata({
   params,
@@ -91,6 +92,7 @@ export default async function MemberPage({
               <DefaultCard className="flex flex-col items-start justify-center gap-2">
                 <div className="w-full flex items-center justify-center py-2 relative rounded-lg mb-2 overflow-hidden">
                   <Image
+                    loader={contentfulImageLoader}
                     src={pfp ? pfp : "/icons/icon_avatar.svg"}
                     fill
                     alt="Profile"

@@ -12,9 +12,9 @@ import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
-import { Timestamp } from "firebase/firestore";
 import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 import Link from "next/link";
+import { contentfulImageLoader } from "../../profile/edit/ProfilePicSection";
 
 export default function GroupMemberTab({
   data,
@@ -174,6 +174,7 @@ export default function GroupMemberTab({
         <div className="flex items-center justify-start gap-3">
           <div className="overflow-hidden rounded-full shadow-lg w-10 h-10 relative">
             <Image
+              loader={contentfulImageLoader}
               src={pfp ? pfp : "/icons/icon_avatar.svg"}
               fill
               alt="Profile"

@@ -7,7 +7,7 @@ import { storageHandler } from "@/src/firebase/storage";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { useHostname } from "@/src/hooks/useHostname";
 
-const contentfulImageLoader: ImageLoader = ({
+export const contentfulImageLoader: ImageLoader = ({
   src,
   width,
 }: ImageLoaderProps) => {

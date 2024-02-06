@@ -10,6 +10,7 @@ import StatusDot from "../utils/StatusDot";
 import ToggleBibo from "./ToggleBibo";
 import EditProfileButton from "./edit/EditProfileButton";
 import ViewProfileButton from "./ViewProfileButton";
+import { contentfulImageLoader } from "./edit/ProfilePicSection";
 
 export type FriendsListType = { [key: string]: MEMBER_SCHEMA };
 
@@ -45,13 +46,17 @@ export default async function ProfileSection({
                 status={bibo}
                 className="absolute top-1 right-1 h-4 w-4 z-20 drop-shadow-md"
               />
-              <Image
-                src="/icons/icon_avatar.svg"
-                height={80}
-                width={80}
-                alt="Profile"
-                className="drop-shadow-md"
-              />
+              <div className="overflow-hidden rounded-full shadow-lg w-24 h-24 relative flex items-center justify-center">
+                <Image
+                  loader={contentfulImageLoader}
+                  fill
+                  src={
+                    memberData.pfp ? memberData.pfp : "/icons/icon_avatar.svg"
+                  }
+                  alt="Profile"
+                  className="object-cover drop-shadow-md cursor-pointer hover:opacity-70 duration-150 z-10 overflow-hidden"
+                />
+              </div>
             </div>
             <div className="flex flex-col items-center justify-center gap-0">
               <h1 className="font-bold text-custom-dark-text text-base">
