@@ -10,6 +10,7 @@ export type MEMBER_SCHEMA = {
   rank: string;
   role: string;
   badges: BADGE_SCHEMA[];
+  pfp?: string;
 
   // stats
   ipptID: string;

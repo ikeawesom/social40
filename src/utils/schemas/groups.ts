@@ -23,6 +23,7 @@ export type GROUP_MEMBERS_SCHEMA = {
   role: string; // role of member
   displayName: string; // display name of member
   bookedIn?: boolean;
+  pfp?: string;
 };
 
 export function initGroupObject({
