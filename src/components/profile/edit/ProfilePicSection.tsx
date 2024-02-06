@@ -1,11 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import Image, { ImageLoader, ImageLoaderProps } from "next/image";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { toast } from "sonner";
 import { storageHandler } from "@/src/firebase/storage";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { useHostname } from "@/src/hooks/useHostname";
+
+const contentfulImageLoader: ImageLoader = ({
+  src,
+  width,
+}: ImageLoaderProps) => {
+  return `${src}?w=${width}`;
+};
 
 export default function ProfilePicSection({
   memberData,
@@ -60,6 +67,7 @@ export default function ProfilePicSection({
       <label htmlFor="upload-img">
         <div className="overflow-hidden rounded-full shadow-lg w-24 h-24 relative flex items-center justify-center">
           <Image
+            loader={contentfulImageLoader}
             fill
             src={filePath}
             alt="Profile"
