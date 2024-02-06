@@ -22,6 +22,7 @@ export default function ActivityDownloadSection({
 }) {
   const { host } = useHostname();
   const [loading, setLoading] = useState(false);
+  const [generated, setGenerated] = useState(false);
   const [activityDownload, setActivityDownload] =
     useState<ACTIVITY_DATA_SCHEMA>({
       activityID: activityData.activityID,
@@ -72,6 +73,7 @@ export default function ActivityDownloadSection({
         };
       });
       setActivityDownload({ ...activityDownload, participants });
+      setGenerated(true);
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -89,7 +91,7 @@ export default function ActivityDownloadSection({
       >
         {loading ? "Generating..." : "Download Activity Data"}
       </p>
-      {!loading && activityDownload && (
+      {!loading && generated && (
         <ActivityDownloadButton activityData={activityDownload} />
       )}
     </div>
