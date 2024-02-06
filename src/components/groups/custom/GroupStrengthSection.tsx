@@ -21,12 +21,14 @@ export default function GroupStrengthSection({
   curMember,
   groupID,
   membersList,
+  admin,
 }: {
   GroupStatusList: GroupStatusType;
   adminID: string;
   membersList: GroupDetailsType;
   groupID: string;
   curMember: GROUP_MEMBERS_SCHEMA;
+  admin: boolean;
 }) {
   const [show, setShow] = useState(false);
   var empty = true;
@@ -93,71 +95,80 @@ export default function GroupStrengthSection({
         groupID={groupID}
         membersList={membersList}
       />
-      <HRow />
-      <h1 className="text-start text-custom-dark-text">
-        Statuses: <span className="font-bold">{statusLength}</span>
-      </h1>
-      <h1 className="text-start text-custom-dark-text">
-        MCs: <span className="font-bold">{mcLength}</span>
-      </h1>
-      <div className="w-full flex flex-col items-start justify-start gap-2 max-h-[80vh]">
-        <h1
-          onClick={() => setShow(!show)}
-          className={twMerge(
-            "text-start cursor-pointer underline text-sm duration-150",
-            !show ? "text-custom-grey-text" : "text-custom-primary"
-          )}
-        >
-          {show ? "Hide Breakdown" : "View Breakdown"}
-        </h1>
-        {show && (
-          <>
-            <InnerContainer
+      {admin && (
+        <>
+          <HRow />
+          <h1 className="text-start text-custom-dark-text">
+            Statuses: <span className="font-bold">{statusLength}</span>
+          </h1>
+          <h1 className="text-start text-custom-dark-text">
+            MCs: <span className="font-bold">{mcLength}</span>
+          </h1>
+          <div className="w-full flex flex-col items-start justify-start gap-2 max-h-[80vh]">
+            <h1
+              onClick={() => setShow(!show)}
               className={twMerge(
-                "min-h-[10vh] max-h-[60vh]",
-                empty &&
-                  "grid place-items-center justify-center overflow-hidden p-4"
+                "text-start cursor-pointer underline text-sm duration-150",
+                !show ? "text-custom-grey-text" : "text-custom-primary"
               )}
             >
-              {empty ? (
-                <p className="text-sm text-custom-grey-text">
-                  Looks like nobody in this groups have statuses recorded.
-                </p>
-              ) : (
-                Object.keys(GroupStatusList).map((memberID: string) => {
-                  const memberStatus = GroupStatusList[memberID];
-                  const memberEmpty = Object.keys(memberStatus).length === 0;
-                  if (!memberEmpty)
-                    return (
-                      <div
-                        key={memberID}
-                        className="w-full flex-col flex items-start justify-center"
-                      >
-                        <h1 className="p-2 font-semibold text-sm">
-                          {memberID}
-                        </h1>
-                        <HRow className="my-0" />
-                        {Object.keys(memberStatus).map((statusID: string) => {
-                          const statusData = memberStatus[statusID];
-                          const active = ActiveTimestamp(statusData.endDate);
+              {show ? "Hide Breakdown" : "View Breakdown"}
+            </h1>
+            {show && (
+              <>
+                <InnerContainer
+                  className={twMerge(
+                    "min-h-[10vh] max-h-[60vh]",
+                    empty &&
+                      "grid place-items-center justify-center overflow-hidden p-4"
+                  )}
+                >
+                  {empty ? (
+                    <p className="text-sm text-custom-grey-text">
+                      Looks like nobody in this groups have statuses recorded.
+                    </p>
+                  ) : (
+                    Object.keys(GroupStatusList).map((memberID: string) => {
+                      const memberStatus = GroupStatusList[memberID];
+                      const memberEmpty =
+                        Object.keys(memberStatus).length === 0;
+                      if (!memberEmpty)
+                        return (
+                          <div
+                            key={memberID}
+                            className="w-full flex-col flex items-start justify-center"
+                          >
+                            <h1 className="p-2 font-semibold text-sm">
+                              {memberID}
+                            </h1>
+                            <HRow className="my-0" />
+                            {Object.keys(memberStatus).map(
+                              (statusID: string) => {
+                                const statusData = memberStatus[statusID];
+                                const active = ActiveTimestamp(
+                                  statusData.endDate
+                                );
 
-                          return (
-                            <MemberStatusTab
-                              key={statusData.statusID}
-                              active={active}
-                              memberID={memberID}
-                              statusData={statusData}
-                            />
-                          );
-                        })}
-                      </div>
-                    );
-                })
-              )}
-            </InnerContainer>
-          </>
-        )}
-      </div>
+                                return (
+                                  <MemberStatusTab
+                                    key={statusData.statusID}
+                                    active={active}
+                                    memberID={memberID}
+                                    statusData={statusData}
+                                  />
+                                );
+                              }
+                            )}
+                          </div>
+                        );
+                    })
+                  )}
+                </InnerContainer>
+              </>
+            )}
+          </div>
+        </>
+      )}
     </DefaultCard>
   );
 }

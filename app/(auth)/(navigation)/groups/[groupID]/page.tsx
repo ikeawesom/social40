@@ -182,15 +182,15 @@ export default async function GroupPage({
                   desc={groupDesc}
                 />
                 {admin && <GroupRequested groupID={groupID} />}
-                {admin && (
-                  <GroupStrengthSection
-                    adminID={memberID}
-                    GroupStatusList={groupStatusList}
-                    curMember={currentMember}
-                    groupID={groupID}
-                    membersList={groupMembers}
-                  />
-                )}
+
+                <GroupStrengthSection
+                  admin={admin}
+                  adminID={memberID}
+                  GroupStatusList={groupStatusList}
+                  curMember={currentMember}
+                  groupID={groupID}
+                  membersList={groupMembers}
+                />
 
                 <GroupLeaderboard memberData={groupMembersData} />
                 <GroupActivities
