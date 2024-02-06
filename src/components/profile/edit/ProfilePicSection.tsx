@@ -80,7 +80,7 @@ export default function ProfilePicSection({
           hidden
           id="upload-img"
           type="file"
-          accept="image/png"
+          accept="image/*"
           onChange={(files) => handleUpload(files.target.files)}
           placeholder="Change Profile Picture"
           className="custom"
