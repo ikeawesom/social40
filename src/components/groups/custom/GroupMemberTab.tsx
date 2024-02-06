@@ -23,13 +23,7 @@ export default function GroupMemberTab({
   curMember,
   addOnline,
 }: {
-  data: {
-    dateJoined: Timestamp;
-    memberID: string;
-    role: string;
-    displayName?: string | undefined;
-    bookedIn?: boolean | undefined;
-  };
+  data: GROUP_MEMBERS_SCHEMA;
   groupID: string;
   className?: string;
   curMember: GROUP_MEMBERS_SCHEMA;
@@ -42,6 +36,8 @@ export default function GroupMemberTab({
   const bookedIn = data.bookedIn as boolean;
   const dateJoined = data.dateJoined;
   const role = data.role;
+  const pfp = data.pfp;
+
   const aboveAdmin =
     GROUP_ROLES_HEIRARCHY[role].rank >= GROUP_ROLES_HEIRARCHY["admin"].rank;
   const owner = role === "owner";
@@ -175,27 +171,37 @@ export default function GroupMemberTab({
           className
         )}
       >
-        <div className="flex flex-col items-start justify-center">
-          <div className="flex items-center justify-start gap-1">
-            <h1 className="font-bold text-sm text-custom-dark-text">
-              {displayName}
-            </h1>
-            {role === "owner" && (
-              <p className="text-xs text-custom-green">(owner)</p>
-            )}
-            {role === "admin" && (
-              <p className="text-xs text-custom-orange">(admin)</p>
-            )}
-            <StatusDot status={bookedIn} />
+        <div className="flex items-center justify-start gap-3">
+          <div className="overflow-hidden rounded-full shadow-lg w-10 h-10 relative">
+            <Image
+              src={pfp ? pfp : "/icons/icon_avatar.svg"}
+              fill
+              alt="Profile"
+              className="object-cover"
+            />
           </div>
-          <p className="text-xs text-custom-grey-text">
-            {groupMemberID.length > MAX_LENGTH
-              ? groupMemberID.substring(0, MAX_LENGTH - 3) + "..."
-              : groupMemberID}
-          </p>
-          <p className="text-xs text-custom-grey-text">
-            Joined on: {TimestampToDateString(dateJoined)}
-          </p>
+          <div className="flex flex-col items-start justify-center">
+            <div className="flex items-center justify-start gap-1">
+              <h1 className="font-bold text-sm text-custom-dark-text">
+                {displayName}
+              </h1>
+              {role === "owner" && (
+                <p className="text-xs text-custom-green">(owner)</p>
+              )}
+              {role === "admin" && (
+                <p className="text-xs text-custom-orange">(admin)</p>
+              )}
+              <StatusDot status={bookedIn} />
+            </div>
+            <p className="text-xs text-custom-grey-text">
+              {groupMemberID.length > MAX_LENGTH
+                ? groupMemberID.substring(0, MAX_LENGTH - 3) + "..."
+                : groupMemberID}
+            </p>
+            <p className="text-xs text-custom-grey-text">
+              Joined on: {TimestampToDateString(dateJoined)}
+            </p>
+          </div>
         </div>
       </div>
     </>
