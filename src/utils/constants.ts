@@ -78,6 +78,14 @@ export const BADGE_COLORS = {
 export const MAX_LENGTH = 30;
 
 export const VERSION_MAP = {
+  "0.3.3": {
+    version: "0.3.3",
+    title: "Profile Pictures",
+    desc: "You are part of Social40's beginning. Feel free to provide your feedback.",
+    updates: [
+      "Introducting Profile Pictures! Users can now add profile pictures to their Social40 accounts",
+    ],
+  },
   "0.3.2": {
     version: "0.3.2",
     title: "Download Activity Data",
