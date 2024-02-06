@@ -17,7 +17,6 @@ import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
 import React, { Suspense } from "react";
 import Image from "next/image";
-import { contentfulImageLoader } from "@/src/components/profile/edit/ProfilePicSection";
 
 export async function generateMetadata({
   params,
@@ -90,23 +89,24 @@ export default async function MemberPage({
           <div className="grid place-items-center">
             <div className="flex flex-col items-stretch justify-start gap-4 max-w-[500px] w-full">
               <DefaultCard className="flex flex-col items-start justify-center gap-2">
-                <div className="w-full flex items-center justify-center py-2 relative rounded-lg mb-2 overflow-hidden">
-                  <Image
-                    loader={contentfulImageLoader}
-                    src={pfp ? pfp : "/icons/icon_avatar.svg"}
-                    fill
-                    alt="Profile"
-                    className="object-cover brightness-50 hover:brightness-75 duration-150"
-                  />
-                  <div className="overflow-hidden rounded-full shadow-2xl sm:w-40 sm:h-40 w-32 h-32 relative flex items-center justify-center">
+                {pfp && (
+                  <div className="w-full flex items-center justify-center py-2 relative rounded-lg mb-2 overflow-hidden">
                     <Image
-                      src={pfp ? pfp : "/icons/icon_avatar.svg"}
+                      src={pfp}
                       fill
                       alt="Profile"
-                      className="object-cover"
+                      className="object-cover brightness-50 hover:brightness-75 duration-150"
                     />
+                    <div className="overflow-hidden rounded-full shadow-2xl sm:w-40 sm:h-40 w-32 h-32 relative flex items-center justify-center">
+                      <Image
+                        src={pfp}
+                        fill
+                        alt="Profile"
+                        className="object-cover"
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
                 <div className="flex w-full items-center justify-between">
                   <MemberPoints points={viewMemberData.points} />
                   <BookedStatus status={viewMemberData.bookedIn} />
