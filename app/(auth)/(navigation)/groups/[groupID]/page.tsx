@@ -6,9 +6,7 @@ import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import GroupHeader from "@/src/components/groups/custom/GroupHeader";
 import { GROUP_MEMBERS_SCHEMA, GROUP_SCHEMA } from "@/src/utils/schemas/groups";
-import GroupMembers, {
-  GroupDetailsType,
-} from "@/src/components/groups/custom/GroupMembers";
+import { GroupDetailsType } from "@/src/components/groups/custom/GroupMembers";
 import GroupRequested from "@/src/components/groups/custom/GroupRequested";
 import SettingsSection from "@/src/components/groups/custom/settings/SettingsSection";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
@@ -23,6 +21,34 @@ import GroupLeaderboard, {
 import GroupActivities, {
   GroupActivitiesType,
 } from "@/src/components/groups/custom/GroupActivities";
+import { dbHandler } from "@/src/firebase/db";
+import handleResponses from "@/src/utils/handleResponses";
+
+async function addPfp(groupMembersTemp: GroupDetailsType) {
+  try {
+    let tempArr = groupMembersTemp;
+    const promiseArr = Object.keys(groupMembersTemp).map(async (id: string) => {
+      const res = await dbHandler.get({ col_name: "MEMBERS", id: id });
+      if (!res.status)
+        return handleResponses({ status: false, error: res.error });
+      const memberData = res.data as MEMBER_SCHEMA;
+      const groupMemberData = groupMembersTemp[id];
+      return handleResponses({
+        data: { memberID: groupMemberData.memberID, pfp: memberData.pfp },
+      });
+    });
+    const arrPromises = await Promise.all(promiseArr);
+    arrPromises.forEach((item: any) => {
+      if (!item.status) throw new Error(item.error);
+      const data = item.data;
+      tempArr[data.memberID].pfp = data.pfp;
+    });
+
+    return handleResponses({ data: tempArr });
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
+}
 
 export async function generateMetadata({
   params,
@@ -75,7 +101,11 @@ export default async function GroupPage({
       const bodyB = await resB.json();
 
       if (!bodyB.status) throw new Error(bodyB.error);
-      const groupMembers = bodyB.data as GroupDetailsType;
+      const groupMembersTemp = bodyB.data as GroupDetailsType;
+
+      const groupMembersRes = await addPfp(groupMembersTemp);
+      if (!groupMembersRes.status) throw new Error(groupMembersRes.error);
+      const groupMembers = groupMembersRes.data as GroupDetailsType;
 
       // // debugging purposes only
       // const membersPostObj = GetPostObj({ groupMembers });
