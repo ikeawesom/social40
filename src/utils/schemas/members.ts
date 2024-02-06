@@ -52,6 +52,19 @@ export type ACTIVITY_PARTICIPANT_SCHEMA = {
   dateJoined: Timestamp; // date format
 };
 
+export type ACTIVITY_DATA_SCHEMA = {
+  activityID: string;
+  activityTitle: string;
+  participants: {
+    [memberID: string]: {
+      memberID: string;
+      rank: string;
+      displayName: string;
+      participated: boolean;
+    };
+  };
+};
+
 export function initMemberObject({
   memberID,
   displayName,
