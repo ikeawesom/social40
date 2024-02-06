@@ -13,6 +13,7 @@ import GroupActivityDetails from "./GroupActivityDetails";
 import GroupActivityJoinSection from "./GroupActivityJoinSection";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import FalloutsCard from "../participants/FalloutsCard";
+import ActivityDownloadSection from "../ActivityDownloadSection";
 
 export type SuspenseGroupActivityFetchType = {
   memberID: string;
@@ -96,6 +97,12 @@ export default async function GroupActivityData({
           {admin && falloutsLength > 0 && <FalloutsCard fallouts={fallouts} />}
           {admin && <GroupActivitySettings activityData={activityData} />}
           {admin && <DeleteGroupActivity activityData={activityData} />}
+          {admin && (
+            <ActivityDownloadSection
+              activityData={activityData}
+              memberID={memberID}
+            />
+          )}
           <p className="text-center self-center justify-center text-xs text-custom-grey-text">
             Activity ID: {activityData.activityID}
           </p>
