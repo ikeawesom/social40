@@ -13,6 +13,7 @@ import { cookies } from "next/headers";
 import Image from "next/image";
 import NewMemberSection from "@/src/components/profile/edit/new-member/NewMemberSection";
 import Link from "next/link";
+import ProfilePicSection from "@/src/components/profile/edit/ProfilePicSection";
 
 export default async function EditProfilePage() {
   const cookieStore = cookies();
@@ -52,13 +53,7 @@ export default async function EditProfilePage() {
               <HRow />
               <div className="flex flex-col items-center justify-start gap-4 mt-4">
                 <div className="flex flex-col gap-2 items-center justify-center">
-                  <Image
-                    src="/icons/icon_avatar.svg"
-                    height={80}
-                    width={80}
-                    alt="Profile"
-                    className="drop-shadow-md"
-                  />
+                  <ProfilePicSection memberData={memberData} />
                   <p className="text-center text-custom-grey-text text-sm">
                     {memberData.memberID}
                   </p>
