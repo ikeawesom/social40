@@ -27,7 +27,7 @@ export default function ProfilePicSection({
 
   const handleUpload = (files: any) => {
     if (files && files[0]) {
-      if (files[0].size < 400000) {
+      if (files[0].size < 5000000) {
         setImageFile(files[0]);
       } else {
         toast.error("File size too large.");
