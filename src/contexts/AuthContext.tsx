@@ -57,6 +57,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         } catch (err: any) {
           console.log("UID ERROR:", err.message);
+          await handleSignOut();
+          const route = `/auth?${new URLSearchParams({
+            new_user: "false",
+          })}`;
+          setMember("");
+          await clearCookies(host);
+          router.push(route, { scroll: false });
         }
       } else {
         console.log("signed out");
