@@ -177,6 +177,7 @@ export default function GroupMemberTab({
               loader={contentfulImageLoader}
               src={pfp ? pfp : "/icons/icon_avatar.svg"}
               fill
+              sizes="100%"
               alt="Profile"
               className="object-cover"
             />

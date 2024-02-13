@@ -69,6 +69,7 @@ export default function ProfilePicSection({
           <Image
             loader={contentfulImageLoader}
             fill
+            sizes="100%"
             src={filePath}
             alt="Profile"
             className="object-cover drop-shadow-md cursor-pointer hover:opacity-70 duration-150 z-10 overflow-hidden"

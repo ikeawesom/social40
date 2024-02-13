@@ -50,6 +50,7 @@ export default async function ProfileSection({
                 <Image
                   loader={contentfulImageLoader}
                   fill
+                  sizes="100%"
                   src={
                     memberData.pfp ? memberData.pfp : "/icons/icon_avatar.svg"
                   }

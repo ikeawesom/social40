@@ -94,6 +94,7 @@ export default async function MemberPage({
                     <Image
                       src={pfp}
                       fill
+                      sizes="100%"
                       alt="Profile"
                       className="object-cover brightness-50 hover:brightness-75 duration-150"
                     />
@@ -101,6 +102,7 @@ export default async function MemberPage({
                       <Image
                         src={pfp}
                         fill
+                        sizes="100%"
                         alt="Profile"
                         className="object-cover"
                       />
