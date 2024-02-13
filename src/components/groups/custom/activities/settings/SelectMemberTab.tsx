@@ -1,6 +1,8 @@
+import { dbHandler } from "@/src/firebase/db";
 import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
-import React from "react";
+import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
+import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 export default function SelectMemberTab({
@@ -18,6 +20,26 @@ export default function SelectMemberTab({
   addMembers: { check: boolean; members: string[] };
 }) {
   let curMembers = addMembers.members;
+
+  const [valid, setValid] = useState(memberData.displayName !== undefined);
+  const [display, setDisplay] = useState(memberData.displayName);
+
+  useEffect(() => {
+    if (!valid) {
+      // display name not inside
+      const fetchData = async () => {
+        const res = await dbHandler.get({
+          col_name: "MEMBERS",
+          id: memberData.memberID,
+        });
+        const data = res.data as MEMBER_SCHEMA;
+        setDisplay(`${data.rank} ${data.displayName}`.trim());
+        setValid(true);
+      };
+      fetchData();
+    }
+  }, [valid]);
+
   return (
     <div
       onClick={() => {
@@ -37,9 +59,11 @@ export default function SelectMemberTab({
           : "hover:bg-custom-light-text"
       )}
     >
-      <h1 className="text-custom-dark-text font-semibold text-sm">
-        {memberData.displayName}
-      </h1>
+      {valid && (
+        <h1 className="text-custom-dark-text font-semibold text-sm">
+          {display}
+        </h1>
+      )}
       <h4 className="text-custom-grey-text text-xs">{memberData.memberID}</h4>
       <h4 className="text-custom-grey-text text-xs">
         Date Joined: {TimestampToDateString(memberData.dateJoined)}
