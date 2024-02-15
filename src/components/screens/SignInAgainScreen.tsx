@@ -1,7 +1,29 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import SignoutButton from "../utils/SignoutButton";
+import { useRouter } from "next/navigation";
+import LoadingScreenSmall from "./LoadingScreenSmall";
+
 export default function SignInAgainScreen() {
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  useEffect(() => {
+    setTimeout(() => {
+      const id = localStorage.getItem("localMemberID");
+      if (id) {
+        router.refresh();
+        router.push("/home");
+        localStorage.removeItem("localMemberID");
+      }
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 1400);
+    }, 2000);
+  }, []);
+
+  if (loading) return <LoadingScreenSmall />;
   return (
     <div className="grid place-items-center h-[50vh]">
       <div className="flex flex-col gap-3 items-center justify-center">
