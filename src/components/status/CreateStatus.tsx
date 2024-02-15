@@ -31,7 +31,7 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
   const { host } = useHostname();
   const [checked, setChecked] = useState({
     status: false,
-    ess: false,
+    ess: true,
     // sheets: false,
     // ir: false,
     cfm: false,
@@ -311,52 +311,6 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
         </div>
 
         <div className="items-start justify-center flex flex-col gap-1">
-          {checked.status && (
-            <>
-              {/* <input
-                  type="checkbox"
-                  required
-                  id="ess"
-                  // className="h-fit flex-1"
-                  name="ess"
-                  onChange={handleCheck}
-                />
-                <label htmlFor="ess" className="flex-3 text-sm"></label> */}
-              <SecondaryButton
-                className={twMerge(
-                  "text-sm",
-                  checked.ess && "border-custom-green bg-custom-light-green"
-                )}
-                onClick={() => {
-                  setChecked({ ...checked, ess: !checked.ess });
-                }}
-              >
-                I have applied for my medical leave via the{" "}
-                <span className="text-custom-primary">ESS app</span>.
-              </SecondaryButton>
-              {/* <div className="flex items-center justify-start gap-4">
-                <input
-                  type="checkbox"
-                  required
-                  id="sheets"
-                  className="h-fit flex-1"
-                  name="sheets"
-                  onChange={handleCheck}
-                />
-                <label htmlFor="sheets" className="flex-3 text-sm">
-                  I have submitted the screenshots of my medical leave to the
-                  Google Forms found{" "}
-                  <Link
-                    href="https://bit.ly/40SAR-MC"
-                    className="text-custom-primary font-semibold"
-                  >
-                    here
-                  </Link>
-                  .
-                </label>
-              </div> */}
-            </>
-          )}
           {/* <div className="flex items-center justify-start gap-4">
             <input
               type="checkbox"
