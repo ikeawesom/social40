@@ -42,6 +42,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ status: false, error: res.error });
     cookieStore.set("uid", res.data.uid);
     cookieStore.set("memberID", res.data.memberID);
+    return NextResponse.json({ status: true, data: res.data.memberID });
   }
 
   return NextResponse.json({ status: true });

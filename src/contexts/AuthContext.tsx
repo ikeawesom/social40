@@ -51,6 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             );
             const body = await res.json();
             if (!body.status) throw new Error(body.error);
+            localStorage.setItem("localMemberID", body.data);
           }
           if (pathname.includes("auth")) {
             router.push("/home", { scroll: false });
