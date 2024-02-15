@@ -39,6 +39,8 @@ async function addDisplayName(obj: any) {
     });
 
     const arrPromise = await Promise.all(promiseArr);
+    type sortables = { id: string; name: string };
+    let displayArr = [] as sortables[];
 
     arrPromise.forEach((item: any) => {
       if (!item.status) throw new Error(item.error);
@@ -47,8 +49,19 @@ async function addDisplayName(obj: any) {
         ...obj[data.id],
         displayName: data.display,
       };
+      displayArr.push({ id: data.id, name: data.display });
     });
-    return handleResponses({ data: obj });
+
+    displayArr.sort((a: sortables, b: sortables) => {
+      return a.name < b.name ? -1 : 1;
+    });
+
+    let objB = {} as any;
+    displayArr.forEach((item: sortables) => {
+      objB[item.id] = obj[item.id];
+    });
+
+    return handleResponses({ data: objB });
   } catch (err: any) {
     return handleResponses({ status: false, error: err.message });
   }
