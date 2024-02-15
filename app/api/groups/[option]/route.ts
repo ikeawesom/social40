@@ -117,13 +117,44 @@ export async function POST(request: NextRequest) {
 
     // convert from list to object
     var tempA = {} as GroupDetailsType;
+    type sortables = { id: string; name: string };
+    let menDisplayArr = [] as sortables[];
+    let cmdDisplayArr = [] as sortables[];
     groupMemberDetails.forEach((item: any) => {
       Object.keys(item).forEach((memberIDFetched: string) => {
-        tempA = { ...tempA, [memberIDFetched]: item[memberIDFetched] };
+        const memberData = item[memberIDFetched] as GROUP_MEMBERS_SCHEMA;
+        tempA = { ...tempA, [memberIDFetched]: memberData };
+        // sort list according to rank
+        const to_push = {
+          id: memberIDFetched,
+          name: memberData.displayName,
+        };
+        if (memberData.role === "member") {
+          menDisplayArr.push(to_push);
+        } else {
+          cmdDisplayArr.push(to_push);
+        }
       });
     });
 
-    return NextResponse.json({ status: true, data: tempA });
+    menDisplayArr.sort((a: sortables, b: sortables) => {
+      return a.name < b.name ? -1 : 1;
+    });
+
+    cmdDisplayArr.sort((a: sortables, b: sortables) => {
+      return a.name < b.name ? -1 : 1;
+    });
+
+    // sorted array of displayNames
+    let sortedDisplayArr = cmdDisplayArr.concat(menDisplayArr);
+
+    var tempB = {} as GroupDetailsType;
+    sortedDisplayArr.forEach((item: sortables) => {
+      const memberData = tempA[item.id] as GROUP_MEMBERS_SCHEMA;
+      tempB = { ...tempB, [item.id]: memberData };
+    });
+
+    return NextResponse.json({ status: true, data: tempB });
   } else if (option === "statuses") {
     // fetch member's statuses
     const memberList = fetchedData.list as string[];
