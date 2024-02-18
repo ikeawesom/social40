@@ -10,6 +10,7 @@ import { twMerge } from "tailwind-merge";
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
 import GroupMembers, { GroupDetailsType } from "./GroupMembers";
 import { GROUP_ROLES_HEIRARCHY } from "@/src/utils/constants";
+import Link from "next/link";
 
 export type GroupStatusType = {
   [memberID: string]: { [statusID: string]: STATUS_SCHEMA };
@@ -31,17 +32,17 @@ export default function GroupStrengthSection({
   admin: boolean;
 }) {
   const [show, setShow] = useState(false);
-  var empty = true;
 
-  const keys = Object.keys(GroupStatusList);
+  // var empty = true;
+  // const keys = Object.keys(GroupStatusList);
 
-  for (var i = 0; i < keys.length; i++) {
-    const length = Object.keys(GroupStatusList[keys[i]]).length;
-    if (length !== 0) {
-      empty = false;
-      break;
-    }
-  }
+  // for (var i = 0; i < keys.length; i++) {
+  //   const length = Object.keys(GroupStatusList[keys[i]]).length;
+  //   if (length !== 0) {
+  //     empty = false;
+  //     break;
+  //   }
+  // }
 
   const totalStrength = Object.keys(membersList).length;
   const commandersStrength = Object.keys(membersList).filter(
@@ -76,6 +77,30 @@ export default function GroupStrengthSection({
       return statusList.length > 0;
     }
   ).length;
+
+  const activeStatuses = Object.keys(GroupStatusList).filter(
+    (memberID: string) => {
+      // check if member has active statuses
+      const activeMembers = Object.keys(GroupStatusList[memberID]).map(
+        (statusID: string) => {
+          const { endDate } = GroupStatusList[memberID][statusID];
+          const active = ActiveTimestamp(endDate);
+          return active;
+        }
+      );
+
+      if (activeMembers.length > 0) {
+        let flag = false;
+        activeMembers.forEach((active: boolean) => {
+          if (active) flag = true;
+        });
+        if (flag) return true;
+      }
+      return false;
+    }
+  );
+
+  const empty = activeStatuses.length === 0;
 
   return (
     <DefaultCard className="w-full flex flex-col items-start justify-start gap-2">
@@ -125,10 +150,11 @@ export default function GroupStrengthSection({
                 >
                   {empty ? (
                     <p className="text-sm text-custom-grey-text">
-                      Looks like nobody in this groups have statuses recorded.
+                      Great! Looks like nobody in this group currently have
+                      statuses.
                     </p>
                   ) : (
-                    Object.keys(GroupStatusList).map((memberID: string) => {
+                    activeStatuses.map((memberID: string) => {
                       const memberStatus = GroupStatusList[memberID];
                       const memberEmpty =
                         Object.keys(memberStatus).length === 0;
@@ -148,15 +174,15 @@ export default function GroupStrengthSection({
                                 const active = ActiveTimestamp(
                                   statusData.endDate
                                 );
-
-                                return (
-                                  <MemberStatusTab
-                                    key={statusData.statusID}
-                                    active={active}
-                                    memberID={memberID}
-                                    statusData={statusData}
-                                  />
-                                );
+                                if (active)
+                                  return (
+                                    <MemberStatusTab
+                                      key={statusData.statusID}
+                                      active={active}
+                                      memberID={memberID}
+                                      statusData={statusData}
+                                    />
+                                  );
                               }
                             )}
                           </div>
@@ -164,6 +190,12 @@ export default function GroupStrengthSection({
                     })
                   )}
                 </InnerContainer>
+                <Link
+                  href={`/groups/${groupID}/statuses`}
+                  className="text-sm underline text-custom-grey-text self-end hover:text-custom-primary duration-150"
+                >
+                  View all statuses
+                </Link>
               </>
             )}
           </div>
