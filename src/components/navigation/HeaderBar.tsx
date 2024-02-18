@@ -21,6 +21,7 @@ export default function HeaderBar({
 
   const handleReload = () => {
     try {
+router.refresh();
       router.replace("/reloading");
     } catch (err: any) {
       toast.error("An error has occurred.");
