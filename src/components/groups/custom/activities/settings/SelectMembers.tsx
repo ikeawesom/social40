@@ -7,10 +7,9 @@ import SelectMemberTab from "./SelectMemberTab";
 import { dbHandler } from "@/src/firebase/db";
 import handleResponses from "@/src/utils/handleResponses";
 import { twMerge } from "tailwind-merge";
-
-type groupMembersType = {
-  [memberID: string]: GROUP_MEMBERS_SCHEMA;
-};
+import { useHostname } from "@/src/hooks/useHostname";
+import { GetPostObj } from "@/src/utils/API/GetPostObj";
+import { GroupDetailsType } from "../../GroupMembers";
 
 export default function SelectMembers({
   setMembers,
@@ -28,9 +27,9 @@ export default function SelectMembers({
   };
 }) {
   const [loading, setLoading] = useState(false);
-
+  const { host } = useHostname();
   const [groupID, setID] = useState("");
-  const [groupMembers, setGroupMembers] = useState<groupMembersType>();
+  const [groupMembers, setGroupMembers] = useState<GroupDetailsType>();
   useEffect(() => {
     const id = window.location.pathname.split("/")[2];
     setID(id);
@@ -41,12 +40,14 @@ export default function SelectMembers({
       setLoading(true);
       try {
         if (groupID !== "") {
-          const res = await dbHandler.getSpecific({
-            path: `GROUPS/${groupID}/MEMBERS`,
-            orderCol: "dateJoined",
-            ascending: true,
-          });
-          setGroupMembers(res.data);
+          const PostObj = GetPostObj({ groupID });
+          // get group members
+          const resB = await fetch(`${host}/api/groups/members`, PostObj);
+          const bodyB = await resB.json();
+
+          if (!bodyB.status) throw new Error(bodyB.error);
+          const groupMembers = bodyB.data as GroupDetailsType;
+          setGroupMembers(groupMembers);
         }
       } catch (err: any) {
         toast.error(err.any);
