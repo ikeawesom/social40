@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 export default function RefreshingScreen() {
   const router = useRouter();
   useEffect(() => {
-    const pathname = sessionStorage.getItem("pathname");
-    if (pathname) {
+    const url = sessionStorage.getItem("url");
+    if (url) {
       setTimeout(() => {
-        router.replace(pathname);
+        router.replace(url);
       }, 600);
     } else {
       router.back();

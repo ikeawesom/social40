@@ -14,7 +14,7 @@ export default function HeaderBar({
   back?: boolean;
 }) {
   useEffect(() => {
-    sessionStorage.setItem("pathname", window.location.pathname);
+    sessionStorage.setItem("url", window.location.href);
   }, []);
 
   const router = useRouter();
