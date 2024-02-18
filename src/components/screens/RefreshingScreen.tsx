@@ -9,7 +9,7 @@ export default function RefreshingScreen() {
     if (url) {
       setTimeout(() => {
         router.replace(url);
-      }, 600);
+      }, 1000);
     } else {
       router.back();
     }
