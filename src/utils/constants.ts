@@ -78,6 +78,15 @@ export const BADGE_COLORS = {
 export const MAX_LENGTH = 30;
 
 export const VERSION_MAP = {
+  "0.4.0": {
+    version: "0.4.0",
+    title: "Statuses Viewing",
+    desc: "You are part of Social40's beginning. Feel free to provide your feedback.",
+    updates: [
+      "Only active statuses will be shown on the main group page",
+      "A link is available to view all past statuses of every member in the group",
+    ],
+  },
   "0.3.3": {
     version: "0.3.3",
     title: "Profile Pictures",
