@@ -14,6 +14,5 @@ export default function RefreshingScreen() {
       router.back();
     }
   }, []);
-  return
-   ( <></>)
+  return <></>
 }
