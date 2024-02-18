@@ -14,5 +14,11 @@ export default function RefreshingScreen() {
       router.back();
     }
   }, []);
-  return <></>;
+  return (
+    <div className="grid place-items-center w-full h-[40vh]">
+      <h1 className="font-bold text-custom-dark-text text-center">
+        Refreshing...
+      </h1>
+    </div>
+  );
 }
