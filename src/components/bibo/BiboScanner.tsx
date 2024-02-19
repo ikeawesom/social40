@@ -88,13 +88,13 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
         );
       }
     }
-    if (memberID !== "") startQR();
-    else {
-      return () => {
+    if (memberID !== "" && !loading && !biboData) startQR();
+    return () => {
+      if (html5QrCode && html5QrCode.isScanning) {
         html5QrCode.stop();
-      };
-    }
-  }, [memberID]);
+      }
+    };
+  }, [memberID, biboData, loading]);
 
   return (
     <>
@@ -147,13 +147,15 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
         </Modal>
       )}
       <div className="flex flex-col items-center justify-center gap-y-3">
-        <div
-          id="reader"
-          className={twMerge(
-            "min-[300px]:w-[290px] w-[250px] aspect-square rounded-lg overflow-hidden",
-            loading ? "hidden" : ""
-          )}
-        />
+        {!loading && (
+          <div
+            id="reader"
+            className={twMerge(
+              "min-[300px]:w-[290px] w-[250px] aspect-square rounded-lg overflow-hidden",
+              loading ? "hidden" : ""
+            )}
+          />
+        )}
         {!loading ? (
           <div className="flex flex-col gap-2 items-center justify-center">
             <p className="animate-pulse font-bold text-custom-grey-text text-sm text-center">
