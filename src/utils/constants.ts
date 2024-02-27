@@ -78,6 +78,15 @@ export const BADGE_COLORS = {
 export const MAX_LENGTH = 30;
 
 export const VERSION_MAP = {
+  "0.5.0": {
+    version: "0.5.0",
+    title: "Announcements",
+    desc: "You are part of Social40's beginning. Feel free to provide your feedback.",
+    updates: [
+      "Admins can now create posts to broadcast announcements",
+      "Friends feature has been removed",
+    ],
+  },
   "0.4.0": {
     version: "0.4.0",
     title: "Statuses Viewing",
