@@ -75,8 +75,8 @@ export default async function ProfileSection({
             </div>
             <ViewProfileButton memberID={memberID} />
           </div>
-          <HRow />
-          <FriendsList friendsData={friendsData} />
+          {/* <HRow />
+          <FriendsList friendsData={friendsData} /> */}
         </>
       ) : (
         <LoadingIcon />
