@@ -33,12 +33,13 @@ export default async function Profile({
   const cookieStore = cookies();
 
   const data = cookieStore.get("memberID");
+  const DEFAULT_TAB = "statuses";
 
   if (!option)
-    redirect(`/profile?${new URLSearchParams({ option: "activity" })}`);
+    redirect(`/profile?${new URLSearchParams({ option: DEFAULT_TAB })}`);
   else {
     if (!OPTIONS.includes(option))
-      redirect(`/profile?${new URLSearchParams({ option: "activity" })}`);
+      redirect(`/profile?${new URLSearchParams({ option: DEFAULT_TAB })}`);
   }
 
   if (data) {

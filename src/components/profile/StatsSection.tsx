@@ -13,6 +13,12 @@ import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 
 const STAT_TABS = [
   {
+    id: "statuses",
+    title: "Statuses",
+    icon: "icon_medical.svg",
+    active: "icon_medical_active.svg",
+  },
+  {
     id: "activity",
     title: "Activity",
     icon: "icon_activities.svg",
@@ -23,12 +29,6 @@ const STAT_TABS = [
     title: "Statistics",
     icon: "icon_stats.svg",
     active: "icon_stats_active.svg",
-  },
-  {
-    id: "statuses",
-    title: "Statuses",
-    icon: "icon_medical.svg",
-    active: "icon_medical_active.svg",
   },
 ];
 

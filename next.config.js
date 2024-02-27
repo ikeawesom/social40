@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    serverActions: true,
+  },
   images: {
     domains: ["firebasestorage.googleapis.com"],
     remotePatterns: [
@@ -12,6 +15,7 @@ const nextConfig = {
     ],
   },
 };
+
 const withPWA = require("next-pwa")({
   disable: process.env.NODE_ENV === "development",
   dest: "public/pwa/build",
