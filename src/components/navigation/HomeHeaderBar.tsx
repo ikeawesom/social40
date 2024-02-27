@@ -31,7 +31,19 @@ export default function HomeHeaderBar({
           height={30}
         />
       </div>
+
       <div className="w-full items-center justify-between flex max-w-[500px]">
+        <Link
+          key="announcements"
+          href={`/home?${new URLSearchParams({ activity: "announcements" })}`}
+          className={twMerge(
+            "text-custom-grey-text font-semibold flex-1 px-4 py-2 border-b-2 text-center duration-200 hover:bg-custom-light-text",
+            params === "announcements" &&
+              "border-b-custom-primary text-custom-primary"
+          )}
+        >
+          Announcements
+        </Link>
         <Link
           key="groups"
           href={`/home?${new URLSearchParams({ activity: "groups" })}`}
@@ -41,17 +53,6 @@ export default function HomeHeaderBar({
           )}
         >
           Groups
-        </Link>
-        <Link
-          key="friends"
-          href={`/home?${new URLSearchParams({ activity: "friends" })}`}
-          className={twMerge(
-            "text-custom-grey-text font-semibold flex-1 px-4 py-2 border-b-2 text-center duration-200 hover:bg-custom-light-text",
-            params === "friends" &&
-              "border-b-custom-primary text-custom-primary"
-          )}
-        >
-          Friends
         </Link>
       </div>
     </div>
