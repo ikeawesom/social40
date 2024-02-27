@@ -33,13 +33,16 @@ export default async function AnnouncementSection({
           </h1>
         </div>
       ) : (
-        Object.keys(announcementsData).map((id: string) => (
-          <AnnouncementCard
-            key={id}
-            announcementData={announcementsData[id]}
-            curMember={curMember}
-          />
-        ))
+        Object.keys(announcementsData).map((id: string) => {
+          const simpleData = JSON.parse(JSON.stringify(announcementsData[id]));
+          return (
+            <AnnouncementCard
+              key={id}
+              announcementData={simpleData}
+              curMember={curMember}
+            />
+          );
+        })
       )}
     </>
   );
