@@ -1,17 +1,24 @@
 import FeedSkeleton from "@/src/components/FeedSkeleton";
+import AnnouncementCard from "@/src/components/announcements/AnnouncementCard";
+import CreateAnnouncementForm from "@/src/components/announcements/CreateAnnouncementForm";
 import FeedGroup from "@/src/components/feed/FeedGroup";
 import GroupsScrollSection from "@/src/components/feed/GroupsScrollSection";
 import HomeHeaderBar from "@/src/components/navigation/HomeHeaderBar";
 import ErrorActivities from "@/src/components/screens/ErrorActivities";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
-import ComingSoonIcon from "@/src/components/utils/ComingSoonIcon";
+import { dbHandler } from "@/src/firebase/db";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
+import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import { ROLES_HIERARCHY } from "@/src/utils/constants";
+import { ANNOUNCEMENT_SCHEMA } from "@/src/utils/schemas/announcements";
 import {
   MEMBER_JOINED_GROUPS_SCHEMA,
   MEMBER_CREATED_GROUPS_SCHEMA,
+  MEMBER_SCHEMA,
 } from "@/src/utils/schemas/members";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
@@ -28,7 +35,7 @@ export default async function Home({
   const groupID = searchParams.groupID;
 
   if (!activityType)
-    redirect(`/home?${new URLSearchParams({ activity: "groups" })}`);
+    redirect(`/home?${new URLSearchParams({ activity: "announcements" })}`);
 
   const cookieStore = cookies();
   const data = cookieStore.get("memberID");
@@ -37,44 +44,43 @@ export default async function Home({
   if (data) {
     const memberID = data.value;
 
-    // fetch groups member is in
-    const MemberObj = GetPostObj({ memberID });
-    const res = await fetch(`${host}/api/groups/joined`, MemberObj);
-    const body = await res.json();
+    if (activityType === "groups") {
+      // fetch groups member is in
+      const MemberObj = GetPostObj({ memberID });
+      const res = await fetch(`${host}/api/groups/joined`, MemberObj);
+      const body = await res.json();
 
-    if (!body.status) throw new Error(body.error);
+      if (!body.status) return ErrorScreenHandler(body.error);
 
-    // fetch group member created
-    const resA = await fetch(`${host}/api/groups/owned`, MemberObj);
-    const bodyA = await resA.json();
+      // fetch group member created
+      const resA = await fetch(`${host}/api/groups/owned`, MemberObj);
+      const bodyA = await resA.json();
 
-    if (!bodyA.status) throw new Error(bodyA.error);
+      if (!bodyA.status) return ErrorScreenHandler(bodyA.error);
 
-    const joinedGroupsData = body.data as {
-      [groupID: string]: MEMBER_JOINED_GROUPS_SCHEMA;
-    };
-    const ownedGroupsData = bodyA.data as {
-      [groupID: string]: MEMBER_CREATED_GROUPS_SCHEMA;
-    };
+      const joinedGroupsData = body.data as {
+        [groupID: string]: MEMBER_JOINED_GROUPS_SCHEMA;
+      };
+      const ownedGroupsData = bodyA.data as {
+        [groupID: string]: MEMBER_CREATED_GROUPS_SCHEMA;
+      };
 
-    const groupsList = Object.keys(joinedGroupsData).concat(
-      Object.keys(ownedGroupsData)
-    );
-
-    if (activityType === "groups" && !groupID && groupsList.length > 0)
-      redirect(
-        `/home?${new URLSearchParams({
-          activity: "groups",
-          groupID: groupsList[0],
-        })}`
+      const groupsList = Object.keys(joinedGroupsData).concat(
+        Object.keys(ownedGroupsData)
       );
+      if (!groupID && groupsList.length > 0)
+        redirect(
+          `/home?${new URLSearchParams({
+            activity: "groups",
+            groupID: groupsList[0],
+          })}`
+        );
 
-    return (
-      <>
-        <HomeHeaderBar text="Social40" params={activityType} />
-        <div className="w-full grid place-items-center mt-[5.5rem]">
-          {activityType === "groups" ? (
-            groupsList.length === 0 ? (
+      return (
+        <>
+          <HomeHeaderBar text="Social40" params={activityType} />
+          <div className="w-full grid place-items-center mt-[5.5rem]">
+            {groupsList.length === 0 ? (
               <ErrorActivities text="Looks like you have no groups joined." />
             ) : (
               <div className="flex flex-col w-full items-center justify-start gap-4 max-w-[500px] overflow-x-hidden">
@@ -91,19 +97,62 @@ export default async function Home({
                   />
                 </Suspense>
               </div>
-            )
-          ) : (
-            <ComingSoonIcon className="gap-2 mt-28" />
-            // <FeedFriends memberID={memberID}/>
-          )}
+            )}
+          </div>
+        </>
+      );
+    }
+
+    const res = await dbHandler.get({
+      col_name: "MEMBERS",
+      id: memberID,
+    });
+
+    const memberData = res.data as MEMBER_SCHEMA;
+    const { role } = memberData;
+    const admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
+
+    const resA = await dbHandler.getSpecific({
+      path: "ANNOUNCEMENTS",
+      orderCol: "createdOn",
+      ascending: false,
+    });
+
+    const announcementsData = (resA.data ?? {}) as {
+      [announcementID: string]: ANNOUNCEMENT_SCHEMA;
+    };
+
+    return (
+      <>
+        <HomeHeaderBar text="Social40" params={activityType} />
+        <div className="w-full grid place-items-center mt-[5.5rem]">
+          <div className="flex flex-col w-full items-center justify-start gap-4 max-w-[500px]">
+            {admin && <CreateAnnouncementForm memberID={memberID} />}
+            {Object.keys(announcementsData).length === 0 ? (
+              <div className="flex flex-col items-center justify-center gap-2">
+                <Image
+                  alt="Question"
+                  width={100}
+                  height={100}
+                  src="/icons/icon_smile.svg"
+                />
+                <h1 className="text-custom-dark-text text-sm">
+                  No announcements yet...
+                </h1>
+              </div>
+            ) : (
+              Object.keys(announcementsData).map((id: string) => (
+                <AnnouncementCard
+                  key={id}
+                  announcementData={announcementsData[id]}
+                  curMember={memberID}
+                />
+              ))
+            )}
+          </div>
         </div>
       </>
     );
   }
   return <SignInAgainScreen />;
 }
-// {groupsList.length !== 1 && (
-//                     <>
-
-//                     </>
-//                   )}
