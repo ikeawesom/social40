@@ -52,7 +52,7 @@ export default function HomeHeaderBar({
             params === "groups" && "border-b-custom-primary text-custom-primary"
           )}
         >
-          Groups
+          Activities
         </Link>
       </div>
     </div>
