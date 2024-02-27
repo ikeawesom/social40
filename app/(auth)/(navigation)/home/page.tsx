@@ -1,5 +1,5 @@
 import FeedSkeleton from "@/src/components/FeedSkeleton";
-import AnnouncementCard from "@/src/components/announcements/AnnouncementCard";
+import AnnouncementSection from "@/src/components/announcements/AnnouncementSection";
 import CreateAnnouncementForm from "@/src/components/announcements/CreateAnnouncementForm";
 import FeedGroup from "@/src/components/feed/FeedGroup";
 import GroupsScrollSection from "@/src/components/feed/GroupsScrollSection";
@@ -112,43 +112,15 @@ export default async function Home({
     const { role } = memberData;
     const admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
 
-    const resA = await dbHandler.getSpecific({
-      path: "ANNOUNCEMENTS",
-      orderCol: "createdOn",
-      ascending: false,
-    });
-
-    const announcementsData = (resA.data ?? {}) as {
-      [announcementID: string]: ANNOUNCEMENT_SCHEMA;
-    };
-
     return (
       <>
         <HomeHeaderBar text="Social40" params={activityType} />
         <div className="w-full grid place-items-center mt-[5.5rem]">
           <div className="flex flex-col w-full items-center justify-start gap-4 max-w-[500px]">
             {admin && <CreateAnnouncementForm memberID={memberID} />}
-            {Object.keys(announcementsData).length === 0 ? (
-              <div className="flex flex-col items-center justify-center gap-2">
-                <Image
-                  alt="Question"
-                  width={100}
-                  height={100}
-                  src="/icons/icon_smile.svg"
-                />
-                <h1 className="text-custom-dark-text text-sm">
-                  No announcements yet...
-                </h1>
-              </div>
-            ) : (
-              Object.keys(announcementsData).map((id: string) => (
-                <AnnouncementCard
-                  key={id}
-                  announcementData={announcementsData[id]}
-                  curMember={memberID}
-                />
-              ))
-            )}
+            <Suspense fallback={<FeedSkeleton />}>
+              <AnnouncementSection curMember={memberID} />
+            </Suspense>
           </div>
         </div>
       </>
