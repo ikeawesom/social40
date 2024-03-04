@@ -45,6 +45,12 @@ export default function GroupStrengthSection({
   // }
 
   const totalStrength = Object.keys(membersList).length;
+  const bookedInStrength = Object.keys(membersList)
+    .map((id: string) => {
+      return membersList[id].bookedIn;
+    })
+    .filter((state: boolean | undefined) => state === true).length;
+
   const commandersStrength = Object.keys(membersList).filter(
     (memberID: string) => {
       return (
@@ -105,8 +111,12 @@ export default function GroupStrengthSection({
   return (
     <DefaultCard className="w-full flex flex-col items-start justify-start gap-2">
       <h1 className="text-custom-dark-text font-semibold">Strength</h1>
+
       <h1 className="text-start text-custom-dark-text">
-        Total: <span className="font-bold">{totalStrength}</span>
+        Booked In:{" "}
+        <span className="font-bold">
+          {bookedInStrength} / {totalStrength}
+        </span>
       </h1>
       <h1 className="text-start text-custom-dark-text">
         Commanders: <span className="font-bold">{commandersStrength}</span>
