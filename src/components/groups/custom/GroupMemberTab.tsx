@@ -22,11 +22,24 @@ export default function GroupMemberTab({
   className,
   curMember,
   addOnline,
+  handleBibo,
 }: {
   data: GROUP_MEMBERS_SCHEMA;
   groupID: string;
   className?: string;
   curMember: GROUP_MEMBERS_SCHEMA;
+  handleBibo: {
+    state: {
+      state: boolean;
+      members: string[];
+    };
+    action: React.Dispatch<
+      React.SetStateAction<{
+        state: boolean;
+        members: string[];
+      }>
+    >;
+  };
   addOnline: () => void;
 }) {
   const { host } = useHostname();
@@ -162,12 +175,31 @@ export default function GroupMemberTab({
         </Modal>
       )}
       <div
-        onClick={() => setShow(true)}
+        onClick={() => {
+          if (handleBibo.state.state) {
+            const curArray = handleBibo.state.members as string[];
+            if (curArray.includes(groupMemberID)) {
+              const index = curArray.indexOf(groupMemberID);
+              curArray.splice(index, 1);
+            } else {
+              curArray.push(groupMemberID);
+            }
+            handleBibo.action({
+              ...handleBibo.state,
+              members: curArray,
+            });
+          } else {
+            setShow(true);
+          }
+        }}
         className={twMerge(
           "w-full py-2 px-3 shadow-sm duration-300 flex items-center justify-between cursor-pointer",
-          curMember.memberID === groupMemberID
+          curMember.memberID === groupMemberID && !handleBibo.state.state
             ? "bg-custom-light-orange hover:brightness-95"
             : "hover:bg-custom-light-text",
+
+          handleBibo.state.members.includes(groupMemberID) &&
+            "bg-custom-light-orange",
           className
         )}
       >

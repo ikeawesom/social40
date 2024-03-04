@@ -14,6 +14,7 @@ import handleBookIn from "@/src/hooks/groups/custom/handleBookIn";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { LoadingIconBright } from "../../utils/LoadingIcon";
+import SecondaryButton from "../../utils/SecondaryButton";
 
 export type GroupDetailsType = {
   [memberID: string]: GROUP_MEMBERS_SCHEMA;
@@ -37,16 +38,24 @@ export default function GroupMembers({
     GROUP_ROLES_HEIRARCHY["admin"].rank;
 
   const [biboLoad, setBiboLoad] = useState(false);
-  const handleBookInButton = async () => {
+  const [bookingIn, setBookingIn] = useState({
+    state: false,
+    members: [] as string[],
+  });
+
+  const confirmBookIn = async () => {
     if (
-      confirm("Are you sure you want to book in all members of this group?")
+      confirm(
+        "Are you sure you want to book in selected members of this group?"
+      )
     ) {
       setBiboLoad(true);
       try {
-        const res = await handleBookIn(membersList);
+        const res = await handleBookIn(bookingIn.members);
         if (!res.status) throw new Error(res.error);
-        toast.success("Successfully booked in all members in group");
+        toast.success("Successfully booked in selected members in group");
         router.refresh();
+        setBookingIn({ members: [], state: false });
       } catch (err: any) {
         toast.error(err.message);
       }
@@ -80,22 +89,47 @@ export default function GroupMembers({
           </div> */}
           <InnerContainer className="max-h-[60vh] relative">
             {admin && (
-              <div className="w-full p-2 pt-0 sticky top-0 left-0 z-10 bg-white shadow-sm">
-                <PrimaryButton
+              <div className="w-full flex gap-2 items-center justify-start p-2 pt-0 sticky top-0 left-0 z-10 bg-white shadow-sm">
+                <SecondaryButton
                   disabled={biboLoad}
-                  onClick={handleBookInButton}
-                  className="w-fit self-start"
+                  onClick={() => {
+                    if (bookingIn.state) {
+                      setBookingIn({ ...bookingIn, members: [], state: false });
+                    } else {
+                      setBookingIn({ ...bookingIn, state: true });
+                    }
+                  }}
+                  className="w-fit"
                 >
                   {biboLoad ? (
                     <LoadingIconBright width={20} height={20} />
+                  ) : bookingIn.state ? (
+                    "Cancel"
                   ) : (
-                    "Book All In"
+                    "Book In Members"
                   )}
-                </PrimaryButton>
+                </SecondaryButton>
+                {bookingIn.state && (
+                  <form className="w-full text-xs text-custom-grey-text flex items-center justify-end gap-4">
+                    <p>Selected: {bookingIn.members.length}</p>
+                    <PrimaryButton
+                      disabled={biboLoad || bookingIn.members.length < 1}
+                      onClick={confirmBookIn}
+                      className="w-fit"
+                    >
+                      {biboLoad ? (
+                        <LoadingIconBright width={20} height={20} />
+                      ) : (
+                        "Confirm"
+                      )}
+                    </PrimaryButton>
+                  </form>
+                )}
               </div>
             )}
             {Object.keys(itemList).map((item) => (
               <GroupMemberTab
+                handleBibo={{ state: bookingIn, action: setBookingIn }}
                 addOnline={addOnline}
                 curMember={curMember}
                 groupID={groupID}
