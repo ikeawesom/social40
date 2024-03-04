@@ -79,19 +79,21 @@ export default function GroupMembers({
             <StatusDot className="w-1 h-1" status />
           </div> */}
           <InnerContainer className="max-h-[60vh] relative">
-            <div className="w-full p-2 pt-0 sticky top-0 left-0 z-10 bg-white shadow-sm">
-              <PrimaryButton
-                disabled={biboLoad}
-                onClick={handleBookInButton}
-                className="w-fit self-start"
-              >
-                {biboLoad ? (
-                  <LoadingIconBright width={20} height={20} />
-                ) : (
-                  "Book All In"
-                )}
-              </PrimaryButton>
-            </div>
+            {admin && (
+              <div className="w-full p-2 pt-0 sticky top-0 left-0 z-10 bg-white shadow-sm">
+                <PrimaryButton
+                  disabled={biboLoad}
+                  onClick={handleBookInButton}
+                  className="w-fit self-start"
+                >
+                  {biboLoad ? (
+                    <LoadingIconBright width={20} height={20} />
+                  ) : (
+                    "Book All In"
+                  )}
+                </PrimaryButton>
+              </div>
+            )}
             {Object.keys(itemList).map((item) => (
               <GroupMemberTab
                 addOnline={addOnline}
