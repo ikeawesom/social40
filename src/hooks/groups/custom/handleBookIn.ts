@@ -1,11 +1,10 @@
 "use server";
 
-import { GroupDetailsType } from "@/src/components/groups/custom/GroupMembers";
 import { dbHandler } from "@/src/firebase/db";
 import handleResponses from "@/src/utils/handleResponses";
 
-export default async function handleBookIn(membersList: GroupDetailsType) {
-  const arrayList = Object.keys(membersList).map(async (memberID: string) => {
+export default async function handleBookIn(membersList: string[]) {
+  const arrayList = membersList.map(async (memberID: string) => {
     const res = await dbHandler.edit({
       col_name: "MEMBERS",
       id: memberID,
