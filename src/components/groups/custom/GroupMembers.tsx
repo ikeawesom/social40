@@ -89,7 +89,7 @@ export default function GroupMembers({
           </div> */}
           <InnerContainer className="max-h-[60vh] relative">
             {admin && (
-              <div className="w-full flex gap-2 items-center justify-start p-2 pt-0 sticky top-0 left-0 z-10 bg-white shadow-sm">
+              <div className="w-full flex flex-col gap-2 items-start justify-start p-2 pt-0 sticky top-0 left-0 z-10 bg-white shadow-sm">
                 <SecondaryButton
                   disabled={biboLoad}
                   onClick={() => {
@@ -110,19 +110,36 @@ export default function GroupMembers({
                   )}
                 </SecondaryButton>
                 {bookingIn.state && (
-                  <form className="w-full text-xs text-custom-grey-text flex items-center justify-end gap-4">
-                    <p>Selected: {bookingIn.members.length}</p>
-                    <PrimaryButton
-                      disabled={biboLoad || bookingIn.members.length < 1}
-                      onClick={confirmBookIn}
-                      className="w-fit"
+                  <form className="w-full flex items-center justify-between gap-4">
+                    <p
+                      className="underline text-sm text-custom-grey-text cursor-pointer"
+                      onClick={() => {
+                        const curArray = bookingIn.members;
+                        Object.keys(membersList).forEach((id: string) => {
+                          if (!bookingIn.members.includes(id))
+                            curArray.push(id);
+                        });
+                        setBookingIn({ ...bookingIn, members: curArray });
+                      }}
                     >
-                      {biboLoad ? (
-                        <LoadingIconBright width={20} height={20} />
-                      ) : (
-                        "Confirm"
-                      )}
-                    </PrimaryButton>
+                      Select All
+                    </p>
+                    <div className="flex gap-2 items-center justify-end">
+                      <p className="text-sm text-custom-grey-text">
+                        Selected: {bookingIn.members.length}
+                      </p>
+                      <PrimaryButton
+                        disabled={biboLoad || bookingIn.members.length < 1}
+                        onClick={confirmBookIn}
+                        className="w-fit"
+                      >
+                        {biboLoad ? (
+                          <LoadingIconBright width={20} height={20} />
+                        ) : (
+                          "Confirm"
+                        )}
+                      </PrimaryButton>
+                    </div>
                   </form>
                 )}
               </div>
