@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
         path: `GROUPS/${groupID}/MEMBERS`,
         criteria: "==",
         field: "role",
-        value: "member"
+        value: "member",
       });
 
       if (!resX.status)
@@ -480,12 +480,38 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ status: false, error: item.error });
     });
 
+    // remove fallouts from group
+    const resD = await dbHandler.getSpecific({
+      path: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
+      orderCol: "memberID",
+      ascending: false,
+    });
+    if (!resD.status)
+      return NextResponse.json({ status: false, error: resD.error });
+
+    const falloutList = resD.data as { [memberID: string]: FALLOUTS_SCHEMA };
+
+    const resList = Object.keys(falloutList).map(async (id: string) => {
+      const res = await dbHandler.delete({
+        col_name: `GROUP-ACTIVITIES/${id}/FALLOUTS`,
+        id,
+      });
+      if (!res.status)
+        return handleResponses({ status: false, error: res.error });
+      return handleResponses();
+    });
+
+    const promList = await Promise.all(resList);
+    promList.forEach((item: any) => {
+      if (!item.status)
+        return NextResponse.json({ status: false, error: item.error });
+    });
+
     // remove activity from group
     const resA = await dbHandler.delete({
       col_name: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
       id: activityID,
     });
-
     if (!resA.status)
       return NextResponse.json({ status: false, error: resA.error });
 
