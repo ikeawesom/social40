@@ -12,6 +12,7 @@ import LoadingIcon from "@/src/components/utils/LoadingIcon";
 import { purgeMembers } from "@/src/utils/groups/purgeMembers";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { handleReload } from "@/src/components/navigation/HeaderBar";
 
 export default function PurgeMembersSection({
   groupID,
@@ -80,7 +81,7 @@ export default function PurgeMembersSection({
       try {
         const res = await purgeMembers(selected.selected, groupID);
         if (!res.status) throw new Error(res.error);
-        // handleReload(router);
+        handleReload(router);
         toast.success("Members purged successfully");
       } catch (err: any) {
         toast.error(err.message);
@@ -103,41 +104,43 @@ export default function PurgeMembersSection({
           loading && "pointer-events-none"
         )}
       >
-        {loading && (
-          <div className="absolute top-0 left-0 w-full h-full z-40 bg-white/80 grid place-items-center">
-            <div className="flex items-center justify-center flex-col gap-1">
+        <div className="w-full bg-white sticky top-0 left-0 z-20 p-2 shadow-sm flex flex-col items-start justify-start gap-1">
+          <div className="w-full flex items-center justify-between flex-wrap gap-2">
+            <p
+              onClick={handleSelectAll}
+              className="hover:brightness-75 cursor-pointer duration-150 text-sm underline text-custom-primary"
+            >
+              {matchArr(selected.selected, Object.keys(groupMembers))
+                ? "Deselect All"
+                : "Select All"}
+            </p>
+            <p
+              onClick={handleSelectTroopers}
+              className="hover:brightness-75 cursor-pointer duration-150 text-sm underline text-custom-primary"
+            >
+              Select All Troopers
+            </p>
+            <SecondaryButton
+              onClick={handlePurge}
+              className="w-fit border-red-500"
+              disabled={selected.selected.length === 0}
+            >
+              <p className="text-xs text-red-500 font-bold">
+                Purge Members ( {selected.selected.length} )
+              </p>
+            </SecondaryButton>
+          </div>
+          {loading && (
+            <div className="flex w-full items-center justify-center flex-col gap-1">
               <LoadingIcon height={30} width={30} />
               <p className="text-sm text-center">
-                Purging members... Please do not leave this screen.
+                Purging members... This might take a few minutes. Please do not
+                leave this screen.
               </p>
             </div>
-          </div>
-        )}
-        <div className="w-full bg-white sticky top-0 left-0 z-20 p-2 shadow-sm flex items-center justify-between flex-wrap gap-2">
-          <p
-            onClick={handleSelectAll}
-            className="hover:brightness-75 cursor-pointer duration-150 text-sm underline text-custom-primary"
-          >
-            {matchArr(selected.selected, Object.keys(groupMembers))
-              ? "Deselect All"
-              : "Select All"}
-          </p>
-          <p
-            onClick={handleSelectTroopers}
-            className="hover:brightness-75 cursor-pointer duration-150 text-sm underline text-custom-primary"
-          >
-            Select All Troopers
-          </p>
-          <SecondaryButton
-            onClick={handlePurge}
-            className="w-fit border-red-500"
-            disabled={selected.selected.length === 0}
-          >
-            <p className="text-xs text-red-500 font-bold">
-              Purge Members ( {selected.selected.length} )
-            </p>
-          </SecondaryButton>
+          )}
         </div>
+
         {Object.keys(itemList).map((memberID: string) => (
           <GroupMemberTab
             onClick={() => handleSelect(memberID)}
