@@ -1,5 +1,11 @@
 import { FIREBASE_APP } from "./config";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 import handleResponses from "../utils/handleResponses";
 
 export const FB_STORAGE = getStorage(FIREBASE_APP);
@@ -17,6 +23,16 @@ class StorageClass {
       return handleResponses({ data: url });
     } catch (err) {
       console.log("err:", err);
+      return handleResponses({ status: false, error: err.message });
+    }
+  }
+
+  async delete({ memberID }) {
+    try {
+      const storageRef = ref(FB_STORAGE, `PROFILE/${memberID}`);
+      await deleteObject(storageRef);
+      return handleResponses();
+    } catch (err) {
       return handleResponses({ status: false, error: err.message });
     }
   }
