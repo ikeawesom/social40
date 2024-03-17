@@ -5,6 +5,17 @@ import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import { MAX_LENGTH } from "@/src/utils/constants";
 import { toast } from "sonner";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+
+export const handleReload = (router: AppRouterInstance) => {
+  try {
+    router.refresh();
+    router.replace("/reloading");
+  } catch (err: any) {
+    toast.error("An error has occurred.");
+    router.refresh();
+  }
+};
 
 export default function HeaderBar({
   text,
@@ -18,17 +29,6 @@ export default function HeaderBar({
   }, []);
 
   const router = useRouter();
-
-  const handleReload = () => {
-    try {
-router.refresh();
-      router.replace("/reloading");
-    } catch (err: any) {
-      toast.error("An error has occurred.");
-      router.refresh();
-      // router.back();
-    }
-  };
 
   return (
     <div
@@ -51,7 +51,7 @@ router.refresh();
         />
       )}
       <Image
-        onClick={handleReload}
+        onClick={() => handleReload(router)}
         src="/icons/navigation/icon_reload.svg"
         className="cursor-pointer justify-self-end"
         alt="Reload"
