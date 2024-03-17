@@ -2,7 +2,11 @@ import { dbHandler } from "@/src/firebase/db";
 import { GROUP_MEMBERS_SCHEMA } from "../schemas/groups";
 import handleResponses from "../handleResponses";
 import { WAITLIST_SCHEMA } from "../schemas/waitlist";
-import { GROUP_ACTIVITY_PARTICIPANT } from "../schemas/group-activities";
+import {
+  GROUP_ACTIVITY_PARTICIPANT,
+  GROUP_ACTIVITY_WAITLIST,
+} from "../schemas/group-activities";
+import { FALLOUTS_SCHEMA } from "../schemas/activities";
 
 export async function deleteGroup(groupID: string) {
   try {
@@ -121,6 +125,16 @@ export async function deleteActivities(groupID: string) {
       if (!res.status)
         return handleResponses({ status: false, error: res.error });
 
+      // delete fallouts
+      const resC = await deleteFallouts(id);
+      if (!resC.status)
+        return handleResponses({ status: false, error: resC.error });
+
+      // delete waitlist
+      const resD = await deleteWaitlist(id);
+      if (!resD.status)
+        return handleResponses({ status: false, error: resD.error });
+
       // remove activity from group
       const resA = await dbHandler.delete({
         col_name: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
@@ -193,6 +207,72 @@ export async function deleteParticipants(activityID: string) {
       if (!item.status) throw new Error(item.error);
     });
 
+    return handleResponses();
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
+}
+
+export async function deleteFallouts(activityID: string) {
+  try {
+    // remove fallouts from group
+    const resD = await dbHandler.getSpecific({
+      path: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
+      orderCol: "memberID",
+      ascending: false,
+    });
+    if (!resD.status) throw new Error(resD.error);
+
+    const falloutList = resD.data as { [memberID: string]: FALLOUTS_SCHEMA };
+
+    const resList = Object.keys(falloutList).map(async (id: string) => {
+      const res = await dbHandler.delete({
+        col_name: `GROUP-ACTIVITIES/${id}/FALLOUTS`,
+        id,
+      });
+      if (!res.status)
+        return handleResponses({ status: false, error: res.error });
+      return handleResponses();
+    });
+
+    const promList = await Promise.all(resList);
+    promList.forEach((item: any) => {
+      if (!item.status) throw new Error(item.error);
+    });
+    return handleResponses();
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
+}
+
+export async function deleteWaitlist(activityID: string) {
+  try {
+    // remove fallouts from group
+    const resD = await dbHandler.getSpecific({
+      path: `GROUP-ACTIVITIES/${activityID}/WAITLIST`,
+      orderCol: "memberID",
+      ascending: false,
+    });
+    if (!resD.status) throw new Error(resD.error);
+
+    const waitlist = resD.data as {
+      [memberID: string]: GROUP_ACTIVITY_WAITLIST;
+    };
+
+    const resList = Object.keys(waitlist).map(async (id: string) => {
+      const res = await dbHandler.delete({
+        col_name: `GROUP-ACTIVITIES/${id}/WAITLIST`,
+        id,
+      });
+      if (!res.status)
+        return handleResponses({ status: false, error: res.error });
+      return handleResponses();
+    });
+
+    const promList = await Promise.all(resList);
+    promList.forEach((item: any) => {
+      if (!item.status) throw new Error(item.error);
+    });
     return handleResponses();
   } catch (err: any) {
     return handleResponses({ status: false, error: err.message });
