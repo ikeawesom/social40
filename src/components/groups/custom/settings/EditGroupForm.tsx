@@ -52,6 +52,7 @@ export default function EditGroupForm({
 
   return (
     <DefaultCard className="w-full">
+      <h1 className="text-custom-dark-text font-bold mb-2">General</h1>
       <form
         className="w-full flex flex-col items-start justify-center gap-4"
         onSubmit={handleSubmit}
