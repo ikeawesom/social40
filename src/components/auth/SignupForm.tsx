@@ -90,27 +90,11 @@ export default function SignupForm({ setStatus }: statusType) {
     }
     setLoading(false);
   };
-
   return (
     <form
       className="flex flex-col gap-y-4 items-center justify-center w-full"
       onSubmit={handleSignup}
     >
-      <input
-        required
-        type="text"
-        name="name"
-        placeholder="Enter your name"
-        onChange={handleChange}
-      />
-      <input
-        required
-        type="password"
-        name="password"
-        placeholder="Choose a password"
-        minLength={8}
-        onChange={handleChange}
-      />
       <span className="min-[500px]:w-[400px] w-[85vw]">
         <input
           required
@@ -123,6 +107,27 @@ export default function SignupForm({ setStatus }: statusType) {
           You can get this from your commanders.
         </p>
       </span>
+      <span className="min-[500px]:w-[400px] w-[85vw]">
+        <input
+          required
+          type="text"
+          name="name"
+          placeholder="Enter your name"
+          onChange={handleChange}
+        />
+        <p className="text-gray-400 text-sm mt-2">
+          Username: <span className="font-bold">{username}</span>
+        </p>
+      </span>
+      <input
+        required
+        type="password"
+        name="password"
+        placeholder="Choose a password"
+        minLength={8}
+        onChange={handleChange}
+      />
+
       <PrimaryButton
         type="submit"
         className="grid place-items-center"
