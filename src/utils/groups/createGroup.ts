@@ -5,7 +5,10 @@ import {
   initGroupObject,
 } from "../schemas/groups";
 import handleResponses from "../handleResponses";
-import { MEMBER_CREATED_GROUPS_SCHEMA } from "../schemas/members";
+import {
+  MEMBER_CREATED_GROUPS_SCHEMA,
+  MEMBER_SCHEMA,
+} from "../schemas/members";
 
 export async function createGroup({
   groupName,
@@ -41,10 +44,14 @@ export async function createGroup({
 
     if (!resA.status) throw new Error(resA.error);
 
+    const resD = await dbHandler.get({ col_name: "MEMBERS", id: createdBy });
+    const data = resD.data as MEMBER_SCHEMA;
+    const { displayName } = data;
     const groupMemberData = {
       dateJoined: createdOn,
       memberID: createdBy,
       role: "owner",
+      displayName,
     } as GROUP_MEMBERS_SCHEMA;
 
     const resB = await dbHandler.add({
