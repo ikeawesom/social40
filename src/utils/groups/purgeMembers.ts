@@ -98,7 +98,7 @@ export async function deleteBIBO(memberID: string) {
   }
 }
 
-async function deleteGroupsJoined(memberID: string) {
+export async function deleteGroupsJoined(memberID: string) {
   try {
     const res = await dbHandler.getSpecific({
       path: `MEMBERS/${memberID}/GROUPS-JOINED`,
@@ -136,7 +136,7 @@ async function deleteGroupsJoined(memberID: string) {
   }
 }
 
-async function deleteGroupsCreated(memberID: string) {
+export async function deleteGroupsCreated(memberID: string) {
   try {
     const res = await dbHandler.getSpecific({
       path: `MEMBERS/${memberID}/GROUPS-CREATED`,
@@ -162,7 +162,7 @@ async function deleteGroupsCreated(memberID: string) {
   }
 }
 
-async function deleteGroupActivities(memberID: string) {
+export async function deleteGroupActivities(memberID: string) {
   try {
     const res = await dbHandler.getSpecific({
       path: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
@@ -202,7 +202,7 @@ async function deleteGroupActivities(memberID: string) {
   }
 }
 
-async function deleteStatuses(memberID: string) {
+export async function deleteStatuses(memberID: string) {
   try {
     const res = await dbHandler.getSpecific({
       path: `MEMBERS/${memberID}/STATUSES`,
@@ -231,7 +231,7 @@ async function deleteStatuses(memberID: string) {
   }
 }
 
-async function deletePFP(memberID: string) {
+export async function deletePFP(memberID: string) {
   try {
     const res = await storageHandler.delete({ memberID });
     if (!res.status) throw new Error(res.error);
