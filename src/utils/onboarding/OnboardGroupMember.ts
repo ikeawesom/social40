@@ -1,6 +1,7 @@
 import { dbHandler } from "../../firebase/db";
 import getCurrentDate from "../getCurrentDate";
 import handleResponses from "../handleResponses";
+import { MEMBER_SCHEMA } from "../schemas/members";
 
 export type OnboardGroupMemberType = {
   groupID: string;
@@ -92,10 +93,18 @@ export async function addMemberToGroup({
 }: OnboardGroupMemberType) {
   if (groupID && memberID && role) {
     try {
+      const resA = await dbHandler.get({
+        col_name: "MEMBERS",
+        id: memberID,
+      });
+      if (!resA.status) throw new Error("MemberID does not exist");
+      const newMemberData = resA.data as MEMBER_SCHEMA;
+      const { displayName } = newMemberData;
       const to_add = {
         dateJoined: getCurrentDate(),
         memberID: memberID,
         role: role,
+        displayName,
       };
 
       const res = await dbHandler.add({
