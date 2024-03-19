@@ -49,7 +49,7 @@ export default function AnnouncementCard({
         {createdBy}
       </Link>
       <HRow className="mb-2" />
-      <h1 className="font-bold text-xl">{title}</h1>
+      <h1 className="font-bold text-xl mb-3">{title}</h1>
       {descLines.map((line: string, index: number) => {
         if (line === "") return <br key={index} />;
         return (
