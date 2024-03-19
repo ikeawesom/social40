@@ -58,7 +58,8 @@ export default async function GroupFeedCard({
     const randomIndex = Math.floor(Math.random() * participantNumber);
 
     const randomParticipant = Object.keys(participantsData)[randomIndex];
-    const oneParticipant = participantNumber - 1 === 0;
+    const oneParticipant = participantNumber === 1;
+    const noParticipant = participantNumber === 0;
 
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-start">
@@ -96,19 +97,23 @@ export default async function GroupFeedCard({
           )}`}
           className="text-sm text-custom-dark-text mt-2"
         >
-          <span className="font-semibold">{randomParticipant} </span>
-          {oneParticipant ? (
-            "is "
-          ) : (
-            <span>
-              `and{" "}
-              <span className="font-semibold">
-                {participantNumber - 1} others
-              </span>{" "}
-              are{" "}
-            </span>
+          {!noParticipant && (
+            <>
+              <span className="font-semibold">{randomParticipant} </span>
+              {oneParticipant ? (
+                "is "
+              ) : (
+                <span>
+                  `and{" "}
+                  <span className="font-semibold">
+                    {participantNumber - 1} others
+                  </span>{" "}
+                  are{" "}
+                </span>
+              )}
+              participating.
+            </>
           )}
-          participating.
         </Link>
 
         <div className="w-full mt-2 flex items-center justify-between gap-3 max-[300px]:flex-wrap">
