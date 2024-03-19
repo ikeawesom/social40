@@ -95,7 +95,7 @@ export default async function Profile({
                 />
               </Suspense>
               {cos && <BiboSection />}
-              <GuidebookDownload />
+              {/* <GuidebookDownload /> */}
             </div>
             {/* TO DO */}
           </div>

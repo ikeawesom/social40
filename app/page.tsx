@@ -69,7 +69,7 @@ export default async function Home() {
                     View updates
                   </Link>
                 </div>
-                <GuidebookDownload />
+                {/* <GuidebookDownload /> */}
               </div>
             </div>
           </div>
