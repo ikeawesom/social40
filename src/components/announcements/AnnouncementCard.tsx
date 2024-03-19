@@ -22,6 +22,8 @@ export default function AnnouncementCard({
   const { announcementID, createdBy, createdOn, desc, title } =
     announcementData;
 
+  const descLines = desc.split("$a");
+
   const handleDelete = async () => {
     if (
       confirm(
@@ -29,7 +31,6 @@ export default function AnnouncementCard({
       )
     ) {
       try {
-        console.log(announcementID);
         const res = await deletePost(announcementID);
         if (!res.status) throw new Error(res.error);
         router.refresh();
@@ -49,7 +50,10 @@ export default function AnnouncementCard({
       </Link>
       <HRow className="mb-2" />
       <h1 className="font-bold text-xl">{title}</h1>
-      <p className="text-custom-dark-text text-sm">{desc}</p>
+      {descLines.map((line: string) => {
+        if (line === "") return <br />;
+        return <p className="text-custom-dark-text text-sm">{`${line}`}</p>;
+      })}
       <div className="flex items-center justify-between gap-3 mt-2">
         <p className="text-xs text-custom-grey-text">
           {TimestampToDateString(createdOn).split(" ")[0]}

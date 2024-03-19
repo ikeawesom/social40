@@ -8,9 +8,10 @@ import handleResponses from "@/src/utils/handleResponses";
 export default async function submitPost(formData: PostType) {
   const { createdBy, desc, title } = formData;
   const createdOn = getCurrentDate();
+  const newDesc = desc.split("\n").join("$a");
   const to_add = {
     title,
-    desc,
+    desc: newDesc,
     createdOn,
     createdBy,
   };
