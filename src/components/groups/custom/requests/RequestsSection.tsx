@@ -14,6 +14,8 @@ import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import HRow from "@/src/components/utils/HRow";
 import handleResponses from "@/src/utils/handleResponses";
+import { handleReload } from "@/src/components/navigation/HeaderBar";
+import { useRouter } from "next/navigation";
 
 export default function RequestsSection({
   data,
@@ -24,6 +26,7 @@ export default function RequestsSection({
   groupID: string;
   reload: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const router = useRouter();
   const { host } = useHostname();
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -86,6 +89,7 @@ export default function RequestsSection({
       if (!res.status) throw new Error(res.error);
       toast.success(`Added ${memberID}.`);
       if (reload) reload(true);
+      handleReload(router);
     } catch (error: any) {
       toast.error(error.message);
     }
