@@ -6,6 +6,8 @@ import { Onboarding } from "@/src/utils/onboarding";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { GroupDetailsType } from "./GroupMembers";
+import { handleReload } from "../../navigation/HeaderBar";
+import { useRouter } from "next/navigation";
 
 export default function InviteMemberForm({
   groupID,
@@ -14,6 +16,7 @@ export default function InviteMemberForm({
   groupID: string;
   membersList: GroupDetailsType;
 }) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [member, setMember] = useState("");
   const { host } = useHostname();
@@ -40,6 +43,7 @@ export default function InviteMemberForm({
         });
         if (!res.status) throw new Error(res.error);
         toast.success("Successfully invited member to group");
+        handleReload(router);
       }
     } catch (err: any) {
       if (err.message.includes("not found")) {

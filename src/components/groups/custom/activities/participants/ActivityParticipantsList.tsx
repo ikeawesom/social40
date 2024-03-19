@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import ParticipantContainer from "./ParticipantContainer";
+import { handleReload } from "@/src/components/navigation/HeaderBar";
 
 export default function ActivityParticipantsList({
   participantsData,
@@ -81,6 +82,7 @@ export default function ActivityParticipantsList({
       router.refresh();
       setCurMember("");
       toast.success(`Kicked ${curMember} from activity`);
+      handleReload(router);
     } catch (err: any) {
       toast.error(err.message);
     }

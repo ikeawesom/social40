@@ -5,6 +5,8 @@ import { LoadingIconBright } from "@/src/components/utils/LoadingIcon";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import { acceptLogic } from "./ActivityWaitlist";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
+import { handleReload } from "@/src/components/navigation/HeaderBar";
+import { useRouter } from "next/navigation";
 
 export default function InviteMemberForm({
   activityID,
@@ -15,6 +17,7 @@ export default function InviteMemberForm({
   host: string;
   participants: any;
 }) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [member, setMember] = useState("");
 
@@ -37,7 +40,8 @@ export default function InviteMemberForm({
 
         const res = await acceptLogic(member, activityID, host);
         if (!res.status) throw new Error(res.error);
-        toast.success("Successfully invited member to group");
+        toast.success("Successfully invited member to activity");
+        handleReload(router);
       }
     } catch (err: any) {
       if (err.message.includes("not found")) {

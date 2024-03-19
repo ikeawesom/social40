@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import { toast } from "sonner";
 import Image from "next/image";
 import handleResponses from "@/src/utils/handleResponses";
+import { handleReload } from "@/src/components/navigation/HeaderBar";
 
 export const acceptLogic = async (
   memberID: string,
@@ -81,6 +82,7 @@ export default function ActivityWaitlist({
       if (!res.status) throw new Error(res.error);
       router.refresh();
       toast.success(`Accepted ${memberID}`);
+      handleReload(router);
     } catch (err: any) {
       toast.error(err.message);
     }
