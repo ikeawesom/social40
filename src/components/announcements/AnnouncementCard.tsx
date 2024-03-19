@@ -50,9 +50,14 @@ export default function AnnouncementCard({
       </Link>
       <HRow className="mb-2" />
       <h1 className="font-bold text-xl">{title}</h1>
-      {descLines.map((line: string) => {
-        if (line === "") return <br />;
-        return <p className="text-custom-dark-text text-sm">{`${line}`}</p>;
+      {descLines.map((line: string, index: number) => {
+        if (line === "") return <br key={index} />;
+        return (
+          <p
+            key={index}
+            className="text-custom-dark-text text-sm"
+          >{`${line}`}</p>
+        );
       })}
       <div className="flex items-center justify-between gap-3 mt-2">
         <p className="text-xs text-custom-grey-text">
