@@ -34,6 +34,7 @@ export default function CreateGroupActivityForm({
     },
     restrict: false,
     level: "Light",
+    pt: true,
   });
   const [loading, setLoading] = useState(false);
   const [startD, setStartD] = useState({
@@ -107,6 +108,15 @@ export default function CreateGroupActivityForm({
           onChange={handleChange}
         />
       </FormInputContainer>
+      <SecondaryButton
+        onClick={() => setInput({ ...input, pt: !input.pt })}
+        className={twMerge(
+          "w-fit",
+          input.pt && "bg-custom-light-orange border-custom-orange"
+        )}
+      >
+        {input.pt ? "This is a PT activity" : "This is not a PT activity"}
+      </SecondaryButton>
       <FormInputContainer
         inputName="desc"
         labelText="Enter a short description of this activity"
