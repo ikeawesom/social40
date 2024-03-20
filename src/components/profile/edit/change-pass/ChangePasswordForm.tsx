@@ -43,7 +43,12 @@ export default function ChangePasswordForm() {
       toast.success("Password changed successfully. Please log in again.");
       await handleSignOut();
     } catch (err: any) {
-      toast.error(err.message);
+      const msg = err.message;
+      if (msg.includes("recent")) {
+        toast.error("You need to re-login to change your password.");
+      } else {
+        toast.error(msg);
+      }
     }
     setLoading(false);
   };
