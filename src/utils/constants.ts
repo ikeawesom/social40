@@ -207,3 +207,25 @@ export const ACTIVITY_TYPE = ["Light", "Moderate", "Strenuous"];
 export const VERSION_NUMBER = Object.keys(VERSION_MAP)[0] as string;
 export const VERSION_DESC = VERSION_MAP[VERSION_NUMBER].desc;
 export const VERSION_UPDATES = VERSION_MAP[VERSION_NUMBER].updates;
+
+export type GAME_TYPE = {
+  id: string;
+  title: string;
+  comingSoon: boolean;
+  img: string;
+};
+
+export const GAMES_LIST = {
+  stallion: {
+    id: "stallion",
+    title: "Stallion Wars",
+    comingSoon: false,
+    img: "/images/games/stallion/card-background.jpg",
+  },
+  poker: {
+    id: "poker",
+    title: "Poker",
+    comingSoon: true,
+    img: "/images/games/poker/card-background.png",
+  },
+} as { [gameID: string]: GAME_TYPE };
