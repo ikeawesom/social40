@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { useRouter } from "next/navigation";
+import { setGameToken } from "./gameToken";
 
 export default function EditProfileForm({
   memberData,
@@ -33,6 +34,11 @@ export default function EditProfileForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // easter egg
+    if (memberDetails.rank.trim().toLowerCase() === "i want to play")
+      return await setGameToken(memberData.memberID);
+
     setLoading(true);
     try {
       const PostObj = GetPostObj({
