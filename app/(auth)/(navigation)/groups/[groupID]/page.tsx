@@ -23,6 +23,7 @@ import GroupActivities, {
 } from "@/src/components/groups/custom/GroupActivities";
 import { dbHandler } from "@/src/firebase/db";
 import handleResponses from "@/src/utils/handleResponses";
+import LeaveGroupSection from "@/src/components/groups/custom/settings/LeaveGroupSection";
 
 async function addPfp(groupMembersTemp: GroupDetailsType) {
   try {
@@ -198,6 +199,9 @@ export default async function GroupPage({
                   admin={admin}
                   activitiesData={groupActivitiesData}
                 />
+                {admin && !owner && (
+                  <LeaveGroupSection groupID={groupID} curMember={memberID} />
+                )}
                 {admin && <SettingsSection groupID={groupID} />}
               </div>
             </div>
