@@ -24,6 +24,7 @@ export default function FeedbackModal({
       const memberObj = GetPostObj({ memberID });
       const res = await fetch(`${host}/api/profile/member`, memberObj);
       const body = await res.json();
+      if (!body.status) return;
 
       // show feedback modal if feedback not done
       const data = body.data as MEMBER_SCHEMA;

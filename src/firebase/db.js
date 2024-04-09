@@ -87,13 +87,30 @@ class DbClass {
   }
 
   async getSpecific(args) {
-    const { path, field, criteria, value, orderCol, ascending } = args;
+    const {
+      path,
+      field,
+      criteria,
+      value,
+      orderCol,
+      ascending,
+      field2,
+      criteria2,
+      value2,
+    } = args;
 
     try {
       const colRef = collection(FIREBASE_DB, path);
       var q;
 
-      if (orderCol && field) {
+      if (field2 && orderCol) {
+        q = query(
+          colRef,
+          where(field, criteria, value),
+          where(field2, criteria2, value2),
+          orderBy(orderCol, !ascending ? "desc" : "asc")
+        );
+      } else if (orderCol && field) {
         q = query(
           colRef,
           where(field, criteria, value),

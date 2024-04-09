@@ -10,7 +10,7 @@ import { dbHandler } from "@/src/firebase/db";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
-import { ANNOUNCEMENT_SCHEMA } from "@/src/utils/schemas/announcements";
+
 import {
   MEMBER_JOINED_GROUPS_SCHEMA,
   MEMBER_CREATED_GROUPS_SCHEMA,
@@ -18,7 +18,6 @@ import {
 } from "@/src/utils/schemas/members";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 

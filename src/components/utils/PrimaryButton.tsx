@@ -8,6 +8,7 @@ export type ButtonType = {
   disabled?: boolean;
   className?: string;
   type?: "button" | "submit" | "reset" | undefined;
+  activated?: boolean;
 };
 
 export default function PrimaryButton(props: ButtonType) {
