@@ -1,14 +1,6 @@
 import React from "react";
-import PrimaryButton from "./PrimaryButton";
+import PrimaryButton, { ButtonType } from "./PrimaryButton";
 import { twMerge } from "tailwind-merge";
-
-export type ButtonType = {
-  children?: React.ReactNode;
-  onClick?: () => void;
-  disabled?: boolean;
-  className?: string;
-  type?: "button" | "submit" | "reset" | undefined;
-};
 
 export default function SecondaryButton(props: ButtonType) {
   return (
@@ -19,6 +11,7 @@ export default function SecondaryButton(props: ButtonType) {
       className={twMerge(
         "bg-white text-custom-dark-text border-[1px] border-custom-light-text",
         `${props.disabled ? "opacity-70 cursor-not-allowed" : ""}`,
+        props.activated && "bg-custom-light-orange border-custom-orange",
         props.className
       )}
     >
