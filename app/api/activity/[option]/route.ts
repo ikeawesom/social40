@@ -122,8 +122,8 @@ export async function POST(req: NextRequest) {
       const resX = await dbHandler.getSpecific({
         path: `GROUPS/${groupID}/MEMBERS`,
         criteria: "==",
-        field: "role",
-        value: "member",
+        field: "bookedIn",
+        value: "true",
       });
 
       if (!resX.status)
