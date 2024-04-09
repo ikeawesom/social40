@@ -5,16 +5,37 @@ import HRow from "../../utils/HRow";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import InnerContainer from "../../utils/InnerContainer";
 import MemberStatusTab from "./MemberStatusTab";
-import { ActiveTimestamp } from "@/src/utils/getCurrentDate";
+import {
+  ActiveTimestamp,
+  DateToTimestamp,
+  TimestampToDate,
+} from "@/src/utils/getCurrentDate";
 import { twMerge } from "tailwind-merge";
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
 import GroupMembers, { GroupDetailsType } from "./GroupMembers";
 import { GROUP_ROLES_HEIRARCHY } from "@/src/utils/constants";
 import Link from "next/link";
+import { Timestamp } from "firebase/firestore";
 
 export type GroupStatusType = {
   [memberID: string]: { [statusID: string]: STATUS_SCHEMA };
 };
+
+export function getFixedTimestamp(timestamp: Timestamp) {
+  const tempDate = TimestampToDate(timestamp);
+  const tempDay = tempDate.getDate() - 1;
+  const endDate = new Date(
+    tempDay,
+    tempDate.getMonth(),
+    tempDate.getFullYear(),
+    23,
+    59,
+    59,
+    999
+  );
+  const endTimestamp = DateToTimestamp(endDate);
+  return endTimestamp;
+}
 
 export default function GroupStrengthSection({
   GroupStatusList,
@@ -63,7 +84,8 @@ export default function GroupStrengthSection({
   const mcLength = Object.keys(GroupStatusList).filter((memberID: string) => {
     const statusObjList = GroupStatusList[memberID];
     const mcList = Object.keys(statusObjList).filter((statusID: string) => {
-      const { endDate } = statusObjList[statusID];
+      const { endDate: tempDate } = statusObjList[statusID];
+      const endDate = getFixedTimestamp(tempDate);
       return ActiveTimestamp(endDate) && statusObjList[statusID].mc === true;
     });
     return mcList.length > 0;
@@ -74,7 +96,8 @@ export default function GroupStrengthSection({
       const statusObjList = GroupStatusList[memberID];
       const statusList = Object.keys(statusObjList).filter(
         (statusID: string) => {
-          const { endDate } = statusObjList[statusID];
+          const { endDate: tempDate } = statusObjList[statusID];
+          const endDate = getFixedTimestamp(tempDate);
           return (
             ActiveTimestamp(endDate) && statusObjList[statusID].mc === false
           );
@@ -90,7 +113,8 @@ export default function GroupStrengthSection({
       const activeMembers = Object.keys(GroupStatusList[memberID]).map(
         (statusID: string) => {
           const { endDate } = GroupStatusList[memberID][statusID];
-          const active = ActiveTimestamp(endDate);
+          const endTimestamp = getFixedTimestamp(endDate);
+          const active = ActiveTimestamp(endTimestamp);
           return active;
         }
       );
