@@ -10,8 +10,9 @@ export default async function AnnouncementSection({
 }: {
   curMember: string;
 }) {
-  const { defaultError, defaultPosts, pinnedError, pinnedPosts } =
-    await handleShowAnnouncements(curMember);
+  const { defaultPosts, pinnedPosts, error } = await handleShowAnnouncements(
+    curMember
+  );
   if (
     Object.keys(defaultPosts).length === 0 &&
     Object.keys(pinnedPosts).length === 0
@@ -29,7 +30,7 @@ export default async function AnnouncementSection({
         </h1>
       </div>
     );
-  if (!pinnedError && !defaultError)
+  if (!error)
     return (
       <>
         {Object.keys(pinnedPosts).length !== 0 &&
@@ -57,5 +58,5 @@ export default async function AnnouncementSection({
       </>
     );
 
-  return ErrorScreenHandler(defaultError || pinnedError);
+  return ErrorScreenHandler(error);
 }
