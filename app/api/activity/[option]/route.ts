@@ -123,7 +123,7 @@ export async function POST(req: NextRequest) {
         path: `GROUPS/${groupID}/MEMBERS`,
         criteria: "==",
         field: "bookedIn",
-        value: "true",
+        value: true,
       });
 
       if (!resX.status)
