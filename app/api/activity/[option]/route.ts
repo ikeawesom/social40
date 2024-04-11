@@ -123,7 +123,7 @@ export async function POST(req: NextRequest) {
     if (!addMembers.check) {
       const resX = await dbHandler.getSpecific({
         path: `GROUPS/${groupID}/MEMBERS`,
-        orderBy: "dateJoined",
+        orderCol: "dateJoined",
         ascending: false
       });
 
