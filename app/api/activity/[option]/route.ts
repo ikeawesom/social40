@@ -57,6 +57,8 @@ export async function POST(req: NextRequest) {
       members: string[];
     };
 
+    console.log(`1. ${addMembers}`);
+
     // get timestamp object from time and date strings
     const timestampRes = StringToTimestamp(`${input.date} ${input.time}`);
 
@@ -123,14 +125,18 @@ export async function POST(req: NextRequest) {
         path: `GROUPS/${groupID}/MEMBERS`,
         criteria: "==",
         field: "bookedIn",
-        value: "true",
+        value: true,
       });
+
+      console.log(`2. res: ${resX}`);
 
       if (!resX.status)
         return NextResponse.json({ status: false, error: resX.error });
-
+      
       membersData = Object.keys(resX.data);
+      console.log(`3. data: ${membersData}`);
     } else {
+      console.log(`2: not check ${membersData}`);
       membersData = addMembers.members;
     }
 
