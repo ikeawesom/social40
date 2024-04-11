@@ -136,8 +136,8 @@ export async function POST(req: NextRequest) {
       membersData = Object.keys(resX.data);
       console.log(`3. data: ${membersData}`);
     } else {
-      console.log(`2: not check ${membersData}`);
       membersData = addMembers.members;
+      console.log(`2: not check ${membersData}`);
     }
 
     const promiseList = membersData.map(async (selectedMemberID: string) => {
