@@ -3,10 +3,7 @@ import HRow from "@/src/components/utils/HRow";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import {
   ActiveTimestamp,
-  DateToString,
-  TimestampToDate,
   TimestampToDateString,
-  handleUTC,
 } from "@/src/utils/getCurrentDate";
 import React from "react";
 import { SuspenseGroupActivityFetchType } from "./GroupActivityData";
@@ -15,24 +12,10 @@ import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 
 export default async function GroupActivityDetails({
-  memberID,
   activityData,
 }: SuspenseGroupActivityFetchType) {
   try {
-    const date = activityData.activityDate;
-    const dateStr = TimestampToDateString(date);
-
-    // modify to manage UTC time difference
-    const localTimestamp = handleUTC(date);
-    const active = ActiveTimestamp(localTimestamp);
-
-    const dateLocal = activityData.createdOn;
-
-    // modify to manage UTC time difference
-    const dateA = TimestampToDate(dateLocal);
-    dateA.setHours(dateA.getHours() + 8);
-    const dateStrA = DateToString(dateA);
-
+    const active = ActiveTimestamp(activityData.activityDate);
     const { activityLevel } = activityData;
 
     return (
@@ -73,7 +56,7 @@ export default async function GroupActivityDetails({
           )}
           <p className="text-custom-dark-text text-sm">
             {active ? "Begins on: " : "Ended on: "}
-            {dateStr}
+            {TimestampToDateString(activityData.activityDate)}
           </p>
         </div>
         <HRow />
@@ -82,7 +65,7 @@ export default async function GroupActivityDetails({
             Created by: {activityData.createdBy}
           </p>
           <p className="text-custom-grey-text text-sm">
-            Created on: {dateStrA}
+            Created on: {TimestampToDateString(activityData.createdOn)}
           </p>
         </div>
       </DefaultCard>

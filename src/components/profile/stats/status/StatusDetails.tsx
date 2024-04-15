@@ -1,5 +1,8 @@
 "use client";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import {
+  DateToTimestamp,
+  TimestampToDateString,
+} from "@/src/utils/getCurrentDate";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import Link from "next/link";
 import React from "react";
@@ -9,9 +12,23 @@ type StatusDetailType = {
   active?: boolean;
   curStatus: STATUS_SCHEMA;
 };
+
 export function StatusDetails({ active, curStatus }: StatusDetailType) {
-  const statusID = curStatus.statusID;
+  const {
+    statusID,
+    endDate: tempEndTimestamp,
+    startDate: tempStartTimestamp,
+  } = curStatus;
   const route = `/members/${curStatus.memberID}/${curStatus.statusID}`;
+
+  const tempEndDate = new Date(tempEndTimestamp.seconds * 1000);
+  tempEndDate.setHours(tempEndDate.getHours() - 8);
+  const endDate = DateToTimestamp(tempEndDate);
+
+  const tempStartDate = new Date(tempStartTimestamp.seconds * 1000);
+  tempStartDate.setHours(tempStartDate.getHours() - 8);
+  const startDate = DateToTimestamp(tempStartDate);
+
   return (
     <Link
       href={route}
@@ -30,10 +47,10 @@ export function StatusDetails({ active, curStatus }: StatusDetailType) {
           {curStatus.statusDesc}
         </h3>
         <p className="text-custom-grey-text text-xs">
-          Start Date: {TimestampToDateString(curStatus.startDate).split(" ")[0]}
+          Start Date: {TimestampToDateString(startDate).split(" ")[0]}
         </p>
         <p className="text-custom-grey-text text-xs">
-          End Date: {TimestampToDateString(curStatus.endDate).split(" ")[0]}
+          End Date: {TimestampToDateString(endDate).split(" ")[0]}
         </p>
       </div>
       {!curStatus.endorsed.status && (

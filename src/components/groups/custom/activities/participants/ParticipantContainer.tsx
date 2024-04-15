@@ -5,7 +5,10 @@ import LoadingIcon from "@/src/components/utils/LoadingIcon";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import {
+  DateToTimestamp,
+  TimestampToDateString,
+} from "@/src/utils/getCurrentDate";
 import handleResponses from "@/src/utils/handleResponses";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
@@ -176,7 +179,12 @@ export default function ParticipantContainer({
             </div>
           )}
           {Object.keys(itemList).map((mem: string) => {
-            const date = itemList[mem].dateJoined;
+            const tempTimestamp = itemList[mem].dateJoined;
+
+            const tempDate = new Date(tempTimestamp.seconds * 1000);
+            tempDate.setHours(tempDate.getHours() - 8);
+            const date = DateToTimestamp(tempDate);
+
             const dateStr = TimestampToDateString(date);
             return (
               <div

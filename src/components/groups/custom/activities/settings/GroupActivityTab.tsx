@@ -1,9 +1,7 @@
 import {
   ActiveTimestamp,
-  DateToString,
-  TimestampToDate,
+  DateToTimestamp,
   TimestampToDateString,
-  handleUTC,
 } from "@/src/utils/getCurrentDate";
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
 import Link from "next/link";
@@ -15,15 +13,18 @@ export default function GroupActivityTab({
 }: {
   activityData: GROUP_ACTIVITIES_SCHEMA;
 }) {
-  const date = activityData.activityDate;
+  // const date = activityData.activityDate;
+  // const active = ActiveTimestamp(date);
+  // const dateStr = TimestampToDateString(date);
 
-  // modify to manage UTC time difference
-  const localTimestamp = handleUTC(date);
-  const active = ActiveTimestamp(localTimestamp);
+  const tempTimestamp = activityData.activityDate;
 
-  const localDate = TimestampToDate(date);
-  localDate.setHours(localDate.getHours() - 8);
-  const dateStr = DateToString(localDate);
+  const tempDate = new Date(tempTimestamp.seconds * 1000);
+  tempDate.setHours(tempDate.getHours() - 16);
+  const date = DateToTimestamp(tempDate);
+
+  const active = ActiveTimestamp(date);
+  const dateStr = TimestampToDateString(date);
 
   return (
     <Link
@@ -46,10 +47,6 @@ export default function GroupActivityTab({
       <h4 className="text-custom-grey-text text-sm">
         {activityData.activityDesc}
       </h4>
-      <p className="text-custom-grey-text text-xs">
-        {active ? "Begins on: " : "Ended on: "}
-        {dateStr}
-      </p>
     </Link>
   );
 }

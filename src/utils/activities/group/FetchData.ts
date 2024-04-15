@@ -1,10 +1,6 @@
 import { ActivityWaitlistType } from "@/src/components/groups/custom/activities/ActivityWaitlist";
 import { GetPostObj } from "../../API/GetPostObj";
-import {
-  TimestampToDateString,
-  ActiveTimestamp,
-  handleUTC,
-} from "../../getCurrentDate";
+import { TimestampToDateString, ActiveTimestamp } from "../../getCurrentDate";
 import {
   GROUP_ACTIVITY_SCHEMA,
   GROUP_ACTIVITY_PARTICIPANT,
@@ -110,10 +106,7 @@ class FetchGroupActivityClass {
 
       const date = activityData.activityDate;
       const dateStr = TimestampToDateString(date);
-
-      // modify to manage UTC time difference
-      const localTimestamp = handleUTC(date);
-      const active = ActiveTimestamp(localTimestamp);
+      const active = ActiveTimestamp(date);
 
       const restrictionStatus = activityData.groupRestriction;
       const currentMember = body.status;

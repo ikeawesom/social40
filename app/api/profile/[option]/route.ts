@@ -3,7 +3,10 @@ import { StatusListType } from "@/src/components/profile/StatsSection";
 import { StatusInputType } from "@/src/components/status/CreateStatus";
 import { dbHandler } from "@/src/firebase/db";
 import { getMethod } from "@/src/utils/API/getAPIMethod";
-import getCurrentDate, { StringToTimestamp } from "@/src/utils/getCurrentDate";
+import getCurrentDate, {
+  DateToTimestamp,
+  StringToTimestamp,
+} from "@/src/utils/getCurrentDate";
 import handleResponses from "@/src/utils/handleResponses";
 import { getFriendsList } from "@/src/utils/profile/getFriendsList";
 import resetPassword from "@/src/utils/profile/resetPassword";
@@ -158,6 +161,18 @@ export async function POST(request: NextRequest) {
         error: startTimestamp.error ? startTimestamp.error : endTimestamp.error,
       });
 
+    const { data: tempEndTimestamp } = endTimestamp;
+    const tempEndDate = new Date(tempEndTimestamp.seconds * 1000);
+    tempEndDate.setHours(tempEndDate.getHours() - 8);
+    // tempEndDate.setDate(tempEndDate.getDate() + 1);
+    const newEndTimestamp = DateToTimestamp(tempEndDate);
+
+    const { data: tempStartTimestamp } = startTimestamp;
+    const tempStartDate = new Date(tempStartTimestamp.seconds * 1000);
+    tempStartDate.setHours(tempStartDate.getHours() - 8);
+    // tempStartDate.setDate(tempStartDate.getDate() + 1);
+    const newStartTimestamp = DateToTimestamp(tempStartDate);
+
     const to_add = {
       statusID: "",
       statusTitle: data.title,
@@ -168,8 +183,8 @@ export async function POST(request: NextRequest) {
         status: false,
         endorsedBy: "",
       },
-      startDate: startTimestamp.data,
-      endDate: endTimestamp.data,
+      startDate: newStartTimestamp,
+      endDate: newEndTimestamp,
       mc,
     } as STATUS_SCHEMA;
 

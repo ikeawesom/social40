@@ -3,7 +3,10 @@ import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import Link from "next/link";
 import React from "react";
 import { twMerge } from "tailwind-merge";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import {
+  DateToTimestamp,
+  TimestampToDateString,
+} from "@/src/utils/getCurrentDate";
 
 type MemberStatusType = {
   memberID: string;
@@ -16,8 +19,23 @@ export default function MemberStatusTab({
   active,
   statusData,
 }: MemberStatusType) {
-  const { endDate, startDate, statusTitle, statusDesc, endorsed, statusID } =
-    statusData;
+  const {
+    endDate: tempEndTimestamp,
+    startDate: tempStartTimestamp,
+    statusTitle,
+    statusDesc,
+    endorsed,
+    statusID,
+  } = statusData;
+
+  const tempEndDate = new Date(tempEndTimestamp.seconds * 1000);
+  tempEndDate.setHours(tempEndDate.getHours() - 8);
+  const endDate = DateToTimestamp(tempEndDate);
+
+  const tempStartDate = new Date(tempStartTimestamp.seconds * 1000);
+  tempStartDate.setHours(tempStartDate.getHours() - 8);
+  const startDate = DateToTimestamp(tempStartDate);
+
   return (
     <Link
       href={`/members/${memberID}/${statusID}`}

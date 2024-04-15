@@ -3,6 +3,7 @@ import { dbHandler } from "@/src/firebase/db";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { getMethod } from "@/src/utils/API/getAPIMethod";
 import getCurrentDate, {
+  DateToTimestamp,
   StringToTimestamp,
   TimestampToDate,
   TimestampToDateString,
@@ -62,7 +63,14 @@ export async function POST(req: NextRequest) {
 
     if (!timestampRes.status)
       return NextResponse.json({ status: false, error: timestampRes.error });
-    const timestamp = timestampRes.data as Timestamp;
+    const tempTimestamp = timestampRes.data as Timestamp;
+
+    // UTC handler
+    const tempDate = new Date(tempTimestamp.seconds * 1000);
+    tempDate.setHours(tempDate.getHours() - 8);
+    const timestamp = DateToTimestamp(tempDate);
+
+    console.log("Server timestamp (from route): " + timestamp);
 
     const durationEnabled = input.duration.active as boolean;
     const timestampResA = durationEnabled
@@ -122,15 +130,19 @@ export async function POST(req: NextRequest) {
       const resX = await dbHandler.getSpecific({
         path: `GROUPS/${groupID}/MEMBERS`,
         orderCol: "dateJoined",
-        ascending: false
+        ascending: false,
       });
+
+      console.log(`2. res: ${resX.data}`);
 
       if (!resX.status)
         return NextResponse.json({ status: false, error: resX.error });
 
       membersData = Object.keys(resX.data);
+      console.log(`3. data: ${membersData}`);
     } else {
       membersData = addMembers.members;
+      console.log(`2: not check ${membersData}`);
     }
 
     const promiseList = membersData.map(async (selectedMemberID: string) => {
@@ -403,13 +415,16 @@ export async function POST(req: NextRequest) {
     if (!timeRes.status)
       return NextResponse.json({ status: false, error: timeRes.error });
 
-    const newDateTimestamp = timeRes.data;
+    const tempTimestamp = timeRes.data as Timestamp;
+    const tempDate = new Date(tempTimestamp.seconds * 1000);
+    tempDate.setHours(tempDate.getHours() - 8);
+    const newTimestamp = DateToTimestamp(tempDate);
 
     const to_edit = {
       activityTitle: newTitle,
       activityDesc: newDesc,
       groupRestriction: newRestriction,
-      activityDate: newDateTimestamp,
+      activityDate: newTimestamp,
     };
 
     const res = await dbHandler.edit({
@@ -427,7 +442,7 @@ export async function POST(req: NextRequest) {
       data: {
         activityTitle: newTitle,
         activityDesc: newDesc,
-        activityDate: newDateTimestamp,
+        activityDate: newTimestamp,
       },
     });
 

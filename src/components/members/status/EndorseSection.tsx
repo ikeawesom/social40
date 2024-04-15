@@ -4,7 +4,10 @@ import DefaultCard from "../../DefaultCard";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import EndorseStatus from "../../status/EndorseStatus";
 import { useRouter } from "next/navigation";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import {
+  DateToString,
+  TimestampToDateString,
+} from "@/src/utils/getCurrentDate";
 
 export default function EndorseSection({
   statusData,
@@ -15,6 +18,9 @@ export default function EndorseSection({
   adminID: string;
   memberID: string;
 }) {
+  const tempDate = new Date(statusData.endorsed.endorsedOn.seconds * 1000);
+  const dateStr = DateToString(tempDate);
+
   const router = useRouter();
   return (
     <DefaultCard className="flex flex-col w-full items-start justify-center gap-1">
@@ -32,7 +38,7 @@ export default function EndorseSection({
             Endorsed by: {statusData.endorsed.endorsedBy}
           </p>
           <p className="text-custom-dark-text text-sm">
-            Endorsed on: {TimestampToDateString(statusData.endorsed.endorsedOn)}
+            Endorsed on: {dateStr}
           </p>
         </>
       )}

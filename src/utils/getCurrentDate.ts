@@ -25,6 +25,7 @@ export function TimestampToDateString(timestamp: Timestamp) {
 
 export function TimestampToDate(timestamp: Timestamp) {
   const date = new Date(timestamp.seconds * 1000);
+  date.setHours(date.getHours() + 8);
   return date;
 }
 
@@ -115,7 +116,7 @@ export function StringToTimestamp(str: string) {
 }
 
 export function ActiveTimestamp(timestamp: Timestamp) {
-  const date = TimestampToDate(timestamp);
+  const date = new Date(timestamp.seconds * 1000);
   const today = new Date();
   return date >= today;
 }
@@ -127,10 +128,4 @@ export function CompareTimestamp(timestampA: Timestamp, timestampB: Timestamp) {
   const diff = dateA.getTime() - dateB.getTime();
   const diffHours = diff / (1000 * 60 * 60);
   return diffHours;
-}
-
-export function handleUTC(date: Timestamp) {
-  const localDate = TimestampToDate(date);
-  localDate.setHours(localDate.getHours() - 8);
-  return DateToTimestamp(localDate);
 }
