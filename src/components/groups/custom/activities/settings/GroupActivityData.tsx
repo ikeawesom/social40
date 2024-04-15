@@ -66,6 +66,7 @@ export default async function GroupActivityData({
       return (
         <div className="w-full flex flex-col items-start justify-center gap-4">
           <h1>{TimestampToDateString(activityData.activityDate)}</h1>
+          <h1>{TimestampToDateString(activityData.createdOn)}</h1>
           {!noRequests && admin && (
             <ActivityWaitlist
               requestsData={requestsData}

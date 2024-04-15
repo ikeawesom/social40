@@ -21,8 +21,9 @@ export default function GroupActivitySettings({
   const oldDesc = activityData.activityDesc;
   const oldRestrict = activityData.groupRestriction;
 
-  const dateTimestamp = activityData.activityDate;
-  const timestampStr = TimestampToDateString(dateTimestamp);
+  const oldTimestamp = activityData.activityDate;
+  const timestampStr = TimestampToDateString(oldTimestamp);
+  console.log("timestamp:", timestampStr);
   const oldDate = timestampStr.split(" ")[0];
   const oldTime = timestampStr.split(" ")[1];
 
