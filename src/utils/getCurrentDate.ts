@@ -25,7 +25,7 @@ export function TimestampToDateString(timestamp: Timestamp) {
 
 export function TimestampToDate(timestamp: Timestamp) {
   const date = new Date(timestamp.seconds * 1000);
-  // date.setHours(date.getHours() - 8);
+  date.setHours(date.getHours() + 8);
   return date;
 }
 
