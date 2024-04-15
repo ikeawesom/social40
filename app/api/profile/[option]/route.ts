@@ -161,11 +161,17 @@ export async function POST(request: NextRequest) {
         error: startTimestamp.error ? startTimestamp.error : endTimestamp.error,
       });
 
-    const { data: tempTimestamp } = endTimestamp;
-    const tempDate = new Date(tempTimestamp.seconds * 1000);
-    tempDate.setHours(tempDate.getHours() - 8);
-    // tempDate.setDate(tempDate.getDate() + 1);
-    const newTimestamp = DateToTimestamp(tempDate);
+    const { data: tempEndTimestamp } = endTimestamp;
+    const tempEndDate = new Date(tempEndTimestamp.seconds * 1000);
+    tempEndDate.setHours(tempEndDate.getHours() - 8);
+    // tempEndDate.setDate(tempEndDate.getDate() + 1);
+    const newEndTimestamp = DateToTimestamp(tempEndDate);
+
+    const { data: tempStartTimestamp } = startTimestamp;
+    const tempStartDate = new Date(tempStartTimestamp.seconds * 1000);
+    tempStartDate.setHours(tempStartDate.getHours() - 8);
+    // tempStartDate.setDate(tempStartDate.getDate() + 1);
+    const newStartTimestamp = DateToTimestamp(tempStartDate);
 
     const to_add = {
       statusID: "",
@@ -177,8 +183,8 @@ export async function POST(request: NextRequest) {
         status: false,
         endorsedBy: "",
       },
-      startDate: startTimestamp.data,
-      endDate: newTimestamp,
+      startDate: newStartTimestamp,
+      endDate: newEndTimestamp,
       mc,
     } as STATUS_SCHEMA;
 
