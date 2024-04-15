@@ -116,7 +116,7 @@ export function StringToTimestamp(str: string) {
 }
 
 export function ActiveTimestamp(timestamp: Timestamp) {
-  const date = TimestampToDate(timestamp);
+  const date = new Date(timestamp.seconds * 1000);
   const today = new Date();
   return date >= today;
 }
