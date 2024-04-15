@@ -19,7 +19,6 @@ export default function EndorseSection({
   memberID: string;
 }) {
   const tempDate = new Date(statusData.endorsed.endorsedOn.seconds * 1000);
-  tempDate.setHours(tempDate.getHours() - 8);
   const dateStr = DateToString(tempDate);
 
   const router = useRouter();
