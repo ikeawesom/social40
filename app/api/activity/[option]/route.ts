@@ -3,6 +3,7 @@ import { dbHandler } from "@/src/firebase/db";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { getMethod } from "@/src/utils/API/getAPIMethod";
 import getCurrentDate, {
+  DateToTimestamp,
   StringToTimestamp,
   TimestampToDate,
   TimestampToDateString,
@@ -57,14 +58,19 @@ export async function POST(req: NextRequest) {
       members: string[];
     };
 
-    console.log(`1. ${addMembers.members}`);
-
     // get timestamp object from time and date strings
     const timestampRes = StringToTimestamp(`${input.date} ${input.time}`);
 
     if (!timestampRes.status)
       return NextResponse.json({ status: false, error: timestampRes.error });
-    const timestamp = timestampRes.data as Timestamp;
+    const tempTimestamp = timestampRes.data as Timestamp;
+
+    // UTC handler
+    const tempDate = new Date(tempTimestamp.seconds * 1000);
+    tempDate.setHours(tempDate.getHours() - 8);
+    const timestamp = DateToTimestamp(tempDate);
+
+    console.log("Server timestamp (from route): " + timestamp);
 
     const durationEnabled = input.duration.active as boolean;
     const timestampResA = durationEnabled
@@ -124,14 +130,14 @@ export async function POST(req: NextRequest) {
       const resX = await dbHandler.getSpecific({
         path: `GROUPS/${groupID}/MEMBERS`,
         orderCol: "dateJoined",
-        ascending: false
+        ascending: false,
       });
 
       console.log(`2. res: ${resX.data}`);
 
       if (!resX.status)
         return NextResponse.json({ status: false, error: resX.error });
-      
+
       membersData = Object.keys(resX.data);
       console.log(`3. data: ${membersData}`);
     } else {
