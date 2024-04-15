@@ -3,10 +3,7 @@ import HRow from "@/src/components/utils/HRow";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import {
   ActiveTimestamp,
-  DateToString,
-  TimestampToDate,
   TimestampToDateString,
-  handleUTC,
 } from "@/src/utils/getCurrentDate";
 import React from "react";
 import { SuspenseGroupActivityFetchType } from "./GroupActivityData";
@@ -20,18 +17,8 @@ export default async function GroupActivityDetails({
 }: SuspenseGroupActivityFetchType) {
   try {
     const date = activityData.activityDate;
+    const active = ActiveTimestamp(date);
     const dateStr = TimestampToDateString(date);
-
-    // modify to manage UTC time difference
-    const localTimestamp = handleUTC(date);
-    const active = ActiveTimestamp(localTimestamp);
-
-    const dateLocal = activityData.createdOn;
-
-    // modify to manage UTC time difference
-    const dateA = TimestampToDate(dateLocal);
-    dateA.setHours(dateA.getHours() + 8);
-    const dateStrA = DateToString(dateA);
 
     const { activityLevel } = activityData;
 
@@ -81,9 +68,7 @@ export default async function GroupActivityDetails({
           <p className="text-custom-grey-text text-sm">
             Created by: {activityData.createdBy}
           </p>
-          <p className="text-custom-grey-text text-sm">
-            Created on: {dateStrA}
-          </p>
+          <p className="text-custom-grey-text text-sm">Created on: {dateStr}</p>
         </div>
       </DefaultCard>
     );

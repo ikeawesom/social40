@@ -3,11 +3,7 @@ import HRow from "../utils/HRow";
 import SearchGroups from "./SearchGroups";
 import GroupItem from "./GroupItem";
 import { MemberGroupsType } from "@/src/utils/groups/getJoinedGroups";
-import {
-  DateToString,
-  TimestampToDate,
-  TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
+import { DateToString, TimestampToDate } from "@/src/utils/getCurrentDate";
 
 export default function GroupsJoinedSection({
   joinedGroups,

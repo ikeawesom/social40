@@ -15,8 +15,6 @@ import { cookies } from "next/headers";
 import { Metadata } from "next";
 import {
   ActiveTimestamp,
-  DateToTimestamp,
-  TimestampToDate,
   TimestampToDateString,
 } from "@/src/utils/getCurrentDate";
 import RevokeStatus from "@/src/components/status/RevokeStatus";
@@ -78,14 +76,9 @@ export default async function CustomStatusPage({
 
     if (!bodyA.status) throw new Error(bodyA.error);
     const statusData = bodyA.data as STATUS_SCHEMA;
-    const { endDate: tempTimestamp } = statusData;
 
-    const localDate = TimestampToDate(tempTimestamp);
-    localDate.setHours(localDate.getHours() + 8);
-
-    const endTimestamp = DateToTimestamp(localDate);
-
-    const active = ActiveTimestamp(endTimestamp);
+    const { endDate } = statusData;
+    const active = ActiveTimestamp(endDate);
 
     return (
       <>
@@ -114,7 +107,7 @@ export default async function CustomStatusPage({
                   {TimestampToDateString(statusData.startDate).split(" ")[0]}
                 </p>
                 <p className="text-custom-grey-text text-sm">
-                  End Date: {TimestampToDateString(endTimestamp).split(" ")[0]}
+                  End Date: {TimestampToDateString(endDate).split(" ")[0]}
                 </p>
               </div>
             </DefaultCard>

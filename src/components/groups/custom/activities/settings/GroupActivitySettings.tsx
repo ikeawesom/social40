@@ -10,11 +10,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import {
-  DateToString,
-  TimestampToDate,
-  TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
+import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 
 export default function GroupActivitySettings({
   activityData,
@@ -24,12 +20,11 @@ export default function GroupActivitySettings({
   const oldTitle = activityData.activityTitle;
   const oldDesc = activityData.activityDesc;
   const oldRestrict = activityData.groupRestriction;
-  const oldDateTimestamp = activityData.activityDate;
-  const oldLocalDate = TimestampToDate(oldDateTimestamp);
-  oldLocalDate.setHours(oldLocalDate.getHours() - 8);
-  const oldTimestampStr = DateToString(oldLocalDate);
-  const oldDate = oldTimestampStr.split(" ")[0];
-  const oldTime = oldTimestampStr.split(" ")[1];
+
+  const dateTimestamp = activityData.activityDate;
+  const timestampStr = TimestampToDateString(dateTimestamp);
+  const oldDate = timestampStr.split(" ")[0];
+  const oldTime = timestampStr.split(" ")[1];
 
   const router = useRouter();
   const { host } = useHostname();
@@ -41,7 +36,7 @@ export default function GroupActivitySettings({
     desc: oldDesc,
     restrict: oldRestrict,
     user: "",
-    date: oldTimestampStr,
+    date: timestampStr,
   });
 
   const [newD, setNewD] = useState({
@@ -69,7 +64,7 @@ export default function GroupActivitySettings({
     oldTitle === input.title &&
     oldDesc === input.desc &&
     oldRestrict === input.restrict &&
-    oldTimestampStr === input.date;
+    timestampStr === input.date;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput({ ...input, [e.target.name]: e.target.value });
