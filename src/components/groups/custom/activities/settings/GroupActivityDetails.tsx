@@ -12,14 +12,10 @@ import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 
 export default async function GroupActivityDetails({
-  memberID,
   activityData,
 }: SuspenseGroupActivityFetchType) {
   try {
-    const date = activityData.activityDate;
-    const active = ActiveTimestamp(date);
-    const dateStr = TimestampToDateString(date);
-
+    const active = ActiveTimestamp(activityData.activityDate);
     const { activityLevel } = activityData;
 
     return (
@@ -60,7 +56,7 @@ export default async function GroupActivityDetails({
           )}
           <p className="text-custom-dark-text text-sm">
             {active ? "Begins on: " : "Ended on: "}
-            {dateStr}
+            {TimestampToDateString(activityData.activityDate)}
           </p>
         </div>
         <HRow />
@@ -68,7 +64,9 @@ export default async function GroupActivityDetails({
           <p className="text-custom-grey-text text-sm">
             Created by: {activityData.createdBy}
           </p>
-          <p className="text-custom-grey-text text-sm">Created on: {dateStr}</p>
+          <p className="text-custom-grey-text text-sm">
+            Created on: {TimestampToDateString(activityData.createdOn)}
+          </p>
         </div>
       </DefaultCard>
     );
