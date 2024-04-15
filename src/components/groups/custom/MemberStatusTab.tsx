@@ -52,10 +52,10 @@ export default function MemberStatusTab({
             {statusTitle}
           </h1>
           <p className="text-custom-grey-text text-xs">
-            Start Date: {TimestampToDateString(startDate)}
+            Start Date: {TimestampToDateString(startDate).split(" ")[0]}
           </p>
           <p className="text-custom-grey-text text-xs">
-            End Date: {TimestampToDateString(endDate)}
+            End Date: {TimestampToDateString(endDate).split(" ")[0]}
           </p>
         </div>
       </div>
