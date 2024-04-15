@@ -12,7 +12,10 @@ import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import {
+  DateToString,
+  TimestampToDateString,
+} from "@/src/utils/getCurrentDate";
 import Link from "next/link";
 import { contentfulImageLoader } from "../../profile/edit/ProfilePicSection";
 
@@ -47,9 +50,12 @@ export default function GroupMemberTab({
   const displayName = data.displayName as string;
   const groupMemberID = data.memberID;
   const bookedIn = data.bookedIn as boolean;
-  const dateJoined = data.dateJoined;
   const role = data.role;
   const pfp = data.pfp;
+
+  const tempTimestamp = data.dateJoined;
+  const tempDate = new Date(tempTimestamp.seconds * 1000);
+  const dateStr = DateToString(tempDate);
 
   const aboveAdmin =
     GROUP_ROLES_HEIRARCHY[role].rank >= GROUP_ROLES_HEIRARCHY["admin"].rank;
@@ -233,7 +239,7 @@ export default function GroupMemberTab({
                 : groupMemberID}
             </p>
             <p className="text-xs text-custom-grey-text">
-              Joined on: {TimestampToDateString(dateJoined)}
+              Joined on: {dateStr}
             </p>
           </div>
         </div>
