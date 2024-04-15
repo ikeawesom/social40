@@ -164,6 +164,7 @@ export async function POST(request: NextRequest) {
     const { data: tempTimestamp } = endTimestamp;
     const tempDate = new Date(tempTimestamp.seconds * 1000);
     tempDate.setHours(tempDate.getHours() - 8);
+    tempDate.setDate(tempDate.getDate() + 1);
     const newTimestamp = DateToTimestamp(tempDate);
 
     const to_add = {
