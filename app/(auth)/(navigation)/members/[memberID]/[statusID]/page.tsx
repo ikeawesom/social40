@@ -109,6 +109,7 @@ export default async function CustomStatusPage({
                 <p className="text-custom-grey-text text-sm">
                   End Date: {TimestampToDateString(endDate).split(" ")[0]}
                 </p>
+                <p>debug: {TimestampToDateString(endDate)}</p>
               </div>
             </DefaultCard>
             <ActiveStatusSection active={active} />
