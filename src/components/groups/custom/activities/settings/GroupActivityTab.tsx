@@ -47,10 +47,6 @@ export default function GroupActivityTab({
       <h4 className="text-custom-grey-text text-sm">
         {activityData.activityDesc}
       </h4>
-      <p className="text-custom-grey-text text-xs">
-        {active ? "Begins on: " : "Ended on: "}
-        {dateStr}
-      </p>
     </Link>
   );
 }
