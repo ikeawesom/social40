@@ -63,14 +63,8 @@ export default async function GroupActivityData({
 
       const falloutsLength = Object.keys(fallouts).length;
 
-      console.log(
-        "timestamp server:",
-        TimestampToDateString(activityData.activityDate)
-      );
       return (
         <div className="w-full flex flex-col items-start justify-center gap-4">
-          <h1>{TimestampToDateString(activityData.activityDate)}</h1>
-          <h1>{TimestampToDateString(activityData.createdOn)}</h1>
           {!noRequests && admin && (
             <ActivityWaitlist
               requestsData={requestsData}
