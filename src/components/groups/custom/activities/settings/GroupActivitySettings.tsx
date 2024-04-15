@@ -29,10 +29,8 @@ export default function GroupActivitySettings({
     TimestampToDateString(activityData.activityDate)
   );
 
-  // const tempTimestamp = new Date(activityData.activityDate.seconds * 1000);
-  // tempTimestamp.setHours(tempTimestamp.getHours() - 8);
-  // const timestampStr = DateToString(tempTimestamp);
-  const timestampStr = TimestampToDateString(activityData.activityDate);
+  const tempTimestamp = new Date(activityData.activityDate.seconds * 1000);
+  const timestampStr = DateToString(tempTimestamp);
   const oldDate = timestampStr.split(" ")[0];
   const oldTime = timestampStr.split(" ")[1];
 
