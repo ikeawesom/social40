@@ -14,6 +14,7 @@ import GroupActivityJoinSection from "./GroupActivityJoinSection";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import FalloutsCard from "../participants/FalloutsCard";
 import ActivityDownloadSection from "../ActivityDownloadSection";
+import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 
 export type SuspenseGroupActivityFetchType = {
   memberID: string;
@@ -61,8 +62,10 @@ export default async function GroupActivityData({
       const { noRequests, requestsData } = resA.data;
 
       const falloutsLength = Object.keys(fallouts).length;
+
       return (
         <div className="w-full flex flex-col items-start justify-center gap-4">
+          <h1>{TimestampToDateString(activityData.activityDate)}</h1>
           {!noRequests && admin && (
             <ActivityWaitlist
               requestsData={requestsData}
