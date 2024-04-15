@@ -3,7 +3,10 @@ import { StatusListType } from "@/src/components/profile/StatsSection";
 import { StatusInputType } from "@/src/components/status/CreateStatus";
 import { dbHandler } from "@/src/firebase/db";
 import { getMethod } from "@/src/utils/API/getAPIMethod";
-import getCurrentDate, { StringToTimestamp } from "@/src/utils/getCurrentDate";
+import getCurrentDate, {
+  DateToTimestamp,
+  StringToTimestamp,
+} from "@/src/utils/getCurrentDate";
 import handleResponses from "@/src/utils/handleResponses";
 import { getFriendsList } from "@/src/utils/profile/getFriendsList";
 import resetPassword from "@/src/utils/profile/resetPassword";
@@ -158,6 +161,11 @@ export async function POST(request: NextRequest) {
         error: startTimestamp.error ? startTimestamp.error : endTimestamp.error,
       });
 
+    const { data: tempTimestamp } = endTimestamp;
+    const tempDate = new Date(tempTimestamp.seconds * 1000);
+    tempDate.setDate(tempDate.getDate() - 1);
+    const newTimestamp = DateToTimestamp(tempDate);
+
     const to_add = {
       statusID: "",
       statusTitle: data.title,
@@ -169,7 +177,7 @@ export async function POST(request: NextRequest) {
         endorsedBy: "",
       },
       startDate: startTimestamp.data,
-      endDate: endTimestamp.data,
+      endDate: newTimestamp,
       mc,
     } as STATUS_SCHEMA;
 
