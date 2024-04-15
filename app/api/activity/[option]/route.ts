@@ -415,13 +415,16 @@ export async function POST(req: NextRequest) {
     if (!timeRes.status)
       return NextResponse.json({ status: false, error: timeRes.error });
 
-    const newDateTimestamp = timeRes.data;
+    const tempTimestamp = timeRes.data as Timestamp;
+    const tempDate = new Date(tempTimestamp.seconds * 1000);
+    tempDate.setHours(tempDate.getHours() - 8);
+    const newTimestamp = DateToTimestamp(tempDate);
 
     const to_edit = {
       activityTitle: newTitle,
       activityDesc: newDesc,
       groupRestriction: newRestriction,
-      activityDate: newDateTimestamp,
+      activityDate: newTimestamp,
     };
 
     const res = await dbHandler.edit({
@@ -439,7 +442,7 @@ export async function POST(req: NextRequest) {
       data: {
         activityTitle: newTitle,
         activityDesc: newDesc,
-        activityDate: newDateTimestamp,
+        activityDate: newTimestamp,
       },
     });
 
