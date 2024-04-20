@@ -35,6 +35,7 @@ export async function POST(request: NextRequest) {
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
     cookieStore.set("uid", uid);
+    cookieStore.set("memberID", memberID);
   } else if (option === "handle-uid-member") {
     const { uid } = fetchedData;
     const res = await dbHandler.get({ col_name: "MEMBERS-UID", id: uid });

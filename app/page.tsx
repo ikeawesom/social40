@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 export default async function Home() {
   const cookieStore = cookies();
   const data = cookieStore.get("memberID");
+  const uid = cookieStore.get("uid");
 
   return (
     <>
@@ -30,7 +31,7 @@ export default async function Home() {
 
             <div className="flex items-center justify-between gap-3 w-full max-[400px]:flex-col">
               <InstallButton />
-              {!data ? (
+              {!data && !uid ? (
                 <Link href="/auth" className="w-full flex-1">
                   <PrimaryButton className="flex items-center justify-center text-lg">
                     Get started
