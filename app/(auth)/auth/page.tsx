@@ -5,6 +5,7 @@ import SignupForm from "@/src/components/auth/SignupForm";
 import LoadingScreen from "@/src/components/screens/LoadingScreen";
 import { useAuth } from "@/src/contexts/AuthContext";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -13,6 +14,7 @@ export default function AuthPage({
 }: {
   searchParams: { [key: string]: string };
 }) {
+  const router = useRouter();
   const [status, setStatus] = useState("");
   const newUser = searchParams["new_user"];
   const { memberID } = useAuth();
@@ -30,43 +32,45 @@ export default function AuthPage({
   }, [status]);
 
   if (memberID === null) return <LoadingScreen />;
+  if (memberID !== "") router.replace("/home");
 
-  return (
-    <div className="grid place-items-center min-h-[80vh]">
-      <div className="flex flex-col gap-y-6 items-center justify-center">
-        <Hero />
-        {newUser === "true" ? (
-          <div className="flex-col flex gap-y-4 items-center justify-center min-[500px]:w-[400px] w-[85vw]">
-            <SignupForm setStatus={setStatus} />
-            <p className="text-center">
-              Already have an account?{" "}
-              <span>
-                <Link
-                  className="text-orange-500 hover:brightness-90 duration-300"
-                  href={`?${new URLSearchParams({ new_user: "false" })}`}
-                >
-                  Sign in.
-                </Link>
-              </span>
-            </p>
-          </div>
-        ) : (
-          <div className="flex-col flex gap-y-4 items-center justify-center min-[500px]:w-[400px] w-[85vw]">
-            <SigninForm setStatus={setStatus} />
-            <p className="text-center">
-              New here?{" "}
-              <span>
-                <Link
-                  className="text-orange-500 hover:brightness-90 duration-300"
-                  href={`?${new URLSearchParams({ new_user: "true" })}`}
-                >
-                  Sign up.
-                </Link>
-              </span>
-            </p>
-          </div>
-        )}
+  if (memberID === "")
+    return (
+      <div className="grid place-items-center min-h-[80vh]">
+        <div className="flex flex-col gap-y-6 items-center justify-center">
+          <Hero />
+          {newUser === "true" ? (
+            <div className="flex-col flex gap-y-4 items-center justify-center min-[500px]:w-[400px] w-[85vw]">
+              <SignupForm setStatus={setStatus} />
+              <p className="text-center">
+                Already have an account?{" "}
+                <span>
+                  <Link
+                    className="text-orange-500 hover:brightness-90 duration-300"
+                    href={`?${new URLSearchParams({ new_user: "false" })}`}
+                  >
+                    Sign in.
+                  </Link>
+                </span>
+              </p>
+            </div>
+          ) : (
+            <div className="flex-col flex gap-y-4 items-center justify-center min-[500px]:w-[400px] w-[85vw]">
+              <SigninForm setStatus={setStatus} />
+              <p className="text-center">
+                New here?{" "}
+                <span>
+                  <Link
+                    className="text-orange-500 hover:brightness-90 duration-300"
+                    href={`?${new URLSearchParams({ new_user: "true" })}`}
+                  >
+                    Sign up.
+                  </Link>
+                </span>
+              </p>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
 }
