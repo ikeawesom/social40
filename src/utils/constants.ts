@@ -78,8 +78,16 @@ export const BADGE_COLORS = {
 export const MAX_LENGTH = 30;
 
 export const VERSION_MAP = {
+  "1.0.0": {
+    version: "1.0.0",
+    title: "We are now out of Beta!",
+    desc: "You are part of Social40's beginning.",
+    updates: [
+      "After many updates and feedback, we have optimized this app to support 40SAR's relevant needs. We are thus happy to announce its first official release!",
+    ],
+  },
   "0.5.1": {
-    version: "0.5.0",
+    version: "0.5.1",
     title: "Booking In",
     desc: "You are part of Social40's beginning. Feel free to provide your feedback.",
     updates: [
