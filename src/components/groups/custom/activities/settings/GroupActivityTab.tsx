@@ -13,19 +13,18 @@ export default function GroupActivityTab({
 }: {
   activityData: GROUP_ACTIVITIES_SCHEMA;
 }) {
-  const date = activityData.activityDate;
-  const active = ActiveTimestamp(date);
-  const dateStr = TimestampToDateString(date);
-
-  // const tempTimestamp = activityData.activityDate;
-
-  // const tempDate = new Date(tempTimestamp.seconds * 1000);
-  // tempDate.setHours(tempDate.getHours() - 16);
-  // const date = DateToTimestamp(tempDate);
-
-  // console.log()
+  // const date = activityData.activityDate;
   // const active = ActiveTimestamp(date);
   // const dateStr = TimestampToDateString(date);
+
+  const tempTimestamp = activityData.activityDate;
+
+  const tempDate = new Date(tempTimestamp.seconds * 1000);
+  tempDate.setHours(tempDate.getHours() - 8);
+  const date = DateToTimestamp(tempDate);
+
+  const active = ActiveTimestamp(date);
+  const dateStr = TimestampToDateString(date);
 
   return (
     <Link
@@ -48,6 +47,7 @@ export default function GroupActivityTab({
       <h4 className="text-custom-grey-text text-sm">
         {activityData.activityDesc}
       </h4>
+      <h4 className="text-custom-grey-text text-sm">{dateStr}</h4>
     </Link>
   );
 }
