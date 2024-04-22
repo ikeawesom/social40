@@ -108,8 +108,13 @@ export default async function Home({
     });
 
     const memberData = res.data as MEMBER_SCHEMA;
-    const { role } = memberData;
-    const admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
+    const role = memberData.role;
+
+    let admin = false;
+
+    if (role !== undefined) {
+      admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
+    }
 
     return (
       <>

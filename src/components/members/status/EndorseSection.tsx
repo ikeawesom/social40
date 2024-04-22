@@ -18,8 +18,12 @@ export default function EndorseSection({
   adminID: string;
   memberID: string;
 }) {
-  const tempDate = new Date(statusData.endorsed.endorsedOn.seconds * 1000);
-  const dateStr = DateToString(tempDate);
+  const endorsed = statusData.endorsed.status;
+  let dateStr = "";
+  if (endorsed) {
+    const tempDate = new Date(statusData.endorsed.endorsedOn.seconds * 1000);
+    dateStr = DateToString(tempDate);
+  }
 
   const router = useRouter();
   return (
@@ -32,7 +36,7 @@ export default function EndorseSection({
           <h4 className="font-semibold text-custom-orange text-sm">PENDING</h4>
         )}
       </div>
-      {statusData.endorsed.status && (
+      {endorsed && (
         <>
           <p className="text-custom-dark-text text-sm">
             Endorsed by: {statusData.endorsed.endorsedBy}
