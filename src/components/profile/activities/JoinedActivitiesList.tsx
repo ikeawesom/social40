@@ -3,8 +3,6 @@ import React from "react";
 import { twMerge } from "tailwind-merge";
 import GroupActivityTab from "../../groups/custom/activities/settings/GroupActivityTab";
 import InnerContainer from "../../utils/InnerContainer";
-import Notice from "../../utils/Notice";
-import { handleHA } from "@/src/utils/activities/handleHA";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import useQueryObj from "@/src/hooks/useQueryObj";
 import QueryInput from "../../utils/QueryInput";
@@ -20,7 +18,8 @@ export default function JoinedActivitiesList({
     obj: activitiesData,
     type: "activityTitle",
   });
-  const { HA, empty } = handleHA(itemList);
+
+  const empty = Object.keys(itemList).length === 0;
 
   return (
     <>
