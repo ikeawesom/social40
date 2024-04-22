@@ -23,7 +23,7 @@ export default function GroupActivityTab({
   const date = DateToTimestamp(tempDate);
   const active = ActiveTimestamp(date);
 
-  // tempDate.setHours(tempDate.getHours() - 8);
+  tempDate.setHours(tempDate.getHours() - 8);
   const newDate = DateToTimestamp(tempDate);
   const dateStr = TimestampToDateString(newDate);
 
