@@ -43,25 +43,22 @@ export default function ActivityParticipantsList({
 
   const route = `/members/${curMember}`;
 
-  const handleFallout = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleFallout = async (msg: string) => {
     setLoading(true);
     try {
       const ActivityObj = GetPostObj({
         activityID,
         memberID: curMember,
-        fallReason: fall.reason,
+        fallReason: msg,
         verifiedBy: memberID,
       });
-      if (fall.status) {
-        const resA = await fetch(
-          `${host}/api/activity/group-fallout`,
-          ActivityObj
-        );
-        const bodyA = await resA.json();
-        if (!bodyA.status) throw new Error(bodyA.error);
-        await handleKick();
-      }
+      const resA = await fetch(
+        `${host}/api/activity/group-fallout`,
+        ActivityObj
+      );
+      const bodyA = await resA.json();
+      if (!bodyA.status) throw new Error(bodyA.error);
+      await handleKick();
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -111,54 +108,57 @@ export default function ActivityParticipantsList({
             </button>
           </div>
           <HRow />
-          <div className="flex flex-col items-center justify-start mt-2 gap-1">
-            <div
-              className={twMerge(
-                "w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200",
-                fall.status && "bg-custom-light-text"
-              )}
-              onClick={() => setFall({ ...fall, status: !fall.status })}
-            >
-              Fell Out
+          {loading ? (
+            <div className="p-4 w-full grid place-items-center">
+              <LoadingIcon height={30} width={30} />
             </div>
-            {fall.status && (
-              <form
-                className="w-full flex items-center justify-start gap-2 mb-2"
-                onSubmit={handleFallout}
-              >
-                <input
-                  type="text"
-                  className="text-sm"
-                  required
-                  placeholder="Reason for falling out"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setFall({ ...fall, reason: e.target.value })
-                  }
-                  value={fall.reason}
-                />
-                <PrimaryButton
-                  disabled={loading}
-                  type="submit"
-                  className="w-fit grid place-items-center"
-                >
-                  {loading ? (
-                    <LoadingIconBright height={20} width={20} />
-                  ) : (
-                    "Submit"
+          ) : (
+            <>
+              <div className="flex flex-col items-center justify-start mt-2 gap-1">
+                <div
+                  className={twMerge(
+                    "w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200",
+                    fall.status && "bg-custom-light-text"
                   )}
-                </PrimaryButton>
-              </form>
-            )}
-          </div>
-          <div
-            className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
-            onClick={async () => {
-              setCfm(false);
-              await handleKick();
-            }}
-          >
-            Others
-          </div>
+                  onClick={() => setFall({ ...fall, status: !fall.status })}
+                >
+                  Add a reason
+                </div>
+                {fall.status && (
+                  <div className="w-full flex items-center justify-start gap-2 mb-2">
+                    <input
+                      type="text"
+                      className="text-sm"
+                      required
+                      placeholder="e.g. RSI, Dizzy, etc."
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setFall({ ...fall, reason: e.target.value })
+                      }
+                      value={fall.reason}
+                    />
+                    <PrimaryButton
+                      onClick={async () => await handleFallout(fall.reason)}
+                      disabled={loading}
+                      type="submit"
+                      className="w-fit grid place-items-center"
+                    >
+                      {loading ? (
+                        <LoadingIconBright height={20} width={20} />
+                      ) : (
+                        "Submit"
+                      )}
+                    </PrimaryButton>
+                  </div>
+                )}
+              </div>
+              <div
+                className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
+                onClick={async () => await handleFallout("Others")}
+              >
+                Others
+              </div>
+            </>
+          )}
         </Modal>
       )}
       {curMember !== "" && !cfm && (
