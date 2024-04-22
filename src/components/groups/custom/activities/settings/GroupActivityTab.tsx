@@ -20,11 +20,12 @@ export default function GroupActivityTab({
   const tempTimestamp = activityData.activityDate;
 
   const tempDate = new Date(tempTimestamp.seconds * 1000);
-  // tempDate.setHours(tempDate.getHours() - 8);
   const date = DateToTimestamp(tempDate);
-
   const active = ActiveTimestamp(date);
-  const dateStr = TimestampToDateString(date);
+
+  // tempDate.setHours(tempDate.getHours() - 8);
+  const newDate = DateToTimestamp(tempDate);
+  const dateStr = TimestampToDateString(newDate);
 
   return (
     <Link
