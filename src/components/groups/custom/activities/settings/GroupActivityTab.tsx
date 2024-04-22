@@ -13,18 +13,19 @@ export default function GroupActivityTab({
 }: {
   activityData: GROUP_ACTIVITIES_SCHEMA;
 }) {
-  // const date = activityData.activityDate;
-  // const active = ActiveTimestamp(date);
-  // const dateStr = TimestampToDateString(date);
-
-  const tempTimestamp = activityData.activityDate;
-
-  const tempDate = new Date(tempTimestamp.seconds * 1000);
-  tempDate.setHours(tempDate.getHours() - 16);
-  const date = DateToTimestamp(tempDate);
-
+  const date = activityData.activityDate;
   const active = ActiveTimestamp(date);
   const dateStr = TimestampToDateString(date);
+
+  // const tempTimestamp = activityData.activityDate;
+
+  // const tempDate = new Date(tempTimestamp.seconds * 1000);
+  // tempDate.setHours(tempDate.getHours() - 16);
+  // const date = DateToTimestamp(tempDate);
+
+  // console.log()
+  // const active = ActiveTimestamp(date);
+  // const dateStr = TimestampToDateString(date);
 
   return (
     <Link
