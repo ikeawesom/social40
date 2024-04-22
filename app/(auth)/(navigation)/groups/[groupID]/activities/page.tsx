@@ -1,4 +1,4 @@
-import GroupFeedCard from "@/src/components/feed/GroupFeedCard";
+import AllActivities from "@/src/components/groups/custom/activities/AllActivities";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import { dbHandler } from "@/src/firebase/db";
@@ -37,18 +37,7 @@ export default async function GroupPage({
       <HeaderBar back text={`Activities`} />
       <div className="grid place-items-center">
         <div className="max-w-[500px] w-full">
-          <div className="flex flex-col items-center justify-start w-full gap-4">
-            {Object.keys(groupActivities).map((activityID: string) => {
-              const data = groupActivities[activityID] as GROUP_ACTIVITY_SCHEMA;
-              return (
-                <GroupFeedCard
-                  memberID={memberID}
-                  key={activityID}
-                  activityData={data}
-                />
-              );
-            })}
-          </div>
+          <AllActivities activities={groupActivities} memberID={memberID} />
         </div>
       </div>
     </>
