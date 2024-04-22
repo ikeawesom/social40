@@ -10,10 +10,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import {
-  DateToString,
-  TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
+import { DateToString } from "@/src/utils/getCurrentDate";
 
 export default function GroupActivitySettings({
   activityData,
@@ -23,11 +20,6 @@ export default function GroupActivitySettings({
   const oldTitle = activityData.activityTitle;
   const oldDesc = activityData.activityDesc;
   const oldRestrict = activityData.groupRestriction;
-
-  console.log(
-    "timestamp client:",
-    TimestampToDateString(activityData.activityDate)
-  );
 
   const tempTimestamp = new Date(activityData.activityDate.seconds * 1000);
   const timestampStr = DateToString(tempTimestamp);
