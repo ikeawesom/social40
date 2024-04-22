@@ -2,13 +2,14 @@
 import React from "react";
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
 import DefaultCard from "../../DefaultCard";
-import HRow from "../../utils/HRow";
 import InnerContainer from "../../utils/InnerContainer";
 import { twMerge } from "tailwind-merge";
 import GroupActivityTab from "./activities/settings/GroupActivityTab";
 import CreateActivityButton from "./activities/settings/CreateActivityButton";
 import useQueryObj from "@/src/hooks/useQueryObj";
 import QueryInput from "../../utils/QueryInput";
+import { DateToTimestamp, ActiveTimestamp } from "@/src/utils/getCurrentDate";
+import Link from "next/link";
 
 export type GroupActivitiesType = {
   [activityID: string]: GROUP_ACTIVITIES_SCHEMA;
@@ -23,15 +24,26 @@ export default function GroupActivities({
   admin: boolean;
   groupID: string;
 }) {
+  const upcomingActivities = {} as GroupActivitiesType;
+
+  Object.keys(activitiesData).forEach((activityID: string) => {
+    const tempTimestamp = activitiesData[activityID].activityDate;
+    const tempDate = new Date(tempTimestamp.seconds * 1000);
+    const date = DateToTimestamp(tempDate);
+    const active = ActiveTimestamp(date);
+    if (active) upcomingActivities[activityID] = activitiesData[activityID];
+  });
+
   const { handleSearch, itemList, search } = useQueryObj({
-    obj: activitiesData,
+    obj: upcomingActivities,
     type: "activityTitle",
   });
+
   const empty = Object.keys(itemList).length === 0;
   return (
     <DefaultCard className="w-full">
       <h1 className="text-custom-dark-text font-semibold mb-2">
-        Group Activities ( {Object.keys(itemList).length} )
+        Upcoming Activities ( {Object.keys(itemList).length} )
       </h1>
       <QueryInput
         handleSearch={handleSearch}
@@ -40,28 +52,41 @@ export default function GroupActivities({
       />
       <InnerContainer
         className={twMerge(
-          "min-h-[10vh] my-2 max-h-[60vh]",
+          "min-h-[10vh] my-2 overflow-y-visible overflow-x-hidden",
           empty && "grid place-items-center justify-center overflow-hidden p-4"
         )}
       >
         {empty ? (
           <p className="text-sm text-custom-grey-text text-center">
-            {search === ""
-              ? "No activities have been created in this group..."
-              : "Nothing found here..."}
+            {search === "" ? "No upcoming activites!" : "Nothing found here..."}
           </p>
         ) : (
-          Object.keys(itemList).map((activityID: string) => {
-            const activityData = itemList[activityID];
-            return (
-              <GroupActivityTab activityData={activityData} key={activityID} />
-            );
+          Object.keys(itemList).map((activityID: string | undefined) => {
+            if (activityID !== undefined) {
+              const activityData = itemList[activityID];
+              return (
+                <GroupActivityTab
+                  activityData={activityData}
+                  key={activityID}
+                />
+              );
+            }
           })
         )}
       </InnerContainer>
       {admin && (
-        <div className="w-full flex items-center justify-end">
-          <CreateActivityButton group groupID={groupID} />
+        <div className="w-full flex flex-col items-end justify-end gap-2">
+          <Link
+            href={`/groups/${groupID}/activities`}
+            className={twMerge(
+              "text-start cursor-pointer underline text-sm duration-150 text-custom-grey-text"
+            )}
+          >
+            View all activites
+          </Link>
+          <div className="w-full flex items-center justify-end">
+            <CreateActivityButton group groupID={groupID} />
+          </div>
         </div>
       )}
     </DefaultCard>
