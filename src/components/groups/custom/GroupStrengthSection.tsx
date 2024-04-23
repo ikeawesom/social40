@@ -11,6 +11,7 @@ import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
 import GroupMembers, { GroupDetailsType } from "./GroupMembers";
 import { GROUP_ROLES_HEIRARCHY } from "@/src/utils/constants";
 import Link from "next/link";
+import CalculateHAButton from "./HA/CalculateHAButton";
 
 export type GroupStatusType = {
   [memberID: string]: { [statusID: string]: STATUS_SCHEMA };
@@ -209,6 +210,12 @@ export default function GroupStrengthSection({
               </>
             )}
           </div>
+        </>
+      )}
+      {admin && (
+        <>
+          <HRow />
+          <CalculateHAButton groupID={groupID} membersList={membersList} />
         </>
       )}
     </DefaultCard>
