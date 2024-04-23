@@ -40,24 +40,24 @@ export function handleHA(start: Timestamp, timestampList: Timestamp[]) {
     // day difference is 1 day
     const dayDiff = getDateDiff(day, prevDay);
 
-    console.log(
-      `Cur: ${day.getDate()} | Prev: ${prevDay.getDate()} | DayDiff: ${dayDiff}`
-    );
+    // console.log(
+    //   `Cur: ${day.getDate()} | Prev: ${prevDay.getDate()} | DayDiff: ${dayDiff}`
+    // );
 
     if (dayDiff > MAX_INTERVAL_BREAK + 1) {
       // break has exceed 2 days
-      console.log("Exceeded");
+      // console.log("Exceeded");
       break;
     }
 
     if (dayDiff === 1) {
-      console.log("Valid");
+      // console.log("Valid");
       checkedDates.push(day);
     } else {
       // day difference exceeded 1 day
       // increment breaks taken
       breaksTaken += 1;
-      console.log("break taken");
+      // console.log("break taken");
       checkedDates.push(day);
     }
     prevDay = resetDay(trimmedList[i]);
@@ -77,7 +77,7 @@ export function handleHA(start: Timestamp, timestampList: Timestamp[]) {
 
   if (!clockedHA) return false;
 
-  console.log("[SUCCESS] Clocked HA.");
+  // console.log("[SUCCESS] Clocked HA.");
 
   // phase 2: maintain HA
   // - 2 HA activities within 14 days
@@ -102,7 +102,7 @@ export function handleHA(start: Timestamp, timestampList: Timestamp[]) {
   for (let i = 1; i < secondTrimmedList.length; i++) {
     // check if activity is within 14 day window
     const curDay = resetDay(secondTrimmedList[i]);
-    console.log("CurDay:", curDay);
+    // console.log("CurDay:", curDay);
     if (curDay > endDate) return false; // activity is after 14 day window, HA has broken
 
     // activity is still within 14 day window
