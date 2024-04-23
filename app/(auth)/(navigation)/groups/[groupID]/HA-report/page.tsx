@@ -5,7 +5,7 @@ import { dbHandler } from "@/src/firebase/db";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { cookies } from "next/headers";
 
-export default async function HAResultsPage({
+export default async function HAReportPage({
   params,
 }: {
   params: { [groupID: string]: string };
