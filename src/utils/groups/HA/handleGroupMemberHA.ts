@@ -5,6 +5,7 @@ import { dbHandler } from "@/src/firebase/db";
 import { DateToTimestamp } from "../../getCurrentDate";
 import { handleHA } from "./handleHA";
 import { MEMBER_SCHEMA } from "../../schemas/members";
+import { HA_REPORT_SCHEMA } from "../../schemas/ha";
 
 export type DateType = {
   day: string;
@@ -54,12 +55,38 @@ export async function handleGroupMemberHA(
 
     const startTimestamp = StringToTimestamp(startDate);
 
-    const { clockedHA, finalIndex } = handleHA(startTimestamp, timestampList);
+    const clockedHA = handleHA(startTimestamp, timestampList);
 
     return handleResponses({
       data: { status: clockedHA, id: memberID, displayName: name },
     });
   } catch (err: any) {
     return handleResponses({ status: false, error: err });
+  }
+}
+
+export async function addReport(groupID: string, report: HA_REPORT_SCHEMA) {
+  try {
+    const { data, error } = await dbHandler.addGeneral({
+      path: `GROUPS/${groupID}/HA-REPORTS`,
+      to_add: report,
+    });
+
+    if (error) throw new Error(error);
+
+    const { error: error2 } = await dbHandler.edit({
+      col_name: `GROUPS/${groupID}/HA-REPORTS`,
+      data: { reportID: data.id },
+      id: data.id,
+    });
+
+    if (error2) throw new Error(error2);
+
+    return handleResponses({ data: data.id });
+  } catch (error: any) {
+    return handleResponses({
+      status: false,
+      error,
+    });
   }
 }
