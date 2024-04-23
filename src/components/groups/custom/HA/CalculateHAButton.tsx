@@ -8,13 +8,16 @@ import HRow from "../../../utils/HRow";
 import { GroupDetailsType } from "../GroupMembers";
 import { useHADetails } from "@/src/hooks/groups/custom/useHADetails";
 import HAForm from "./HAForm";
+import { twMerge } from "tailwind-merge";
 
 export default function CalculateHAButton({
   membersList,
   groupID,
+  className,
 }: {
   membersList: GroupDetailsType;
   groupID: string;
+  className?: string;
 }) {
   const { enable, disable, show } = useHADetails();
 
@@ -45,7 +48,7 @@ export default function CalculateHAButton({
         </Modal>
       )}
       <PrimaryButton
-        className="flex items-center justify-center gap-2"
+        className={twMerge("flex items-center justify-center gap-2", className)}
         onClick={enable}
       >
         Calculate HA
