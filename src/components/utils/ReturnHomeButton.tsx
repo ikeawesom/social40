@@ -2,12 +2,12 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 import PrimaryButton from "./PrimaryButton";
+import Link from "next/link";
 
 export default function ReturnHomeButton() {
-  const router = useRouter();
   return (
-    <PrimaryButton onClick={() => router.replace("/", { scroll: false })}>
-      Return Home
-    </PrimaryButton>
+    <Link href="/home">
+      <PrimaryButton>Return Home</PrimaryButton>
+    </Link>
   );
 }
