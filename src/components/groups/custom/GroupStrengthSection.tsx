@@ -216,6 +216,15 @@ export default function GroupStrengthSection({
         <>
           <HRow />
           <CalculateHAButton groupID={groupID} membersList={membersList} />
+          <Link
+            href={`/groups/${groupID}/HA-report`}
+            className={twMerge(
+              "text-start cursor-pointer underline text-sm duration-150",
+              !show ? "text-custom-grey-text" : "text-custom-primary"
+            )}
+          >
+            View HA Reports
+          </Link>
         </>
       )}
     </DefaultCard>
