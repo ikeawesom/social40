@@ -4,17 +4,15 @@ import React, { FormEvent, useEffect, useState } from "react";
 import Image from "next/image";
 import { useHADetails } from "@/src/hooks/groups/custom/useHADetails";
 import { GroupDetailsType } from "../GroupMembers";
-import { handleGroupMemberHA } from "@/src/utils/groups/HA/handleGroupMemberHA";
+import {
+  addReport,
+  handleGroupMemberHA,
+} from "@/src/utils/groups/HA/handleGroupMemberHA";
 import LoadingIcon from "@/src/components/utils/LoadingIcon";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { DateToString } from "@/src/utils/getCurrentDate";
-
-export type isHAType = {
-  id: string;
-  displayName: string;
-  isHA: boolean;
-};
+import { HA_REPORT_SCHEMA, isHAType } from "@/src/utils/schemas/ha";
 
 export default function HAForm({
   groupID,
@@ -29,16 +27,7 @@ export default function HAForm({
   const [done, setDone] = useState(false);
 
   useEffect(() => {
-    if (done) {
-      const route = {} as any;
-      checkedStatus.forEach((item: isHAType) => {
-        route[item.id] = JSON.stringify({
-          displayName: item.displayName,
-          id: item.id,
-          isHA: item.isHA,
-        } as isHAType);
-      });
-
+    const addLocalReport = async () => {
       const from = DateToString(
         new Date(
           parseInt(start.year),
@@ -49,27 +38,25 @@ export default function HAForm({
 
       const to = DateToString(new Date()).split(" ")[0];
 
-      let currentStore = {} as any;
-      const currentStoreRef = localStorage.getItem("HA-results");
-
-      if (currentStoreRef) {
-        currentStore = JSON.parse(currentStoreRef);
-      }
-
-      currentStore[groupID] = {
+      const to_add = {
+        groupID,
         members: checkedStatus,
         time: {
           from,
           to,
         },
-      };
+      } as HA_REPORT_SCHEMA;
 
-      localStorage.setItem("HA-results", JSON.stringify(currentStore));
+      const res = await addReport(groupID, to_add);
+      const { data: id } = res;
 
       setTimeout(() => {
-        router.push(`/groups/${groupID}/HA-results`);
+        router.push(`/groups/${groupID}/HA-report/${id}`);
       }, 300);
-    }
+      setDone(false);
+    };
+
+    if (done) addLocalReport();
   }, [done]);
 
   const handleSubmit = async (e: FormEvent) => {
