@@ -4,11 +4,15 @@ import Image from "next/image";
 import SignoutButton from "../utils/SignoutButton";
 import { useRouter } from "next/navigation";
 import LoadingScreenSmall from "./LoadingScreenSmall";
+import { handleReload } from "../navigation/HeaderBar";
 
 export default function SignInAgainScreen() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   useEffect(() => {
+    // test
+    handleReload(router);
+
     setTimeout(() => {
       const id = localStorage.getItem("localMemberID");
       if (id) {
@@ -24,6 +28,7 @@ export default function SignInAgainScreen() {
   }, []);
 
   if (loading) return <LoadingScreenSmall />;
+
   return (
     <div className="grid place-items-center h-[50vh]">
       <div className="flex flex-col gap-3 items-center justify-center">
