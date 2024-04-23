@@ -78,11 +78,9 @@ export default function GroupActivities({
         <div className="w-full flex flex-col items-end justify-end gap-2">
           <Link
             href={`/groups/${groupID}/activities`}
-            className={twMerge(
-              "text-start cursor-pointer underline text-sm duration-150 text-custom-grey-text"
-            )}
+            className="text-start cursor-pointer underline text-sm duration-150 text-custom-grey-text hover:text-custom-primary"
           >
-            View all activites
+            View all activites ( {Object.keys(activitiesData).length} )
           </Link>
           <div className="w-full flex items-center justify-end">
             <CreateActivityButton group groupID={groupID} />
