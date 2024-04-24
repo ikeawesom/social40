@@ -26,10 +26,9 @@ export default function AllActivityCard({
   } = data;
 
   const tempDate = new Date(tempTimestamp.seconds * 1000);
-  tempDate.setHours(tempDate.getHours() - 8);
+  const date = DateToTimestamp(tempDate);
   const dateStr = DateToString(tempDate);
-  const activityDate = DateToTimestamp(tempDate);
-  const active = ActiveTimestamp(activityDate);
+  const active = ActiveTimestamp(date);
 
   return (
     <Link
