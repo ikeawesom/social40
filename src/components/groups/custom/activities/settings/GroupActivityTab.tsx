@@ -6,7 +6,6 @@ import {
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
 import Link from "next/link";
 import React from "react";
-import { twMerge } from "tailwind-merge";
 
 export default function GroupActivityTab({
   activityData,
@@ -17,12 +16,9 @@ export default function GroupActivityTab({
   // const active = ActiveTimestamp(date);
   // const dateStr = TimestampToDateString(date);
 
-  const tempTimestamp = activityData.activityDate;
+  const { activityDate: tempTimestamp, isPT } = activityData;
 
   const tempDate = new Date(tempTimestamp.seconds * 1000);
-  const date = DateToTimestamp(tempDate);
-  const active = ActiveTimestamp(date);
-
   tempDate.setHours(tempDate.getHours() - 8);
   const newDate = DateToTimestamp(tempDate);
   const dateStr = TimestampToDateString(newDate);
@@ -36,14 +32,9 @@ export default function GroupActivityTab({
     >
       <h1 className="text-custom-dark-text font-semibold flex items-center justify-start gap-1">
         {activityData.activityTitle}
-        <span
-          className={twMerge(
-            "text-xs",
-            active ? "text-custom-orange" : "text-custom-green"
-          )}
-        >
-          ({active ? "Upcoming" : "Completed"})
-        </span>
+        {isPT && (
+          <span className="text-xs text-custom-primary font-bold">( PT )</span>
+        )}
       </h1>
       <h4 className="text-custom-grey-text text-sm">
         {activityData.activityDesc}
