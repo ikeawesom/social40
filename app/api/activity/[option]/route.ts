@@ -53,6 +53,8 @@ export async function POST(req: NextRequest) {
 
   if (option === "group-create") {
     const { input } = fetchedData;
+    // console.log(input);
+
     const addMembers = fetchedData.addMembers as {
       check: boolean;
       members: string[];
@@ -98,7 +100,7 @@ export async function POST(req: NextRequest) {
         active: durationEnabled,
         dateCutOff: cutOff,
       },
-      isPT: input.isPT,
+      isPT: input.pt,
     } as GROUP_ACTIVITY_SCHEMA;
 
     const res = await dbHandler.addGeneral({
@@ -220,7 +222,7 @@ export async function POST(req: NextRequest) {
       activityTitle: input.title,
       activityID: fetchedID,
       groupID: groupID,
-      isPT: input.isPT,
+      isPT: input.pt,
     } as GROUP_ACTIVITIES_SCHEMA;
 
     const resB = await dbHandler.add({
