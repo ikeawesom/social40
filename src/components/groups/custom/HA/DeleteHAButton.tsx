@@ -4,7 +4,6 @@ import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import { deleteHA } from "@/src/utils/groups/HA/handleDeleteHA";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { LoadingIconBright } from "@/src/components/utils/LoadingIcon";
 
 export default function DeleteHAButton({
   groupID,
@@ -39,7 +38,7 @@ export default function DeleteHAButton({
       onClick={handleDelete}
       className="text-custom-red border-custom-red bg-custom-light-red w-fit self-center flex items-center justify-center gap-1"
     >
-      {loading ? <LoadingIconBright width={20} height={20} /> : "Delete Report"}
+      {loading ? "Deleting..." : "Delete Report"}
     </SecondaryButton>
   );
 }
