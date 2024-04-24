@@ -30,11 +30,13 @@ export default async function Home({
 }: {
   searchParams: { activity: string; groupID: string };
 }) {
-  const activityType = searchParams.activity;
+  let activityType = searchParams.activity;
   const groupID = searchParams.groupID;
 
-  if (!activityType)
-    redirect(`/home?${new URLSearchParams({ activity: "announcements" })}`);
+  if (!activityType) {
+    activityType = "announcements";
+  }
+  // redirect(`/home?${new URLSearchParams({ activity: "announcements" })}`);
 
   const cookieStore = cookies();
   const data = cookieStore.get("memberID");
