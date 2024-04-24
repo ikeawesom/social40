@@ -15,6 +15,7 @@ export type GROUP_ACTIVITIES_SCHEMA = {
   activityTitle: string; // title of activity
   activityDesc: string; // description of activity
   activityDate: Timestamp; // date of activity
+  isPT?: boolean; //
 };
 
 export type GROUP_MEMBERS_SCHEMA = {

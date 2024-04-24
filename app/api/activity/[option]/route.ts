@@ -220,6 +220,7 @@ export async function POST(req: NextRequest) {
       activityTitle: input.title,
       activityID: fetchedID,
       groupID: groupID,
+      isPT: input.isPT,
     } as GROUP_ACTIVITIES_SCHEMA;
 
     const resB = await dbHandler.add({
@@ -425,7 +426,8 @@ export async function POST(req: NextRequest) {
       activityDesc: newDesc,
       groupRestriction: newRestriction,
       activityDate: newTimestamp,
-    };
+      isPT: input.isPT,
+    } as GROUP_ACTIVITY_SCHEMA;
 
     const res = await dbHandler.edit({
       col_name: `GROUP-ACTIVITIES`,
@@ -443,7 +445,8 @@ export async function POST(req: NextRequest) {
         activityTitle: newTitle,
         activityDesc: newDesc,
         activityDate: newTimestamp,
-      },
+        isPT: input.isPT,
+      } as GROUP_ACTIVITIES_SCHEMA,
     });
 
     if (!resA.status)
