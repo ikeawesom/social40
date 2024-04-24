@@ -60,9 +60,13 @@ export async function handleGroupMemberHA(
     });
 
     const startTimestamp = StringToTimestamp(startDate);
-
+    const updateTimestampList = timestampList.map((t: Timestamp) => {
+      const date = new Date(t.seconds * 1000);
+      date.setHours(date.getHours() + 8);
+      return DateToTimestamp(date);
+    });
     // console.log("Calculating for:", memberID);
-    const clockedHA = handleHA(startTimestamp, timestampList);
+    const clockedHA = handleHA(startTimestamp, updateTimestampList);
 
     return handleResponses({
       data: { isHA: clockedHA, id: memberID, displayName: name } as isHAType,
