@@ -16,12 +16,15 @@ export function handleHA(start: Timestamp, timestampList: Timestamp[]) {
   let finalIndex = -1;
   let breaksTaken = 0;
 
-  // console.log("Original:",timestampList.map((t) => new Date(t.seconds * 1000)));
+  console.log(
+    "Original:",
+    timestampList.map((t) => new Date(t.seconds * 1000))
+  );
   // automatically returns false if trimmed list contains no activities
   const trimmedList = trimList(start, timestampList);
 
-  // const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
-  // console.log("Trimmed:", debugTrim);
+  const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
+  console.log("Trimmed:", debugTrim);
 
   if (trimmedList.length < 1) return false;
 
