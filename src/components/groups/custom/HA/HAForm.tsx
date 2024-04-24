@@ -66,14 +66,14 @@ export default function HAForm({
       const members = Object.keys(membersList);
 
       for (const memberID of members) {
-        console.log("Caclculating for", memberID);
+        // console.log("Caclculating for", memberID);
         const { status, data, error } = await handleGroupMemberHA(
           start,
           memberID
         );
         if (status) {
           setCheckedStatus((init) => [...init, data]);
-          console.log(`${memberID}: ${data.isHA}`);
+          // console.log(`${memberID}: ${data.isHA}`);
         }
         if (error) throw new Error(error);
       }
