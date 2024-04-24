@@ -37,7 +37,10 @@ export default async function GroupPage({
       <HeaderBar back text={`Activities`} />
       <div className="grid place-items-center">
         <div className="max-w-[500px] w-full">
-          <AllActivities activities={groupActivities} memberID={memberID} />
+          <AllActivities
+            activities={JSON.parse(JSON.stringify(groupActivities))}
+            memberID={memberID}
+          />
         </div>
       </div>
     </>

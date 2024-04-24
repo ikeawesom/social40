@@ -11,6 +11,8 @@ import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { DateToString } from "@/src/utils/getCurrentDate";
+import SecondaryButton from "@/src/components/utils/SecondaryButton";
+import { twMerge } from "tailwind-merge";
 
 export default function GroupActivitySettings({
   activityData,
@@ -20,6 +22,7 @@ export default function GroupActivitySettings({
   const oldTitle = activityData.activityTitle;
   const oldDesc = activityData.activityDesc;
   const oldRestrict = activityData.groupRestriction;
+  const oldPT = activityData.isPT;
 
   const tempTimestamp = new Date(activityData.activityDate.seconds * 1000);
   const timestampStr = DateToString(tempTimestamp);
@@ -37,6 +40,7 @@ export default function GroupActivitySettings({
     restrict: oldRestrict,
     user: "",
     date: timestampStr,
+    isPT: oldPT,
   });
 
   const [newD, setNewD] = useState({
@@ -64,7 +68,8 @@ export default function GroupActivitySettings({
     oldTitle === input.title &&
     oldDesc === input.desc &&
     oldRestrict === input.restrict &&
-    timestampStr === input.date;
+    timestampStr === input.date &&
+    oldPT === input.isPT;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -243,6 +248,18 @@ export default function GroupActivitySettings({
                 </select>
               </div>
             </FormInputContainer>
+
+            <SecondaryButton
+              onClick={() => setInput({ ...input, isPT: !input.isPT })}
+              className={twMerge(
+                "w-fit",
+                input.isPT && "bg-custom-light-orange border-custom-orange"
+              )}
+            >
+              {input.isPT
+                ? "This is a PT activity"
+                : "This is not a PT activity"}
+            </SecondaryButton>
 
             {!noChanges && (
               <FormInputContainer
