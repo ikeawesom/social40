@@ -17,7 +17,7 @@ export default function SignInAgainScreen() {
       const id = localStorage.getItem("localMemberID");
       if (id) {
         router.refresh();
-        router.push("/home");
+        router.push("/home", { scroll: false });
         localStorage.removeItem("localMemberID");
       }
 

@@ -10,7 +10,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 export const handleReload = (router: AppRouterInstance) => {
   try {
     router.refresh();
-    router.replace("/reloading");
+    router.replace("/reloading", { scroll: false });
   } catch (err: any) {
     toast.error("An error has occurred.");
     router.refresh();

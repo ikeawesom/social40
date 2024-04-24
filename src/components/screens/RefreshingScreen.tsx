@@ -7,9 +7,9 @@ export default function RefreshingScreen() {
   useEffect(() => {
     const url = sessionStorage.getItem("url");
     if (url) {
-      router.replace(url);
+      router.replace(url, { scroll: false });
     } else {
-      router.replace("/home");
+      router.replace("/home", { scroll: false });
     }
   }, []);
   return <></>;

@@ -89,7 +89,7 @@ export default function ParticipantContainer({
       if (mem !== memberID) {
         setCurMember(mem);
       } else {
-        router.push(`/members/${memberID}`);
+        router.push(`/members/${memberID}`, { scroll: false });
       }
     } else {
       // select state

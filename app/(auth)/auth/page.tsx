@@ -32,7 +32,7 @@ export default function AuthPage({
   }, [status]);
 
   if (memberID === null) return <LoadingScreen />;
-  if (memberID !== "") router.replace("/home");
+  if (memberID !== "") router.replace("/home", { scroll: false });
 
   if (memberID === "")
     return (

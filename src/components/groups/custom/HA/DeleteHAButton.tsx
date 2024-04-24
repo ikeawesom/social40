@@ -25,7 +25,7 @@ export default function DeleteHAButton({
         const { error } = await deleteHA(reportID, groupID);
         if (error) throw new Error(error);
         router.refresh();
-        router.replace(`/groups/${groupID}/HA-report`);
+        router.replace(`/groups/${groupID}/HA-report`, { scroll: false });
       } catch (err: any) {
         toast.error(err.message);
       }

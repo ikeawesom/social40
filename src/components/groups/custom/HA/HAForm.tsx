@@ -51,7 +51,7 @@ export default function HAForm({
       const { data: id } = res;
 
       setTimeout(() => {
-        router.push(`/groups/${groupID}/HA-report/${id}`);
+        router.push(`/groups/${groupID}/HA-report/${id}`, { scroll: false });
       }, 300);
       setDone(false);
     };
@@ -66,11 +66,15 @@ export default function HAForm({
       const members = Object.keys(membersList);
 
       for (const memberID of members) {
+        console.log("Caclculating for", memberID);
         const { status, data, error } = await handleGroupMemberHA(
           start,
           memberID
         );
-        if (status) setCheckedStatus((init) => [...init, data]);
+        if (status) {
+          setCheckedStatus((init) => [...init, data]);
+          console.log(`${memberID}: ${data.isHA}`);
+        }
         if (error) throw new Error(error);
       }
       setDone(true);

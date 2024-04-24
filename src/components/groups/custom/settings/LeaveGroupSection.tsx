@@ -32,7 +32,7 @@ export default function LeaveGroupSection({
         if (!body.status) throw new Error(body.error);
         toast.success(`Left group ${groupID}.`);
         handleReload(router);
-        router.replace("/groups");
+        router.replace("/groups", { scroll: false });
       } catch (err: any) {
         toast.error(err.message);
       }
