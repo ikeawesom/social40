@@ -5,7 +5,7 @@ import { dbHandler } from "@/src/firebase/db";
 import { DateToTimestamp } from "../../getCurrentDate";
 import { handleHA } from "./handleHA";
 import { MEMBER_SCHEMA } from "../../schemas/members";
-import { HA_REPORT_SCHEMA } from "../../schemas/ha";
+import { HA_REPORT_SCHEMA, isHAType } from "../../schemas/ha";
 
 export type DateType = {
   day: string;
@@ -58,7 +58,7 @@ export async function handleGroupMemberHA(
     const clockedHA = handleHA(startTimestamp, timestampList);
 
     return handleResponses({
-      data: { status: clockedHA, id: memberID, displayName: name },
+      data: { isHA: clockedHA, id: memberID, displayName: name } as isHAType,
     });
   } catch (err: any) {
     return handleResponses({ status: false, error: err });
