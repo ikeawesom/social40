@@ -212,7 +212,7 @@ export default function GroupStrengthSection({
           </div>
         </>
       )}
-      {admin && (
+      {/* {admin && (
         <>
           <HRow />
           <CalculateHAButton groupID={groupID} membersList={membersList} />
@@ -226,7 +226,7 @@ export default function GroupStrengthSection({
             View HA Reports
           </Link>
         </>
-      )}
+      )} */}
     </DefaultCard>
   );
 }
