@@ -16,6 +16,7 @@ export function handleHA(start: Timestamp, timestampList: Timestamp[]) {
   let finalIndex = -1;
   let breaksTaken = 0;
 
+  // console.log("Original:",timestampList.map((t) => new Date(t.seconds * 1000)));
   // automatically returns false if trimmed list contains no activities
   const trimmedList = trimList(start, timestampList);
 
@@ -44,10 +45,16 @@ export function handleHA(start: Timestamp, timestampList: Timestamp[]) {
     //   `Cur: ${day.getDate()} | Prev: ${prevDay.getDate()} | DayDiff: ${dayDiff}`
     // );
 
+    prevDay = resetDay(trimmedList[i]);
+
     if (dayDiff > MAX_INTERVAL_BREAK + 1) {
       // break has exceed 2 days
-      // console.log("Exceeded");
-      break;
+      // console.log("Exceeded, reset");
+      // reset variables
+      // console.log("----\n\n");
+      checkedDates = [day];
+      breaksTaken = 0;
+      continue;
     }
 
     if (dayDiff <= 1) {
@@ -56,18 +63,24 @@ export function handleHA(start: Timestamp, timestampList: Timestamp[]) {
     } else {
       // day difference exceeded 1 day
       // increment breaks taken
-      breaksTaken += 1;
       // console.log("break taken");
+      breaksTaken += 1;
       checkedDates.push(day);
     }
-    prevDay = resetDay(trimmedList[i]);
 
-    if (breaksTaken > MAX_BREAKS)
+    if (breaksTaken > MAX_BREAKS) {
       // more than 1 break taken during 10 day period
-      return false;
+      // reset variables
+      // console.log("more than 1 break, reset");
+      // console.log("----\n\n");
+      checkedDates = [day];
+      breaksTaken = 0;
+      continue;
+    }
 
     if (checkedDates.length === MAX_ACTIVITIES) {
       // if criterias have been met, set final index to continue searching from
+      // console.log("checked dates:", checkedDates);
       finalIndex = i;
       clockedHA = true;
       break;
@@ -98,7 +111,7 @@ export function handleHA(start: Timestamp, timestampList: Timestamp[]) {
   let endDate = resetDay(secondTrimmedList[0]);
   endDate.setDate(endDate.getDate() + MAX_SECOND_INTERVAL);
 
-  // iterate through dates, from second ite
+  // iterate through dates, from second item
   for (let i = 1; i < secondTrimmedList.length; i++) {
     // check if activity is within 14 day window
     const curDay = resetDay(secondTrimmedList[i]);
@@ -166,7 +179,7 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
     // console.log("[PROG] Trimmed:", debugTrim);
   });
 
-  console.log("list:", trimmedList);
+  // console.log("list:", trimmedList);
   return trimmedList;
 }
 
@@ -175,18 +188,21 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
 // let list = [] as Timestamp[];
 
 // list.push(DateToTimestamp(new Date(2024, 3, 1)));
-// list.push(DateToTimestamp(new Date(2024, 3, 2)));
-// list.push(DateToTimestamp(new Date(2024, 3, 3)));
-// list.push(DateToTimestamp(new Date(2024, 3, 4)));
 // list.push(DateToTimestamp(new Date(2024, 3, 5)));
 // list.push(DateToTimestamp(new Date(2024, 3, 6)));
 // list.push(DateToTimestamp(new Date(2024, 3, 7)));
 // list.push(DateToTimestamp(new Date(2024, 3, 8)));
 // list.push(DateToTimestamp(new Date(2024, 3, 9)));
-// list.push(DateToTimestamp(new Date(2024, 3, 10)));
-// list.push(DateToTimestamp(new Date(2024, 3, 11)));
-// list.push(DateToTimestamp(new Date(2024, 3, 12)));
-// list.push(DateToTimestamp(new Date(2024, 3, 13)));
+// list.push(DateToTimestamp(new Date(2024, 3, 15)));
+// list.push(DateToTimestamp(new Date(2024, 3, 16)));
+// list.push(DateToTimestamp(new Date(2024, 3, 17)));
+// list.push(DateToTimestamp(new Date(2024, 3, 18)));
+// list.push(DateToTimestamp(new Date(2024, 3, 19)));
+// list.push(DateToTimestamp(new Date(2024, 3, 22)));
+// list.push(DateToTimestamp(new Date(2024, 3, 23)));
+// list.push(DateToTimestamp(new Date(2024, 3, 24)));
+// list.push(DateToTimestamp(new Date(2024, 3, 25)));
+// list.push(DateToTimestamp(new Date(2024, 3, 26)));
 
 // const startDate = new Date(2024, 3, 1);
 // const startTimestamp = DateToTimestamp(startDate);
