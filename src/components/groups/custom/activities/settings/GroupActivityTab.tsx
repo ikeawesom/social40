@@ -1,11 +1,11 @@
 import {
-  ActiveTimestamp,
   DateToTimestamp,
   TimestampToDateString,
 } from "@/src/utils/getCurrentDate";
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
 import Link from "next/link";
 import React from "react";
+import Image from "next/image";
 
 export default function GroupActivityTab({
   activityData,
@@ -33,7 +33,13 @@ export default function GroupActivityTab({
       <h1 className="text-custom-dark-text font-semibold flex items-center justify-start gap-1">
         {activityData.activityTitle}
         {isPT && (
-          <span className="text-xs text-custom-primary font-bold">( PT )</span>
+          <Image
+            alt="PT activity"
+            className="my-1"
+            src="/icons/features/icon_activities_active.svg"
+            width={20}
+            height={20}
+          />
         )}
       </h1>
       <h4 className="text-custom-grey-text text-sm">
