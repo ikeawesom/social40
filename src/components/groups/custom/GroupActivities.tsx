@@ -75,16 +75,14 @@ export default function GroupActivities({
         )}
       </InnerContainer>
       {admin && (
-        <div className="w-full flex flex-col items-end justify-end gap-2">
+        <div className="w-full flex items-center justify-end gap-x-4 gap-y-2 flex-wrap">
           <Link
             href={`/groups/${groupID}/activities`}
             className="text-start cursor-pointer underline text-sm duration-150 text-custom-grey-text hover:text-custom-primary"
           >
             View all activites ( {Object.keys(activitiesData).length} )
           </Link>
-          <div className="w-full flex items-center justify-end">
-            <CreateActivityButton group groupID={groupID} />
-          </div>
+          <CreateActivityButton group groupID={groupID} />
         </div>
       )}
     </DefaultCard>
