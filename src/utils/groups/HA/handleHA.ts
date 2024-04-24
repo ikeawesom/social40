@@ -152,18 +152,21 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
 
   const startDate = resetDay(start);
   let trimmedList = [] as Timestamp[];
+  let checked = [] as number[];
 
   // removes all activities before start date
   timestampList.forEach((day: Timestamp) => {
     const curDay = resetDay(day);
-    if (curDay >= startDate) {
+    if (curDay >= startDate && !checked.includes(curDay.getTime())) {
       trimmedList.push(day);
+      checked.push(curDay.getTime());
     }
 
     // const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
     // console.log("[PROG] Trimmed:", debugTrim);
   });
 
+  console.log("list:", trimmedList);
   return trimmedList;
 }
 
@@ -177,13 +180,13 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
 // list.push(DateToTimestamp(new Date(2024, 3, 4)));
 // list.push(DateToTimestamp(new Date(2024, 3, 5)));
 // list.push(DateToTimestamp(new Date(2024, 3, 6)));
+// list.push(DateToTimestamp(new Date(2024, 3, 7)));
+// list.push(DateToTimestamp(new Date(2024, 3, 8)));
 // list.push(DateToTimestamp(new Date(2024, 3, 9)));
 // list.push(DateToTimestamp(new Date(2024, 3, 10)));
 // list.push(DateToTimestamp(new Date(2024, 3, 11)));
 // list.push(DateToTimestamp(new Date(2024, 3, 12)));
 // list.push(DateToTimestamp(new Date(2024, 3, 13)));
-// list.push(DateToTimestamp(new Date(2024, 3, 28)));
-// list.push(DateToTimestamp(new Date(2024, 3, 29)));
 
 // const startDate = new Date(2024, 3, 1);
 // const startTimestamp = DateToTimestamp(startDate);
