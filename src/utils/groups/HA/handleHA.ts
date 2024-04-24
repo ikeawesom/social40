@@ -50,7 +50,7 @@ export function handleHA(start: Timestamp, timestampList: Timestamp[]) {
       break;
     }
 
-    if (dayDiff === 1) {
+    if (dayDiff <= 1) {
       // console.log("Valid");
       checkedDates.push(day);
     } else {
