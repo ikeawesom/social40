@@ -22,21 +22,23 @@ export default function HATabs({
         <SecondaryButton
           onClick={() => setMemberType("HA")}
           className={twMerge(
+            "self-stretch",
             memberType === "HA" &&
               "border-custom-orange bg-custom-light-orange text-custom-orange font-bold"
           )}
         >
-          HA Members ( {HAmembers.length} )
+          HA Members ({HAmembers.length})
         </SecondaryButton>
 
         <SecondaryButton
           onClick={() => setMemberType("normal")}
           className={twMerge(
+            "self-stretch",
             memberType === "normal" &&
               "border-custom-orange bg-custom-light-orange text-custom-orange font-bold"
           )}
         >
-          Non-HA Members ( {normalMembers.length} )
+          Non-HA Members ({normalMembers.length})
         </SecondaryButton>
       </div>
       <HRow />
