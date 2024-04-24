@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
         active: durationEnabled,
         dateCutOff: cutOff,
       },
-      isPT: input.pt,
+      isPT: input.isPT,
     } as GROUP_ACTIVITY_SCHEMA;
 
     const res = await dbHandler.addGeneral({
