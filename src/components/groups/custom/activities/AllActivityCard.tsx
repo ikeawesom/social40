@@ -2,6 +2,8 @@ import DefaultCard from "@/src/components/DefaultCard";
 import ActivityStatusTab from "@/src/components/feed/ActivityStatusTab";
 import {
   ActiveTimestamp,
+  DateToString,
+  DateToTimestamp,
   TimestampToDateString,
 } from "@/src/utils/getCurrentDate";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
@@ -19,10 +21,14 @@ export default function AllActivityCard({
     activityTitle,
     activityID,
     activityDesc,
-    activityDate,
+    activityDate: tempTimestamp,
     isPT,
   } = data;
-  const dateStr = TimestampToDateString(activityDate);
+
+  const tempDate = new Date(tempTimestamp.seconds * 1000);
+  tempDate.setHours(tempDate.getHours() - 8);
+  const dateStr = DateToString(tempDate);
+  const activityDate = DateToTimestamp(tempDate);
   const active = ActiveTimestamp(activityDate);
 
   return (
