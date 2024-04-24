@@ -292,12 +292,26 @@ export async function POST(request: NextRequest) {
       [activityID: string]: GROUP_ACTIVITY_SCHEMA;
     };
 
+    const sortedActivitiesList = [] as GROUP_ACTIVITY_SCHEMA[];
+
     activitiesDataList.forEach((item: any) => {
       if (!item.status)
         return NextResponse.json({ status: false, error: item.error });
       const data = item.data as GROUP_ACTIVITY_SCHEMA;
-      const activityID = data.activityID;
-      activitiesDataObj[activityID] = data;
+
+      sortedActivitiesList.push(data);
+    });
+
+    sortedActivitiesList.sort(function (a, b) {
+      return (
+        new Date(b.activityDate.seconds * 1000).getTime() -
+        new Date(a.activityDate.seconds * 1000).getTime()
+      );
+    });
+
+    sortedActivitiesList.forEach((item: GROUP_ACTIVITY_SCHEMA) => {
+      const activityID = item.activityID;
+      activitiesDataObj[activityID] = item;
     });
 
     return NextResponse.json({ status: true, data: activitiesDataObj });
