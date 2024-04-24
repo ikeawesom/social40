@@ -11,20 +11,27 @@ export default function SignInAgainScreen() {
   const router = useRouter();
   useEffect(() => {
     // test
-    handleReload(router);
+    const reloaded = localStorage.getItem("load");
 
-    setTimeout(() => {
-      const id = localStorage.getItem("localMemberID");
-      if (id) {
-        router.refresh();
-        router.push("/home", { scroll: false });
-        localStorage.removeItem("localMemberID");
-      }
-
+    if (!reloaded) {
+      handleReload(router);
+      localStorage.setItem("load", "true");
+    } else {
+      localStorage.removeItem("load");
       setTimeout(() => {
-        setLoading(false);
-      }, 1400);
-    }, 2000);
+        const id = localStorage.getItem("localMemberID");
+        if (id) {
+          router.refresh();
+          router.push("/home", { scroll: false });
+          localStorage.removeItem("localMemberID");
+        }
+
+        setTimeout(() => {
+          router.push("/auth", { scroll: false });
+          // setLoading(false);
+        }, 1400);
+      }, 2000);
+    }
   }, []);
 
   if (loading) return <LoadingScreenSmall />;
