@@ -172,6 +172,7 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
   let trimmedList = [] as Timestamp[];
   let checked = [] as number[];
   const nowDate = new Date();
+  nowDate.setHours(nowDate.getHours() + 8);
   nowDate.setHours(23,59)
   
   console.log("Final:", nowDate);
