@@ -66,6 +66,7 @@ export async function handleGroupMemberHA(
     const startDateTemp = new Date(startTimestamp.seconds * 1000);
     startDateTemp.setHours(0, 0, 0, 0);
     const nowDate = new Date();
+    nowDate.setHours(nowDate.getHours() + 8);
     nowDate.setHours(23, 59);
 
     Object.keys(activityData).forEach((activityID: string) => {
@@ -78,7 +79,7 @@ export async function handleGroupMemberHA(
       // console.log(
       //   `Start: ${startDateTemp} | Cur: ${activityDateTemp} | Now: ${nowDate}`
       // );
-      if (startDateTemp <= activityDateTemp) {
+      if (startDateTemp <= activityDateTemp && activityDateTemp <= nowDate) {
         // add to activityListDate
         // console.log("added");
         const dateStr = DateToString(
