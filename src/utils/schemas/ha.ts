@@ -12,4 +12,24 @@ export type HA_REPORT_SCHEMA = {
     from: string; // when calculated HA from
     to: string; // last updated date
   };
+  data: GroupDatesActivitiesType;
+};
+
+export type EachActivityType = {
+  activityID: string;
+  activityTitle: string;
+  activityDateStr: string;
+  createdBy: string;
+};
+
+export type EachDateActivitiesType = {
+  [activityID: string]: EachActivityType;
+};
+
+export type AllDatesActivitiesType = {
+  [dateStr: string]: EachDateActivitiesType;
+};
+
+export type GroupDatesActivitiesType = {
+  [memberID: string]: AllDatesActivitiesType;
 };

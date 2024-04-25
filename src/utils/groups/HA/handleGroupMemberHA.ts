@@ -2,11 +2,17 @@
 import { Timestamp } from "firebase/firestore";
 import handleResponses from "../../handleResponses";
 import { dbHandler } from "@/src/firebase/db";
-import { DateToTimestamp } from "../../getCurrentDate";
-import { handleHA } from "./handleHA";
+import { DateToString, DateToTimestamp } from "../../getCurrentDate";
+import { handleHA, resetDay } from "./handleHA";
 import { MEMBER_SCHEMA } from "../../schemas/members";
-import { HA_REPORT_SCHEMA, isHAType } from "../../schemas/ha";
+import {
+  AllDatesActivitiesType,
+  EachActivityType,
+  HA_REPORT_SCHEMA,
+  isHAType,
+} from "../../schemas/ha";
 import { GROUP_ACTIVITY_SCHEMA } from "../../schemas/group-activities";
+import { ROLES_HIERARCHY } from "../../constants";
 
 export type DateType = {
   day: string;
@@ -36,7 +42,8 @@ export async function handleGroupMemberHA(
     if (errorMember) throw new Error(errorMember);
 
     const memberDetails = memberDetailsRes as MEMBER_SCHEMA;
-    const name = `${memberDetails.rank} ${memberDetails.displayName}`.trim();
+    const { rank, displayName, role } = memberDetails;
+    const name = `${rank} ${displayName}`.trim();
 
     // fetch member activities
     const { data, error } = await dbHandler.getSpecific({
@@ -52,27 +59,68 @@ export async function handleGroupMemberHA(
       [id: string]: GROUP_ACTIVITY_SCHEMA;
     };
 
+    let activityListPerDate = {} as AllDatesActivitiesType;
     let timestampList = [] as Timestamp[];
+
+    const startTimestamp = StringToTimestamp(startDate);
+    const startDateTemp = new Date(startTimestamp.seconds * 1000);
+    startDateTemp.setHours(0, 0, 0, 0);
+    const nowDate = new Date();
+    nowDate.setHours(23, 59);
 
     Object.keys(activityData).forEach((activityID: string) => {
       const { activityDate } = activityData[activityID];
       timestampList.push(activityDate);
+
+      // check if activity is before today
+      const activityDateTemp = new Date(activityDate.seconds * 1000);
+      activityDateTemp.setHours(activityDateTemp.getHours() + 8);
+      // console.log(
+      //   `Start: ${startDateTemp} | Cur: ${activityDateTemp} | Now: ${nowDate}`
+      // );
+      if (startDateTemp <= activityDateTemp && activityDateTemp <= nowDate) {
+        // add to activityListDate
+        // console.log("added");
+        const dateStr = DateToString(
+          resetDay(DateToTimestamp(activityDateTemp))
+        );
+
+        const tempData = {
+          activityID,
+          activityTitle: activityData[activityID].activityTitle,
+          activityDateStr: DateToString(activityDateTemp),
+          createdBy: activityData[activityID].createdBy,
+        } as EachActivityType;
+
+        const tempDataA = { [activityID]: tempData };
+
+        activityListPerDate[dateStr.split(" ")[0]] = tempDataA;
+      }
     });
 
-    const startTimestamp = StringToTimestamp(startDate);
     const updateTimestampList = timestampList.map((t: Timestamp) => {
       const date = new Date(t.seconds * 1000);
       date.setHours(date.getHours() + 8);
       return DateToTimestamp(date);
     });
-    // console.log("Calculating for:", memberID);
-    const clockedHA = handleHA(startTimestamp, updateTimestampList);
+
+    const isCommander =
+      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
+
+    const clockedHA = handleHA(
+      startTimestamp,
+      updateTimestampList,
+      isCommander
+    );
 
     return handleResponses({
-      data: { isHA: clockedHA, id: memberID, displayName: name } as isHAType,
+      data: {
+        dailyActivities: activityListPerDate,
+        HA: { isHA: clockedHA, id: memberID, displayName: name } as isHAType,
+      },
     });
   } catch (err: any) {
-    return handleResponses({ status: false, error: err });
+    return handleResponses({ status: false, error: err.message });
   }
 }
 

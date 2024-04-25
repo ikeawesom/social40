@@ -18,7 +18,7 @@ export default function HATabs({
 
   return (
     <>
-      <div className="flex items-center justify-center gap-3 w-full mt-4">
+      <DefaultCard className="bg-white/50 flex items-center justify-center gap-3 w-full">
         <SecondaryButton
           onClick={() => setMemberType("HA")}
           className={twMerge(
@@ -40,8 +40,7 @@ export default function HATabs({
         >
           Non-HA Members ({normalMembers.length})
         </SecondaryButton>
-      </div>
-      <HRow />
+      </DefaultCard>
       {memberType === "HA"
         ? HAmembers.map((item: isHAType, index: number) => {
             const { displayName, id, isHA } = item;
