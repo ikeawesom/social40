@@ -78,7 +78,7 @@ export async function handleGroupMemberHA(
       // console.log(
       //   `Start: ${startDateTemp} | Cur: ${activityDateTemp} | Now: ${nowDate}`
       // );
-      if (startDateTemp <= activityDateTemp && activityDateTemp <= nowDate) {
+      if (startDateTemp <= activityDateTemp) {
         // add to activityListDate
         // console.log("added");
         const dateStr = DateToString(
