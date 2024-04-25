@@ -1,6 +1,6 @@
 import FormInputContainer from "@/src/components/utils/FormInputContainer";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useHADetails } from "@/src/hooks/groups/custom/useHADetails";
 import { GroupDetailsType } from "../GroupMembers";
@@ -26,8 +26,10 @@ export default function HAForm({
   membersList: GroupDetailsType;
 }) {
   const router = useRouter();
-  const { onChange, start, loading, toggleLoad } = useHADetails();
-  const [checkedStatus, setCheckedStatus] = useState<isHAType[]>([]);
+  const { onChange, start, loading, setLoading } = useHADetails();
+  // const [checkedStatus, setCheckedStatus] = useState<isHAType[]>([]);
+  const checkedStatus = useRef<isHAType[]>([]);
+
   const [dailyActivities, setDailyActivities] =
     useState<GroupDatesActivitiesType>();
   const [done, setDone] = useState(false);
@@ -46,13 +48,15 @@ export default function HAForm({
 
       const to_add = {
         groupID,
-        members: checkedStatus,
+        members: checkedStatus.current,
         time: {
           from,
           to,
         },
-        data: dailyActivities,
+        // data: dailyActivities,
       } as HA_REPORT_SCHEMA;
+
+      console.log(dailyActivities);
 
       const res = await addReport(groupID, to_add);
       const { data: id } = res;
@@ -68,7 +72,7 @@ export default function HAForm({
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    toggleLoad();
+    setLoading(true);
     try {
       const members = Object.keys(membersList);
 
@@ -78,24 +82,27 @@ export default function HAForm({
           start,
           memberID
         );
+
         if (status) {
-          setCheckedStatus((init) => [...init, data.HA]);
+          // setCheckedStatus((init) => [...init, data.HA]);
+          checkedStatus.current.push(data.HA);
           setDailyActivities({
             ...dailyActivities,
             [memberID]: data.dailyActivities,
           });
           // console.log(`${memberID}: ${data.isHA}`);
         }
-        if (error) throw new Error(error);
+        if (error) throw new Error(error.message);
       }
       setDone(true);
     } catch (err: any) {
       toast.error(err.message);
     }
-    toggleLoad();
+    setLoading(false);
   };
 
-  const completedScan = checkedStatus.length == Object.keys(membersList).length;
+  const completedScan =
+    checkedStatus.current.length == Object.keys(membersList).length;
 
   if (loading || completedScan)
     return (
@@ -104,7 +111,8 @@ export default function HAForm({
         {loading && !completedScan && (
           <p className="text-sm text-custom-grey-text">
             {Math.round(
-              (checkedStatus.length / Object.keys(membersList).length) * 100
+              (checkedStatus.current.length / Object.keys(membersList).length) *
+                100
             )}
             % complete
           </p>

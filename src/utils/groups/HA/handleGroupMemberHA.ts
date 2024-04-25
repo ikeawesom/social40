@@ -62,23 +62,38 @@ export async function handleGroupMemberHA(
     let activityListPerDate = {} as AllDatesActivitiesType;
     let timestampList = [] as Timestamp[];
 
+    const startTimestamp = StringToTimestamp(startDate);
+    const startDateTemp = new Date(startTimestamp.seconds * 1000);
+    const nowDate = new Date();
+    nowDate.setHours(23, 59);
+
     Object.keys(activityData).forEach((activityID: string) => {
       const { activityDate } = activityData[activityID];
       timestampList.push(activityDate);
 
-      // add to activityListDate
-      const dateStr = DateToString(resetDay(activityDate));
+      // check if activity is before today
+      const activityDateTemp = new Date(activityDate.seconds * 1000);
+      // console.log(
+      //   `Start: ${startDateTemp} | Cur: ${activityDateTemp} | Now: ${nowDate}`
+      // );
+      if (startDateTemp <= activityDateTemp && activityDateTemp <= nowDate) {
+        // add to activityListDate
+        // console.log("added");
+        const dateStr = DateToString(resetDay(activityDate)).split(" ")[0];
 
-      const tempData = {
-        activityID,
-        activityTitle: activityData[activityID].activityTitle,
-        activityDateStr: dateStr,
-      } as EachActivityType;
+        const tempData = {
+          activityID,
+          activityTitle: activityData[activityID].activityTitle,
+          activityDateStr: DateToString(new Date(activityDate.seconds * 1000)),
+          createdBy: activityData[activityID].createdBy,
+        } as EachActivityType;
 
-      activityListPerDate[dateStr][activityID] = tempData;
+        const tempDataA = { [activityID]: tempData };
+
+        activityListPerDate[dateStr] = tempDataA;
+      }
     });
 
-    const startTimestamp = StringToTimestamp(startDate);
     const updateTimestampList = timestampList.map((t: Timestamp) => {
       const date = new Date(t.seconds * 1000);
       date.setHours(date.getHours() + 8);
@@ -102,7 +117,7 @@ export async function handleGroupMemberHA(
       },
     });
   } catch (err: any) {
-    return handleResponses({ status: false, error: err });
+    return handleResponses({ status: false, error: err.message });
   }
 }
 
