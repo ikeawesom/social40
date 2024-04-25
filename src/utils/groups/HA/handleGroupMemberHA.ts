@@ -83,7 +83,7 @@ export async function handleGroupMemberHA(
         // console.log("added");
         const dateStr = DateToString(
           resetDay(DateToTimestamp(activityDateTemp))
-        ).split(" ")[0];
+        );
 
         const tempData = {
           activityID,
@@ -94,7 +94,7 @@ export async function handleGroupMemberHA(
 
         const tempDataA = { [activityID]: tempData };
 
-        activityListPerDate[dateStr] = tempDataA;
+        activityListPerDate[dateStr.split(" ")[0]] = tempDataA;
       }
     });
 
