@@ -97,7 +97,7 @@ export function handleHA(
 
   if (!clockedHA) return false;
 
-  // console.log("[SUCCESS] Clocked HA.");
+  console.log("[SUCCESS] Clocked HA.");
 
   // phase 2: maintain HA
   // - 2 HA activities within 14 days
