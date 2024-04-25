@@ -187,8 +187,8 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
       checked.push(curDay.getTime());
     }
 
-    // const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
-    // console.log("[PROG] Trimmed:", debugTrim);
+    const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
+    console.log("[PROG] Trimmed:", debugTrim);
   });
 
   // console.log("list:", trimmedList);
