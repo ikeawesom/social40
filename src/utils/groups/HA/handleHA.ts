@@ -1,6 +1,10 @@
 import { Timestamp } from "firebase/firestore";
 import { DateToTimestamp, TimestampToDate } from "../../getCurrentDate";
 
+const MAX_BREAKS = 1;
+const MAX_INTERVAL_BREAK = 2;
+const MAX_ACTIVITIES = 10;
+
 // takes in the start timestamp to calculate from
 // takes in a list of sorted timestamps
 export function handleHA(
@@ -8,10 +12,6 @@ export function handleHA(
   timestampList: Timestamp[],
   isCommander: boolean
 ) {
-  const MAX_BREAKS = 1;
-  const MAX_INTERVAL_BREAK = 2;
-  const MAX_ACTIVITIES = isCommander ? 7 : 10;
-
   // phase 1: clock initial HA
   // - 10 dates in a row
   // - a maximum of 1 break
@@ -174,16 +174,10 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
   let trimmedList = [] as Timestamp[];
   let checked = [] as number[];
 
-  const now = new Date();
-
   // removes all activities before start date
   timestampList.forEach((day: Timestamp) => {
     const curDay = resetDay(day);
-    if (
-      curDay >= startDate &&
-      !checked.includes(curDay.getTime()) &&
-      curDay <= now
-    ) {
+    if (curDay >= startDate && !checked.includes(curDay.getTime())) {
       trimmedList.push(day);
       checked.push(curDay.getTime());
     }
