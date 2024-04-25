@@ -27,8 +27,8 @@ export function handleHA(
   // automatically returns false if trimmed list contains no activities
   const trimmedList = trimList(start, timestampList);
 
-  // const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
-  // console.log("Trimmed:", debugTrim);
+  const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
+  console.log("Trimmed:", debugTrim);
 
   if (trimmedList.length < 1) return false;
 
@@ -94,6 +94,8 @@ export function handleHA(
     }
     // console.log("Checked dates:", checkedDates);
   }
+
+  console.log("Checked dates:", checkedDates);
 
   if (!clockedHA) return false;
 
