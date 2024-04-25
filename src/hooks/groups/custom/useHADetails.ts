@@ -15,7 +15,6 @@ export function useHADetails() {
 
   const enable = () => setShow(true);
   const disable = () => setShow(false);
-  const toggleLoad = () => setLoading(!loading);
 
   return {
     onChange,
@@ -24,6 +23,6 @@ export function useHADetails() {
     show,
     start,
     loading,
-    toggleLoad,
+    setLoading,
   };
 }
