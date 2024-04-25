@@ -173,13 +173,13 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
   let checked = [] as number[];
   const nowDate = new Date();
   nowDate.setHours(nowDate.getHours() + 8);
-  nowDate.setHours(23,59)
+  // nowDate.setHours(23,59)
   
   console.log("Final:", nowDate);
 
   // removes all activities before start date
   timestampList.forEach((day: Timestamp) => {
-    const curDay = resetDay(day);
+    const curDay = new Date(day.seconds * 1000);
     console.log("Cur:", curDay);
     if (
       curDay >= startDate &&
