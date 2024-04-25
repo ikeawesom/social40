@@ -180,8 +180,7 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
     const curDay = resetDay(day);
     if (
       curDay >= startDate &&
-      !checked.includes(curDay.getTime()) &&
-      curDay <= nowDate
+      !checked.includes(curDay.getTime())
     ) {
       trimmedList.push(day);
       checked.push(curDay.getTime());
