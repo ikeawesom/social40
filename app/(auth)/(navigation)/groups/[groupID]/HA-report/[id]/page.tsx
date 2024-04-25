@@ -1,6 +1,8 @@
 import DeleteHAButton from "@/src/components/groups/custom/HA/DeleteHAButton";
+import DownloadHAButton from "@/src/components/groups/custom/HA/DownloadHAButton";
 import HATabs from "@/src/components/groups/custom/HA/HATabs";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
+import HRow from "@/src/components/utils/HRow";
 import { dbHandler } from "@/src/firebase/db";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { HA_REPORT_SCHEMA } from "@/src/utils/schemas/ha";
@@ -40,7 +42,11 @@ export default async function ReportPage({
                 Calculated from: {time.from} <br /> Last updated: {time.to}
               </p>
             </div>
-            <DeleteHAButton groupID={groupID} reportID={reportID} />
+            <div className="flex items-center justify-center w-full gap-3 max-[400px]:flex-wrap">
+              <DownloadHAButton groupID={groupID} reportID={reportID} />
+              <DeleteHAButton groupID={groupID} reportID={reportID} />
+            </div>
+            <HRow />
             <HATabs HAmembers={HAmembers} normalMembers={normalMembers} />
             <p className="text-center text-xs text-custom-grey-text self-center mt-3">
               Report ID: {reportID}
