@@ -19,6 +19,7 @@ export type EachActivityType = {
   activityID: string;
   activityTitle: string;
   activityDateStr: string;
+  createdBy: string;
 };
 
 export type EachDateActivitiesType = {
