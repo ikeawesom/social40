@@ -1,9 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import { DateToTimestamp, TimestampToDate } from "../../getCurrentDate";
-
-const MAX_BREAKS = 1;
-const MAX_INTERVAL_BREAK = 2;
-const MAX_ACTIVITIES = 10;
+import { DateToTimestamp } from "../../getCurrentDate";
 
 // takes in the start timestamp to calculate from
 // takes in a list of sorted timestamps
@@ -20,6 +16,10 @@ export function handleHA(
   let finalIndex = -1;
   let breaksTaken = 0;
 
+  const MAX_BREAKS = 1;
+  const MAX_INTERVAL_BREAK = 2;
+  const MAX_ACTIVITIES = isCommander ? 7 : 10;
+
   console.log(
     "Original:",
     timestampList.map((t) => new Date(t.seconds * 1000))
@@ -27,8 +27,8 @@ export function handleHA(
   // automatically returns false if trimmed list contains no activities
   const trimmedList = trimList(start, timestampList);
 
-  const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
-  console.log("Trimmed:", debugTrim);
+  // const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
+  // console.log("Trimmed:", debugTrim);
 
   if (trimmedList.length < 1) return false;
 
@@ -173,11 +173,16 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
   const startDate = resetDay(start);
   let trimmedList = [] as Timestamp[];
   let checked = [] as number[];
+  const nowDate = resetDay(DateToTimestamp(new Date()));
 
   // removes all activities before start date
   timestampList.forEach((day: Timestamp) => {
     const curDay = resetDay(day);
-    if (curDay >= startDate && !checked.includes(curDay.getTime())) {
+    if (
+      curDay >= startDate &&
+      !checked.includes(curDay.getTime()) &&
+      curDay <= nowDate
+    ) {
       trimmedList.push(day);
       checked.push(curDay.getTime());
     }
