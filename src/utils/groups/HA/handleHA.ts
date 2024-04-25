@@ -20,15 +20,15 @@ export function handleHA(
   const MAX_INTERVAL_BREAK = 2;
   const MAX_ACTIVITIES = isCommander ? 7 : 10;
 
-  console.log(
-    "Original:",
-    timestampList.map((t) => new Date(t.seconds * 1000))
-  );
+  // console.log(
+  //   "Original:",
+  //   timestampList.map((t) => new Date(t.seconds * 1000))
+  // );
   // automatically returns false if trimmed list contains no activities
   const trimmedList = trimList(start, timestampList);
 
-  const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
-  console.log("Trimmed:", debugTrim);
+  // const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
+  // console.log("Trimmed:", debugTrim);
 
   if (trimmedList.length < 1) return false;
 
@@ -40,7 +40,7 @@ export function handleHA(
 
   for (let i = 1; i < trimmedList.length; i++) {
     const day = resetDay(trimmedList[i]);
-    console.log("Current day:", day);
+    // console.log("Current day:", day);
     if (checkedDates.includes(day))
       // checked for the day, continue to next day
       continue;
@@ -48,29 +48,29 @@ export function handleHA(
     // day difference is 1 day
     const dayDiff = getDateDiff(day, prevDay);
 
-    console.log(
-      `Cur: ${day.getDate()} | Prev: ${prevDay.getDate()} | DayDiff: ${dayDiff}`
-    );
+    // console.log(
+    //   `Cur: ${day.getDate()} | Prev: ${prevDay.getDate()} | DayDiff: ${dayDiff}`
+    // );
 
     prevDay = resetDay(trimmedList[i]);
 
     if (dayDiff > MAX_INTERVAL_BREAK + 1) {
       // break has exceed 2 days
-      console.log("Exceeded, reset");
+      // console.log("Exceeded, reset");
       // reset variables
-      console.log("----\n\n");
+      // console.log("----\n\n");
       checkedDates = [day];
       breaksTaken = 0;
       continue;
     }
 
     if (dayDiff <= 1) {
-      console.log("Valid");
+      // console.log("Valid");
       checkedDates.push(day);
     } else {
       // day difference exceeded 1 day
       // increment breaks taken
-      console.log("break taken");
+      // console.log("break taken");
       breaksTaken += 1;
       checkedDates.push(day);
     }
@@ -78,8 +78,8 @@ export function handleHA(
     if (breaksTaken > MAX_BREAKS) {
       // more than 1 break taken during 10 day period
       // reset variables
-      console.log("more than 1 break, reset");
-      console.log("----\n\n");
+      // console.log("more than 1 break, reset");
+      // console.log("----\n\n");
       checkedDates = [day];
       breaksTaken = 0;
       continue;
@@ -92,12 +92,12 @@ export function handleHA(
       clockedHA = true;
       break;
     }
-    console.log("Checked dates:", checkedDates);
+    // console.log("Checked dates:", checkedDates);
   }
 
   if (!clockedHA) return false;
 
-  console.log("[SUCCESS] Clocked HA.");
+  // console.log("[SUCCESS] Clocked HA.");
 
   // phase 2: maintain HA
   // - 2 HA activities within 14 days
