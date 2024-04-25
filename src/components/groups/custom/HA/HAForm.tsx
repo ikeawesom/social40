@@ -29,7 +29,7 @@ export default function HAForm({
   const { onChange, start, loading, setLoading } = useHADetails();
   // const [checkedStatus, setCheckedStatus] = useState<isHAType[]>([]);
   const checkedStatus = useRef<isHAType[]>([]);
-
+  const dailyActivitiesRef = useRef<GroupDatesActivitiesType>({});
   const [dailyActivities, setDailyActivities] =
     useState<GroupDatesActivitiesType>();
   const [done, setDone] = useState(false);
@@ -53,7 +53,7 @@ export default function HAForm({
           from,
           to,
         },
-        // data: dailyActivities,
+        data: dailyActivitiesRef.current,
       } as HA_REPORT_SCHEMA;
 
       console.log(dailyActivities);
@@ -86,6 +86,7 @@ export default function HAForm({
         if (status) {
           // setCheckedStatus((init) => [...init, data.HA]);
           checkedStatus.current.push(data.HA);
+          dailyActivitiesRef.current[memberID] = data.dailyActivities;
           setDailyActivities({
             ...dailyActivities,
             [memberID]: data.dailyActivities,
