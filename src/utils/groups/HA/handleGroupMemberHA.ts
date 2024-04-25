@@ -7,6 +7,7 @@ import { handleHA } from "./handleHA";
 import { MEMBER_SCHEMA } from "../../schemas/members";
 import { HA_REPORT_SCHEMA, isHAType } from "../../schemas/ha";
 import { GROUP_ACTIVITY_SCHEMA } from "../../schemas/group-activities";
+import { ROLES_HIERARCHY } from "../../constants";
 
 export type DateType = {
   day: string;
@@ -36,7 +37,8 @@ export async function handleGroupMemberHA(
     if (errorMember) throw new Error(errorMember);
 
     const memberDetails = memberDetailsRes as MEMBER_SCHEMA;
-    const name = `${memberDetails.rank} ${memberDetails.displayName}`.trim();
+    const { rank, displayName, role } = memberDetails;
+    const name = `${rank} ${displayName}`.trim();
 
     // fetch member activities
     const { data, error } = await dbHandler.getSpecific({
@@ -66,7 +68,14 @@ export async function handleGroupMemberHA(
       return DateToTimestamp(date);
     });
     // console.log("Calculating for:", memberID);
-    const clockedHA = handleHA(startTimestamp, updateTimestampList);
+    const isCommander =
+      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
+
+    const clockedHA = handleHA(
+      startTimestamp,
+      updateTimestampList,
+      isCommander
+    );
 
     return handleResponses({
       data: { isHA: clockedHA, id: memberID, displayName: name } as isHAType,
