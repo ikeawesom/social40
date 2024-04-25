@@ -165,10 +165,8 @@ export function getDateDiff(day: Date, prevDay: Date) {
 }
 
 export function trimList(start: Timestamp, timestampList: Timestamp[]) {
-  // let temp = timestampList.map(
-  //   (time: Timestamp) => new Date(time.seconds * 1000)
-  // );
-  // console.log("Initial List:", temp);
+  let temp = timestampList.map((time: Timestamp) => new Date(time.seconds * 1000));
+  console.log("Initial List:", temp);
 
   const startDate = resetDay(start);
   let trimmedList = [] as Timestamp[];
@@ -191,7 +189,7 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
     console.log("[PROG] Trimmed:", debugTrim);
   });
 
-  // console.log("list:", trimmedList);
+  console.log("final list:", trimmedList);
   return trimmedList;
 }
 
