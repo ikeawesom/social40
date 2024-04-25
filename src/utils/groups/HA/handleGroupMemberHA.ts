@@ -88,7 +88,7 @@ export async function handleGroupMemberHA(
         const tempData = {
           activityID,
           activityTitle: activityData[activityID].activityTitle,
-          activityDateStr: dateStr,
+          activityDateStr: DateToString(activityDateTemp),
           createdBy: activityData[activityID].createdBy,
         } as EachActivityType;
 
