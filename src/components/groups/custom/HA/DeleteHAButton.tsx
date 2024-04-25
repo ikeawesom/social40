@@ -36,7 +36,7 @@ export default function DeleteHAButton({
     <SecondaryButton
       disabled={loading}
       onClick={handleDelete}
-      className="text-custom-red border-custom-red bg-custom-light-red w-fit self-center flex items-center justify-center gap-1"
+      className="text-custom-red border-custom-red bg-custom-light-red w-full self-center flex items-center justify-center gap-1"
     >
       {loading ? "Deleting..." : "Delete Report"}
     </SecondaryButton>
