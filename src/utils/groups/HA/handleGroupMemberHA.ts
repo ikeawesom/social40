@@ -2,10 +2,15 @@
 import { Timestamp } from "firebase/firestore";
 import handleResponses from "../../handleResponses";
 import { dbHandler } from "@/src/firebase/db";
-import { DateToTimestamp } from "../../getCurrentDate";
-import { handleHA } from "./handleHA";
+import { DateToString, DateToTimestamp } from "../../getCurrentDate";
+import { handleHA, resetDay } from "./handleHA";
 import { MEMBER_SCHEMA } from "../../schemas/members";
-import { HA_REPORT_SCHEMA, isHAType } from "../../schemas/ha";
+import {
+  AllDatesActivitiesType,
+  EachActivityType,
+  HA_REPORT_SCHEMA,
+  isHAType,
+} from "../../schemas/ha";
 import { GROUP_ACTIVITY_SCHEMA } from "../../schemas/group-activities";
 import { ROLES_HIERARCHY } from "../../constants";
 
@@ -54,11 +59,23 @@ export async function handleGroupMemberHA(
       [id: string]: GROUP_ACTIVITY_SCHEMA;
     };
 
+    let activityListPerDate = {} as AllDatesActivitiesType;
     let timestampList = [] as Timestamp[];
 
     Object.keys(activityData).forEach((activityID: string) => {
       const { activityDate } = activityData[activityID];
       timestampList.push(activityDate);
+
+      // add to activityListDate
+      const dateStr = DateToString(resetDay(activityDate));
+
+      const tempData = {
+        activityID,
+        activityTitle: activityData[activityID].activityTitle,
+        activityDateStr: dateStr,
+      } as EachActivityType;
+
+      activityListPerDate[dateStr][activityID] = tempData;
     });
 
     const startTimestamp = StringToTimestamp(startDate);
@@ -67,6 +84,7 @@ export async function handleGroupMemberHA(
       date.setHours(date.getHours() + 8);
       return DateToTimestamp(date);
     });
+
     // console.log("Calculating for:", memberID);
     const isCommander =
       ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
@@ -78,7 +96,10 @@ export async function handleGroupMemberHA(
     );
 
     return handleResponses({
-      data: { isHA: clockedHA, id: memberID, displayName: name } as isHAType,
+      data: {
+        dailyActivities: activityListPerDate,
+        HA: { isHA: clockedHA, id: memberID, displayName: name } as isHAType,
+      },
     });
   } catch (err: any) {
     return handleResponses({ status: false, error: err });

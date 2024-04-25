@@ -12,7 +12,11 @@ import LoadingIcon from "@/src/components/utils/LoadingIcon";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { DateToString } from "@/src/utils/getCurrentDate";
-import { HA_REPORT_SCHEMA, isHAType } from "@/src/utils/schemas/ha";
+import {
+  GroupDatesActivitiesType,
+  HA_REPORT_SCHEMA,
+  isHAType,
+} from "@/src/utils/schemas/ha";
 
 export default function HAForm({
   groupID,
@@ -24,6 +28,8 @@ export default function HAForm({
   const router = useRouter();
   const { onChange, start, loading, toggleLoad } = useHADetails();
   const [checkedStatus, setCheckedStatus] = useState<isHAType[]>([]);
+  const [dailyActivities, setDailyActivities] =
+    useState<GroupDatesActivitiesType>();
   const [done, setDone] = useState(false);
 
   useEffect(() => {
@@ -45,6 +51,7 @@ export default function HAForm({
           from,
           to,
         },
+        data: dailyActivities,
       } as HA_REPORT_SCHEMA;
 
       const res = await addReport(groupID, to_add);
@@ -72,7 +79,11 @@ export default function HAForm({
           memberID
         );
         if (status) {
-          setCheckedStatus((init) => [...init, data]);
+          setCheckedStatus((init) => [...init, data.HA]);
+          setDailyActivities({
+            ...dailyActivities,
+            [memberID]: data.dailyActivities,
+          });
           // console.log(`${memberID}: ${data.isHA}`);
         }
         if (error) throw new Error(error);
