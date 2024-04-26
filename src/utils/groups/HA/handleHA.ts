@@ -180,13 +180,14 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
   // removes all activities before start date
   timestampList.forEach((day: Timestamp) => {
     const curDay = new Date(day.seconds * 1000);
+    const resetCurDay = resetDay(day);
     console.log("Cur:", curDay);
     if (
       curDay >= startDate &&
-      !checked.includes(curDay.getTime()) && curDay <= nowDate
+      !checked.includes(resetCurDay.getTime()) && curDay <= nowDate
     ) {
       trimmedList.push(day);
-      checked.push(curDay.getTime());
+      checked.push(resetCurDay.getTime());
     }
 
     const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
