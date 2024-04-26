@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 
-export function useDownloadHA(groupID: string, reportID: string) {
+export function useDownloadHA(groupID: string, reportID: string, from: string, to: string) {
   const [loading, setLoading] = useState(false);
   const download = async () => {
     setLoading(true);
@@ -79,7 +79,7 @@ export function useDownloadHA(groupID: string, reportID: string) {
 
       //   console.log(tableRows);
 
-      const filename = `HA-report-${groupID}-${reportID}`;
+      const filename = `HA-report-${groupID}-${from}-${to}-${reportID}`;
       ExportExcel({ excelData: tableRows, filename });
     } catch (error: any) {
       toast.error(error.message);
