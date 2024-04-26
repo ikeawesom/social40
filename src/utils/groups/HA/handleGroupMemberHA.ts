@@ -108,7 +108,7 @@ export async function handleGroupMemberHA(
     const isCommander =
       ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
 
-console.log("Calculating for:",memberID)
+    // console.log("Calculating for:",memberID)
 
     const clockedHA = handleHA(
       startTimestamp,
