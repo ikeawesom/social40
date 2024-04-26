@@ -9,11 +9,15 @@ export type HATableRowType = { [date: string]: string };
 export default function DownloadHAButton({
   groupID,
   reportID,
+  from,
+  to
 }: {
+  from: string;
+  to: string;
   groupID: string;
   reportID: string;
 }) {
-  const { download, loading } = useDownloadHA(groupID, reportID);
+  const { download, loading } = useDownloadHA(groupID, reportID, from, to);
   return (
     <SecondaryButton
       disabled={loading}
