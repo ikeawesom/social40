@@ -166,7 +166,7 @@ export function getDateDiff(day: Date, prevDay: Date) {
 
 export function trimList(start: Timestamp, timestampList: Timestamp[]) {
   let temp = timestampList.map((time: Timestamp) => new Date(time.seconds * 1000));
-  console.log("Initial List:", temp);
+  // console.log("Initial List:", temp);
 
   const startDate = resetDay(start);
   let trimmedList = [] as Timestamp[];
@@ -175,13 +175,13 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
   nowDate.setHours(nowDate.getHours() + 8);
   // nowDate.setHours(23,59)
   
-  console.log("Final:", nowDate);
+  // console.log("Final:", nowDate);
 
   // removes all activities before start date
   timestampList.forEach((day: Timestamp) => {
     const curDay = new Date(day.seconds * 1000);
     const resetCurDay = resetDay(day);
-    console.log("Cur:", curDay);
+    // console.log("Cur:", curDay);
     if (
       curDay >= startDate &&
       !checked.includes(resetCurDay.getTime()) && curDay <= nowDate
@@ -190,8 +190,8 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
       checked.push(resetCurDay.getTime());
     }
 
-    const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
-    console.log("[PROG] Trimmed:", debugTrim);
+    // const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
+    // console.log("[PROG] Trimmed:", debugTrim);
   });
 
   return trimmedList;
