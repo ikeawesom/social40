@@ -43,7 +43,7 @@ export default async function ReportPage({
               </p>
             </div>
             <div className="flex items-center justify-center w-full gap-3 max-[400px]:flex-wrap">
-              <DownloadHAButton groupID={groupID} reportID={reportID} />
+              <DownloadHAButton from={time.from} to={time.to} groupID={groupID} reportID={reportID} />
               <DeleteHAButton groupID={groupID} reportID={reportID} />
             </div>
             <HRow />
