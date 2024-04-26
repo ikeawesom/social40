@@ -79,7 +79,7 @@ export function useDownloadHA(groupID: string, reportID: string, from: string, t
 
       //   console.log(tableRows);
 
-      const filename = `HA-report-${groupID}-${from}-${to}-${reportID}`;
+      const filename = `HA-report-${groupID}-${from}-to-${to}-${reportID}`;
       ExportExcel({ excelData: tableRows, filename });
     } catch (error: any) {
       toast.error(error.message);
