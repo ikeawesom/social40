@@ -7,6 +7,9 @@ export default function FeedSkeleton() {
       <DefaultSkeleton />
       <DefaultSkeleton />
       <DefaultSkeleton />
+      <DefaultSkeleton />
+      <DefaultSkeleton />
+      <DefaultSkeleton />
     </div>
   );
 }
