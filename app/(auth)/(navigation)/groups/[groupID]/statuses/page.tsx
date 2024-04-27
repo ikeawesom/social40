@@ -93,7 +93,7 @@ export default async function Page({
           <HeaderBar back text={`All Statuses`} />
           <div className="grid place-items-center">
             <div className="max-w-[500px] w-full">
-              <div className="flex flex-col items-center justify-start w-full gap-4">
+              <div className="flex flex-col items-center justify-start w-full gap-6">
                 <FullStatusList groupStatusList={sortedGroupStatusList} />
               </div>
             </div>
