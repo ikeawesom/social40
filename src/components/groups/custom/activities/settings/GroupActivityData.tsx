@@ -14,7 +14,6 @@ import GroupActivityJoinSection from "./GroupActivityJoinSection";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import FalloutsCard from "../participants/FalloutsCard";
 import ActivityDownloadSection from "../ActivityDownloadSection";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 
 export type SuspenseGroupActivityFetchType = {
   memberID: string;
@@ -76,8 +75,7 @@ export default async function GroupActivityData({
               activityData={activityData}
               memberID={memberID}
             />
-          </Suspense>
-          <Suspense fallback={<DefaultSkeleton className="h-[5vh]" />}>
+
             <GroupActivityJoinSection
               activityData={activityData}
               memberID={memberID}

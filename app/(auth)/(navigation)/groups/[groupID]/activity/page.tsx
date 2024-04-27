@@ -58,29 +58,27 @@ export default async function ActivityPage({
           <HeaderBar back text={title} />
           <div className="w-full grid place-items-center">
             <div className="max-w-[500px] w-full">
-              <Suspense fallback={<DefaultSkeleton className="h-[80vh]" />}>
-                {view ? (
-                  remark ? (
-                    <ActivityRemarkData
-                      remarkID={query["remarkid"]}
-                      groupID={groupID}
-                      activityID={query["id"]}
-                    />
-                  ) : (
-                    <GroupActivityData
-                      activityID={query["id"]}
-                      groupID={groupID}
-                    />
-                  )
+              {view ? (
+                remark ? (
+                  <ActivityRemarkData
+                    remarkID={query["remarkid"]}
+                    groupID={groupID}
+                    activityID={query["id"]}
+                  />
                 ) : (
-                  <DefaultCard className="w-full">
-                    <CreateGroupActivityForm
-                      memberID={memberID}
-                      groupID={groupID}
-                    />
-                  </DefaultCard>
-                )}
-              </Suspense>
+                  <GroupActivityData
+                    activityID={query["id"]}
+                    groupID={groupID}
+                  />
+                )
+              ) : (
+                <DefaultCard className="w-full">
+                  <CreateGroupActivityForm
+                    memberID={memberID}
+                    groupID={groupID}
+                  />
+                </DefaultCard>
+              )}
             </div>
           </div>
         </>

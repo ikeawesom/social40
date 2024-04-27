@@ -31,7 +31,7 @@ export default function AuthPage({
     if (status !== "") setStatus("");
   }, [status]);
 
-  if (memberID === null) return <LoadingScreen />;
+  if (memberID === null) return <LoadingScreen text="Authenticating user..." />;
   if (memberID !== "") router.replace("/home", { scroll: false });
 
   if (memberID === "")

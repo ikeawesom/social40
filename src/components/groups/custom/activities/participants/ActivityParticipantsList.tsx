@@ -1,6 +1,5 @@
 "use client";
 import HRow from "@/src/components/utils/HRow";
-import InnerContainer from "@/src/components/utils/InnerContainer";
 import LoadingIcon, {
   LoadingIconBright,
 } from "@/src/components/utils/LoadingIcon";
@@ -8,7 +7,7 @@ import Modal from "@/src/components/utils/Modal";
 import QueryInput from "@/src/components/utils/QueryInput";
 import useQueryObj from "@/src/hooks/useQueryObj";
 import Link from "next/link";
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { toast } from "sonner";

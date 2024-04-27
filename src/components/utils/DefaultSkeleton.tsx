@@ -6,9 +6,11 @@ export default function DefaultSkeleton({ className }: { className?: string }) {
   return (
     <DefaultCard
       className={twMerge(
-        "w-full animate-pulse bg-gray-200 h-[20vh]",
+        "w-full bg-gray-300 h-[20vh] relative overflow-hidden",
         className
       )}
-    />
+    >
+      <div className="shimmer" />
+    </DefaultCard>
   );
 }

@@ -52,6 +52,12 @@ export default function CreateGroupActivityForm({
     check: false,
     members: [] as string[],
   });
+  const [done, setDone] = useState("");
+
+  useEffect(() => {
+    if (done !== "")
+      sessionStorage.setItem("url", `${window.location.origin}${done}`);
+  }, [done]);
 
   useEffect(() => {
     setInput({
@@ -79,7 +85,10 @@ export default function CreateGroupActivityForm({
         `/groups/${groupID}/activity?${new URLSearchParams({ id: body.data })}`,
         { scroll: false }
       );
-      toast.success("Created activity");
+      setDone(
+        `/groups/${groupID}/activity?${new URLSearchParams({ id: body.data })}`
+      );
+      toast.success("Created activity. Bringing you there now...");
     } catch (err: any) {
       toast.error(err.message);
     }

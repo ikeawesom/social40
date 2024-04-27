@@ -87,13 +87,13 @@ export default async function Profile({
                 friendsData={friendsList}
                 memberData={memberData}
               />
-              <Suspense fallback={<DefaultSkeleton className="h-[30vh]" />}>
-                <StatsSection
-                  className="sm:col-span-2"
-                  option={option}
-                  memberID={memberID}
-                />
-              </Suspense>
+              {/* <Suspense fallback={<DefaultSkeleton className="h-[30vh]" />}> */}
+              <StatsSection
+                className="sm:col-span-2"
+                option={option}
+                memberID={memberID}
+              />
+              {/* </Suspense> */}
               {cos && <BiboSection />}
               {/* <GuidebookDownload /> */}
             </div>
