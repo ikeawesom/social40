@@ -75,11 +75,11 @@ export default function CreateGroupActivityForm({
       if (!body.status) throw new Error(body.error);
 
       router.refresh();
-      router.replace(
+      router.push(
         `/groups/${groupID}/activity?${new URLSearchParams({ id: body.data })}`,
         { scroll: false }
       );
-      toast.success("Created activity");
+      toast.success("Created activity. Bringing you there now...");
     } catch (err: any) {
       toast.error(err.message);
     }
