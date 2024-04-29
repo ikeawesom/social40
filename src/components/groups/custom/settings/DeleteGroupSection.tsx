@@ -33,7 +33,7 @@ export default function DeleteGroupSection({
       const res = await deleteGroup(groupID);
       if (!res.status) throw new Error(res.error);
       toast.success("Successfully deleted group. Returning to home...");
-
+      router.refresh();
       setTimeout(() => {
         router.push("/groups", { scroll: false });
       }, 1500);
