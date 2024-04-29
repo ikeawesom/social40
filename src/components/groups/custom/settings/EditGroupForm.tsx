@@ -48,8 +48,8 @@ export default function EditGroupForm({
           ...groupData,
           groupName: inputGroup.groupName,
           groupDesc: inputGroup.groupDesc,
-          cos: inputGroup.cos,
-        },
+          cos: { state: inputGroup.cos },
+        } as GROUP_SCHEMA,
       });
       if (!res.status) throw new Error(res.error);
       toast.success("Successfully updated changes.");

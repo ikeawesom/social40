@@ -16,6 +16,7 @@ export async function createGroup({
   createdBy,
   groupDesc,
   createdOn,
+  cos,
 }: GROUP_SCHEMA) {
   try {
     const res = await dbHandler.get({
@@ -34,6 +35,7 @@ export async function createGroup({
       groupDesc,
       createdOn,
       createdBy,
+      cos,
     });
 
     const resA = await dbHandler.add({
