@@ -25,6 +25,7 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
     name: "",
     desc: "",
     admin: "",
+    cos: false,
   });
 
   const [loading, setLoading] = useState(false);
@@ -46,7 +47,7 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
     setLoading(true);
 
     try {
-      const { admin, desc, name } = groupDetails;
+      const { admin, desc, name, cos } = groupDetails;
       if (admin.split(" ").length > 1)
         throw new Error("Admin ID cannot have spaces.");
 
@@ -55,6 +56,7 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
         createdBy: memberID,
         groupDesc: desc,
         groupName: name,
+        cos,
         createdOn: getCurrentDate(),
       });
 
@@ -132,6 +134,17 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
           onChange={handleTextArea}
           value={groupDetails.desc}
         />
+        <SecondaryButton
+          onClick={() =>
+            setGroupDetails({ ...groupDetails, cos: !groupDetails.cos })
+          }
+          className={twMerge(
+            "w-fit",
+            groupDetails.cos && "bg-custom-light-orange border-custom-orange"
+          )}
+        >
+          {groupDetails.cos ? "COS Enabled" : "Enable COS"}
+        </SecondaryButton>
         <PrimaryButton
           disabled={loading}
           type="submit"
