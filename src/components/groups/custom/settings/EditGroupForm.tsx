@@ -48,7 +48,10 @@ export default function EditGroupForm({
           ...groupData,
           groupName: inputGroup.groupName,
           groupDesc: inputGroup.groupDesc,
-          cos: { state: inputGroup.cos.state },
+          cos: {
+            state: inputGroup.cos.state,
+            allowed: groupData.cos?.allowed ?? [groupData.createdBy],
+          },
         } as GROUP_SCHEMA,
       });
       if (!res.status) throw new Error(res.error);
