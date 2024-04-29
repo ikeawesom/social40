@@ -5,7 +5,7 @@ export type GROUP_SCHEMA = {
   groupID: string;
   groupName: string;
   groupDesc: string;
-  cos?: boolean;
+  cos?: { state: boolean; allowed: string[] };
   createdBy: string; // memberID of owner
   createdOn: Timestamp;
 };
