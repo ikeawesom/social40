@@ -25,7 +25,7 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
     name: "",
     desc: "",
     admin: "",
-    cos: false,
+    cos: { state: false, allowed: [] as string[] },
   });
 
   const [loading, setLoading] = useState(false);
@@ -56,7 +56,7 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
         createdBy: memberID,
         groupDesc: desc,
         groupName: name,
-        cos: { state: cos, allowed: [memberID] },
+        cos: { state: cos.state, allowed: [memberID] },
         createdOn: getCurrentDate(),
       });
 
@@ -136,14 +136,18 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
         />
         <SecondaryButton
           onClick={() =>
-            setGroupDetails({ ...groupDetails, cos: !groupDetails.cos })
+            setGroupDetails({
+              ...groupDetails,
+              cos: { ...groupDetails.cos, state: !groupDetails.cos.state },
+            })
           }
           className={twMerge(
             "w-fit",
-            groupDetails.cos && "bg-custom-light-orange border-custom-orange"
+            groupDetails.cos.state &&
+              "bg-custom-light-orange border-custom-orange"
           )}
         >
-          {groupDetails.cos ? "COS Enabled" : "Enable COS"}
+          {groupDetails.cos.state ? "COS Enabled" : "Enable COS"}
         </SecondaryButton>
         <PrimaryButton
           disabled={loading}

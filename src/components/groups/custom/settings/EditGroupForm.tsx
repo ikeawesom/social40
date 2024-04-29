@@ -19,7 +19,7 @@ export default function EditGroupForm({
 
   const initGroupName = groupData.groupName;
   const initGroupDesc = groupData.groupDesc;
-  const initCos = groupData.cos ?? false;
+  const initCos = groupData.cos ?? { state: false, allowed: [] };
 
   const [loading, setLoading] = useState(false);
   const [inputGroup, setInputGroup] = useState({
@@ -31,7 +31,7 @@ export default function EditGroupForm({
   const noChange =
     inputGroup.groupName === initGroupName &&
     inputGroup.groupDesc === initGroupDesc &&
-    inputGroup.cos === initCos;
+    inputGroup.cos.state === initCos.state;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputGroup({ ...inputGroup, [e.target.name]: e.target.value });
@@ -48,12 +48,12 @@ export default function EditGroupForm({
           ...groupData,
           groupName: inputGroup.groupName,
           groupDesc: inputGroup.groupDesc,
-          cos: { state: inputGroup.cos },
+          cos: { state: inputGroup.cos.state },
         } as GROUP_SCHEMA,
       });
       if (!res.status) throw new Error(res.error);
-      toast.success("Successfully updated changes.");
       router.refresh();
+      toast.success("Successfully updated changes.");
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -82,13 +82,19 @@ export default function EditGroupForm({
           onChange={handleChange}
         />
         <SecondaryButton
-          onClick={() => setInputGroup({ ...inputGroup, cos: !inputGroup.cos })}
+          onClick={() =>
+            setInputGroup({
+              ...inputGroup,
+              cos: { ...inputGroup.cos, state: !inputGroup.cos.state },
+            })
+          }
           className={twMerge(
             "w-fit",
-            inputGroup.cos && "bg-custom-light-orange border-custom-orange"
+            inputGroup.cos.state &&
+              "bg-custom-light-orange border-custom-orange"
           )}
         >
-          {inputGroup.cos ? "COS Enabled" : "Enable COS"}
+          {inputGroup.cos.state ? "COS Enabled" : "Enable COS"}
         </SecondaryButton>
         <PrimaryButton
           disabled={noChange || loading}
