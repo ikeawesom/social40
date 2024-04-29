@@ -33,6 +33,7 @@ export function initGroupObject({
   groupName,
   groupDesc,
   createdBy,
+  cos,
 }: GROUP_SCHEMA) {
   return {
     groupID,
@@ -40,5 +41,6 @@ export function initGroupObject({
     groupDesc,
     createdBy,
     createdOn: getCurrentDate(),
+    cos,
   } as GROUP_SCHEMA;
 }
