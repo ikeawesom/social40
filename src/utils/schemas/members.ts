@@ -16,6 +16,16 @@ export type MEMBER_SCHEMA = {
   ipptID: string;
   shootingID: string;
   statisticsID: string;
+  dutyPoints: {
+    cos: number;
+    gd: number; // TBC
+    days: {
+      weekends: number;
+      weekdays: number;
+      publics: number;
+      fridays: number;
+    };
+  };
 
   // hidden activities
   hiddenActivities?: string[];
@@ -85,6 +95,16 @@ export function initMemberObject({
     points: 0,
     rank: "",
     role,
+    dutyPoints: {
+      cos: 0,
+      gd: 0,
+      days: {
+        fridays: 0,
+        publics: 0,
+        weekdays: 0,
+        weekends: 0,
+      },
+    },
     badges: [],
     shootingID: "", // need to create and assign
     statisticsID: "", // need to create and assign
