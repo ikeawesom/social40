@@ -12,6 +12,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 export default function CosPlansSection({
   cosData,
@@ -77,7 +78,12 @@ export default function CosPlansSection({
               </DefaultCard>
             )
           )}
-          <div className="w-full flex flex-col items-start justify-start gap-2 mt-2">
+          <div
+            className={twMerge(
+              "w-full flex flex-col items-start justify-start gap-2",
+              showAll && "mt-4"
+            )}
+          >
             {showAll &&
               Object.keys(cosData).map((date: string) => {
                 const { month } = cosData[date];
@@ -87,7 +93,7 @@ export default function CosPlansSection({
                     key={date}
                     className="w-full"
                   >
-                    <DefaultCard className="py-2 px-3 pr-1 flex items-center justify-between gap-2 mb-2 hover:bg-custom-light-text duration-150">
+                    <DefaultCard className="py-2 px-3 pr-1 flex items-center justify-between gap-2 hover:bg-custom-light-text duration-150">
                       <h4 className="font-bold text-start text-custom-dark-text">
                         {MONTHS[month]}
                       </h4>
