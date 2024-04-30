@@ -1,6 +1,7 @@
 import {
   EditMemberCOSPoints,
   RemoveMemberCOS,
+  ToggleCOSAdmin,
 } from "@/src/utils/groups/COS/handleCOS";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { useRouter } from "next/navigation";
@@ -47,7 +48,26 @@ export function useCOSMembers(groupData: GROUP_SCHEMA) {
   const toggleAdmin = async (id: string) => {
     setLoad(true);
     try {
-      // todo
+      if (!cos) return;
+
+      let updatedAdmin = [] as string[];
+      if (cos.admins.includes(id)) {
+        updatedAdmin = cos.admins.filter((curID: string) => curID !== id);
+      } else {
+        cos.admins.push(id);
+        updatedAdmin = cos.admins;
+      }
+
+      const to_update = {
+        cos: {
+          ...cos,
+          admins: updatedAdmin,
+        },
+      };
+
+      const { error } = await ToggleCOSAdmin(groupID, to_update);
+      if (error) throw new Error(error);
+      toast.success(`Successfully updated ${id}'s COS permissions.`);
     } catch (err: any) {
       toast.error(err.message);
     }

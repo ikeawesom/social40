@@ -5,6 +5,19 @@ import handleResponses from "../../handleResponses";
 import { GROUP_SCHEMA } from "../../schemas/groups";
 import { COS_DAILY_SCHEMA, CosDailyType } from "../../schemas/cos";
 
+export async function ToggleCOSAdmin(groupID: string, to_update: any) {
+  try {
+    const { error } = await dbHandler.edit({
+      col_name: "GROUPS",
+      id: groupID,
+      data: to_update,
+    });
+    if (error) throw new Error(error);
+    return handleResponses();
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
+}
 export async function EditMemberCOSPoints(id: string, points: number) {
   try {
     const { error } = await dbHandler.edit({
