@@ -41,3 +41,17 @@ select:not(.custom) {
     transform: translateX(100%);
   }
 }
+
+.fade-in {
+  /* opacity: 0; */
+  animation: fade-in 150ms forwards ease-in;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
