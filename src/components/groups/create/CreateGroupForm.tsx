@@ -4,14 +4,13 @@ import SecondaryButton from "../../utils/SecondaryButton";
 import PrimaryButton from "../../utils/PrimaryButton";
 import generateID from "@/src/utils/getRandomID";
 import Modal from "../../utils/Modal";
-import HRow from "../../utils/HRow";
-import Image from "next/image";
 import { toast } from "sonner";
 import { LoadingIconBright } from "../../utils/LoadingIcon";
 import getCurrentDate from "@/src/utils/getCurrentDate";
 import { useMemberID } from "@/src/hooks/useMemberID";
 import { useRouter } from "next/navigation";
 import { createGroup } from "@/src/utils/groups/createGroup";
+import ModalHeader from "../../utils/ModalHeader";
 
 type FormType = {
   className?: string;
@@ -25,6 +24,7 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
     name: "",
     desc: "",
     admin: "",
+    cos: { state: false, allowed: [] as string[] },
   });
 
   const [loading, setLoading] = useState(false);
@@ -46,7 +46,7 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
     setLoading(true);
 
     try {
-      const { admin, desc, name } = groupDetails;
+      const { admin, desc, name, cos } = groupDetails;
       if (admin.split(" ").length > 1)
         throw new Error("Admin ID cannot have spaces.");
 
@@ -55,6 +55,7 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
         createdBy: memberID,
         groupDesc: desc,
         groupName: name,
+        cos: { state: cos.state, admins: [memberID], members: [memberID] },
         createdOn: getCurrentDate(),
       });
 
@@ -70,23 +71,7 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
 
   return (
     <Modal>
-      <div className="mb-4">
-        <div className="flex items-center justify-between w-full">
-          <h1 className="text-custom-dark-text font-semibold">Create Group</h1>
-          <button
-            onClick={closeModal}
-            className="hover:opacity-75 duration-200"
-          >
-            <Image
-              src="/icons/icon_close.svg"
-              alt="Close"
-              width={15}
-              height={15}
-            />
-          </button>
-        </div>
-        <HRow />
-      </div>
+      <ModalHeader close={closeModal} className="mb-4" heading="Create Group" />
       <form
         className={twMerge("flex-col gap-y-4 flex", className)}
         onSubmit={handleGroup}
@@ -132,6 +117,21 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
           onChange={handleTextArea}
           value={groupDetails.desc}
         />
+        <SecondaryButton
+          onClick={() =>
+            setGroupDetails({
+              ...groupDetails,
+              cos: { ...groupDetails.cos, state: !groupDetails.cos.state },
+            })
+          }
+          className={twMerge(
+            "w-fit",
+            groupDetails.cos.state &&
+              "bg-custom-light-orange border-custom-orange"
+          )}
+        >
+          {groupDetails.cos.state ? "COS Enabled" : "Enable COS"}
+        </SecondaryButton>
         <PrimaryButton
           disabled={loading}
           type="submit"

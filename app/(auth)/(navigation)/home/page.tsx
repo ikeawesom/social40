@@ -104,33 +104,41 @@ export default async function Home({
       );
     }
 
-    const res = await dbHandler.get({
-      col_name: "MEMBERS",
-      id: memberID,
-    });
+    try {
+      const res = await dbHandler.get({
+        col_name: "MEMBERS",
+        id: memberID,
+      });
 
-    const memberData = res.data as MEMBER_SCHEMA;
+      const memberData = res.data as MEMBER_SCHEMA;
+      if (!memberData)
+        throw new Error(
+          "An unexpected error occurred. Try clearing your cache and try again later."
+        );
+      let admin = false;
 
-    let admin = false;
+      if ("role" in memberData) {
+        admin =
+          ROLES_HIERARCHY[memberData.role].rank >=
+          ROLES_HIERARCHY["admin"].rank;
+      }
 
-    if ("role" in memberData) {
-      admin =
-        ROLES_HIERARCHY[memberData.role].rank >= ROLES_HIERARCHY["admin"].rank;
-    }
-
-    return (
-      <>
-        <HomeHeaderBar text="Social40" params={activityType} />
-        <div className="w-full grid place-items-center mt-[5.5rem]">
-          <div className="flex flex-col w-full items-center justify-start gap-4 max-w-[500px]">
-            {admin && <CreateAnnouncementForm memberID={memberID} />}
-            <Suspense fallback={<FeedSkeleton />}>
-              <AnnouncementSection curMember={memberID} />
-            </Suspense>
+      return (
+        <>
+          <HomeHeaderBar text="Social40" params={activityType} />
+          <div className="w-full grid place-items-center mt-[5.5rem]">
+            <div className="flex flex-col w-full items-center justify-start gap-4 max-w-[500px]">
+              {admin && <CreateAnnouncementForm memberID={memberID} />}
+              <Suspense fallback={<FeedSkeleton />}>
+                <AnnouncementSection curMember={memberID} />
+              </Suspense>
+            </div>
           </div>
-        </div>
-      </>
-    );
+        </>
+      );
+    } catch (err: any) {
+      return ErrorScreenHandler(err);
+    }
   }
   return <SignInAgainScreen />;
 }

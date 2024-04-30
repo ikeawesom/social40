@@ -5,6 +5,7 @@ export type GROUP_SCHEMA = {
   groupID: string;
   groupName: string;
   groupDesc: string;
+  cos?: { state: boolean; admins: string[]; members: string[] };
   createdBy: string; // memberID of owner
   createdOn: Timestamp;
 };
@@ -32,6 +33,7 @@ export function initGroupObject({
   groupName,
   groupDesc,
   createdBy,
+  cos,
 }: GROUP_SCHEMA) {
   return {
     groupID,
@@ -39,5 +41,6 @@ export function initGroupObject({
     groupDesc,
     createdBy,
     createdOn: getCurrentDate(),
+    cos,
   } as GROUP_SCHEMA;
 }

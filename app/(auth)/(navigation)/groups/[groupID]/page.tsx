@@ -24,6 +24,7 @@ import GroupActivities, {
 import { dbHandler } from "@/src/firebase/db";
 import handleResponses from "@/src/utils/handleResponses";
 import LeaveGroupSection from "@/src/components/groups/custom/settings/LeaveGroupSection";
+import CosSection from "@/src/components/groups/custom/cos/CosSection";
 
 async function addPfp(groupMembersTemp: GroupDetailsType) {
   try {
@@ -95,7 +96,8 @@ export default async function GroupPage({
       const bodyA = await resA.json();
 
       if (!bodyA.status) throw new Error(bodyA.error);
-      const { createdBy, groupName, groupDesc } = bodyA.data as GROUP_SCHEMA;
+      const { createdBy, groupName, groupDesc, cos } =
+        bodyA.data as GROUP_SCHEMA;
 
       // get group members
       const resB = await fetch(`${host}/api/groups/members`, PostObj);
@@ -107,15 +109,6 @@ export default async function GroupPage({
       const groupMembersRes = await addPfp(groupMembersTemp);
       if (!groupMembersRes.status) throw new Error(groupMembersRes.error);
       const groupMembers = groupMembersRes.data as GroupDetailsType;
-
-      // // debugging purposes only
-      // const membersPostObj = GetPostObj({ groupMembers });
-      // const nameUpdateRes = await fetch(
-      //   `${host}/api/groups/display-update`,
-      //   membersPostObj
-      // );
-      // const nameUpdateBody = await nameUpdateRes.json();
-      // if (!nameUpdateBody.status) throw new Error(nameUpdateBody.error);
 
       // get group statuses
       const memberIDList = Object.keys(groupMembers);
@@ -183,6 +176,16 @@ export default async function GroupPage({
                   desc={groupDesc}
                 />
                 {admin && <GroupRequested groupID={groupID} />}
+
+                {cos && cos.state && (
+                  // (cos?.admins?.includes(memberID) ||
+                  //   cos?.members?.includes(memberID)) &&
+                  <CosSection
+                    cos={cos}
+                    curMemberID={memberID}
+                    groupID={groupID}
+                  />
+                )}
 
                 <GroupStrengthSection
                   admin={admin}

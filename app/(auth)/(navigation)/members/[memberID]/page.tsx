@@ -17,6 +17,7 @@ import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
 import React, { Suspense } from "react";
 import Image from "next/image";
+import HRow from "@/src/components/utils/HRow";
 
 export async function generateMetadata({
   params,
@@ -90,7 +91,7 @@ export default async function MemberPage({
             <div className="flex flex-col items-stretch justify-start gap-4 max-w-[500px] w-full">
               <DefaultCard className="flex flex-col items-start justify-center gap-2">
                 {pfp && (
-                  <div className="w-full flex items-center justify-center py-2 relative rounded-lg mb-2 overflow-hidden">
+                  <div className="w-full flex items-center justify-center py-2 relative rounded-lg mb-1 overflow-hidden">
                     <Image
                       src={pfp}
                       fill
@@ -109,12 +110,13 @@ export default async function MemberPage({
                     </div>
                   </div>
                 )}
-                <div className="flex w-full items-center justify-between">
+                {/* <div className="flex w-full items-center justify-between">
                   <MemberPoints points={viewMemberData.points} />
-                  <BookedStatus status={viewMemberData.bookedIn} />
-                </div>
+                </div> */}
                 <div className="flex flex-col items-start justify-center">
-                  <h1 className="text-xl text-custom-dark-text">{rankName}</h1>
+                  <h1 className="text-xl text-custom-dark-text flex items-center justify-start gap-2">
+                    {rankName} <BookedStatus status={viewMemberData.bookedIn} />
+                  </h1>
                   <p className="text-sm text-custom-grey-text">
                     {viewMemberData.memberID}
                   </p>
@@ -124,6 +126,33 @@ export default async function MemberPage({
                   </p>
                 </div>
                 <MemberBadges badges={viewMemberData.badges} />
+                {(permission || sameMember) && (
+                  <>
+                    <HRow />
+                    <div className="flex items-center justify-center gap-1 w-full flex-col">
+                      <h1 className="text-custom-dark-text font-bold">
+                        Duty Points
+                      </h1>
+                      <div className="flex items-center justify-around gap-3 w-full">
+                        <div className="flex flex-col items-center justify-center gap-0">
+                          <p className="text-sm text-custom-grey-text">COS</p>
+                          <h4 className="text-lg text-custom-dark-text font-bold">
+                            {viewMemberData.dutyPoints.cos}
+                          </h4>
+                        </div>
+
+                        <div className="flex flex-col items-center justify-center gap-0">
+                          <p className="text-sm text-custom-grey-text">
+                            Guards
+                          </p>
+                          <h4 className="text-lg text-custom-dark-text font-bold">
+                            {viewMemberData.dutyPoints.gd}
+                          </h4>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </DefaultCard>
               <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
                 <JoinedActivities clickedMemberID={clickedMemberID} />

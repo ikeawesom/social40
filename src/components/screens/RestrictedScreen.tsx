@@ -17,7 +17,7 @@ export default function RestrictedScreen() {
             />
           </div>
 
-          <h1 className="text-center text-4xl font-bold text-custom-dark-text">
+          <h1 className="text-center text-4xl font-bold text-custom-dark-text my-4">
             Forbidden
           </h1>
           <p className="text-center text-custom-grey-text">

@@ -1,5 +1,4 @@
 "use client";
-import HRow from "@/src/components/utils/HRow";
 import LoadingIcon, {
   LoadingIconBright,
 } from "@/src/components/utils/LoadingIcon";
@@ -8,7 +7,6 @@ import QueryInput from "@/src/components/utils/QueryInput";
 import useQueryObj from "@/src/hooks/useQueryObj";
 import Link from "next/link";
 import React, { useState } from "react";
-import Image from "next/image";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
@@ -17,6 +15,8 @@ import { twMerge } from "tailwind-merge";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import ParticipantContainer from "./ParticipantContainer";
 import { handleReload } from "@/src/components/navigation/HeaderBar";
+import ModalHeader from "@/src/components/utils/ModalHeader";
+import ModalLoading from "@/src/components/utils/ModalLoading";
 
 export default function ActivityParticipantsList({
   participantsData,
@@ -90,23 +90,10 @@ export default function ActivityParticipantsList({
     <>
       {cfm && (
         <Modal className="min-[400px]:p-4">
-          <div className="flex items-center justify-between w-full">
-            <h1 className="text-custom-dark-text font-semibold">
-              Why are you kicking {curMember}?
-            </h1>
-            <button
-              onClick={() => setCfm(false)}
-              className="hover:opacity-75 duration-200"
-            >
-              <Image
-                src="/icons/icon_close.svg"
-                alt="Close"
-                width={15}
-                height={15}
-              />
-            </button>
-          </div>
-          <HRow />
+          <ModalHeader
+            close={() => setCfm(false)}
+            heading={`Why are you kicking ${curMember}?`}
+          />
           {loading ? (
             <div className="p-4 w-full grid place-items-center">
               <LoadingIcon height={30} width={30} />
@@ -163,28 +150,10 @@ export default function ActivityParticipantsList({
       {curMember !== "" && !cfm && (
         <Modal className="min-[400px]:p-4">
           {loading ? (
-            <div className="w-full grid place-items-center">
-              <LoadingIcon height={50} width={50} />
-            </div>
+            <ModalLoading />
           ) : (
             <>
-              <div className="flex items-center justify-between w-full">
-                <h1 className="text-custom-dark-text font-semibold">
-                  {curMember}
-                </h1>
-                <button
-                  onClick={() => setCurMember("")}
-                  className="hover:opacity-75 duration-200"
-                >
-                  <Image
-                    src="/icons/icon_close.svg"
-                    alt="Close"
-                    width={15}
-                    height={15}
-                  />
-                </button>
-              </div>
-              <HRow />
+              <ModalHeader close={() => setCurMember("")} heading={curMember} />
               <div className="flex flex-col items-center justify-start mt-2 gap-1">
                 <Link
                   className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"

@@ -4,6 +4,7 @@ import ReturnHomeButton from "../utils/ReturnHomeButton";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import SecondaryButton from "../utils/SecondaryButton";
+import { handleReload } from "../navigation/HeaderBar";
 
 export default function OfflineScreen() {
   const router = useRouter();
@@ -23,8 +24,8 @@ export default function OfflineScreen() {
             connection or try again later.
           </p>
         </div>
-        <div className="flex flex-col items-center justify-center w-full gap-2">
-          <SecondaryButton onClick={() => router.refresh()}>
+        <div className="flex flex-col items-center justify-center w-fit gap-2">
+          <SecondaryButton onClick={() => handleReload(router)}>
             Refresh
           </SecondaryButton>
           <ReturnHomeButton />

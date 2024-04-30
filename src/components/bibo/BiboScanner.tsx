@@ -4,13 +4,12 @@ import { Html5Qrcode } from "html5-qrcode";
 import LoadingIcon, { LoadingIconBright } from "../utils/LoadingIcon";
 import { twMerge } from "tailwind-merge";
 import Modal from "../utils/Modal";
-import Image from "next/image";
-import HRow from "../utils/HRow";
 import SecondaryButton from "../utils/SecondaryButton";
 import { toast } from "sonner";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { useHostname } from "@/src/hooks/useHostname";
 import { BIBO_SCHEMA } from "@/src/utils/schemas/bibo";
+import ModalHeader from "../utils/ModalHeader";
 
 export default function BiboScanner({ memberID }: { memberID: string }) {
   const [loading, setLoading] = useState(false);
@@ -100,25 +99,11 @@ export default function BiboScanner({ memberID }: { memberID: string }) {
     <>
       {biboData && (
         <Modal className="flex flex-col items-center justify-start gap-10 w-full">
-          <div className="mb-2 w-full">
-            <div className="flex items-center justify-between w-full gap-4">
-              <h1 className="text-custom-dark-text font-semibold">
-                Book In Member
-              </h1>
-              <button
-                onClick={handleReset}
-                className="hover:opacity-75 duration-200"
-              >
-                <Image
-                  src="/icons/icon_close.svg"
-                  alt="Close"
-                  width={15}
-                  height={15}
-                />
-              </button>
-            </div>
-            <HRow />
-          </div>
+          <ModalHeader
+            close={handleReset}
+            heading="Book In Member"
+            className="mb-2"
+          />
           <div className="flex flex-col items-center justify-center">
             <h1 className="text-center">Booking in member:</h1>
             <h1 className="text-center text-custom-primary font-semibold">

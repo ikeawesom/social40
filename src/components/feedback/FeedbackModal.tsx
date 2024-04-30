@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 import Modal from "../utils/Modal";
 import Image from "next/image";
-import HRow from "../utils/HRow";
 import PrimaryButton from "../utils/PrimaryButton";
 import Link from "next/link";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { toast } from "sonner";
+import ModalHeader from "../utils/ModalHeader";
 
 export default function FeedbackModal({
   memberID,
@@ -50,25 +50,11 @@ export default function FeedbackModal({
   if (show === "show")
     return (
       <Modal>
-        <div className="mb-2">
-          <div className="flex items-center justify-between w-full">
-            <h1 className="text-custom-dark-text font-semibold">
-              Enjoying Social40?
-            </h1>
-            <button
-              onClick={() => setShow("closed")}
-              className="hover:opacity-75 duration-200"
-            >
-              <Image
-                src="/icons/icon_close.svg"
-                alt="Close"
-                width={15}
-                height={15}
-              />
-            </button>
-          </div>
-          <HRow />
-        </div>
+        <ModalHeader
+          close={() => setShow("closed")}
+          className="mb-2"
+          heading="Enjoying Social40?"
+        />
         <div className="flex flex-col items-center justify-start gap-2 mb-2">
           <Image
             src="/icons/icon_smile.svg"

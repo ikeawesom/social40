@@ -4,11 +4,11 @@ import React from "react";
 import Modal from "../../../utils/Modal";
 import PrimaryButton from "../../../utils/PrimaryButton";
 import Image from "next/image";
-import HRow from "../../../utils/HRow";
 import { GroupDetailsType } from "../GroupMembers";
 import { useHADetails } from "@/src/hooks/groups/custom/useHADetails";
 import HAForm from "./HAForm";
 import { twMerge } from "tailwind-merge";
+import ModalHeader from "@/src/components/utils/ModalHeader";
 
 export default function CalculateHAButton({
   membersList,
@@ -25,25 +25,11 @@ export default function CalculateHAButton({
     <>
       {show && (
         <Modal>
-          <div className="mb-2">
-            <div className="flex items-center justify-between w-full">
-              <h1 className="text-custom-dark-text font-semibold">
-                Calculate HA
-              </h1>
-              <button
-                onClick={disable}
-                className="hover:opacity-75 duration-200"
-              >
-                <Image
-                  src="/icons/icon_close.svg"
-                  alt="Close"
-                  width={15}
-                  height={15}
-                />
-              </button>
-            </div>
-            <HRow />
-          </div>
+          <ModalHeader
+            close={disable}
+            className="mb-2"
+            heading="Calculate HA"
+          />
           <HAForm membersList={membersList} groupID={groupID} />
         </Modal>
       )}
