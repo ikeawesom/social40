@@ -21,10 +21,12 @@ export default function MonthlyPlanList({
   sortedPlans,
   groupData,
   month,
+  memberPoints,
 }: {
   sortedPlans: { [date: string]: CosDailyType };
   groupData: GROUP_SCHEMA;
   month: string;
+  memberPoints: { [memberID: string]: number };
 }) {
   const router = useRouter();
   const { memberID } = useMemberID();
@@ -165,6 +167,9 @@ export default function MonthlyPlanList({
       <div className="w-full flex flex-col items-start justify-start gap-2">
         {Object.keys(plans).map((date: string) => {
           const { day, memberID, month, type } = plans[date];
+          const newScore =
+            Number(memberPoints[plans[date].memberID]) +
+            Number(COS_TYPES[type]);
           return (
             <DefaultCard
               className="w-full py-2 px-3 flex items-center justify-between"
@@ -190,9 +195,15 @@ export default function MonthlyPlanList({
                   )}
                 >
                   {members.map((id: string) => (
-                    <option key={id}>{id}</option>
+                    <option key={id} value={id}>
+                      {id} ({memberPoints[id]})
+                    </option>
                   ))}
                 </select>
+                <h1 className="mt-2 text-sm font-bold text-custom-green">
+                  Points: {memberPoints[plans[date].memberID]} {" >> "}{" "}
+                  {newScore}
+                </h1>
               </div>
               <div className="self-start">
                 {type === "weekend" && <Badge className="mb-1">WEEKEND</Badge>}
