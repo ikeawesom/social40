@@ -239,7 +239,18 @@ export default function CreatePlanSection({
           )}
         </Modal>
       )}
-      <PrimaryButton onClick={() => setShowModal(true)} className="w-fit px-3">
+      <PrimaryButton
+        onClick={() => {
+          if (members.length > 0) {
+            setShowModal(true);
+          } else {
+            alert(
+              "Slow down! You have no COS members added. Please add some members first, then start planning."
+            );
+          }
+        }}
+        className="w-fit px-3"
+      >
         Create Plan
       </PrimaryButton>
     </>
