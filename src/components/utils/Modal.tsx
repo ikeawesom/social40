@@ -12,7 +12,7 @@ type ModalProps = {
 
 export default function Modal({ children, className, loading }: ModalProps) {
   return (
-    <div className="min-h-screen w-full bg-black/25 fixed z-20 grid place-items-center top-0 left-0 px-4">
+    <div className="min-h-screen w-full bg-black/25 fixed z-20 grid place-items-center top-0 left-0 px-4 fade-in">
       {loading ? (
         <LoadingIcon />
       ) : (
