@@ -17,6 +17,11 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Badge from "@/src/components/utils/Badge";
 import { CreateCOSPlan } from "@/src/utils/groups/COS/handleCOS";
+import { handleReload } from "@/src/components/navigation/HeaderBar";
+
+export const getType = (day: number) => {
+  return day === 0 || day === 6 ? "weekend" : day === 5 ? "friday" : "standard";
+};
 
 export default function CreatePlanSection({
   groupID,
@@ -65,14 +70,6 @@ export default function CreatePlanSection({
 
   const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
     setSelectedMonth(parseInt(e.target.value));
-
-  const getType = (day: number) => {
-    return day === 0 || day === 6
-      ? "weekend"
-      : day === 5
-      ? "friday"
-      : "standard";
-  };
 
   const calculateDays = () => {
     const year = new Date().getFullYear();
@@ -141,6 +138,7 @@ export default function CreatePlanSection({
       toast.success(
         `Nice, your plan for ${MONTHS[selectedMonth]} was saved successfully.`
       );
+      handleReload(router);
     } catch (err: any) {
       toast.error(err.message);
     }
