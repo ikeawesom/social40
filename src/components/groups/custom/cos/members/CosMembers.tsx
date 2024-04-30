@@ -68,8 +68,8 @@ export default function CosMembers({
                           onClick={() => toggleAdmin(clickedID)}
                         >
                           {admins.includes(clickedID)
-                            ? "Remove as Admin"
-                            : "Make Admin"}
+                            ? "Remove as COS Admin"
+                            : "Make COS Admin"}
                         </div>
                       </div>
                     )}
