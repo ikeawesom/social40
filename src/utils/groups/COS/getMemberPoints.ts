@@ -21,7 +21,7 @@ export async function getMemberPoints(members: string[]) {
     resolvedArr.forEach((item: any) => {
       if (!item.status) throw new Error(item.error);
       const data = item.data as MEMBER_SCHEMA;
-      const points = data.dutyPoints.cos;
+      const points = data.dutyPoints?.cos ?? 0;
       sortedMemberPoints.push({ points, memberID: data.memberID });
     });
 
