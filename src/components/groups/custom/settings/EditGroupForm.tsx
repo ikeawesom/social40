@@ -19,7 +19,7 @@ export default function EditGroupForm({
 
   const initGroupName = groupData.groupName;
   const initGroupDesc = groupData.groupDesc;
-  const initCos = groupData.cos ?? { state: false, allowed: [] };
+  const initCos = groupData.cos ?? { state: false, members: [], admins: [] };
 
   const [loading, setLoading] = useState(false);
   const [inputGroup, setInputGroup] = useState({
@@ -50,7 +50,8 @@ export default function EditGroupForm({
           groupDesc: inputGroup.groupDesc,
           cos: {
             state: inputGroup.cos.state,
-            allowed: groupData.cos?.allowed ?? [groupData.createdBy],
+            admins: inputGroup.cos.admins ?? [groupData.createdBy],
+            members: inputGroup.cos.members ?? [groupData.createdBy],
           },
         } as GROUP_SCHEMA,
       });

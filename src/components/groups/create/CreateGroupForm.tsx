@@ -56,7 +56,7 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
         createdBy: memberID,
         groupDesc: desc,
         groupName: name,
-        cos: { state: cos.state, allowed: [memberID] },
+        cos: { state: cos.state, admins: [memberID], members: [memberID] },
         createdOn: getCurrentDate(),
       });
 
