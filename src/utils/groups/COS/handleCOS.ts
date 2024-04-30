@@ -84,3 +84,26 @@ export async function DeleteCOSPlan(groupID: string, month: string) {
     return handleResponses({ status: false, error: err.message });
   }
 }
+
+export async function EditCOSPlan(
+  groupID: string,
+  month: string,
+  plans: {
+    [date: string]: CosDailyType;
+  }
+) {
+  try {
+    const { error } = await dbHandler.edit({
+      col_name: `GROUPS/${groupID}/COS`,
+      id: `${month}`,
+      data: {
+        plans,
+      },
+    });
+    if (error) throw new Error(error);
+
+    return handleResponses();
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
+}
