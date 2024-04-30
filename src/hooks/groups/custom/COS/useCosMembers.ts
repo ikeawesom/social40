@@ -67,6 +67,8 @@ export function useCOSMembers(groupData: GROUP_SCHEMA) {
 
       const { error } = await ToggleCOSAdmin(groupID, to_update);
       if (error) throw new Error(error);
+      router.refresh();
+      reset();
       toast.success(`Successfully updated ${id}'s COS permissions.`);
     } catch (err: any) {
       toast.error(err.message);
