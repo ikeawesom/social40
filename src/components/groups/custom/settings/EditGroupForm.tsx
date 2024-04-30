@@ -50,8 +50,14 @@ export default function EditGroupForm({
           groupDesc: inputGroup.groupDesc,
           cos: {
             state: inputGroup.cos.state,
-            admins: inputGroup.cos.admins ?? [groupData.createdBy],
-            members: inputGroup.cos.members ?? [groupData.createdBy],
+            admins:
+              inputGroup.cos.admins.length === 0
+                ? [groupData.createdBy]
+                : inputGroup.cos.admins,
+            members:
+              inputGroup.cos.members.length === 0
+                ? [groupData.createdBy]
+                : inputGroup.cos.members,
           },
         } as GROUP_SCHEMA,
       });
