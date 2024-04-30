@@ -42,6 +42,14 @@ export default function AddMembersSection({
           ) : (
             <>
               <InnerContainer className="w-full max-h-[30vh] border-[1px] border-custom-light-text/50">
+                {Object.keys(members).length === 0 && (
+                  <div className="w-full grid place-items-center p-4 h-[10vh]">
+                    <p className="text-sm text-custom-grey-text text-center">
+                      Hmm.. looks like you don't have any eligible members for
+                      COS.
+                    </p>
+                  </div>
+                )}
                 {Object.keys(members).map((id: string) => {
                   const added = toAdd.includes(id);
                   return (
