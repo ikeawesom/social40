@@ -328,29 +328,37 @@ export default function MonthlyPlanList({
                   {day} {MONTHS[month]}
                   {memberID !== ori[date].memberID && "*"}
                 </p>
-                <select
-                  onChange={(e) => onChangeMember(e, date)}
-                  value={memberID}
-                  className={twMerge(
-                    "custom text-sm border-[1px] border-custom-grey-text/10 rounded-md px-2 py-1",
-                    !unlocked && "pointer-events-none"
-                  )}
-                >
-                  {members.map((id: string) => (
-                    <option key={id} value={id}>
-                      {id} ({memberPoints[id]})
-                    </option>
-                  ))}
-                </select>
-                <p
-                  onClick={() => togglePublicHols(date)}
-                  className={twMerge(
-                    "w-fit text-xs mt-2 text-custom-grey-text underline cursor-pointer hover:text-custom-primary",
-                    !unlocked && "pointer-events-none"
-                  )}
-                >
-                  Toggle as Public Holiday
-                </p>
+                {confirmed ? (
+                  <h1 className="text-sm font-bold text-custom-dark-text">
+                    {memberID}
+                  </h1>
+                ) : (
+                  <select
+                    onChange={(e) => onChangeMember(e, date)}
+                    value={memberID}
+                    className={twMerge(
+                      "custom text-sm border-[1px] border-custom-grey-text/10 rounded-md px-2 py-1",
+                      !unlocked && "pointer-events-none"
+                    )}
+                  >
+                    {members.map((id: string) => (
+                      <option key={id} value={id}>
+                        {id} ({memberPoints[id]})
+                      </option>
+                    ))}
+                  </select>
+                )}
+                {!confirmed && (
+                  <p
+                    onClick={() => togglePublicHols(date)}
+                    className={twMerge(
+                      "w-fit text-xs mt-2 text-custom-grey-text underline cursor-pointer hover:text-custom-primary",
+                      !unlocked && "pointer-events-none"
+                    )}
+                  >
+                    Toggle as Public Holiday
+                  </p>
+                )}
               </div>
               <div className="self-start">
                 <p className="text-xs text-custom-grey-text text-end mb-2">
