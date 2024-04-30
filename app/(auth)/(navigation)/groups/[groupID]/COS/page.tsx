@@ -52,7 +52,14 @@ export default async function GroupCOSPage({
         <HeaderBar text={`COS Plan for ${groupID}`} back />
         <div className="grid place-items-center">
           <div className="max-w-[500px] w-full flex flex-col items-start justify-start gap-4">
-            <Suspense fallback={<DefaultSkeleton className="h-[30vh]" />}>
+            <Suspense
+              fallback={
+                <div className="flex flex-col w-full items-start justify-start gap-2">
+                  <DefaultSkeleton className="h-[30px] max-w-[150px]" />
+                  <DefaultSkeleton className="h-[14vh]" />
+                </div>
+              }
+            >
               <PlansSection
                 curMemberID={memberID}
                 groupID={groupID}
@@ -60,7 +67,16 @@ export default async function GroupCOSPage({
                 admins={admins}
               />
             </Suspense>
-            <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
+            <Suspense
+              fallback={
+                <div className="flex flex-col w-full items-start justify-start gap-2">
+                  <DefaultSkeleton className="h-[30px] max-w-[150px]" />
+                  <DefaultSkeleton className="h-[15px]" />
+                  <DefaultSkeleton className="h-[15px]" />
+                  <DefaultSkeleton className="h-[15px]" />
+                </div>
+              }
+            >
               <COSMembersSection
                 curMemberID={memberID}
                 groupData={groupData}
