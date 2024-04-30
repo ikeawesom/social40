@@ -43,30 +43,7 @@ export default function CosPlansSection({
         </div>
       ) : (
         <div>
-          {showAll ? (
-            Object.keys(cosData).map((date: string) => {
-              const { month } = cosData[date];
-              return (
-                <Link
-                  href={`/groups/${cosData[date].groupID}/COS/${cosData[date].month}`}
-                  key={date}
-                >
-                  <DefaultCard className="py-2 px-3 pr-1 flex items-center justify-between gap-2 mb-2 hover:bg-custom-light-text duration-150">
-                    <h4 className="font-bold text-start text-custom-dark-text">
-                      {MONTHS[month]}
-                    </h4>
-                    <Image
-                      src="/icons/icon_arrow-down.svg"
-                      width={30}
-                      height={30}
-                      alt="Show"
-                      className="-rotate-90"
-                    />
-                  </DefaultCard>
-                </Link>
-              );
-            })
-          ) : Object.keys(curMonthPlan).length === 0 ? (
+          {Object.keys(curMonthPlan).length === 0 ? (
             <div className="min-h-[10vh] bg-white grid place-items-center p-4 rounded-md">
               <p className="text-sm text-custom-grey-text text-center">
                 Seems like there is no COS plan for this month...
@@ -75,9 +52,12 @@ export default function CosPlansSection({
           ) : (
             todayCOS && (
               <DefaultCard>
-                {todayCOS.type === "weekend" && <Badge>WEEKEND</Badge>}
+                {todayCOS.type === "weekend" && (
+                  <Badge className="mb-2">WEEKEND</Badge>
+                )}
                 {todayCOS.type === "public" && (
                   <Badge
+                    className="mb-2"
                     backgroundColor="bg-purple-50"
                     primaryColor="border-purple-300"
                   >
@@ -97,6 +77,32 @@ export default function CosPlansSection({
               </DefaultCard>
             )
           )}
+          <div className="w-full flex flex-col items-start justify-start gap-2 mt-2">
+            {showAll &&
+              Object.keys(cosData).map((date: string) => {
+                const { month } = cosData[date];
+                return (
+                  <Link
+                    href={`/groups/${cosData[date].groupID}/COS/${cosData[date].month}`}
+                    key={date}
+                    className="w-full"
+                  >
+                    <DefaultCard className="py-2 px-3 pr-1 flex items-center justify-between gap-2 mb-2 hover:bg-custom-light-text duration-150">
+                      <h4 className="font-bold text-start text-custom-dark-text">
+                        {MONTHS[month]}
+                      </h4>
+                      <Image
+                        src="/icons/icon_arrow-down.svg"
+                        width={30}
+                        height={30}
+                        alt="Show"
+                        className="-rotate-90"
+                      />
+                    </DefaultCard>
+                  </Link>
+                );
+              })}
+          </div>
           <div className="flex items-center justify-end mt-2">
             <p
               onClick={() => setShowAll(!showAll)}
