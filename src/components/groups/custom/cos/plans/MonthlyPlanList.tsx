@@ -296,8 +296,8 @@ export default function MonthlyPlanList({
                 <>
                   <p className="text-xs text-start text-custom-grey-text mt-1">
                     By confirming the scores, the system will finalize the duty
-                    points of the above members. We suggest only confirming the
-                    scores at the end of the month when all duties have been
+                    points of the above members. It is suggested to only confirm
+                    the scores at the end of the month when all duties have been
                     served.
                   </p>
                   <PrimaryButton disabled={loading} onClick={handleConfirm}>
