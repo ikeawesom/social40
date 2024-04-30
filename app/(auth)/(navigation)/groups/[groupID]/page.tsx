@@ -177,11 +177,15 @@ export default async function GroupPage({
                 />
                 {admin && <GroupRequested groupID={groupID} />}
 
-                {cos?.state &&
-                  (cos?.admins?.includes(memberID) ||
-                    cos?.members?.includes(memberID)) && (
-                    <CosSection groupID={groupID} />
-                  )}
+                {cos && cos.state && (
+                  // (cos?.admins?.includes(memberID) ||
+                  //   cos?.members?.includes(memberID)) &&
+                  <CosSection
+                    cos={cos}
+                    curMemberID={memberID}
+                    groupID={groupID}
+                  />
+                )}
 
                 <GroupStrengthSection
                   admin={admin}
