@@ -21,6 +21,7 @@ export default async function CosSection({
 }) {
   try {
     const date = new Date();
+    date.setHours(date.getHours() + 8);
     const dateStr = DateToString(date).split(" ")[0];
 
     const month = date.getMonth(); // 0: jan, 1: feb, 2: march, etc.
