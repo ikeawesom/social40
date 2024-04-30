@@ -216,6 +216,21 @@ export const VERSION_NUMBER = Object.keys(VERSION_MAP)[0] as string;
 export const VERSION_DESC = VERSION_MAP[VERSION_NUMBER].desc;
 export const VERSION_UPDATES = VERSION_MAP[VERSION_NUMBER].updates;
 
+export const MONTHS = [
+  "JANUARY",
+  "FEBUARY",
+  "MARCH",
+  "APRIL",
+  "MAY",
+  "JUNE",
+  "JULY",
+  "AUGUST",
+  "SEPTEMBER",
+  "OCTOBER",
+  "NOVEMBER",
+  "DECEMBER",
+];
+
 export type GAME_TYPE = {
   id: string;
   title: string;
