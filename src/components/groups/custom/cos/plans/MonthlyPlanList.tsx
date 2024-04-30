@@ -27,9 +27,6 @@ export default function MonthlyPlanList({
   month: string;
 }) {
   const router = useRouter();
-  const { cos, groupID } = groupData;
-  if (!cos) return;
-  const { admins, members } = cos;
   const { memberID } = useMemberID();
   const [unlocked, setUnlock] = useState(false);
   const [plans, setPlans] = useState(sortedPlans);
@@ -41,6 +38,10 @@ export default function MonthlyPlanList({
   useEffect(() => {
     if (memberID !== "") setAllowed(admins.includes(memberID));
   }, [memberID]);
+
+  const { cos, groupID } = groupData;
+  if (!cos) return;
+  const { admins, members } = cos;
 
   const onChangeMember = (
     e: React.ChangeEvent<HTMLSelectElement>,
