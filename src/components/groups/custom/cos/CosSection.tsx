@@ -1,16 +1,18 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import { dbHandler } from "@/src/firebase/db";
+import { DateToString } from "@/src/utils/getCurrentDate";
 import { COS_DAILY_SCHEMA } from "@/src/utils/schemas/cos";
 import Link from "next/link";
 import React from "react";
 
 export default async function CosSection({ groupID }: { groupID: string }) {
   try {
-    const month = new Date().getMonth();
-    const day = new Date().getDate();
-    // 0: jan, 1: feb, 2: march, etc.
-    const { error, data } = await dbHandler.get({
+    const date = new Date();
+    const dateStr = DateToString(date).split(" ")[0];
+
+    const month = date.getMonth(); // 0: jan, 1: feb, 2: march, etc.
+    const { data, error } = await dbHandler.get({
       col_name: `GROUPS/${groupID}/COS`,
       id: `${month}`,
     });
@@ -33,7 +35,7 @@ export default async function CosSection({ groupID }: { groupID: string }) {
         ) : (
           <div className="flex flex-col items-start justify-start gap-2">
             <h1 className="font-bold text-custom-dark-text">
-              COS: {cosData[`${day}`].memberID}
+              COS: {cosData.plans[dateStr].memberID}
             </h1>
           </div>
         )}
