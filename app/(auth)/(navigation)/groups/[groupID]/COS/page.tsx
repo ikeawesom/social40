@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: "COS",
 };
 
-export default async function Groups({
+export default async function GroupCOSPage({
   params,
 }: {
   params: { [groupID: string]: string };
@@ -53,7 +53,10 @@ export default async function Groups({
         <div className="grid place-items-center">
           <div className="max-w-[500px] w-full flex flex-col items-start justify-start gap-4">
             <Suspense fallback={<DefaultSkeleton className="h-[30vh]" />}>
-              <PlansSection groupID={groupID} />
+              <PlansSection
+                groupID={groupID}
+                members={groupData.cos?.members ?? []}
+              />
             </Suspense>
             <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
               <COSMembersSection
