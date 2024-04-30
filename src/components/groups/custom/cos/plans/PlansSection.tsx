@@ -10,9 +10,13 @@ import { getMemberPoints } from "@/src/utils/groups/COS/getMemberPoints";
 export default async function PlansSection({
   groupID,
   members,
+  admins,
+  curMemberID,
 }: {
   groupID: string;
   members: string[];
+  admins: string[];
+  curMemberID: string;
 }) {
   try {
     const { data, error } = await dbHandler.getSpecific({
@@ -38,12 +42,14 @@ export default async function PlansSection({
           <h1 className="text-lg font-bold text-custom-dark-text">
             Planned COS
           </h1>
-          <CreatePlanSection
-            memberPoints={memberPoints}
-            members={members}
-            cosData={cosData}
-            groupID={groupID}
-          />
+          {admins.includes(curMemberID) && (
+            <CreatePlanSection
+              memberPoints={memberPoints}
+              members={members}
+              cosData={cosData}
+              groupID={groupID}
+            />
+          )}
         </div>
         <HRow className="mb-2" />
         <CosPlansSection cosData={cosData} />

@@ -53,10 +53,16 @@ export default async function GroupCOSPage({
         <div className="grid place-items-center">
           <div className="max-w-[500px] w-full flex flex-col items-start justify-start gap-4">
             <Suspense fallback={<DefaultSkeleton className="h-[30vh]" />}>
-              <PlansSection groupID={groupID} members={cos.members ?? []} />
+              <PlansSection
+                curMemberID={memberID}
+                groupID={groupID}
+                members={cos.members ?? []}
+                admins={admins}
+              />
             </Suspense>
             <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
               <COSMembersSection
+                curMemberID={memberID}
                 groupData={groupData}
                 admins={admins}
                 members={cos.members ?? []}

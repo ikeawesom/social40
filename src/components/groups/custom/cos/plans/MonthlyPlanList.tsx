@@ -222,13 +222,15 @@ export default function MonthlyPlanList({
               height={20}
             />
           </SecondaryButton>
-          <SecondaryButton
-            onClick={handleDelete}
-            disabled={loading || !allowed}
-            className="text-custom-red border-custom-red bg-custom-light-red self-stretch"
-          >
-            {deleting ? "Deleting..." : "Delete Plan"}
-          </SecondaryButton>
+          {allowed && (
+            <SecondaryButton
+              onClick={handleDelete}
+              disabled={loading || !allowed}
+              className="text-custom-red border-custom-red bg-custom-light-red self-stretch"
+            >
+              {deleting ? "Deleting..." : "Delete Plan"}
+            </SecondaryButton>
+          )}
         </div>
         <p className="text-sm text-custom-grey-text mt-2">
           {confirmed

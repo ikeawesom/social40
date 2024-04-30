@@ -9,10 +9,12 @@ export default async function COSMembersSection({
   members,
   groupData,
   admins,
+  curMemberID,
 }: {
   groupData: GROUP_SCHEMA;
   members: string[];
   admins: string[];
+  curMemberID: string;
 }) {
   try {
     const { data, error } = await getMemberPoints(members);
@@ -26,7 +28,9 @@ export default async function COSMembersSection({
           <h1 className="text-lg font-bold text-custom-dark-text">
             COS Members
           </h1>
-          <AddMembersSection groupData={groupData} curMembers={members} />
+          {admins.includes(curMemberID) && (
+            <AddMembersSection groupData={groupData} curMembers={members} />
+          )}
         </div>
         <HRow className="mb-2" />
         <CosMembers
