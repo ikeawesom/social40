@@ -17,6 +17,7 @@ export type COS_DAILY_SCHEMA = {
   plans: { [date: string]: CosDailyType };
   month: number;
   groupID: string;
+  confirmed?: boolean;
 };
 
 export type COS_MONTHLY_SCHEMA = {
