@@ -6,7 +6,19 @@ import { COS_DAILY_SCHEMA } from "@/src/utils/schemas/cos";
 import Link from "next/link";
 import React from "react";
 
-export default async function CosSection({ groupID }: { groupID: string }) {
+export default async function CosSection({
+  groupID,
+  curMemberID,
+  cos,
+}: {
+  groupID: string;
+  curMemberID: string;
+  cos: {
+    state: boolean;
+    admins: string[];
+    members: string[];
+  };
+}) {
   try {
     const date = new Date();
     const dateStr = DateToString(date).split(" ")[0];
@@ -33,10 +45,22 @@ export default async function CosSection({ groupID }: { groupID: string }) {
             </Link>
           </div>
         ) : (
-          <div className="flex flex-col items-start justify-start gap-2">
+          <div className="flex flex-col items-start justify-start gap-1">
+            <p className="text-xs text-custom-grey-text">
+              COS for today, {dateStr}
+            </p>
             <h1 className="font-bold text-custom-dark-text">
-              COS: {cosData.plans[dateStr].memberID}
+              {cosData.plans[dateStr].memberID}
             </h1>
+            {(cos.admins.includes(curMemberID) ||
+              cos.members.includes(curMemberID)) && (
+              <Link
+                href={`/groups/${groupID}/COS`}
+                className="text-xs underline text-custom-primary hover:opacity-70"
+              >
+                View COS Plans
+              </Link>
+            )}
           </div>
         )}
       </DefaultCard>
