@@ -8,12 +8,12 @@ export default function loading() {
       <HeaderBar text="COS Plan for ..." back />
       <div className="w-full grid place-items-center">
         <div className="flex flex-col w-full items-start justify-start gap-2 max-w-[500px]">
-          <DefaultSkeleton className="h-[50px] max-w-[300px]" />
-          <DefaultSkeleton className="h-[25vh] mb-2" />
-          <DefaultSkeleton className="h-[50px] max-w-[300px]" />
-          <DefaultSkeleton className="h-[10vh]" />
-          <DefaultSkeleton className="h-[10vh]" />
-          <DefaultSkeleton className="h-[10vh]" />
+          <DefaultSkeleton className="h-[30px] max-w-[150px]" />
+          <DefaultSkeleton className="h-[14vh] mb-2" />
+          <DefaultSkeleton className="h-[30px] max-w-[150px]" />
+          <DefaultSkeleton className="h-[15px]" />
+          <DefaultSkeleton className="h-[15px]" />
+          <DefaultSkeleton className="h-[15px]" />
         </div>
       </div>
     </>
