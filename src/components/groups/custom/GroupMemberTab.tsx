@@ -5,19 +5,16 @@ import { useRouter } from "next/navigation";
 import StatusDot from "../../utils/StatusDot";
 import { GROUP_ROLES_HEIRARCHY, MAX_LENGTH } from "@/src/utils/constants";
 import Modal from "../../utils/Modal";
-import HRow from "../../utils/HRow";
 import Image from "next/image";
-import LoadingIcon from "../../utils/LoadingIcon";
 import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
-import {
-  DateToString,
-  TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
+import { DateToString } from "@/src/utils/getCurrentDate";
 import Link from "next/link";
 import { contentfulImageLoader } from "../../profile/edit/ProfilePicSection";
+import ModalLoading from "../../utils/ModalLoading";
+import ModalHeader from "../../utils/ModalHeader";
 
 export default function GroupMemberTab({
   data,
@@ -120,28 +117,10 @@ export default function GroupMemberTab({
       {show && (
         <Modal className="min-[400px]:p-4">
           {loading ? (
-            <div className="w-full grid place-items-center">
-              <LoadingIcon height={50} width={50} />
-            </div>
+            <ModalLoading />
           ) : (
             <>
-              <div className="flex items-center justify-between w-full">
-                <h1 className="text-custom-dark-text font-semibold">
-                  {displayName}
-                </h1>
-                <button
-                  onClick={() => setShow(false)}
-                  className="hover:opacity-75 duration-200"
-                >
-                  <Image
-                    src="/icons/icon_close.svg"
-                    alt="Close"
-                    width={15}
-                    height={15}
-                  />
-                </button>
-              </div>
-              <HRow />
+              <ModalHeader close={() => setShow(false)} heading={displayName} />
               <div className="flex flex-col items-center justify-start mt-2 gap-1">
                 <Link
                   className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"

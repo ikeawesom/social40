@@ -3,14 +3,13 @@
 import Modal from "@/src/components/utils/Modal";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import React from "react";
-import Image from "next/image";
-import HRow from "@/src/components/utils/HRow";
-import LoadingIcon from "@/src/components/utils/LoadingIcon";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import InnerContainer from "@/src/components/utils/InnerContainer";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import { twMerge } from "tailwind-merge";
 import { useAddCosMembers } from "@/src/hooks/groups/custom/COS/useAddCosMembers";
+import ModalLoading from "@/src/components/utils/ModalLoading";
+import ModalHeader from "@/src/components/utils/ModalHeader";
 
 export default function AddMembersSection({
   groupData,
@@ -35,31 +34,11 @@ export default function AddMembersSection({
     <>
       {showModal && (
         <Modal className="min-[400px]:p-4">
-          <div className="flex items-center justify-between w-full">
-            <h1 className="text-custom-dark-text font-semibold">Add Members</h1>
-            <button onClick={reset} className="hover:opacity-75 duration-200">
-              <Image
-                src="/icons/icon_close.svg"
-                alt="Close"
-                width={15}
-                height={15}
-              />
-            </button>
-          </div>
-          <HRow className="mb-2" />
+          <ModalHeader close={reset} heading="Add Members" />
           {loading || loadAdd ? (
-            <div className="p-4 w-full grid place-items-center">
-              <LoadingIcon height={30} width={30} />
-              {!loadAdd ? (
-                <p className="text-xs text-custom-grey-text mt-2">
-                  Loading members...
-                </p>
-              ) : (
-                <p className="text-xs text-custom-grey-text mt-2">
-                  Adding members...
-                </p>
-              )}
-            </div>
+            <ModalLoading
+              text={!loadAdd ? "Loading members..." : "Adding members..."}
+            />
           ) : (
             <>
               <InnerContainer className="w-full max-h-[30vh] border-[1px] border-custom-light-text/50">
@@ -121,7 +100,7 @@ export default function AddMembersSection({
           )}
         </Modal>
       )}
-      <PrimaryButton onClick={() => setShowModal(true)} className="w-fit">
+      <PrimaryButton onClick={() => setShowModal(true)} className="w-fit px-3">
         Add Members
       </PrimaryButton>
     </>

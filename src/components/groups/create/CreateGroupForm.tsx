@@ -4,14 +4,13 @@ import SecondaryButton from "../../utils/SecondaryButton";
 import PrimaryButton from "../../utils/PrimaryButton";
 import generateID from "@/src/utils/getRandomID";
 import Modal from "../../utils/Modal";
-import HRow from "../../utils/HRow";
-import Image from "next/image";
 import { toast } from "sonner";
 import { LoadingIconBright } from "../../utils/LoadingIcon";
 import getCurrentDate from "@/src/utils/getCurrentDate";
 import { useMemberID } from "@/src/hooks/useMemberID";
 import { useRouter } from "next/navigation";
 import { createGroup } from "@/src/utils/groups/createGroup";
+import ModalHeader from "../../utils/ModalHeader";
 
 type FormType = {
   className?: string;
@@ -72,23 +71,7 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
 
   return (
     <Modal>
-      <div className="mb-4">
-        <div className="flex items-center justify-between w-full">
-          <h1 className="text-custom-dark-text font-semibold">Create Group</h1>
-          <button
-            onClick={closeModal}
-            className="hover:opacity-75 duration-200"
-          >
-            <Image
-              src="/icons/icon_close.svg"
-              alt="Close"
-              width={15}
-              height={15}
-            />
-          </button>
-        </div>
-        <HRow />
-      </div>
+      <ModalHeader close={closeModal} className="mb-4" heading="Create Group" />
       <form
         className={twMerge("flex-col gap-y-4 flex", className)}
         onSubmit={handleGroup}

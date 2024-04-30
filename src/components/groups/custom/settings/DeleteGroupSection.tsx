@@ -4,13 +4,13 @@ import Modal from "@/src/components/utils/Modal";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import Image from "next/image";
-import HRow from "@/src/components/utils/HRow";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import LoadingIcon from "@/src/components/utils/LoadingIcon";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { deleteGroup } from "@/src/utils/groups/deleteGroup";
 import { twMerge } from "tailwind-merge";
+import ModalHeader from "@/src/components/utils/ModalHeader";
 
 export default function DeleteGroupSection({
   groupData,
@@ -53,25 +53,11 @@ export default function DeleteGroupSection({
       </SecondaryButton>
       {showModal && (
         <Modal className="max-w-[500px]">
-          <div className="mb-4">
-            <div className="flex items-center justify-between w-full">
-              <h1 className="text-custom-dark-text font-semibold">
-                Delete {groupData.groupID}
-              </h1>
-              <button
-                onClick={() => setShowModal(false)}
-                className="hover:opacity-75 duration-200"
-              >
-                <Image
-                  src="/icons/icon_close.svg"
-                  alt="Close"
-                  width={15}
-                  height={15}
-                />
-              </button>
-            </div>
-            <HRow />
-          </div>
+          <ModalHeader
+            close={() => setShowModal(false)}
+            className="mb-4"
+            heading={` Delete ${groupData.groupID}`}
+          />
           <div className="grid place-items-center p-4">
             <div className="flex flex-col items-center justify-center gap-3">
               <Image

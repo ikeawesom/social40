@@ -3,13 +3,12 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import Modal from "@/src/components/utils/Modal";
 import Link from "next/link";
-import Image from "next/image";
 import React from "react";
-import HRow from "@/src/components/utils/HRow";
 import { useMemberID } from "@/src/hooks/useMemberID";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
-import LoadingIcon from "@/src/components/utils/LoadingIcon";
 import { useCOSMembers } from "@/src/hooks/groups/custom/COS/useCosMembers";
+import ModalHeader from "@/src/components/utils/ModalHeader";
+import ModalLoading from "@/src/components/utils/ModalLoading";
 
 export default function CosMembers({
   membersPoints,
@@ -35,26 +34,10 @@ export default function CosMembers({
   return (
     <>
       {clickedID !== "" && (
-        <Modal className="min-[400px]:p-4">
-          <div className="flex items-center justify-between w-full">
-            <h1 className="text-custom-dark-text font-semibold">{clickedID}</h1>
-            <button
-              onClick={() => setClickedID("")}
-              className="hover:opacity-75 duration-200"
-            >
-              <Image
-                src="/icons/icon_close.svg"
-                alt="Close"
-                width={15}
-                height={15}
-              />
-            </button>
-          </div>
-          <HRow className="mb-2" />
+        <Modal>
+          <ModalHeader close={() => setClickedID("")} heading={clickedID} />
           {load ? (
-            <div className="w-full grid place-items-center">
-              <LoadingIcon height={30} width={30} />
-            </div>
+            <ModalLoading />
           ) : (
             <>
               <div className="flex flex-col items-center justify-start mt-2 gap-1">
