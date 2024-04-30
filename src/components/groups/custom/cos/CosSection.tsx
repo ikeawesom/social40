@@ -38,7 +38,7 @@ export default async function CosSection({
         {!cosData ? (
           <div className="flex w-full items-start justify-center flex-col gap-2">
             <p className="text-sm text-custom-grey-text">
-              Hmm.. you do not have a COS planned for today.
+              Hmm.. you do not have a COS planned for today, {dateStr}.
             </p>
             <Link href={`/groups/${groupID}/COS`}>
               <PrimaryButton className="w-fit">Start Planning</PrimaryButton>
