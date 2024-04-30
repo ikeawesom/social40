@@ -15,7 +15,7 @@ export default function Badge({
   return (
     <div
       className={twMerge(
-        "px-2 py-1 border-[1px] rounded-md",
+        "px-2 py-1 border-[1px] rounded-md w-fit",
         primaryColor ?? "border-blue-300",
         backgroundColor ?? "bg-blue-50",
         className
