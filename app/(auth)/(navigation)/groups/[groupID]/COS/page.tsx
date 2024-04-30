@@ -1,5 +1,5 @@
-import PlansSection from "@/src/components/groups/custom/cos/PlansSection";
-import COSMembersSection from "@/src/components/groups/custom/cos/COSMembersSection";
+import PlansSection from "@/src/components/groups/custom/cos/plans/PlansSection";
+import COSMembersSection from "@/src/components/groups/custom/cos/members/COSMembersSection";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
