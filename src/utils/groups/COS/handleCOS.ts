@@ -70,7 +70,6 @@ export async function EditMemberCOSPoints(id: string, points: number) {
 
 export async function RemoveMemberCOS(
   groupID: string,
-  groupData: GROUP_SCHEMA,
   updatedMembers: string[]
 ) {
   try {
@@ -79,7 +78,6 @@ export async function RemoveMemberCOS(
       id: groupID,
       data: {
         cos: {
-          ...groupData.cos,
           members: updatedMembers,
         },
       },
@@ -214,49 +212,35 @@ export async function UpdateMembersCOSPoints(
   }
 }
 
-const isNewMonth = (a: string, b: string) => {
-  const firstMonth = a.split("/")[1];
-  const secMonth = b.split("/")[1];
-  return firstMonth !== secMonth;
-};
-
-export async function FinishCOSDuty(
+export async function FinishCosDuty(
   groupID: string,
-  dateStr: string,
-  prevDateStr: string,
-  cosData: COS_DAILY_SCHEMA,
-  month: number,
-  to_earn: number
+  month: string,
+  date: string,
+  id: string,
+  points: number
 ) {
   try {
-    let lastOfMonth = isNewMonth(prevDateStr, dateStr);
     const { error } = await dbHandler.edit({
       col_name: `GROUPS/${groupID}/COS`,
-      id: `${month}`,
+      id: month,
       data: {
         plans: {
-          ...cosData.plans,
-          [prevDateStr]: { ...cosData.plans[prevDateStr], finished: true },
+          [date]: {
+            finished: true,
+          },
         },
-        confirmed: lastOfMonth,
       },
     });
+
     if (error) throw new Error(error);
 
-    // add points
-    const id = cosData.plans[prevDateStr].memberID;
-    const { data, error: ptErr } = await getMemberPoints([id]);
-    if (ptErr) throw new Error(ptErr);
-
-    const curPoints = Number(data[id]);
-    const newPoints = curPoints + to_earn;
-
+    // update points
     const { error: upErr } = await dbHandler.edit({
       col_name: "MEMBERS",
       id,
       data: {
         dutyPoints: {
-          cos: newPoints,
+          cos: points,
         },
       },
     });

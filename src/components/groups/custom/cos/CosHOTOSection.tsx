@@ -2,7 +2,7 @@
 
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import { dbHandler } from "@/src/firebase/db";
-import { FinishCOSDuty } from "@/src/utils/groups/COS/handleCOS";
+import { FinishCosDuty } from "@/src/utils/groups/COS/handleCOS";
 import { COS_DAILY_SCHEMA, COS_TYPES } from "@/src/utils/schemas/cos";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -41,12 +41,11 @@ export default function CosHOTOSection({
     try {
       const to_earn = Number(COS_TYPES[cosData.plans[prevDateStr].type]);
 
-      const { error } = await FinishCOSDuty(
+      const { error } = await FinishCosDuty(
         groupID,
-        dateStr,
+        `${month}`,
         prevDateStr,
-        cosData,
-        month,
+        curMemberID,
         to_earn
       );
 

@@ -12,13 +12,9 @@ import { MONTHS } from "@/src/utils/constants";
 import {
   DeleteCOSPlan,
   EditCOSPlan,
-  FinishCOSDuty,
+  FinishCosDuty,
 } from "@/src/utils/groups/COS/handleCOS";
-import {
-  COS_DAILY_SCHEMA,
-  COS_TYPES,
-  CosDailyType,
-} from "@/src/utils/schemas/cos";
+import { COS_TYPES, CosDailyType } from "@/src/utils/schemas/cos";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -27,7 +23,6 @@ import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { getType } from "./CreatePlanSection";
 import Notice from "@/src/components/utils/Notice";
-import { DateToString, StringToDate } from "@/src/utils/getCurrentDate";
 
 export default function MonthlyPlanList({
   sortedPlans,
@@ -36,7 +31,6 @@ export default function MonthlyPlanList({
   memberPoints,
   membersOriginalScores,
   confirmed,
-  monthCOSData,
 }: {
   sortedPlans: { [date: string]: CosDailyType };
   groupData: GROUP_SCHEMA;
@@ -44,7 +38,6 @@ export default function MonthlyPlanList({
   membersOriginalScores: { [memberID: string]: number };
   memberPoints: { [memberID: string]: number };
   confirmed: boolean;
-  monthCOSData: COS_DAILY_SCHEMA;
 }) {
   const router = useRouter();
   const { groupID, cos } = groupData;
@@ -57,23 +50,13 @@ export default function MonthlyPlanList({
   const [deleting, setDeleting] = useState(false);
   const [showScores, setShowScores] = useState(true);
 
-  const handleFinishMember = async (date: string) => {
+  const handleFinishMember = async (date: string, id: string) => {
     setLoading(true);
     try {
-      const { data } = StringToDate(`${date} 12:00`);
-      const nextDate = data as Date;
-      nextDate.setDate(nextDate.getDate() + 1);
-      const nextDateStr = DateToString(nextDate).split(" ")[0];
-      const to_earn = Number(COS_TYPES[sortedPlans[date].type]);
+      const newScore =
+        Number(memberPoints[id]) + Number(COS_TYPES[sortedPlans[date].type]);
 
-      const { error } = await FinishCOSDuty(
-        groupID,
-        nextDateStr,
-        date,
-        monthCOSData,
-        Number(month),
-        to_earn
-      );
+      const { error } = await FinishCosDuty(groupID, month, date, id, newScore);
 
       if (error) throw new Error(error);
       router.refresh();
@@ -406,9 +389,11 @@ export default function MonthlyPlanList({
               {allowed && (
                 <div className="flex items-center justify-end mt-2">
                   <PrimaryButton
-                    onClick={async () => await handleFinishMember(date)}
+                    onClick={async () =>
+                      await handleFinishMember(date, memberID)
+                    }
                     className="w-fit"
-                    disabled={dutyOver || loading}
+                    disabled={dutyOver || loading || unlocked}
                   >
                     {dutyOver
                       ? "Confirmed"
