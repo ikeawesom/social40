@@ -55,7 +55,7 @@ export default async function GroupsMonthlyCOSPage({
     if (error) throw new Error(error);
 
     const monthCOSData = monthlyCOSRes as COS_DAILY_SCHEMA;
-    const { plans, confirmed } = monthCOSData;
+    const { plans, confirmed, membersOriginalScores } = monthCOSData;
 
     const sortedPlansArr = Object.keys(plans).sort(
       (a: string, b: string) => plans[a].day - plans[b].day
@@ -78,6 +78,7 @@ export default async function GroupsMonthlyCOSPage({
         <div className="grid place-items-center">
           <div className="max-w-[500px] w-full flex flex-col items-start justify-start gap-4">
             <MonthlyPlanList
+              membersOriginalScores={membersOriginalScores}
               confirmed={confirmed ?? false}
               memberPoints={memberPoints}
               sortedPlans={sortedPlans}

@@ -82,11 +82,7 @@ export function useCOSMembers(groupData: GROUP_SCHEMA) {
       if (!cos) return;
 
       const updatedMembers = cos.members.filter((cur: string) => cur !== id);
-      const { error } = await RemoveMemberCOS(
-        groupID,
-        groupData,
-        updatedMembers
-      );
+      const { error } = await RemoveMemberCOS(groupID, updatedMembers);
       if (error) throw new Error(error);
 
       router.refresh();

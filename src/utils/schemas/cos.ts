@@ -6,6 +6,8 @@ export const COS_TYPES = {
 };
 
 export type CosDailyType = {
+  takenOver?: boolean;
+  finished?: boolean;
   memberID: string;
   day: number;
   month: number;
@@ -18,6 +20,7 @@ export type COS_DAILY_SCHEMA = {
   month: number;
   groupID: string;
   confirmed?: boolean;
+  membersOriginalScores: { [id: string]: number };
 };
 
 export type COS_MONTHLY_SCHEMA = {
