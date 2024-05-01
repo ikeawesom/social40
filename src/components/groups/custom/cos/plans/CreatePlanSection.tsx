@@ -192,7 +192,8 @@ export default function CreatePlanSection({
                           {type === "public" && (
                             <Badge
                               backgroundColor="bg-purple-50"
-                              primaryColor="border-purple-300"
+                              borderColor="border-purple-300"
+                              textColor="text-purple-300"
                             >
                               HOLIDAY
                             </Badge>

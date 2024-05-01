@@ -5,23 +5,25 @@ export default function Badge({
   children,
   className,
   backgroundColor,
-  primaryColor,
+  borderColor,
+  textColor,
 }: {
   className?: string;
   children?: React.ReactNode;
-  primaryColor?: string;
+  borderColor?: string;
   backgroundColor?: string;
+  textColor?: string;
 }) {
   return (
     <div
       className={twMerge(
         "px-2 py-1 border-[1px] rounded-md w-fit",
-        primaryColor ?? "border-blue-300",
+        borderColor ?? "border-blue-300",
         backgroundColor ?? "bg-blue-50",
         className
       )}
     >
-      <p className={twMerge("text-xs", primaryColor ?? "text-blue-300")}>
+      <p className={twMerge("text-xs", textColor ?? "text-blue-300")}>
         {children ?? "TEXT"}
       </p>
     </div>
