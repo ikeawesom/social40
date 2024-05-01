@@ -78,7 +78,6 @@ export default async function GroupsMonthlyCOSPage({
         <div className="grid place-items-center">
           <div className="max-w-[500px] w-full flex flex-col items-start justify-start gap-4">
             <MonthlyPlanList
-              monthCOSData={monthCOSData}
               membersOriginalScores={membersOriginalScores}
               confirmed={confirmed ?? false}
               memberPoints={memberPoints}
