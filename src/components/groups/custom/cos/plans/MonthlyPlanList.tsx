@@ -25,11 +25,13 @@ export default function MonthlyPlanList({
   groupData,
   month,
   memberPoints,
+  membersOriginalScores,
   confirmed,
 }: {
   sortedPlans: { [date: string]: CosDailyType };
   groupData: GROUP_SCHEMA;
   month: string;
+  membersOriginalScores: { [memberID: string]: number };
   memberPoints: { [memberID: string]: number };
   confirmed: boolean;
 }) {
@@ -67,13 +69,16 @@ export default function MonthlyPlanList({
 
       const oldPoint = Object.keys(pointsObj).includes(memberID)
         ? pointsObj[memberID].new
-        : Number(memberPoints[memberID]);
+        : Number(membersOriginalScores[memberID]);
       const newPoint = oldPoint + Number(COS_TYPES[type]);
 
       if (Object.keys(pointsObj).includes(memberID)) {
         pointsObj[memberID].new = newPoint;
       } else {
-        pointsObj[memberID] = { old: memberPoints[memberID], new: newPoint };
+        pointsObj[memberID] = {
+          old: membersOriginalScores[memberID],
+          new: newPoint,
+        };
       }
     });
     return sortScores(pointsObj);
@@ -267,7 +272,7 @@ export default function MonthlyPlanList({
                     <h1 className="text-sm text-custom-dark-text">{id}</h1>
                     {confirmed ? (
                       <h1 className="font-bold text-custom-green">
-                        {memberPoints[id]}
+                        {membersOriginalScores[id]}
                       </h1>
                     ) : (
                       <h1 className="font-bold text-custom-green">
