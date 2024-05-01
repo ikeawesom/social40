@@ -2,7 +2,7 @@
 
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import { dbHandler } from "@/src/firebase/db";
-import { getMemberPoints } from "@/src/utils/groups/COS/getMemberPoints";
+import { FinishCOSDuty } from "@/src/utils/groups/COS/handleCOS";
 import { COS_DAILY_SCHEMA, COS_TYPES } from "@/src/utils/schemas/cos";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -40,37 +40,16 @@ export default function CosHOTOSection({
     setLoading(true);
 
     try {
-      const { error } = await dbHandler.edit({
-        col_name: `GROUPS/${groupID}/COS`,
-        id: `${month}`,
-        data: {
-          plans: {
-            ...cosData.plans,
-            [prevDateStr]: { ...cosData.plans[prevDateStr], finished: true },
-          },
-        },
-      });
+      const { error } = await FinishCOSDuty(
+        groupID,
+        dateStr,
+        prevDateStr,
+        cosData,
+        month,
+        to_earn
+      );
+
       if (error) throw new Error(error);
-
-      // add points
-      const id = cosData.plans[prevDateStr].memberID;
-      const { data, error: ptErr } = await getMemberPoints([id]);
-      if (ptErr) throw new Error(ptErr);
-
-      const curPoints = Number(data[id]);
-      const newPoints = curPoints + to_earn;
-
-      const { error: upErr } = await dbHandler.edit({
-        col_name: "MEMBERS",
-        id,
-        data: {
-          dutyPoints: {
-            cos: newPoints,
-          },
-        },
-      });
-
-      if (upErr) throw new Error(upErr);
       router.refresh();
       toast.success("Duty finished. Now awaiting next day COS to take over.");
     } catch (err: any) {
