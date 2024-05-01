@@ -6,6 +6,8 @@ export const COS_TYPES = {
 };
 
 export type CosDailyType = {
+  takenOver?: boolean;
+  finished?: boolean;
   memberID: string;
   day: number;
   month: number;
