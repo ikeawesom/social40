@@ -34,6 +34,7 @@ export default function CosHOTOSection({
   const router = useRouter();
   const { groupID } = cosData;
   const [loading, setLoading] = useState(false);
+  const to_earn = Number(COS_TYPES[cosData.plans[prevDateStr].type]);
 
   const handleFinish = async () => {
     setLoading(true);
@@ -57,8 +58,7 @@ export default function CosHOTOSection({
       if (ptErr) throw new Error(ptErr);
 
       const curPoints = Number(data[id]);
-      const newPoints =
-        curPoints + Number(COS_TYPES[cosData.plans[prevDateStr].type]);
+      const newPoints = curPoints + to_earn;
 
       const { error: upErr } = await dbHandler.edit({
         col_name: "MEMBERS",
@@ -108,9 +108,9 @@ export default function CosHOTOSection({
           <PrimaryButton
             disabled={loading}
             onClick={handleFinish}
-            className="mt-2 w-fit"
+            className="w-fit px-4 mt-2"
           >
-            {loading ? "Working..." : "Finish duty"}
+            {loading ? "Working..." : `Finish Duty (+${to_earn})`}
           </PrimaryButton>
         )}
       {!pendingPrevFinish &&
@@ -120,12 +120,19 @@ export default function CosHOTOSection({
             Awaiting take over...
           </p>
         )}
+      {pendingPrevFinish &&
+        !pendingCurTakeOver &&
+        curDayCOS === curMemberID && (
+          <p className="animate-pulse text-xs text-custom-primary">
+            Awaiting previous COS to finish duty...
+          </p>
+        )}
       {prevDayCos !== "" &&
         !pendingPrevFinish &&
         pendingCurTakeOver &&
         curDayCOS === curMemberID && (
           <PrimaryButton
-            className="mt-2 w-fit"
+            className="mt-2 w-fit px-4"
             onClick={handleTakeOver}
             disabled={loading}
           >
