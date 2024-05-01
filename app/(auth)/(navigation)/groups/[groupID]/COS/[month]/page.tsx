@@ -4,7 +4,6 @@ import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import { dbHandler } from "@/src/firebase/db";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import { getMemberPoints } from "@/src/utils/groups/COS/getMemberPoints";
 import { COS_DAILY_SCHEMA, CosDailyType } from "@/src/utils/schemas/cos";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { Metadata } from "next";
@@ -55,7 +54,7 @@ export default async function GroupsMonthlyCOSPage({
     if (error) throw new Error(error);
 
     const monthCOSData = monthlyCOSRes as COS_DAILY_SCHEMA;
-    const { plans, confirmed } = monthCOSData;
+    const { plans, confirmed, membersOriginalScores } = monthCOSData;
 
     const sortedPlansArr = Object.keys(plans).sort(
       (a: string, b: string) => plans[a].day - plans[b].day
@@ -65,13 +64,6 @@ export default async function GroupsMonthlyCOSPage({
       sortedPlans[date] = plans[date];
     });
 
-    const { data: memberRes, error: memberError } = await getMemberPoints(
-      members
-    );
-
-    if (memberError) throw new Error(memberError);
-    const memberPoints = memberRes as { [memberID: string]: number };
-
     return (
       <>
         <HeaderBar back text={`COS Plan for ${groupID}`} />
@@ -79,7 +71,7 @@ export default async function GroupsMonthlyCOSPage({
           <div className="max-w-[500px] w-full flex flex-col items-start justify-start gap-4">
             <MonthlyPlanList
               confirmed={confirmed ?? false}
-              memberPoints={memberPoints}
+              memberPoints={membersOriginalScores}
               sortedPlans={sortedPlans}
               groupData={groupData}
               month={month}
