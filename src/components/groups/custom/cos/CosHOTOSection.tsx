@@ -34,12 +34,13 @@ export default function CosHOTOSection({
   const router = useRouter();
   const { groupID } = cosData;
   const [loading, setLoading] = useState(false);
-  const to_earn = Number(COS_TYPES[cosData.plans[prevDateStr].type]);
 
   const handleFinish = async () => {
     setLoading(true);
 
     try {
+      const to_earn = Number(COS_TYPES[cosData.plans[prevDateStr].type]);
+
       const { error } = await FinishCOSDuty(
         groupID,
         dateStr,
@@ -89,7 +90,11 @@ export default function CosHOTOSection({
             onClick={handleFinish}
             className="w-fit px-4 mt-2"
           >
-            {loading ? "Working..." : `Finish Duty (+${to_earn})`}
+            {loading
+              ? "Working..."
+              : `Finish Duty (+${Number(
+                  COS_TYPES[cosData.plans[prevDateStr].type]
+                )})`}
           </PrimaryButton>
         )}
       {!pendingPrevFinish &&
