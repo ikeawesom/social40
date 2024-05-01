@@ -20,6 +20,7 @@ export type COS_DAILY_SCHEMA = {
   month: number;
   groupID: string;
   confirmed?: boolean;
+  membersOriginalScores: { [id: string]: number };
 };
 
 export type COS_MONTHLY_SCHEMA = {
