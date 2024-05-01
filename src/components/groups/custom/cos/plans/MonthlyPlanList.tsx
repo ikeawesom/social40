@@ -9,8 +9,16 @@ import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import { useMemberID } from "@/src/hooks/useMemberID";
 import { MONTHS } from "@/src/utils/constants";
-import { DeleteCOSPlan, EditCOSPlan } from "@/src/utils/groups/COS/handleCOS";
-import { COS_TYPES, CosDailyType } from "@/src/utils/schemas/cos";
+import {
+  DeleteCOSPlan,
+  EditCOSPlan,
+  FinishCOSDuty,
+} from "@/src/utils/groups/COS/handleCOS";
+import {
+  COS_DAILY_SCHEMA,
+  COS_TYPES,
+  CosDailyType,
+} from "@/src/utils/schemas/cos";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -19,6 +27,7 @@ import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { getType } from "./CreatePlanSection";
 import Notice from "@/src/components/utils/Notice";
+import { DateToString, StringToDate } from "@/src/utils/getCurrentDate";
 
 export default function MonthlyPlanList({
   sortedPlans,
@@ -27,6 +36,7 @@ export default function MonthlyPlanList({
   memberPoints,
   membersOriginalScores,
   confirmed,
+  monthCOSData,
 }: {
   sortedPlans: { [date: string]: CosDailyType };
   groupData: GROUP_SCHEMA;
@@ -34,8 +44,10 @@ export default function MonthlyPlanList({
   membersOriginalScores: { [memberID: string]: number };
   memberPoints: { [memberID: string]: number };
   confirmed: boolean;
+  monthCOSData: COS_DAILY_SCHEMA;
 }) {
   const router = useRouter();
+  const { groupID, cos } = groupData;
   const { memberID } = useMemberID();
   const [unlocked, setUnlock] = useState(false);
   const [plans, setPlans] = useState(sortedPlans);
@@ -45,6 +57,33 @@ export default function MonthlyPlanList({
   const [deleting, setDeleting] = useState(false);
   const [showScores, setShowScores] = useState(true);
 
+  const handleFinishMember = async (date: string) => {
+    setLoading(true);
+    try {
+      const { data } = StringToDate(`${date} 12:00`);
+      const nextDate = data as Date;
+      nextDate.setDate(nextDate.getDate() + 1);
+      const nextDateStr = DateToString(nextDate).split(" ")[0];
+      const to_earn = Number(COS_TYPES[sortedPlans[date].type]);
+
+      const { error } = await FinishCOSDuty(
+        groupID,
+        nextDateStr,
+        date,
+        monthCOSData,
+        Number(month),
+        to_earn
+      );
+
+      if (error) throw new Error(error);
+      router.refresh();
+      toast.success("Duty confirmed and points have been added.");
+      handleReload(router);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+    setLoading(false);
+  };
   useEffect(() => {
     if (memberID !== "") setAllowed(admins.includes(memberID));
   }, [memberID]);
@@ -179,7 +218,6 @@ export default function MonthlyPlanList({
     });
   };
 
-  const { cos, groupID } = groupData;
   if (!cos) return;
   const { admins, members } = cos;
 
@@ -291,77 +329,93 @@ export default function MonthlyPlanList({
         {Object.keys(plans).map((date: string) => {
           const { day, memberID, month, type, finished, takenOver } =
             plans[date];
+          const points = COS_TYPES[type];
           const dutyOver = finished || takenOver || confirmed;
 
           return (
-            <DefaultCard
-              className="w-full py-2 px-3 flex items-center justify-between"
-              key={date}
-            >
-              <div>
-                <p
-                  className={twMerge(
-                    "text-xs text-custom-grey-text flex items-center justify-start mb-1",
-                    memberID !== ori[date].memberID &&
-                      "text-custom-dark-text font-bold"
+            <DefaultCard className="w-full p-3" key={date}>
+              <div className="flex items-center justify-between">
+                <div>
+                  {type === "weekend" && (
+                    <Badge className="mb-2">WEEKEND</Badge>
                   )}
-                >
-                  {day} {MONTHS[month]}
-                  {memberID !== ori[date].memberID && "*"}
-                </p>
-                {dutyOver ? (
-                  <h1 className="font-bold text-custom-dark-text">
-                    {memberID}
-                  </h1>
-                ) : (
-                  <select
-                    onChange={(e) => onChangeMember(e, date)}
-                    value={memberID}
-                    className={twMerge(
-                      "custom text-sm border-[1px] border-custom-grey-text/10 rounded-md px-2 py-1",
-                      !unlocked && "pointer-events-none"
-                    )}
-                  >
-                    {members.map((id: string) => (
-                      <option key={id} value={id}>
-                        {id} ({memberPoints[id]})
-                      </option>
-                    ))}
-                  </select>
-                )}
-                {!dutyOver && (
+                  {type === "public" && (
+                    <Badge
+                      className="mb-2"
+                      backgroundColor="bg-purple-50"
+                      borderColor="border-purple-300"
+                      textColor="text-purple-300"
+                    >
+                      HOLIDAY
+                    </Badge>
+                  )}
                   <p
-                    onClick={() => togglePublicHols(date)}
                     className={twMerge(
-                      "w-fit text-xs mt-2 text-custom-grey-text underline cursor-pointer hover:text-custom-primary",
-                      !unlocked && "pointer-events-none"
+                      "text-xs text-custom-grey-text flex items-center justify-start mb-1",
+                      memberID !== ori[date].memberID &&
+                        "text-custom-dark-text font-bold"
                     )}
                   >
-                    Toggle as Public Holiday
+                    {day} {MONTHS[month]}
+                    {memberID !== ori[date].memberID && "*"}
                   </p>
-                )}
+                  {dutyOver ? (
+                    <h1 className="font-bold text-custom-dark-text">
+                      {memberID}
+                    </h1>
+                  ) : (
+                    <select
+                      onChange={(e) => onChangeMember(e, date)}
+                      value={memberID}
+                      className={twMerge(
+                        "custom text-sm border-[1px] border-custom-grey-text/10 rounded-md px-2 py-1",
+                        !unlocked && "pointer-events-none"
+                      )}
+                    >
+                      {members.map((id: string) => (
+                        <option key={id} value={id}>
+                          {id} ({memberPoints[id]})
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  {!dutyOver && (
+                    <p
+                      onClick={() => togglePublicHols(date)}
+                      className={twMerge(
+                        "w-fit text-xs mt-2 text-custom-grey-text underline cursor-pointer hover:text-custom-primary",
+                        !unlocked && "pointer-events-none"
+                      )}
+                    >
+                      Toggle as Public Holiday
+                    </p>
+                  )}
+                </div>
+                <div className="self-start">
+                  {!dutyOver ? (
+                    <p className="text-xs text-custom-grey-text text-end mb-2">
+                      To earn: {points}
+                    </p>
+                  ) : (
+                    <p className="text-xs font-bold text-custom-green text-end mb-2">
+                      +{points} points
+                    </p>
+                  )}
+                </div>
               </div>
-              <div className="self-start">
-                {!dutyOver ? (
-                  <p className="text-xs text-custom-grey-text text-end mb-2">
-                    To earn: {COS_TYPES[type]}
-                  </p>
-                ) : (
-                  <p className="text-xs font-bold text-custom-green text-end mb-2">
-                    +{COS_TYPES[type]} points
-                  </p>
-                )}
-                {type === "weekend" && <Badge>WEEKEND</Badge>}
-                {type === "public" && (
-                  <Badge
-                    backgroundColor="bg-purple-50"
-                    borderColor="border-purple-300"
-                    textColor="text-purple-300"
+              {allowed && (
+                <div className="flex items-center justify-end mt-2">
+                  <PrimaryButton
+                    onClick={async () => await handleFinishMember(date)}
+                    className="w-fit"
+                    disabled={dutyOver || loading}
                   >
-                    HOLIDAY
-                  </Badge>
-                )}
-              </div>
+                    {dutyOver
+                      ? "Confirmed"
+                      : `Confirm Duty (+${points} points)`}
+                  </PrimaryButton>
+                </div>
+              )}
             </DefaultCard>
           );
         })}
