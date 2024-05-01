@@ -5,6 +5,7 @@ import handleResponses from "../../handleResponses";
 import { GROUP_SCHEMA } from "../../schemas/groups";
 import { COS_DAILY_SCHEMA, CosDailyType } from "../../schemas/cos";
 import { MEMBER_SCHEMA } from "../../schemas/members";
+import { getMemberPoints } from "./getMemberPoints";
 
 export async function getParticipantsOriginalPoints(plan: {
   [date: string]: CosDailyType;
@@ -49,6 +50,7 @@ export async function ToggleCOSAdmin(groupID: string, to_update: any) {
     return handleResponses({ status: false, error: err.message });
   }
 }
+
 export async function EditMemberCOSPoints(id: string, points: number) {
   try {
     const { error } = await dbHandler.edit({
@@ -206,6 +208,60 @@ export async function UpdateMembersCOSPoints(
     });
     if (cfmError) throw new Error(cfmError);
 
+    return handleResponses();
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
+}
+
+const isNewMonth = (a: string, b: string) => {
+  const firstMonth = a.split("/")[1];
+  const secMonth = b.split("/")[1];
+  return firstMonth !== secMonth;
+};
+
+export async function FinishCOSDuty(
+  groupID: string,
+  dateStr: string,
+  prevDateStr: string,
+  cosData: COS_DAILY_SCHEMA,
+  month: number,
+  to_earn: number
+) {
+  try {
+    let lastOfMonth = isNewMonth(prevDateStr, dateStr);
+    const { error } = await dbHandler.edit({
+      col_name: `GROUPS/${groupID}/COS`,
+      id: `${month}`,
+      data: {
+        plans: {
+          ...cosData.plans,
+          [prevDateStr]: { ...cosData.plans[prevDateStr], finished: true },
+        },
+        confirmed: lastOfMonth,
+      },
+    });
+    if (error) throw new Error(error);
+
+    // add points
+    const id = cosData.plans[prevDateStr].memberID;
+    const { data, error: ptErr } = await getMemberPoints([id]);
+    if (ptErr) throw new Error(ptErr);
+
+    const curPoints = Number(data[id]);
+    const newPoints = curPoints + to_earn;
+
+    const { error: upErr } = await dbHandler.edit({
+      col_name: "MEMBERS",
+      id,
+      data: {
+        dutyPoints: {
+          cos: newPoints,
+        },
+      },
+    });
+
+    if (upErr) throw new Error(upErr);
     return handleResponses();
   } catch (err: any) {
     return handleResponses({ status: false, error: err.message });
