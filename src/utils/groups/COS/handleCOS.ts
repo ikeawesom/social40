@@ -4,6 +4,37 @@ import { dbHandler } from "@/src/firebase/db";
 import handleResponses from "../../handleResponses";
 import { GROUP_SCHEMA } from "../../schemas/groups";
 import { COS_DAILY_SCHEMA, CosDailyType } from "../../schemas/cos";
+import { MEMBER_SCHEMA } from "../../schemas/members";
+
+export async function getParticipantsOriginalPoints(plan: {
+  [date: string]: CosDailyType;
+}) {
+  const participants = [] as string[];
+  Object.keys(plan).forEach((date: string) => {
+    const { memberID: id } = plan[date];
+    if (!participants.includes(id)) participants.push(id);
+  });
+
+  const promiseArr = participants.map(async (id: string) => {
+    const { data, error } = await dbHandler.get({ col_name: "MEMBERS", id });
+    if (error) return handleResponses({ status: false, error });
+    const memberData = data as MEMBER_SCHEMA;
+    return handleResponses({
+      data: { id, originalPoints: memberData.dutyPoints.cos },
+    });
+  });
+
+  const resolvedArr = await Promise.all(promiseArr);
+
+  const oriScores = {} as { [id: string]: number };
+  resolvedArr.forEach((item: any) => {
+    if (!item.status)
+      return handleResponses({ status: false, error: item.error });
+    oriScores[item.data.id] = item.data.originalPoints;
+  });
+
+  return handleResponses({ data: oriScores });
+}
 
 export async function ToggleCOSAdmin(groupID: string, to_update: any) {
   try {
@@ -67,6 +98,13 @@ export async function CreateCOSPlan(
   }
 ) {
   try {
+    const { error: pointsErr, data } = await getParticipantsOriginalPoints(
+      plan
+    );
+    if (!pointsErr) throw new Error(pointsErr);
+
+    const oriScores = data;
+
     const { error } = await dbHandler.add({
       col_name: `GROUPS/${groupID}/COS`,
       id: `${selectedMonth}`,
@@ -74,8 +112,11 @@ export async function CreateCOSPlan(
         groupID,
         plans: plan,
         month: selectedMonth,
+        confirmed: false,
+        membersOriginalScores: oriScores,
       } as COS_DAILY_SCHEMA,
     });
+
     if (error) throw new Error(error);
 
     return handleResponses();
@@ -106,11 +147,19 @@ export async function EditCOSPlan(
   }
 ) {
   try {
+    const { error: pointsErr, data } = await getParticipantsOriginalPoints(
+      plans
+    );
+    if (pointsErr) throw new Error(pointsErr);
+
+    const oriScores = data;
+
     const { error } = await dbHandler.edit({
       col_name: `GROUPS/${groupID}/COS`,
       id: `${month}`,
       data: {
         plans,
+        membersOriginalScores: oriScores,
       },
     });
     if (error) throw new Error(error);

@@ -9,11 +9,7 @@ import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import { useMemberID } from "@/src/hooks/useMemberID";
 import { MONTHS } from "@/src/utils/constants";
-import {
-  DeleteCOSPlan,
-  EditCOSPlan,
-  UpdateMembersCOSPoints,
-} from "@/src/utils/groups/COS/handleCOS";
+import { DeleteCOSPlan, EditCOSPlan } from "@/src/utils/groups/COS/handleCOS";
 import { COS_TYPES, CosDailyType } from "@/src/utils/schemas/cos";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import Image from "next/image";
@@ -51,10 +47,12 @@ export default function MonthlyPlanList({
     if (memberID !== "") setAllowed(admins.includes(memberID));
   }, [memberID]);
 
-  const sortScores = (memberPoints: { [memberID: string]: number }) => {
-    let tempObj = {} as { [memberID: string]: number };
+  const sortScores = (memberPoints: {
+    [memberID: string]: { old: number; new: number };
+  }) => {
+    let tempObj = {} as { [memberID: string]: { old: number; new: number } };
     const sortedArr = Object.keys(memberPoints).sort(
-      (a, b) => memberPoints[b] - memberPoints[a]
+      (a, b) => memberPoints[b].new - memberPoints[a].new
     );
     sortedArr.forEach((id: string) => {
       tempObj[id] = memberPoints[id];
@@ -63,20 +61,26 @@ export default function MonthlyPlanList({
   };
 
   const getNewParticipantsScores = () => {
-    let poinsObj = {} as { [memberID: string]: number };
+    let pointsObj = {} as { [memberID: string]: { old: number; new: number } };
     Object.keys(sortedPlans).forEach((date: string) => {
       const { memberID, type } = sortedPlans[date];
-      const oldPoint = Object.keys(poinsObj).includes(memberID)
-        ? poinsObj[memberID]
-        : memberPoints[memberID];
-      const newPoint = Number(oldPoint) + Number(COS_TYPES[type]);
-      poinsObj[memberID] = newPoint;
+
+      const oldPoint = Object.keys(pointsObj).includes(memberID)
+        ? pointsObj[memberID].new
+        : Number(memberPoints[memberID]);
+      const newPoint = oldPoint + Number(COS_TYPES[type]);
+
+      if (Object.keys(pointsObj).includes(memberID)) {
+        pointsObj[memberID].new = newPoint;
+      } else {
+        pointsObj[memberID] = { old: memberPoints[memberID], new: newPoint };
+      }
     });
-    return sortScores(poinsObj);
+    return sortScores(pointsObj);
   };
 
   const newMemberPoints = getNewParticipantsScores() as {
-    [memberID: string]: number;
+    [memberID: string]: { old: number; new: number };
   };
 
   const onChangeMember = (
@@ -168,25 +172,6 @@ export default function MonthlyPlanList({
               ),
       },
     });
-  };
-
-  const handleConfirm = async () => {
-    setLoading(true);
-    try {
-      const { error } = await UpdateMembersCOSPoints(
-        newMemberPoints,
-        groupID,
-        month
-      );
-      if (error) throw new Error(error);
-      router.refresh();
-      toast.success(
-        "Points for members updated successfully. This plan is now locked."
-      );
-    } catch (err: any) {
-      toast.error(err.message);
-    }
-    setLoading(false);
   };
 
   const { cos, groupID } = groupData;
@@ -286,32 +271,23 @@ export default function MonthlyPlanList({
                       </h1>
                     ) : (
                       <h1 className="font-bold text-custom-green">
-                        {memberPoints[id]} {" >> "} {newMemberPoints[id]}
+                        {newMemberPoints[id].old} {" >> "}{" "}
+                        {newMemberPoints[id].new}
                       </h1>
                     )}
                   </div>
                 ))}
               </InnerContainer>
-              {allowed && !confirmed && (
-                <>
-                  <p className="text-xs text-start text-custom-grey-text mt-1">
-                    By confirming the scores, the system will finalize the duty
-                    points of the above members. It is suggested to only confirm
-                    the scores at the end of the month when all duties have been
-                    served.
-                  </p>
-                  <PrimaryButton disabled={loading} onClick={handleConfirm}>
-                    Confirm Scores
-                  </PrimaryButton>
-                </>
-              )}
             </>
           )}
         </DefaultCard>
       </div>
       <div className="w-full flex flex-col items-start justify-start gap-2">
         {Object.keys(plans).map((date: string) => {
-          const { day, memberID, month, type } = plans[date];
+          const { day, memberID, month, type, finished, takenOver } =
+            plans[date];
+          const dutyOver = finished || takenOver || confirmed;
+
           return (
             <DefaultCard
               className="w-full py-2 px-3 flex items-center justify-between"
@@ -328,8 +304,8 @@ export default function MonthlyPlanList({
                   {day} {MONTHS[month]}
                   {memberID !== ori[date].memberID && "*"}
                 </p>
-                {confirmed ? (
-                  <h1 className="text-sm font-bold text-custom-dark-text">
+                {dutyOver ? (
+                  <h1 className="font-bold text-custom-dark-text">
                     {memberID}
                   </h1>
                 ) : (
@@ -348,7 +324,7 @@ export default function MonthlyPlanList({
                     ))}
                   </select>
                 )}
-                {!confirmed && (
+                {!dutyOver && (
                   <p
                     onClick={() => togglePublicHols(date)}
                     className={twMerge(
@@ -361,14 +337,21 @@ export default function MonthlyPlanList({
                 )}
               </div>
               <div className="self-start">
-                <p className="text-xs text-custom-grey-text text-end mb-2">
-                  To earn: {COS_TYPES[type]}
-                </p>
+                {!dutyOver ? (
+                  <p className="text-xs text-custom-grey-text text-end mb-2">
+                    To earn: {COS_TYPES[type]}
+                  </p>
+                ) : (
+                  <p className="text-xs font-bold text-custom-green text-end mb-2">
+                    +{COS_TYPES[type]} points
+                  </p>
+                )}
                 {type === "weekend" && <Badge>WEEKEND</Badge>}
                 {type === "public" && (
                   <Badge
                     backgroundColor="bg-purple-50"
-                    primaryColor="border-purple-300"
+                    borderColor="border-purple-300"
+                    textColor="text-purple-300"
                   >
                     HOLIDAY
                   </Badge>
