@@ -25,11 +25,12 @@ export default function PermissionForm({
 
   const oldRole = viewMember.role;
 
+  const { host } = useHostname();
   const [confirm, setConfirm] = useState("");
   const [showRoles, setShowRoles] = useState(false);
+  const [show, setShow] = useState(false);
   const [currentRole, setCurrentRole] = useState(oldRole);
   const [loading, setLoading] = useState(false);
-  const { host } = useHostname();
 
   const ready = confirm === viewMember.memberID;
   const noChange = currentRole === oldRole;
@@ -90,122 +91,136 @@ export default function PermissionForm({
         }}
       >
         <div className={sameRole ? "pointer-events-none" : ""}>
-          <div className="flex flex-row items-center justify-start gap-2">
-            <h1 className="text-start font-semibold text-base">
-              Account Permissions
-            </h1>
-            <SecondaryButton
-              onClick={() => setShowRoles(!showRoles)}
-              className="w-fit self-stretch p-0 border-0 shadow-none"
-            >
-              {showRoles ? (
-                <Image
-                  src="/icons/icon_question_primary.svg"
-                  alt="Show"
-                  width={30}
-                  height={30}
-                />
-              ) : (
-                <Image
-                  src="/icons/icon_question.svg"
-                  alt="Hide"
-                  width={30}
-                  height={30}
-                />
-              )}
-            </SecondaryButton>
+          <div className="flex w-full items-center justify-between gap-2">
+            <div className="flex flex-row items-center justify-start gap-2">
+              <h1 className="text-start font-semibold text-base">
+                Account Permissions
+              </h1>
+              <SecondaryButton
+                onClick={() => setShowRoles(!showRoles)}
+                className="w-fit self-stretch p-0 border-0 shadow-none"
+              >
+                {showRoles ? (
+                  <Image
+                    src="/icons/icon_question_primary.svg"
+                    alt="Show"
+                    width={30}
+                    height={30}
+                  />
+                ) : (
+                  <Image
+                    src="/icons/icon_question.svg"
+                    alt="Hide"
+                    width={30}
+                    height={30}
+                  />
+                )}
+              </SecondaryButton>
+            </div>
+            <Image
+              onClick={() => setShow(!show)}
+              src="/icons/icon_arrow-down.svg"
+              alt="Show"
+              width={30}
+              height={30}
+              className={`duration-300 ease-in-out ${show ? "rotate-180" : ""}`}
+            />
           </div>
-          <HRow className="mb-2" />
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col items-start justify-center gap-2"
-          >
-            <div
-              className="flex items-center justify-between w-full gap-2 shadow-sm border-[1px]
+
+          {show && (
+            <>
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col items-start justify-center gap-2 mt-2"
+              >
+                <div
+                  className="flex items-center justify-between w-full gap-2 shadow-sm border-[1px]
     border-gray-200 rounded-lg px-3 py-2"
-            >
-              <p className="text-sm w-fit">Your Permissions</p>
-              <p className="text-sm font-semibold">
-                {ROLES_HIERARCHY[currentMember.role].title}
-              </p>
-            </div>
-            <div
-              className={twMerge(
-                "flex justify-between w-full gap-2 shadow-sm border-[1px] border-gray-200 rounded-lg px-3 py-2",
-                sameRole ? "flex-row items-center" : "flex-col items-start"
-              )}
-            >
-              <label htmlFor="permission" className="text-sm w-fit">
-                Set Permissions
-              </label>
-              {sameRole ? (
-                <>
-                  <p className="text-sm font-semibold">
-                    {ROLES_HIERARCHY[viewMember.role].title}
-                  </p>
-                </>
-              ) : (
-                <select
-                  name="permission"
-                  id="permission"
-                  value={currentRole}
-                  onChange={handleChangeSelect}
                 >
-                  {Object.keys(permissions).map((item: string) => {
-                    return (
-                      <option className="p-2" key={item} value={item}>
+                  <p className="text-sm w-fit">Your Permissions</p>
+                  <p className="text-sm font-semibold">
+                    {ROLES_HIERARCHY[currentMember.role].title}
+                  </p>
+                </div>
+                <div
+                  className={twMerge(
+                    "flex justify-between w-full gap-2 shadow-sm border-[1px] border-gray-200 rounded-lg px-3 py-2",
+                    sameRole ? "flex-row items-center" : "flex-col items-start"
+                  )}
+                >
+                  <label htmlFor="permission" className="text-sm w-fit">
+                    Set Permissions
+                  </label>
+                  {sameRole ? (
+                    <>
+                      <p className="text-sm font-semibold">
+                        {ROLES_HIERARCHY[viewMember.role].title}
+                      </p>
+                    </>
+                  ) : (
+                    <select
+                      name="permission"
+                      id="permission"
+                      value={currentRole}
+                      onChange={handleChangeSelect}
+                    >
+                      {Object.keys(permissions).map((item: string) => {
+                        return (
+                          <option className="p-2" key={item} value={item}>
+                            {permissions[item].title}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  )}
+                </div>
+                <div className="flex flex-col items-start justify-center gap-1 w-full m2-2">
+                  <p className="text-sm">
+                    Please type this member's member ID below to confirm.
+                  </p>
+                  <input
+                    type="text"
+                    placeholder={viewMember.memberID}
+                    value={confirm}
+                    onChange={handleChangeCfm}
+                  />
+                  <p className="text-sm text-custom-grey-text">
+                    Note that the higher the tier, the more permissions will be
+                    available to this member.
+                  </p>
+                </div>
+                <PrimaryButton
+                  type="submit"
+                  disabled={loading || !ready || noChange}
+                  className="grid place-items-center"
+                >
+                  {loading ? (
+                    <LoadingIconBright width={20} height={20} />
+                  ) : (
+                    "Update Permissions"
+                  )}
+                </PrimaryButton>
+              </form>
+              {showRoles && (
+                <ul className="mt-4 w-full flex flex-col items-start justify-center gap-4">
+                  {Object.keys(permissions).map((item: any) => (
+                    <li key={item} className="w-full">
+                      <h1 className="text-custom-dark-text font-semibold">
                         {permissions[item].title}
-                      </option>
-                    );
-                  })}
-                </select>
+                      </h1>
+                      <HRow />
+                      <ul className="list-disc ml-4">
+                        {permissions[item].desc.map((itemA: string) => (
+                          <li key={itemA} className="text-sm">
+                            {itemA}
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  ))}
+                </ul>
               )}
-            </div>
-            <div className="flex flex-col items-start justify-center gap-1 w-full m2-2">
-              <p className="text-sm">
-                Please type this member's member ID below to confirm.
-              </p>
-              <input
-                type="text"
-                placeholder={viewMember.memberID}
-                value={confirm}
-                onChange={handleChangeCfm}
-              />
-              <p className="text-sm text-custom-grey-text">
-                Note that the higher the tier, the more permissions will be
-                available to this member.
-              </p>
-            </div>
-            <PrimaryButton
-              type="submit"
-              disabled={loading || !ready || noChange}
-              className="grid place-items-center"
-            >
-              {loading ? (
-                <LoadingIconBright width={20} height={20} />
-              ) : (
-                "Update Permissions"
-              )}
-            </PrimaryButton>
-          </form>
-          {showRoles && (
-            <ul className="mt-4 w-full flex flex-col items-start justify-center gap-4">
-              {Object.keys(permissions).map((item: any) => (
-                <li key={item} className="w-full">
-                  <h1 className="text-custom-dark-text font-semibold">
-                    {permissions[item].title}
-                  </h1>
-                  <HRow />
-                  <ul className="list-disc ml-4">
-                    {permissions[item].desc.map((itemA: string) => (
-                      <li key={itemA} className="text-sm">
-                        {itemA}
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ))}
-            </ul>
+            </>
           )}
         </div>
       </div>
