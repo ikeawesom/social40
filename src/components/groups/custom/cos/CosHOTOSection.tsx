@@ -92,7 +92,7 @@ export default function CosHOTOSection({
 DATE: ${dateStr}
 COS: ${displayName.toUpperCase()}
 -----------------
-*${company} KEYS*
+*${company.toUpperCase()} KEYS*
 ${dateStr}
 
 Who draw the keys: ${displayNameA.toUpperCase()}
