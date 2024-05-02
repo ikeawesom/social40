@@ -130,7 +130,7 @@ export default async function GroupFeedCard({
           ) : (
             <SecondaryButton
               disabled
-              className="border-custom-green text-custom-green text-xs"
+              className="border-custom-green text-custom-green text-xs px-3"
             >
               {active
                 ? "You are participating in this activity"

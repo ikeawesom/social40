@@ -49,7 +49,7 @@ export default function JoinGroupActivityButton({
       onClick={handleRequest}
       disabled={!canJoin || loading || requested}
       className={twMerge(
-        "grid place-items-center w-full",
+        "grid place-items-center w-full px-3",
         !canJoin
           ? "border-custom-red text-custom-red"
           : "border-custom-orange text-custom-orange",
