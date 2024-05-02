@@ -3,10 +3,14 @@
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import { dbHandler } from "@/src/firebase/db";
 import { getMemberPoints } from "@/src/utils/groups/COS/getMemberPoints";
-import { FinishCosDuty } from "@/src/utils/groups/COS/handleCOS";
+import {
+  FinishCosDuty,
+  GetDisplayName,
+} from "@/src/utils/groups/COS/handleCOS";
 import { COS_DAILY_SCHEMA, COS_TYPES } from "@/src/utils/schemas/cos";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { WhatsappShareButton } from "react-share";
 import { toast } from "sonner";
 
 export default function CosHOTOSection({
@@ -35,6 +39,7 @@ export default function CosHOTOSection({
   const router = useRouter();
   const { groupID } = cosData;
   const [loading, setLoading] = useState(false);
+  const [shareWS, setShareWS] = useState("");
 
   const handleFinish = async () => {
     setLoading(true);
@@ -66,6 +71,39 @@ export default function CosHOTOSection({
     setLoading(false);
   };
 
+  const handleShare = async () => {
+    try {
+      const { data: displayName, error } = await GetDisplayName(curDayCOS);
+      if (error)
+        throw new Error(
+          "An unexpected error has occured. Could not generate HOTO message."
+        );
+
+      const { data: displayNameA, error: errorA } = await GetDisplayName(
+        prevDayCos
+      );
+      if (errorA)
+        throw new Error(
+          "An unexpected error has occured. Could not generate HOTO message."
+        );
+
+      const company = cosData.groupID;
+      const hotoMSG = `INCOMING COS
+DATE: ${dateStr}
+COS: ${displayName.toUpperCase()}
+-----------------
+*${company.toUpperCase()} KEYS*
+${dateStr}
+
+Who draw the keys: ${displayNameA.toUpperCase()}
+Keys returned timing: 2359
+Keys drawn timing: 0001`;
+
+      setShareWS(hotoMSG);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
   const handleTakeOver = async () => {
     setLoading(true);
     try {
@@ -81,29 +119,19 @@ export default function CosHOTOSection({
       });
       if (error) throw new Error(error);
       router.refresh();
-      toast.success("COS duty taken over");
+      toast.success(
+        "Great, COS duty taken over. Changes will be updated shortly."
+      );
+
+      // send whatsapp message
+      handleShare();
     } catch (err: any) {
       toast.error(err.message);
     }
     setLoading(false);
   };
   return (
-    <div className="w-full flex items-center justify-end">
-      {pendingPrevFinish &&
-        !pendingCurTakeOver &&
-        activeCOS === curMemberID && (
-          <PrimaryButton
-            disabled={loading}
-            onClick={handleFinish}
-            className="w-fit px-4 mt-2"
-          >
-            {loading
-              ? "Working..."
-              : `Finish Duty (+${Number(
-                  COS_TYPES[cosData.plans[prevDateStr].type]
-                )})`}
-          </PrimaryButton>
-        )}
+    <div className="w-full flex items-center justify-end gap-2">
       {!pendingPrevFinish &&
         pendingCurTakeOver &&
         activeCOS === curMemberID && (
@@ -118,17 +146,44 @@ export default function CosHOTOSection({
             Awaiting previous COS to finish duty...
           </p>
         )}
+      {pendingPrevFinish &&
+        !pendingCurTakeOver &&
+        activeCOS === curMemberID && (
+          <PrimaryButton
+            disabled={loading}
+            onClick={handleFinish}
+            className="w-fit px-4"
+          >
+            {loading
+              ? "Working..."
+              : `Finish Duty (+${Number(
+                  COS_TYPES[cosData.plans[prevDateStr].type]
+                )})`}
+          </PrimaryButton>
+        )}
+
       {prevDayCos !== "" &&
         !pendingPrevFinish &&
         pendingCurTakeOver &&
         curDayCOS === curMemberID && (
           <PrimaryButton
-            className="mt-2 w-fit px-4"
+            className="w-fit px-4"
             onClick={handleTakeOver}
             disabled={loading}
           >
             {loading ? "Working..." : "Take Over"}
           </PrimaryButton>
+        )}
+      {shareWS !== "" &&
+        !pendingCurTakeOver &&
+        !pendingPrevFinish &&
+        curDayCOS === curMemberID && (
+          <WhatsappShareButton url={shareWS}>
+            <span className="flex flex-row items-center justify-between gap-1 px-3 py-2 rounded-md shadow-sm bg-white  duration-200 border-[1px] cursor-pointer hover:brightness-95">
+              <img src="/icons/whatsapp.svg" alt="" width={20} />
+              <p className="text-sm">Send HOTO message</p>
+            </span>
+          </WhatsappShareButton>
         )}
     </div>
   );

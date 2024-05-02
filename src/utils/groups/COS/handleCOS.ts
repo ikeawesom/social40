@@ -101,7 +101,7 @@ export async function CreateCOSPlan(
     const { error: pointsErr, data } = await getParticipantsOriginalPoints(
       plan
     );
-    if (!pointsErr) throw new Error(pointsErr);
+    if (pointsErr) throw new Error(pointsErr);
 
     const oriScores = data;
 
@@ -247,6 +247,19 @@ export async function FinishCosDuty(
 
     if (upErr) throw new Error(upErr);
     return handleResponses();
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
+}
+
+export async function GetDisplayName(id: string) {
+  try {
+    const { error, data } = await dbHandler.get({ col_name: "MEMBERS", id });
+    if (error) throw new Error(error);
+
+    const memberData = data as MEMBER_SCHEMA;
+    const displayName = `${memberData.rank} ${memberData.displayName}`.trim();
+    return handleResponses({ data: displayName });
   } catch (err: any) {
     return handleResponses({ status: false, error: err.message });
   }
