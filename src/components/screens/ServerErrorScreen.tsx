@@ -4,6 +4,7 @@ import ReturnHomeButton from "../utils/ReturnHomeButton";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import SecondaryButton from "../utils/SecondaryButton";
+import { handleReload } from "../navigation/HeaderBar";
 
 export default function ServerErrorScreen({ eMsg }: { eMsg?: string }) {
   const router = useRouter();
@@ -27,6 +28,9 @@ export default function ServerErrorScreen({ eMsg }: { eMsg?: string }) {
           </p>
         </div>
         <div className="flex flex-col items-center justify-center w-full gap-2">
+          <SecondaryButton onClick={() => handleReload(router)}>
+            Refresh
+          </SecondaryButton>
           <ReturnHomeButton />
         </div>
       </div>
