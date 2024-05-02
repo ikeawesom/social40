@@ -2,6 +2,7 @@
 
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import { dbHandler } from "@/src/firebase/db";
+import { getMemberPoints } from "@/src/utils/groups/COS/getMemberPoints";
 import { FinishCosDuty } from "@/src/utils/groups/COS/handleCOS";
 import { COS_DAILY_SCHEMA, COS_TYPES } from "@/src/utils/schemas/cos";
 import { useRouter } from "next/navigation";
@@ -39,14 +40,21 @@ export default function CosHOTOSection({
     setLoading(true);
 
     try {
+      const { error: oldScoreErr, data: scoreRes } = await getMemberPoints([
+        curMemberID,
+      ]);
+      if (oldScoreErr) throw new Error(oldScoreErr);
+
+      const prevScore = Number(scoreRes[curMemberID]);
       const to_earn = Number(COS_TYPES[cosData.plans[prevDateStr].type]);
+      const newScore = prevScore + to_earn;
 
       const { error } = await FinishCosDuty(
         groupID,
         `${month}`,
         prevDateStr,
         curMemberID,
-        to_earn
+        newScore
       );
 
       if (error) throw new Error(error);
