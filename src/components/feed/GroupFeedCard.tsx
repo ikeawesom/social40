@@ -117,16 +117,7 @@ export default async function GroupFeedCard({
         </Link>
 
         <div className="w-full mt-2 flex items-center justify-between gap-3 max-[300px]:flex-wrap">
-          {owner ? (
-            <SecondaryButton
-              disabled
-              className="border-custom-green text-custom-green text-xs"
-            >
-              {active
-                ? "You created this activity"
-                : "You have participated in this activity"}
-            </SecondaryButton>
-          ) : !currentParticipant ? (
+          {!currentParticipant ? (
             <JoinGroupActivityButton
               fallout={Object.keys(fallouts).includes(memberID)}
               active={active}
