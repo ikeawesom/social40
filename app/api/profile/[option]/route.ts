@@ -260,61 +260,6 @@ export async function POST(request: NextRequest) {
     if (!res.status)
       return NextResponse.json({ status: false, error: res.error });
     return NextResponse.json({ status: true });
-  } else if (option === "group-activities") {
-    const res = await dbHandler.getSpecific({
-      path: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
-      orderCol: "activityDate",
-      ascending: false,
-    });
-
-    if (!res.status)
-      return NextResponse.json({ status: false, error: res.error });
-
-    const joinedActivities = res.data as {
-      [activityID: string]: ACTIVITY_PARTICIPANT_SCHEMA;
-    };
-
-    const activitesDataPromise = Object.keys(joinedActivities).map(
-      async (activityID: string) => {
-        const res = await dbHandler.get({
-          col_name: `GROUP-ACTIVITIES`,
-          id: activityID,
-        });
-        if (!res.status)
-          return handleResponses({ status: false, error: res.error });
-        return handleResponses({ data: res.data });
-      }
-    );
-
-    const activitiesDataList = await Promise.all(activitesDataPromise);
-
-    const activitiesDataObj = {} as {
-      [activityID: string]: GROUP_ACTIVITY_SCHEMA;
-    };
-
-    const sortedActivitiesList = [] as GROUP_ACTIVITY_SCHEMA[];
-
-    activitiesDataList.forEach((item: any) => {
-      if (!item.status)
-        return NextResponse.json({ status: false, error: item.error });
-      const data = item.data as GROUP_ACTIVITY_SCHEMA;
-
-      sortedActivitiesList.push(data);
-    });
-
-    sortedActivitiesList.sort(function (a, b) {
-      return (
-        new Date(b.activityDate.seconds * 1000).getTime() -
-        new Date(a.activityDate.seconds * 1000).getTime()
-      );
-    });
-
-    sortedActivitiesList.forEach((item: GROUP_ACTIVITY_SCHEMA) => {
-      const activityID = item.activityID;
-      activitiesDataObj[activityID] = item;
-    });
-
-    return NextResponse.json({ status: true, data: activitiesDataObj });
   } else if (option === "feedback-done") {
     const res = await dbHandler.edit({
       col_name: "MEMBERS",
