@@ -33,7 +33,7 @@ export function useCOSMembers(groupData: GROUP_SCHEMA) {
     try {
       const { error } = await EditMemberCOSPoints(
         clickedID,
-        parseInt(curPoints ?? "0")
+        Number(curPoints ?? "0")
       );
       if (error) throw new Error(error);
       router.refresh();
