@@ -8,7 +8,7 @@ export default function AddStatusButton() {
   return (
     <PrimaryButton
       onClick={() => router.push("/status", { scroll: false })}
-      className="mb-2"
+      className="mb-2 mt-1"
     >
       Add a Status
     </PrimaryButton>

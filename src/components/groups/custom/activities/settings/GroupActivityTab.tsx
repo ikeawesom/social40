@@ -28,7 +28,7 @@ export default function GroupActivityTab({
       href={`/groups/${activityData.groupID}/activity?${new URLSearchParams({
         id: activityData.activityID,
       })}`}
-      className="w-full py-2 px-3 flex items-start justify-center flex-col duration-200 hover:bg-custom-light-text"
+      className="w-full py-2 px-3 flex items-start justify-center flex-col duration-150 hover:bg-custom-light-text"
     >
       <h1 className="text-custom-dark-text font-semibold flex items-center justify-start gap-1">
         {activityData.activityTitle}
