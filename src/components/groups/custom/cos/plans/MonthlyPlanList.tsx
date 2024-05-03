@@ -313,7 +313,7 @@ export default function MonthlyPlanList({
           const { day, memberID, month, type, finished, takenOver } =
             plans[date];
           const points = COS_TYPES[type];
-          const dutyOver = finished || takenOver || confirmed;
+          const dutyOver = finished || confirmed;
 
           return (
             <DefaultCard className="w-full p-3" key={date}>
