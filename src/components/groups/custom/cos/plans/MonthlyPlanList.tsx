@@ -392,8 +392,8 @@ export default function MonthlyPlanList({
                     onClick={async () =>
                       await handleFinishMember(date, memberID)
                     }
-                    className="w-fit"
-                    disabled={dutyOver || loading || unlocked}
+                    className="w-fit px-3"
+                    disabled={dutyOver || loading || !unlocked}
                   >
                     {dutyOver
                       ? "Confirmed"
