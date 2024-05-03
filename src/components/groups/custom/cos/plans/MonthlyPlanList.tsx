@@ -393,7 +393,7 @@ export default function MonthlyPlanList({
                       await handleFinishMember(date, memberID)
                     }
                     className="w-fit"
-                    disabled={dutyOver || loading || unlocked}
+                    disabled={dutyOver || loading || !unlocked}
                   >
                     {dutyOver
                       ? "Confirmed"
