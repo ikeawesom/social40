@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type STATISTICS_SCHEMA = {
   statisticsID: string;
   memberID: string; // member who
@@ -25,48 +27,46 @@ export function initStatisticsObject({
   } as STATISTICS_SCHEMA;
 }
 
+export type IPPT_STATS_SCHEMA = {
+  score: number;
+  pushups: number;
+  situps: number;
+  timing: number; // in seconds
+};
+
 export type IPPT_SCHEMA = {
   ipptID: string;
   memberID: string;
-  ipptDate: string; // date format
-  pushups: number;
-  situps: number;
-  score: number;
-  timing: number; // in seconds
+  ipptDate: Timestamp; // date format
+  stats: IPPT_STATS_SCHEMA;
 };
 
 export function initIpptObject({
   ipptID,
   memberID,
   ipptDate,
-  pushups,
-  situps,
-  score,
-  timing,
+  stats: { pushups, situps, score, timing },
 }: IPPT_SCHEMA) {
   return {
     ipptID,
     memberID,
     ipptDate,
-    pushups,
-    situps,
-    score,
-    timing,
+    stats: { pushups, situps, score, timing },
   } as IPPT_SCHEMA;
 }
 
 export type SHOOTING_SCHEMA = {
   memberID: string;
   shootingID: string;
-  shots: number;
-  shootingDate: string; // date format
+  score: number;
+  shootingDate: Timestamp; // date format
 };
 
 export function initShootingObject({
   memberID,
   shootingID,
   shootingDate,
-  shots,
+  score,
 }: SHOOTING_SCHEMA) {
-  return { memberID, shootingID, shots, shootingDate } as SHOOTING_SCHEMA;
+  return { memberID, shootingID, score, shootingDate } as SHOOTING_SCHEMA;
 }
