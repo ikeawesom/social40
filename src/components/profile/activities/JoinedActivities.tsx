@@ -69,7 +69,9 @@ export default async function JoinedActivities({
 
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-start">
-        <JoinedActivitiesList activitiesData={activitiesDataObj} />
+        <JoinedActivitiesList
+          activitiesData={JSON.parse(JSON.stringify(activitiesDataObj))}
+        />
       </DefaultCard>
     );
   } catch (err: any) {
