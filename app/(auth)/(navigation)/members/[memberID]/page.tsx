@@ -11,13 +11,14 @@ import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import { ROLES_HIERARCHY } from "@/src/utils/constants";
+import { DEFAULT_STATS, ROLES_HIERARCHY } from "@/src/utils/constants";
 import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
 import React, { Suspense } from "react";
 import Image from "next/image";
 import HRow from "@/src/components/utils/HRow";
+import AddMemberStatForm from "@/src/components/members/statistics/AddMemberStatForm";
 
 export async function generateMetadata({
   params,
@@ -110,9 +111,9 @@ export default async function MemberPage({
                     </div>
                   </div>
                 )}
-                {/* <div className="flex w-full items-center justify-between">
+                <div className="flex w-full items-center justify-between">
                   <MemberPoints points={viewMemberData.points} />
-                </div> */}
+                </div>
                 <div className="flex flex-col items-start justify-center">
                   <h1 className="text-xl text-custom-dark-text flex items-center justify-start gap-2">
                     {rankName} <BookedStatus status={viewMemberData.bookedIn} />
@@ -126,9 +127,28 @@ export default async function MemberPage({
                   </p>
                 </div>
                 <MemberBadges badges={viewMemberData.badges} />
-                {(permission || sameMember) && (
+                <HRow />
+                <div className="flex items-center justify-center gap-1 w-full flex-col">
+                  <h1 className="text-custom-dark-text font-bold">
+                    Recent Statistics
+                  </h1>
+                  <div className="flex items-center justify-around gap-3 w-full">
+                    {DEFAULT_STATS.map((type: string) => (
+                      <div
+                        key={type}
+                        className="flex flex-col items-center justify-center gap-0"
+                      >
+                        <p className="text-sm text-custom-grey-text">{type}</p>
+                        <h4 className="text-lg text-custom-dark-text font-bold">
+                          {viewMemberData.dutyPoints.cos}
+                        </h4>
+                      </div>
+                    ))}
+                  </div>
+                  {permission && <AddMemberStatForm id={clickedMemberID} />}
+                </div>
+                {/* {(permission || sameMember) && (
                   <>
-                    <HRow />
                     <div className="flex items-center justify-center gap-1 w-full flex-col">
                       <h1 className="text-custom-dark-text font-bold">
                         Duty Points
@@ -152,7 +172,7 @@ export default async function MemberPage({
                       </div>
                     </div>
                   </>
-                )}
+                )} */}
               </DefaultCard>
               <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
                 <JoinedActivities clickedMemberID={clickedMemberID} />
