@@ -231,6 +231,8 @@ export const MONTHS = [
   "DECEMBER",
 ];
 
+export const DEFAULT_STATS = ["IPPT", "ATP", "VOC"];
+
 export type GAME_TYPE = {
   id: string;
   title: string;
