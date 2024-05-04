@@ -35,38 +35,18 @@ export type IPPT_STATS_SCHEMA = {
 };
 
 export type IPPT_SCHEMA = {
-  ipptID: string;
+  ipptID?: string;
   memberID: string;
   ipptDate: Timestamp; // date format
   stats: IPPT_STATS_SCHEMA;
 };
 
-export function initIpptObject({
-  ipptID,
-  memberID,
-  ipptDate,
-  stats: { pushups, situps, score, timing },
-}: IPPT_SCHEMA) {
-  return {
-    ipptID,
-    memberID,
-    ipptDate,
-    stats: { pushups, situps, score, timing },
-  } as IPPT_SCHEMA;
-}
-
-export type SHOOTING_SCHEMA = {
-  memberID: string;
-  shootingID: string;
-  score: number;
-  shootingDate: Timestamp; // date format
+export type VOC_SCHEMA = {
+  vocID: string;
+  timing: number; // in seconds
 };
 
-export function initShootingObject({
-  memberID,
-  shootingID,
-  shootingDate,
-  score,
-}: SHOOTING_SCHEMA) {
-  return { memberID, shootingID, score, shootingDate } as SHOOTING_SCHEMA;
-}
+export type ATP_SCHEMA = {
+  atpID: string;
+  score: number;
+};
