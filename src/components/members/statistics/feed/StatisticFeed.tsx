@@ -86,7 +86,10 @@ export async function StatisticFeed({
                   type={type}
                 />
               ) : (
-                <DefaultCard className="w-full flex items-center justify-between gap-4">
+                <DefaultCard
+                  className="w-full flex items-center justify-between gap-4"
+                  key={id}
+                >
                   <div>
                     <h1>{type}</h1>
                     <p className="text-xs text-custom-grey-text">
