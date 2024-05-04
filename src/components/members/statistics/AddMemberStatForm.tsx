@@ -1,46 +1,50 @@
 "use client";
 
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import Image from "next/image";
 import PrimaryButton from "../../utils/PrimaryButton";
 import Modal from "../../utils/Modal";
 import ModalHeader from "../../utils/ModalHeader";
-import { DEFAULT_STATS } from "@/src/utils/constants";
+import { DEFAULT_STATS, DefaultStatsType } from "@/src/utils/constants";
 import FormInputContainer from "../../utils/FormInputContainer";
 import HRow from "../../utils/HRow";
 import { toast } from "sonner";
-import { setIPPT } from "@/src/utils/members/SetStatistics";
+import { setATP, setIPPT, setVOC } from "@/src/utils/members/SetStatistics";
 import { useRouter } from "next/navigation";
 import { useSetIppt } from "@/src/hooks/members/useSetIppt";
 import InnerContainer from "../../utils/InnerContainer";
+import Badge from "../../utils/Badge";
+import SecondaryButton from "../../utils/SecondaryButton";
+import { useQueryMember } from "@/src/hooks/members/useQueryMember";
+import { useSetVOC } from "@/src/hooks/members/useSetVOC";
+import { useSetATP } from "@/src/hooks/members/useSetATP";
+
+const DEFAULT_DATE = { day: 1, month: 1, year: 2024 };
 
 export default function AddMemberStatForm({ id }: { id: string }) {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
-  const [statType, setStatType] = useState<string>(DEFAULT_STATS[0]);
+  const [statType, setStatType] = useState<string>(DEFAULT_STATS[0].name);
   const [loading, setLoading] = useState(false);
+  const [statDate, setStatDate] = useState(DEFAULT_DATE);
 
-  const [time, setTime] = useState({ min: 0, sec: 0 });
-  const [score, setScore] = useState(0);
-  const [query, setQuery] = useState("");
-  const [members, setMembers] = useState<string[]>([id]);
+  const { resetScore, score, setScore } = useSetATP();
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (query !== "") {
-        // handle
-      }
-    }, 400);
-  }, [query]);
+  const {
+    filtered,
+    handleAdd,
+    isDetail,
+    members,
+    query,
+    resetQuery,
+    setIsDetail,
+    setQuery,
+  } = useQueryMember(id);
 
   const { handleAgeChange, handleIPPTChange, ipptStat, resetIppt } =
     useSetIppt();
 
-  const [statDate, setStatDate] = useState({
-    day: 1,
-    month: 1,
-    year: 2024,
-  });
+  const { resetTime, setTime, time } = useSetVOC();
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStatDate({ ...statDate, [e.target.name]: e.target.value });
@@ -69,6 +73,12 @@ export default function AddMemberStatForm({ id }: { id: string }) {
           }
         );
         if (error) throw new Error(error);
+      } else if (statType === "ATP") {
+        const { error } = await setATP(id, score);
+        if (error) throw new Error(error);
+      } else if (statType === "VOC" || statType === "SOC") {
+        const { error } = await setVOC(members, time, statType);
+        if (error) throw new Error(error);
       }
       reset();
       router.refresh();
@@ -83,19 +93,20 @@ export default function AddMemberStatForm({ id }: { id: string }) {
     setShowModal(false);
     setLoading(false);
     setStatType("IPPT");
+    setStatDate(DEFAULT_DATE);
     resetIppt();
+    resetTime();
+    resetScore();
+    resetQuery();
   };
 
-  const type = statType === "VOC" ? "time" : "score";
+  const type = statType === "ATP" ? "score" : "time";
 
   return (
     <>
       {showModal && (
         <Modal>
-          <ModalHeader
-            close={() => setShowModal(false)}
-            heading="Add Statistic"
-          />
+          <ModalHeader close={reset} heading="Add Statistic" />
           <form
             className="flex items-start justify-start flex-col gap-2"
             onSubmit={handleSubmit}
@@ -110,8 +121,8 @@ export default function AddMemberStatForm({ id }: { id: string }) {
                 value={statType}
                 onChange={handleChangeType}
               >
-                {DEFAULT_STATS.map((type: string) => (
-                  <option key={type}>{type}</option>
+                {DEFAULT_STATS.map((type: DefaultStatsType) => (
+                  <option key={type.name}>{type.name}</option>
                 ))}
               </select>
             </FormInputContainer>
@@ -125,7 +136,7 @@ export default function AddMemberStatForm({ id }: { id: string }) {
                       value={ipptStat.age}
                       onChange={handleAgeChange}
                     >
-                      {new Array(10)
+                      {new Array(43)
                         .fill(1)
                         .map((value: number, index: number) => (
                           <option key={index} value={index + 18}>
@@ -184,34 +195,55 @@ export default function AddMemberStatForm({ id }: { id: string }) {
               {statType !== "IPPT" && (
                 <>
                   {type === "time" ? (
-                    <div className="w-full flex items-center justify-start gap-2">
-                      <FormInputContainer inputName="min" labelText="Mins">
-                        <input
-                          type="number"
-                          name="min"
-                          value={time.min}
-                          onChange={(e) =>
-                            setTime({
-                              ...time,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        />
-                      </FormInputContainer>
-                      <FormInputContainer inputName="sec" labelText="Secs">
-                        <input
-                          type="number"
-                          name="sec"
-                          value={time.sec}
-                          onChange={(e) =>
-                            setTime({
-                              ...time,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        />
-                      </FormInputContainer>
-                    </div>
+                    <>
+                      <div className="w-full flex items-center justify-start gap-2">
+                        <FormInputContainer inputName="min" labelText="Mins">
+                          <input
+                            type="number"
+                            name="min"
+                            value={time.min}
+                            onChange={(e) =>
+                              setTime({
+                                ...time,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          />
+                        </FormInputContainer>
+                        <FormInputContainer inputName="sec" labelText="Secs">
+                          <input
+                            type="number"
+                            name="sec"
+                            value={time.sec}
+                            onChange={(e) =>
+                              setTime({
+                                ...time,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          />
+                        </FormInputContainer>
+                      </div>
+                      <div className="flex w-full items-center justify-start gap-3 mt-3">
+                        <p className="text-sm text-custom-grey-text">
+                          Was this activity done in detail level?
+                        </p>
+                        <SecondaryButton
+                          activated={isDetail}
+                          onClick={() => setIsDetail(true)}
+                          className="w-fit px-3 py-1"
+                        >
+                          Yes
+                        </SecondaryButton>
+                        <SecondaryButton
+                          onClick={() => setIsDetail(false)}
+                          activated={!isDetail}
+                          className="w-fit px-3 py-1"
+                        >
+                          No
+                        </SecondaryButton>
+                      </div>
+                    </>
                   ) : (
                     <FormInputContainer inputName="score" labelText="Score">
                       <input
@@ -222,28 +254,57 @@ export default function AddMemberStatForm({ id }: { id: string }) {
                       />
                     </FormInputContainer>
                   )}
-                  <FormInputContainer
-                    inputName="query"
-                    labelText="Add members to this activity"
-                    className="mt-3"
-                  >
-                    <input
-                      placeholder="Search for members"
-                      name="query"
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                    />
-                  </FormInputContainer>
-                  <InnerContainer className="w-full flex flex-row p-2 max-h-[15vh] items-center justify-start gap-1 flex-wrap">
-                    {members.map((id: string) => (
-                      <p
-                        className="text-sm px-2 py-1 bg-custom-light-text rounded-md cursor-default hover:brightness-95"
-                        key={id}
-                      >
-                        {id}
-                      </p>
-                    ))}
-                  </InnerContainer>
+                  {isDetail && (
+                    <div className="w-full p-3 rounded-md border-[1px] border-custom-light-text flex flex-col items-start justify-start gap-2 mt-2">
+                      <div className="relative w-full">
+                        <FormInputContainer
+                          inputName="query"
+                          labelText="Add members to this detail"
+                        >
+                          <input
+                            placeholder="Search for members"
+                            name="query"
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                          />
+                        </FormInputContainer>
+                        {query !== "" && (
+                          <div className="flex flex-col items-start justify-start w-full absolute top-18 left-0 z-20 rounded-md border-[1px] border-custom-light-text overflow-x-hidden overflow-y-scroll max-h-[20vh]">
+                            {filtered.length === 0 ? (
+                              <div className="w-full px-3 py-2 bg-white">
+                                <p className="text-xs">No members found</p>
+                              </div>
+                            ) : (
+                              filtered.map((id: string) => (
+                                <div
+                                  key={id}
+                                  onClick={() => handleAdd(id)}
+                                  className="w-full px-3 py-2 bg-white hover:bg-custom-light-text"
+                                >
+                                  <p className="text-xs flex items-center justify-start gap-2">
+                                    {id}{" "}
+                                    {members.includes(id) && (
+                                      <Badge>Added</Badge>
+                                    )}
+                                  </p>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <InnerContainer className="w-full flex flex-row p-2 max-h-[15vh] items-center justify-start gap-1 flex-wrap">
+                        {members.map((id: string) => (
+                          <p
+                            className="text-sm px-2 py-1 bg-custom-light-text rounded-md cursor-default hover:brightness-95"
+                            key={id}
+                          >
+                            {id}
+                          </p>
+                        ))}
+                      </InnerContainer>
+                    </div>
+                  )}
                 </>
               )}
             </div>
