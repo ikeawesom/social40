@@ -122,7 +122,8 @@ class DbClass {
         const asc = ascending ? "asc" : "desc";
         q = query(colRef, orderBy(orderCol, asc));
       } else {
-        throw new Error("Invalid props.");
+        // throw new Error("Invalid props.");
+        q = query(colRef);
       }
 
       const qSnap = await getDocs(q);
