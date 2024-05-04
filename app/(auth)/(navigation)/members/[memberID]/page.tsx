@@ -11,7 +11,7 @@ import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import { DEFAULT_STATS, ROLES_HIERARCHY } from "@/src/utils/constants";
+import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
@@ -19,6 +19,9 @@ import React, { Suspense } from "react";
 import Image from "next/image";
 import HRow from "@/src/components/utils/HRow";
 import AddMemberStatForm from "@/src/components/members/statistics/AddMemberStatForm";
+import StatisticsSection from "@/src/components/members/statistics/StatisticsSection";
+import StatsLoading from "@/src/components/members/statistics/StatsLoading";
+import Link from "next/link";
 
 export async function generateMetadata({
   params,
@@ -129,23 +132,21 @@ export default async function MemberPage({
                 <MemberBadges badges={viewMemberData.badges} />
                 <HRow />
                 <div className="flex items-center justify-center gap-1 w-full flex-col">
-                  <h1 className="text-custom-dark-text font-bold">
-                    Recent Statistics
+                  <h1 className="text-custom-dark-text font-bold mb-1">
+                    Best Statistics
                   </h1>
-                  <div className="flex items-center justify-around gap-3 w-full">
-                    {DEFAULT_STATS.map((type: string) => (
-                      <div
-                        key={type}
-                        className="flex flex-col items-center justify-center gap-0"
-                      >
-                        <p className="text-sm text-custom-grey-text">{type}</p>
-                        <h4 className="text-lg text-custom-dark-text font-bold">
-                          {viewMemberData.dutyPoints.cos}
-                        </h4>
-                      </div>
-                    ))}
+                  <Suspense fallback={<StatsLoading />}>
+                    <StatisticsSection id={clickedMemberID} />
+                  </Suspense>
+                  <div className="w-full items-end justify-center flex-col flex mt-2 gap-1">
+                    <Link
+                      href={`/members/${clickedMemberID}/statistics`}
+                      className="text-sm underline text-custom-grey-text hover:text-custom-primary"
+                    >
+                      View All
+                    </Link>
+                    {permission && <AddMemberStatForm id={clickedMemberID} />}
                   </div>
-                  {permission && <AddMemberStatForm id={clickedMemberID} />}
                 </div>
                 {/* {(permission || sameMember) && (
                   <>
