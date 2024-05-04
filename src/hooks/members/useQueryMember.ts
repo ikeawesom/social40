@@ -1,0 +1,60 @@
+import { getMembersData } from "@/src/utils/members/SetStatistics";
+import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
+import { useState, useEffect } from "react";
+
+export function useQueryMember(id: string) {
+  const [query, setQuery] = useState("");
+  const [members, setMembers] = useState<string[]>([id]);
+  const [membersList, setMembersList] = useState<{
+    [id: string]: MEMBER_SCHEMA;
+  }>();
+  const [filtered, setFiltered] = useState<string[]>([]);
+  const [isDetail, setIsDetail] = useState(false);
+
+  const handleAdd = (id: string) => {
+    if (!members.includes(id)) {
+      setMembers([...members, id]);
+      resetQuery();
+    }
+  };
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      const { data } = await getMembersData();
+      if (data) setMembersList(data);
+    };
+    if (!membersList) fetchMembers();
+  }, []);
+
+  useEffect(() => {
+    if (query === "") setFiltered([]);
+
+    if (query !== "" && membersList) {
+      // handle
+      const lowerQuery = query.toLowerCase();
+      const temp = Object.keys(membersList).filter((id: string) => {
+        const idLower = id.toLowerCase();
+        const name = membersList[id].displayName.toLowerCase();
+        return idLower.includes(lowerQuery) || name.includes(lowerQuery);
+      });
+      setFiltered(temp);
+    }
+  }, [query]);
+
+  const resetQuery = () => {
+    setQuery("");
+    setFiltered([]);
+    setMembers([id]);
+  };
+
+  return {
+    members,
+    resetQuery,
+    isDetail,
+    setIsDetail,
+    query,
+    setQuery,
+    filtered,
+    handleAdd,
+  };
+}
