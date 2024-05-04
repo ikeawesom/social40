@@ -5,7 +5,7 @@ import Image from "next/image";
 import PrimaryButton from "../../utils/PrimaryButton";
 import Modal from "../../utils/Modal";
 import ModalHeader from "../../utils/ModalHeader";
-import { DEFAULT_STATS, DefaultStatsType } from "@/src/utils/constants";
+import { DEFAULT_STATS } from "@/src/utils/constants";
 import FormInputContainer from "../../utils/FormInputContainer";
 import HRow from "../../utils/HRow";
 import { toast } from "sonner";
@@ -24,7 +24,9 @@ const DEFAULT_DATE = { day: 1, month: 1, year: 2024 };
 export default function AddMemberStatForm({ id }: { id: string }) {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
-  const [statType, setStatType] = useState<string>(DEFAULT_STATS[0].name);
+  const [statType, setStatType] = useState<string>(
+    Object.keys(DEFAULT_STATS)[0]
+  );
   const [loading, setLoading] = useState(false);
   const [statDate, setStatDate] = useState(DEFAULT_DATE);
 
@@ -57,27 +59,29 @@ export default function AddMemberStatForm({ id }: { id: string }) {
     e.preventDefault();
     setLoading(true);
     try {
+      const date = {
+        day: statDate.day,
+        month: statDate.month,
+        year: statDate.year,
+      };
       if (statType === "IPPT") {
+        const timing = Number(ipptStat.min) * 60 + Number(ipptStat.sec);
         const { error } = await setIPPT(
           id,
           {
             age: ipptStat.age,
             pushups: ipptStat.pushups,
             situps: ipptStat.situps,
-            timing: ipptStat.min * 60 + ipptStat.sec,
+            timing,
           },
-          {
-            day: statDate.day,
-            month: statDate.month,
-            year: statDate.year,
-          }
+          date
         );
         if (error) throw new Error(error);
       } else if (statType === "ATP") {
-        const { error } = await setATP(id, score);
+        const { error } = await setATP(id, score, date);
         if (error) throw new Error(error);
       } else if (statType === "VOC" || statType === "SOC") {
-        const { error } = await setVOC(members, time, statType);
+        const { error } = await setVOC(members, time, statType, date);
         if (error) throw new Error(error);
       }
       reset();
@@ -121,8 +125,8 @@ export default function AddMemberStatForm({ id }: { id: string }) {
                 value={statType}
                 onChange={handleChangeType}
               >
-                {DEFAULT_STATS.map((type: DefaultStatsType) => (
-                  <option key={type.name}>{type.name}</option>
+                {Object.keys(DEFAULT_STATS).map((type: string) => (
+                  <option key={type}>{DEFAULT_STATS[type].name}</option>
                 ))}
               </select>
             </FormInputContainer>
@@ -338,7 +342,7 @@ export default function AddMemberStatForm({ id }: { id: string }) {
                 />
               </FormInputContainer>
             </div>
-            <PrimaryButton disabled={loading} type="submit" className="mt-2">
+            <PrimaryButton disabled={loading} type="submit">
               {loading ? "Working..." : "Submit"}
             </PrimaryButton>
           </form>

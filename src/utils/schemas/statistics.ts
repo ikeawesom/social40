@@ -28,25 +28,38 @@ export function initStatisticsObject({
 }
 
 export type IPPT_STATS_SCHEMA = {
-  score: number;
   pushups: number;
   situps: number;
   timing: number; // in seconds
 };
 
 export type IPPT_SCHEMA = {
-  ipptID?: string;
+  ipptID: string;
   memberID: string;
-  ipptDate: Timestamp; // date format
+  dateCompleted: Timestamp; // date format
   stats: IPPT_STATS_SCHEMA;
+
+  // common property among stats
+  statType: "IPPT";
+  score: number;
 };
 
 export type VOC_SCHEMA = {
+  memberID: string;
   vocID: string;
-  timing: number; // in seconds
+
+  // common property among stats
+  dateCompleted: Timestamp; // date format
+  statType: "VOC" | "SOC";
+  score: number; // in seconds
 };
 
 export type ATP_SCHEMA = {
+  memberID: string;
   atpID: string;
+
+  // common property among stats
+  dateCompleted: Timestamp; // date format
+  statType: "ATP";
   score: number;
 };

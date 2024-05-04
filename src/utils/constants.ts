@@ -1,3 +1,5 @@
+import { BadgeColorsType } from "./schemas/members";
+
 export const ROLES_DESC = {
   "permissions-allow": "Can change permissions for other members",
   "create-admins": "Can create new accounts with set permissions",
@@ -70,10 +72,25 @@ export const GROUP_ROLES_HEIRARCHY = {
 } as { [role: string]: { rank: number; title: string } };
 
 export const BADGE_COLORS = {
-  Gold: "bg-orange-300",
-  Sharpshooter: "bg-green-300",
-  Recon: "bg-blue-300",
-} as { [key: string]: string };
+  GOLD: {
+    bg: "bg-orange-300",
+    text: "text-orange-700",
+  },
+  SHARPSHOOTER: {
+    bg: "bg-green-300",
+    text: "text-green-800",
+  },
+  RECON: {
+    bg: "bg-blue-300",
+    text: "text-blue-800",
+  },
+  FLASH: {
+    bg: "bg-red-600",
+    text: "text-yellow-200",
+  },
+} as {
+  [key: string]: BadgeColorsType;
+};
 
 export const MAX_LENGTH = 30;
 
@@ -234,13 +251,29 @@ export const MONTHS = [
 export type DefaultStatsType = {
   name: string;
   featured: boolean;
+  scoringType: "ASC" | "DESC";
+  criteria?: any;
+  timing?: boolean;
 };
-export const DEFAULT_STATS = [
-  { name: "IPPT", featured: true },
-  { name: "ATP", featured: true },
-  { name: "VOC", featured: true },
-  { name: "SOC", featured: false },
-];
+export const DEFAULT_STATS = {
+  IPPT: {
+    name: "IPPT",
+    featured: true,
+    scoringType: "DESC",
+    criteria: { gold: 85, silver: 75, pass: 61 },
+  },
+  ATP: {
+    name: "ATP",
+    featured: true,
+    scoringType: "DESC",
+    criteria: {
+      mm: 29,
+      pass: 21,
+    },
+  },
+  VOC: { name: "VOC", featured: true, scoringType: "ASC", timing: true },
+  SOC: { name: "SOC", featured: false, scoringType: "ASC", timing: true },
+} as { [type: string]: DefaultStatsType };
 
 export type GAME_TYPE = {
   id: string;
