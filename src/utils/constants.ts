@@ -231,7 +231,16 @@ export const MONTHS = [
   "DECEMBER",
 ];
 
-export const DEFAULT_STATS = ["IPPT", "ATP", "VOC"];
+export type DefaultStatsType = {
+  name: string;
+  featured: boolean;
+};
+export const DEFAULT_STATS = [
+  { name: "IPPT", featured: true },
+  { name: "ATP", featured: true },
+  { name: "VOC", featured: true },
+  { name: "SOC", featured: false },
+];
 
 export type GAME_TYPE = {
   id: string;
