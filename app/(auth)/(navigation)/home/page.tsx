@@ -1,6 +1,7 @@
 import FeedSkeleton from "@/src/components/FeedSkeleton";
 import AnnouncementSection from "@/src/components/announcements/AnnouncementSection";
 import CreateAnnouncementForm from "@/src/components/announcements/CreateAnnouncementForm";
+import UpdatesSection from "@/src/components/announcements/UpdatesSection";
 import FeedGroup from "@/src/components/feed/FeedGroup";
 import GroupsScrollSection from "@/src/components/feed/GroupsScrollSection";
 import HomeHeaderBar from "@/src/components/navigation/HomeHeaderBar";
@@ -128,6 +129,9 @@ export default async function Home({
           <HomeHeaderBar text="Social40" params={activityType} />
           <div className="w-full grid place-items-center mt-[5.5rem]">
             <div className="flex flex-col w-full items-center justify-start gap-4 max-w-[500px]">
+              <UpdatesSection
+                memberData={JSON.parse(JSON.stringify(memberData))}
+              />
               {admin && <CreateAnnouncementForm memberID={memberID} />}
               <Suspense fallback={<FeedSkeleton />}>
                 <AnnouncementSection curMember={memberID} />
