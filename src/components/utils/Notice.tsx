@@ -1,5 +1,6 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
+import Image from "next/image";
 
 type NoticeType = {
   status: "info" | "success" | "warning" | "error";
@@ -7,6 +8,7 @@ type NoticeType = {
   containerClassName?: string;
   textClassName?: string;
   noHeader?: boolean;
+  close?: () => void;
 };
 export default function Notice({
   status,
@@ -14,11 +16,12 @@ export default function Notice({
   containerClassName,
   textClassName,
   noHeader,
+  close,
 }: NoticeType) {
   return (
     <div
       className={twMerge(
-        "w-full rounded-lg border-[1.2px] p-2",
+        "w-full rounded-lg border-[1.2px] p-2 relative",
         status === "info" && "bg-blue-50 border-blue-700/30",
         status === "success" && "bg-custom-light-green border-custom-green/30",
         status === "error" && "bg-custom-light-red border-custom-red/30",
@@ -42,6 +45,16 @@ export default function Notice({
         )}{" "}
         {children ?? "This is a notice card."}
       </p>
+      {close && (
+        <Image
+          src="/icons/icon_close.svg"
+          alt="Close"
+          width={10}
+          height={10}
+          onClick={close}
+          className="absolute top-3 right-3 cursor-pointer hover:opacity-70"
+        />
+      )}
     </div>
   );
 }
