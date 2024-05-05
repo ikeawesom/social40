@@ -191,7 +191,7 @@ export default async function GroupPage({
                 <Suspense fallback={<DefaultSkeleton className="h-[50px]" />}>
                   <GroupActivitiesServer groupID={groupID} admin={admin} />
                 </Suspense>
-                {admin && !owner && (
+                {!owner && (
                   <LeaveGroupSection groupID={groupID} curMember={memberID} />
                 )}
                 {admin && <SettingsSection groupID={groupID} />}
