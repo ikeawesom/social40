@@ -328,6 +328,7 @@ export default function AddMemberStatForm({
                           //   )}
                           // </div>
                           <AnnouncementTag
+                            key={user}
                             isDelete={user !== id}
                             onClick={() => handleRemove(user)}
                           >
