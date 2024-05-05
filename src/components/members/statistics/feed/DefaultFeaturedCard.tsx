@@ -33,6 +33,11 @@ export default function DefaultFeaturedCard({
             Completed on{" "}
             {TimestampToDateString(data.dateCompleted).split(" ")[0]}
           </p>
+          <div className="w-full flex items-center justify-start">
+            <p className="text-xs">
+              Verified by: {data.addedBy ?? data.memberID}
+            </p>
+          </div>
         </div>
         <div className="flex items-center justify-start gap-1 text-end">
           <h1 className="text-4xl font-bold">{score}</h1>
@@ -49,6 +54,7 @@ export default function DefaultFeaturedCard({
           )}
         </div>
       </div>
+
       <div className="shimmer slow" />
     </DefaultCard>
   );

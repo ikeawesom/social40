@@ -50,7 +50,8 @@ export async function calculateIPPT(stats: IPPTStats) {
 export async function setIPPT(
   id: string,
   stats: IPPTStats,
-  date: { day: number; month: number; year: number }
+  date: { day: number; month: number; year: number },
+  curID: string
 ) {
   try {
     const { pushups, situps, timing, age } = stats;
@@ -75,6 +76,7 @@ export async function setIPPT(
       },
       score: Number(score),
       statType: "IPPT",
+      addedBy: curID,
     } as IPPT_SCHEMA;
 
     const { error, data } = await dbHandler.addGeneral({
@@ -113,7 +115,8 @@ export async function setVOC(
   members: string[],
   time: { min: number; sec: number },
   type: "VOC" | "SOC",
-  date: { day: number; month: number; year: number }
+  date: { day: number; month: number; year: number },
+  curID: string
 ) {
   try {
     const { min, sec } = time;
@@ -127,6 +130,7 @@ export async function setVOC(
         dateCompleted: DateToTimestamp(
           new Date(date.year, date.month - 1, date.day)
         ),
+        addedBy: curID,
       } as VOC_SCHEMA;
       const { error, data } = await dbHandler.addGeneral({
         path: `MEMBERS/${id}/${type}`,
@@ -169,7 +173,8 @@ export async function setVOC(
 export async function setATP(
   id: string,
   score: number,
-  date: { day: number; month: number; year: number }
+  date: { day: number; month: number; year: number },
+  curID: string
 ) {
   try {
     const { error, data } = await dbHandler.addGeneral({
@@ -181,6 +186,7 @@ export async function setATP(
         dateCompleted: DateToTimestamp(
           new Date(date.year, date.month - 1, date.day)
         ),
+        addedBy: curID,
       } as ATP_SCHEMA,
     });
     if (error) throw new Error(error);

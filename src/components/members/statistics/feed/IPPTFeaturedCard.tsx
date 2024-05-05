@@ -45,6 +45,11 @@ export default function IPPTFeaturedCard({
           </span>{" "}
           for 2.4km
         </p>
+        <div className="w-full flex items-center justify-end">
+          <p className="text-xs">
+            Verified by: {bestStat.addedBy ?? bestStat.memberID}
+          </p>
+        </div>
       </div>
     </DefaultCard>
   );

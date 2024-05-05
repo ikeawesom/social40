@@ -42,6 +42,7 @@ export type IPPT_SCHEMA = {
   // common property among stats
   statType: "IPPT";
   score: number;
+  addedBy: string; // memberID who created the stat
 };
 
 export type VOC_SCHEMA = {
@@ -52,6 +53,7 @@ export type VOC_SCHEMA = {
   dateCompleted: Timestamp; // date format
   statType: "VOC" | "SOC";
   score: number; // in seconds
+  addedBy: string; // memberID who created the stat
 };
 
 export type ATP_SCHEMA = {
@@ -62,4 +64,5 @@ export type ATP_SCHEMA = {
   dateCompleted: Timestamp; // date format
   statType: "ATP";
   score: number;
+  addedBy: string; // memberID who created the stat
 };

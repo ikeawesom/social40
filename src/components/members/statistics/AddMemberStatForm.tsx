@@ -22,7 +22,13 @@ import AnnouncementTag from "../../announcements/AnnouncementTag";
 
 const DEFAULT_DATE = { day: 1, month: 1, year: 2024 };
 
-export default function AddMemberStatForm({ id }: { id: string }) {
+export default function AddMemberStatForm({
+  id,
+  curID,
+}: {
+  id: string;
+  curID: string;
+}) {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [statType, setStatType] = useState<string>(
@@ -76,14 +82,15 @@ export default function AddMemberStatForm({ id }: { id: string }) {
             situps: ipptStat.situps,
             timing,
           },
-          date
+          date,
+          curID
         );
         if (error) throw new Error(error);
       } else if (statType === "ATP") {
-        const { error } = await setATP(id, score, date);
+        const { error } = await setATP(id, score, date, curID);
         if (error) throw new Error(error);
       } else if (statType === "VOC" || statType === "SOC") {
-        const { error } = await setVOC(members, time, statType, date);
+        const { error } = await setVOC(members, time, statType, date, curID);
         if (error) throw new Error(error);
       }
       reset();
@@ -369,20 +376,18 @@ export default function AddMemberStatForm({ id }: { id: string }) {
           </form>
         </Modal>
       )}
-      <div className="w-full items-center justify-end flex mt-1">
-        <PrimaryButton
-          onClick={() => setShowModal(true)}
-          className="w-fit px-4 pr-2 flex items-center justify-center"
-        >
-          Add Stats
-          <Image
-            alt="+"
-            src="/icons/icon_right_bright.svg"
-            width={25}
-            height={25}
-          />
-        </PrimaryButton>
-      </div>
+      <PrimaryButton
+        onClick={() => setShowModal(true)}
+        className="w-fit px-4 pr-2 flex items-center justify-center"
+      >
+        Add Stats
+        <Image
+          alt="+"
+          src="/icons/icon_right_bright.svg"
+          width={25}
+          height={25}
+        />
+      </PrimaryButton>
     </>
   );
 }
