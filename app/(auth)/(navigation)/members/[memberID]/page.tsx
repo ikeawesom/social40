@@ -18,10 +18,7 @@ import { cookies } from "next/headers";
 import React, { Suspense } from "react";
 import Image from "next/image";
 import HRow from "@/src/components/utils/HRow";
-import AddMemberStatForm from "@/src/components/members/statistics/AddMemberStatForm";
-import StatisticsSection from "@/src/components/members/statistics/StatisticsSection";
-import StatsLoading from "@/src/components/members/statistics/StatsLoading";
-import Link from "next/link";
+import MainStatisticsSection from "@/src/components/members/statistics/MainStatisticsSection";
 
 export async function generateMetadata({
   params,
@@ -124,30 +121,20 @@ export default async function MemberPage({
                   <p className="text-sm text-custom-grey-text">
                     {viewMemberData.memberID}
                   </p>
-                  <p className="text-sm text-custom-grey-text">
-                    Created on:{" "}
-                    {TimestampToDateString(viewMemberData.createdOn)}
-                  </p>
+                  {sameMember && (
+                    <p className="text-sm text-custom-grey-text">
+                      Created on:{" "}
+                      {TimestampToDateString(viewMemberData.createdOn)}
+                    </p>
+                  )}
                 </div>
                 <MemberBadges badges={viewMemberData.badges} />
                 <HRow />
-                <div className="flex items-center justify-center gap-1 w-full flex-col">
-                  <h1 className="text-custom-dark-text font-bold mb-1">
-                    Best Statistics
-                  </h1>
-                  <Suspense fallback={<StatsLoading />}>
-                    <StatisticsSection id={clickedMemberID} />
-                  </Suspense>
-                  <div className="w-full items-end justify-center flex-col flex mt-2 gap-1">
-                    <Link
-                      href={`/members/${clickedMemberID}/statistics`}
-                      className="text-sm underline text-custom-grey-text hover:text-custom-primary"
-                    >
-                      View All
-                    </Link>
-                    {permission && <AddMemberStatForm id={clickedMemberID} />}
-                  </div>
-                </div>
+                <MainStatisticsSection
+                  curID={memberID}
+                  clickedMemberID={clickedMemberID}
+                  permission={higher}
+                />
                 {/* {(permission || sameMember) && (
                   <>
                     <div className="flex items-center justify-center gap-1 w-full flex-col">
