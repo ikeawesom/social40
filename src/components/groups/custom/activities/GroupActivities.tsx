@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
-import DefaultCard from "../../DefaultCard";
-import InnerContainer from "../../utils/InnerContainer";
+import DefaultCard from "../../../DefaultCard";
+import InnerContainer from "../../../utils/InnerContainer";
 import { twMerge } from "tailwind-merge";
-import GroupActivityTab from "./activities/settings/GroupActivityTab";
-import CreateActivityButton from "./activities/settings/CreateActivityButton";
+import GroupActivityTab from "./settings/GroupActivityTab";
+import CreateActivityButton from "./settings/CreateActivityButton";
 import useQueryObj from "@/src/hooks/useQueryObj";
-import QueryInput from "../../utils/QueryInput";
+import QueryInput from "../../../utils/QueryInput";
 import { DateToTimestamp, ActiveTimestamp } from "@/src/utils/getCurrentDate";
 import Link from "next/link";
 
@@ -74,17 +74,15 @@ export default function GroupActivities({
           })
         )}
       </InnerContainer>
-      {admin && (
-        <div className="w-full flex items-center justify-end gap-x-4 gap-y-2 flex-wrap">
-          <Link
-            href={`/groups/${groupID}/activities`}
-            className="text-start cursor-pointer underline text-sm duration-150 text-custom-grey-text hover:text-custom-primary"
-          >
-            View all activites ( {Object.keys(activitiesData).length} )
-          </Link>
-          <CreateActivityButton group groupID={groupID} />
-        </div>
-      )}
+      <div className="w-full flex items-center justify-end gap-x-4 gap-y-2 flex-wrap">
+        <Link
+          href={`/groups/${groupID}/activities`}
+          className="text-start cursor-pointer underline text-sm duration-150 text-custom-grey-text hover:text-custom-primary"
+        >
+          View all activites ( {Object.keys(activitiesData).length} )
+        </Link>
+        {admin && <CreateActivityButton group groupID={groupID} />}
+      </div>
     </DefaultCard>
   );
 }
