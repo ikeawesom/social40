@@ -39,7 +39,7 @@ export default async function MemberPage({
         <div className="grid place-items-center">
           <div className="flex flex-col items-stretch justify-start gap-2 max-w-[500px] w-full">
             <StatsScrollSection id={clickedMemberID} />
-            <Suspense fallback={<StatisticSkeleton />}>
+            <Suspense key={statType} fallback={<StatisticSkeleton />}>
               <StatisticFeed id={clickedMemberID} type={statType} />
             </Suspense>
           </div>
