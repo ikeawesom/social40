@@ -27,6 +27,9 @@ export type MEMBER_SCHEMA = {
     };
   };
 
+  // dismissed updates
+  dismissedUpdates?: string[];
+
   // hidden activities
   hiddenActivities?: string[];
 
