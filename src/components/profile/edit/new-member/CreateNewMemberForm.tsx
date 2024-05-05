@@ -95,7 +95,7 @@ export default function CreateNewMemberForm({ memberData }: NewMemberType) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full flex flex-col items-center justify-start gap-3 mt-4"
+      className="w-full flex flex-col items-center justify-start gap-3 mt-4 pb-2"
     >
       <input
         required
