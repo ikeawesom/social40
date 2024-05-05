@@ -36,10 +36,14 @@ export type MEMBER_SCHEMA = {
   createdOn: Timestamp; // date format
 };
 
+export type BadgeColorsType = {
+  bg: string;
+  text: string;
+};
+
 export type BADGE_SCHEMA = {
-  index: number; // poition of list (current length of list)
   name: string;
-  color: string;
+  colors: BadgeColorsType;
 };
 
 export type FRIENDS_SCHEMA = {

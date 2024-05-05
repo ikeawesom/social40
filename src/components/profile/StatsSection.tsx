@@ -10,6 +10,7 @@ import StatusFeed from "./stats/StatusFeed";
 import { ACTIVITY_SCHEMA } from "@/src/utils/schemas/activities";
 import { STATISTICS_SCHEMA } from "@/src/utils/schemas/statistics";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
+import MainStatisticsSection from "../members/statistics/MainStatisticsSection";
 
 const STAT_TABS = [
   {
@@ -18,12 +19,12 @@ const STAT_TABS = [
     icon: "icon_medical.svg",
     active: "icon_medical_active.svg",
   },
-  {
-    id: "activity",
-    title: "Activity",
-    icon: "icon_activities.svg",
-    active: "icon_activities_active.svg",
-  },
+  // {
+  //   id: "activity",
+  //   title: "Activity",
+  //   icon: "icon_activities.svg",
+  //   active: "icon_activities_active.svg",
+  // },
   {
     id: "stats",
     title: "Statistics",
@@ -82,7 +83,11 @@ export default function StatsSection({
       {option === "activity" ? (
         <ActivityFeed memberID={memberID} />
       ) : option === "stats" ? (
-        <StatsFeed memberID={memberID} />
+        <MainStatisticsSection
+          curID={memberID}
+          clickedMemberID={memberID}
+          permission={true}
+        />
       ) : option === "statuses" ? (
         <StatusFeed memberID={memberID} />
       ) : (

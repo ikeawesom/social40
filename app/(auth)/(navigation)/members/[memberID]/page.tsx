@@ -18,6 +18,7 @@ import { cookies } from "next/headers";
 import React, { Suspense } from "react";
 import Image from "next/image";
 import HRow from "@/src/components/utils/HRow";
+import MainStatisticsSection from "@/src/components/members/statistics/MainStatisticsSection";
 
 export async function generateMetadata({
   params,
@@ -110,9 +111,9 @@ export default async function MemberPage({
                     </div>
                   </div>
                 )}
-                {/* <div className="flex w-full items-center justify-between">
+                <div className="flex w-full items-center justify-between">
                   <MemberPoints points={viewMemberData.points} />
-                </div> */}
+                </div>
                 <div className="flex flex-col items-start justify-center">
                   <h1 className="text-xl text-custom-dark-text flex items-center justify-start gap-2">
                     {rankName} <BookedStatus status={viewMemberData.bookedIn} />
@@ -120,15 +121,22 @@ export default async function MemberPage({
                   <p className="text-sm text-custom-grey-text">
                     {viewMemberData.memberID}
                   </p>
-                  <p className="text-sm text-custom-grey-text">
-                    Created on:{" "}
-                    {TimestampToDateString(viewMemberData.createdOn)}
-                  </p>
+                  {sameMember && (
+                    <p className="text-sm text-custom-grey-text">
+                      Created on:{" "}
+                      {TimestampToDateString(viewMemberData.createdOn)}
+                    </p>
+                  )}
                 </div>
                 <MemberBadges badges={viewMemberData.badges} />
-                {(permission || sameMember) && (
+                <HRow />
+                <MainStatisticsSection
+                  curID={memberID}
+                  clickedMemberID={clickedMemberID}
+                  permission={higher}
+                />
+                {/* {(permission || sameMember) && (
                   <>
-                    <HRow />
                     <div className="flex items-center justify-center gap-1 w-full flex-col">
                       <h1 className="text-custom-dark-text font-bold">
                         Duty Points
@@ -152,7 +160,7 @@ export default async function MemberPage({
                       </div>
                     </div>
                   </>
-                )}
+                )} */}
               </DefaultCard>
               <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
                 <JoinedActivities clickedMemberID={clickedMemberID} />

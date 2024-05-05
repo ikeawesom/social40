@@ -19,6 +19,10 @@ select:not(.custom) {
     border-gray-200 text-sm;
 }
 
+.shimmer.slow {
+  animation: shimmer 4s infinite ease-in-out;
+}
+
 .shimmer {
   position: absolute;
   top: 0;

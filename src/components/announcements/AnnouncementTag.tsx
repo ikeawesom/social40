@@ -1,5 +1,6 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
+import Image from "next/image";
 
 export default function AnnouncementTag({
   className,
@@ -13,21 +14,21 @@ export default function AnnouncementTag({
   onClick?: () => void;
 }) {
   return (
-    <p
+    <div
       className={twMerge(
-        "cursor-default text-sm px-2 py-1 rounded-md bg-custom-grey-text/90 text-custom-light-text",
+        "flex items-center justify-start gap-1 px-2 py-1 bg-custom-grey-text text-white rounded-md cursor-default hover:brightness-95 text-sm",
         className
       )}
     >
       {children ? children : "text"}
       {isDelete && (
-        <span
+        <div
           onClick={onClick}
-          className="hover:brightness-90 cursor-pointer font-bold bg-white text-custom-grey-text/90 px-1 rounded-md ml-1"
+          className="bg-white/60 p-1 rounded-full hover:bg-white"
         >
-          {"x"}
-        </span>
+          <Image src="/icons/icon_close.svg" alt="Close" width={8} height={8} />
+        </div>
       )}
-    </p>
+    </div>
   );
 }

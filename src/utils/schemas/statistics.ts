@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type STATISTICS_SCHEMA = {
   statisticsID: string;
   memberID: string; // member who
@@ -25,48 +27,42 @@ export function initStatisticsObject({
   } as STATISTICS_SCHEMA;
 }
 
-export type IPPT_SCHEMA = {
-  ipptID: string;
-  memberID: string;
-  ipptDate: string; // date format
+export type IPPT_STATS_SCHEMA = {
   pushups: number;
   situps: number;
-  score: number;
   timing: number; // in seconds
 };
 
-export function initIpptObject({
-  ipptID,
-  memberID,
-  ipptDate,
-  pushups,
-  situps,
-  score,
-  timing,
-}: IPPT_SCHEMA) {
-  return {
-    ipptID,
-    memberID,
-    ipptDate,
-    pushups,
-    situps,
-    score,
-    timing,
-  } as IPPT_SCHEMA;
-}
-
-export type SHOOTING_SCHEMA = {
+export type IPPT_SCHEMA = {
+  ipptID: string;
   memberID: string;
-  shootingID: string;
-  shots: number;
-  shootingDate: string; // date format
+  dateCompleted: Timestamp; // date format
+  stats: IPPT_STATS_SCHEMA;
+
+  // common property among stats
+  statType: "IPPT";
+  score: number;
+  addedBy: string; // memberID who created the stat
 };
 
-export function initShootingObject({
-  memberID,
-  shootingID,
-  shootingDate,
-  shots,
-}: SHOOTING_SCHEMA) {
-  return { memberID, shootingID, shots, shootingDate } as SHOOTING_SCHEMA;
-}
+export type VOC_SCHEMA = {
+  memberID: string;
+  vocID: string;
+
+  // common property among stats
+  dateCompleted: Timestamp; // date format
+  statType: "VOC" | "SOC";
+  score: number; // in seconds
+  addedBy: string; // memberID who created the stat
+};
+
+export type ATP_SCHEMA = {
+  memberID: string;
+  atpID: string;
+
+  // common property among stats
+  dateCompleted: Timestamp; // date format
+  statType: "ATP";
+  score: number;
+  addedBy: string; // memberID who created the stat
+};

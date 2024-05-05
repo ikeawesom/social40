@@ -59,19 +59,8 @@ export default async function Home() {
             </div>
             <div className="flex flex-col gap-2 items-center justify-center">
               <p className="text-custom-grey-text text-center text-sm">
-                v{VERSION_NUMBER}: {VERSION_DESC}
+                App Version: v{VERSION_NUMBER}
               </p>
-              <div className="flex gap-x-6 gap-y-2 items-center justify-center flex-wrap">
-                <div className="flex flex-col gap-2 items-center justify-center">
-                  <Link
-                    href="/docs/updates"
-                    className="text-custom-primary font-semibold text-sm hover:underline duration-200"
-                  >
-                    View updates
-                  </Link>
-                </div>
-                {/* <GuidebookDownload /> */}
-              </div>
             </div>
           </div>
         </div>

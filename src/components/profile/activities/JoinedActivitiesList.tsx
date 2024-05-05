@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import GroupActivityTab from "../../groups/custom/activities/settings/GroupActivityTab";
 import InnerContainer from "../../utils/InnerContainer";
@@ -14,18 +14,46 @@ export default function JoinedActivitiesList({
     [activityID: string]: GROUP_ACTIVITY_SCHEMA;
   };
 }) {
+  const [showAll, setShowAll] = useState(false);
+
   const { handleSearch, itemList, search } = useQueryObj({
     obj: activitiesData,
     type: "activityTitle",
   });
 
-  const empty = Object.keys(itemList).length === 0;
+  const activityListID = Object.keys(itemList).filter((id: string) => {
+    const now = new Date();
+    const { activityDate } = activitiesData[id];
+    const date = new Date(activityDate.seconds * 1000);
+    date.setHours(date.getHours() + 8);
+    return !showAll ? date >= now : true;
+  });
+
+  const filteredData = {} as {
+    [activityID: string]: GROUP_ACTIVITY_SCHEMA;
+  };
+
+  activityListID.forEach((id: string) => {
+    filteredData[id] = activitiesData[id];
+  });
+
+  const empty = Object.keys(filteredData).length === 0;
 
   return (
     <>
-      <h1 className="text-custom-dark-text font-semibold mb-2">
-        Group Activities Participated ( {Object.keys(itemList).length} )
-      </h1>
+      <div className="flex items-center justify-between gap-2 w-full mb-2">
+        <h1 className="text-custom-dark-text font-semibold">
+          {!showAll ? "Upcoming Activities" : "Activities Participated"} ({" "}
+          {Object.keys(filteredData).length} )
+        </h1>
+        <p
+          onClick={() => setShowAll(!showAll)}
+          className="text-end cursor-pointer underline text-sm text-custom-grey-text hover:text-custom-primary"
+        >
+          {!showAll ? "Show All" : "Hide"}
+        </p>
+      </div>
+
       <QueryInput
         handleSearch={handleSearch}
         placeholder="Search for activity name"
@@ -40,12 +68,10 @@ export default function JoinedActivitiesList({
       >
         {empty ? (
           <p className="text-sm text-custom-grey-text text-center">
-            {search === ""
-              ? "Hmm, this member has not participated in any group activities..."
-              : "No activities found..."}
+            {search === "" ? "Hmm, nothing here..." : "No activities found..."}
           </p>
         ) : (
-          Object.keys(itemList).map((activityID: string) => {
+          Object.keys(filteredData).map((activityID: string) => {
             const activityData = itemList[activityID];
             return (
               <GroupActivityTab activityData={activityData} key={activityID} />
