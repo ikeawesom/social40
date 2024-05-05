@@ -28,7 +28,10 @@ export default function ServerErrorScreen({ eMsg }: { eMsg?: string }) {
           </p>
         </div>
         <div className="flex flex-col items-center justify-center w-full gap-2">
-          <SecondaryButton onClick={() => handleReload(router)}>
+          <SecondaryButton
+            className="w-full max-w-[200px]"
+            onClick={() => handleReload(router)}
+          >
             Refresh
           </SecondaryButton>
           <ReturnHomeButton />

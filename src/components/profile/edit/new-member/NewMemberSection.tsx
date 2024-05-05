@@ -14,7 +14,7 @@ export default function NewMemberSection({
 }) {
   const [show, setShow] = useState(false);
   return (
-    <DefaultCard className="w-full">
+    <DefaultCard className="w-full py-2 px-3">
       <div className="flex items-center justify-between w-full">
         <h1 className="text-custom-dark-text font-semibold text-start">
           Create New Member

@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function ReturnHomeButton() {
   return (
-    <Link href="/home">
+    <Link href="/home" className="w-full max-w-[200px]">
       <PrimaryButton>Return Home</PrimaryButton>
     </Link>
   );

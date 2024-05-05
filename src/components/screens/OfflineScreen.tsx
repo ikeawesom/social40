@@ -25,7 +25,10 @@ export default function OfflineScreen() {
           </p>
         </div>
         <div className="flex flex-col items-center justify-center w-fit gap-2">
-          <SecondaryButton onClick={() => handleReload(router)}>
+          <SecondaryButton
+            className="w-full max-w-[200px]"
+            onClick={() => handleReload(router)}
+          >
             Refresh
           </SecondaryButton>
           <ReturnHomeButton />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import { cookies } from "next/headers";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
@@ -7,7 +7,7 @@ import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import GroupHeader from "@/src/components/groups/custom/GroupHeader";
 import { GROUP_MEMBERS_SCHEMA, GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { GroupDetailsType } from "@/src/components/groups/custom/GroupMembers";
-import GroupRequested from "@/src/components/groups/custom/GroupRequested";
+import GroupRequested from "@/src/components/groups/custom/requests/GroupRequested";
 import SettingsSection from "@/src/components/groups/custom/settings/SettingsSection";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import { GROUP_ROLES_HEIRARCHY } from "@/src/utils/constants";
@@ -18,13 +18,12 @@ import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import GroupLeaderboard, {
   MembersDataType,
 } from "@/src/components/groups/custom/GroupLeaderboard";
-import GroupActivities, {
-  GroupActivitiesType,
-} from "@/src/components/groups/custom/GroupActivities";
 import { dbHandler } from "@/src/firebase/db";
 import handleResponses from "@/src/utils/handleResponses";
 import LeaveGroupSection from "@/src/components/groups/custom/settings/LeaveGroupSection";
 import CosSection from "@/src/components/groups/custom/cos/CosSection";
+import { GroupActivitiesServer } from "@/src/components/groups/custom/activities/GroupActivitiesServer";
+import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 
 async function addPfp(groupMembersTemp: GroupDetailsType) {
   try {
@@ -156,14 +155,6 @@ export default async function GroupPage({
 
       const groupMembersData = groupMembersDataObj as MembersDataType;
 
-      // get group activities
-      const resD = await fetch(`${host}/api/groups/get-activities`, PostObj);
-      const bodyD = await resD.json();
-
-      if (!bodyD.status) throw new Error(bodyD.error);
-
-      const groupActivitiesData = bodyD.data as GroupActivitiesType;
-
       return (
         <>
           <HeaderBar back text={groupID} />
@@ -197,11 +188,9 @@ export default async function GroupPage({
                 />
 
                 <GroupLeaderboard memberData={groupMembersData} />
-                <GroupActivities
-                  groupID={groupID}
-                  admin={admin}
-                  activitiesData={groupActivitiesData}
-                />
+                <Suspense fallback={<DefaultSkeleton className="h-[50px]" />}>
+                  <GroupActivitiesServer groupID={groupID} admin={admin} />
+                </Suspense>
                 {admin && !owner && (
                   <LeaveGroupSection groupID={groupID} curMember={memberID} />
                 )}

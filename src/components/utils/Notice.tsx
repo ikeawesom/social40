@@ -3,14 +3,14 @@ import { twMerge } from "tailwind-merge";
 
 type NoticeType = {
   status: "info" | "success" | "warning" | "error";
-  text: string;
+  children?: React.ReactNode;
   containerClassName?: string;
   textClassName?: string;
   noHeader?: boolean;
 };
 export default function Notice({
   status,
-  text,
+  children,
   containerClassName,
   textClassName,
   noHeader,
@@ -18,15 +18,16 @@ export default function Notice({
   return (
     <div
       className={twMerge(
-        "w-full rounded-lg border-[1.2px] p-2",
-        status === "info" && "bg-blue-50 border-blue-700",
-        status === "success" && "bg-custom-light-green border-custom-green",
-        status === "error" && "bg-custom-light-red border-custom-red",
-        status === "warning" && "bg-custom-light-orange border-custom-orange",
+        "w-full rounded-lg border-[1.2px] p-2 px-3 relative",
+        status === "info" && "bg-blue-50 border-blue-700/30",
+        status === "success" && "bg-custom-light-green border-custom-green/30",
+        status === "error" && "bg-custom-light-red border-custom-red/30",
+        status === "warning" &&
+          "bg-custom-light-orange/50 border-custom-orange/30",
         containerClassName
       )}
     >
-      <p
+      <div
         className={twMerge(
           status === "info" && "text-blue-700",
           status === "success" && "text-custom-green",
@@ -39,8 +40,8 @@ export default function Notice({
         {!noHeader && (
           <span className="font-semibold">[{status.toUpperCase()}]</span>
         )}{" "}
-        {text}
-      </p>
+        {children ?? "This is a notice card."}
+      </div>
     </div>
   );
 }

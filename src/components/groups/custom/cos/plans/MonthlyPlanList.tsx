@@ -277,12 +277,10 @@ export default function MonthlyPlanList({
           {showScores && (
             <>
               {!noChange && (
-                <Notice
-                  status="warning"
-                  text="Make sure to save changes to see the final monthly scores update accordingly."
-                  noHeader
-                  containerClassName="mb-1"
-                />
+                <Notice status="warning" noHeader containerClassName="mb-1">
+                  Make sure to save changes to see the final monthly scores
+                  update accordingly.
+                </Notice>
               )}
               <InnerContainer className="max-h-[40vh]">
                 {Object.keys(newMemberPoints).map((id: string) => (
