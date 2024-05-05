@@ -97,10 +97,11 @@ export const MAX_LENGTH = 30;
 export const VERSION_MAP = {
   "1.2.1": {
     version: "1.2.1",
-    title: "Statistics - Beta",
+    title: "Personal Statistics",
     desc: "Added personal statistics tracking to display on profile",
     updates: [
       "Members can now add their own personal statistics to their profile",
+      "Commanders can also add for their soldiers to boost their motivation and monitor their progress",
       "Currently supports IPPT, ATP, VOC and SOC",
       "Members can earn Social40 points through these personal statistics",
     ],
@@ -260,6 +261,7 @@ export const VERSION_MAP = {
 export const ACTIVITY_TYPE = ["Light", "Moderate", "Strenuous"];
 
 export const VERSION_NUMBER = Object.keys(VERSION_MAP)[0] as string;
+export const VERSION_TITLE = VERSION_MAP[VERSION_NUMBER].title;
 export const VERSION_DESC = VERSION_MAP[VERSION_NUMBER].desc;
 export const VERSION_UPDATES = VERSION_MAP[VERSION_NUMBER].updates;
 
