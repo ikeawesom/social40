@@ -95,6 +95,36 @@ export const BADGE_COLORS = {
 export const MAX_LENGTH = 30;
 
 export const VERSION_MAP = {
+  "1.2.1": {
+    version: "1.2.1",
+    title: "Statistics - Beta",
+    desc: "Added personal statistics tracking to display on profile",
+    updates: [
+      "Members can now add their own personal statistics to their profile",
+      "Currently supports IPPT, ATP, VOC and SOC",
+      "Members can earn Social40 points through these personal statistics",
+    ],
+  },
+  "1.2.0": {
+    version: "1.2.0",
+    title: "COS - Points and Planning",
+    desc: "",
+    updates: [
+      "Created Social40 COS system which includes automatic points tracking",
+      "Plan your COS accurately with easy-to-use UI",
+      "Easily manage your monthly plan without worrying about keeping track of points",
+    ],
+  },
+  "1.1.0": {
+    version: "1.1.0",
+    title: "Heat Acclimatisation (HA) Reports",
+    desc: "",
+    updates: [
+      "Easily calculate your soldiers HA currency",
+      "Say goodbye to manual tracking of HA",
+      "HA Reports can be downloaded into spreadsheets for other administrative uses if needed",
+    ],
+  },
   "1.0.0": {
     version: "1.0.0",
     title: "We are now out of Beta!",
