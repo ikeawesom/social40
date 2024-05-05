@@ -38,9 +38,10 @@ export default function AddMemberStatForm({ id }: { id: string }) {
     isDetail,
     members,
     query,
-    resetQuery,
+    resetQueryMember,
     setIsDetail,
     setQuery,
+    handleRemove,
   } = useQueryMember(id);
 
   const { handleAgeChange, handleIPPTChange, ipptStat, resetIppt } =
@@ -101,7 +102,7 @@ export default function AddMemberStatForm({ id }: { id: string }) {
     resetIppt();
     resetTime();
     resetScore();
-    resetQuery();
+    resetQueryMember();
   };
 
   const type = statType === "ATP" ? "score" : "time";
@@ -259,7 +260,7 @@ export default function AddMemberStatForm({ id }: { id: string }) {
                     </FormInputContainer>
                   )}
                   {isDetail && (
-                    <div className="w-full p-3 rounded-md border-[1px] border-custom-light-text flex flex-col items-start justify-start gap-2 mt-2">
+                    <div className="w-full flex flex-col items-start justify-start gap-2 mt-2">
                       <div className="relative w-full">
                         <FormInputContainer
                           inputName="query"
@@ -297,14 +298,27 @@ export default function AddMemberStatForm({ id }: { id: string }) {
                           </div>
                         )}
                       </div>
-                      <InnerContainer className="w-full flex flex-row p-2 max-h-[15vh] items-center justify-start gap-1 flex-wrap">
-                        {members.map((id: string) => (
-                          <p
-                            className="text-sm px-2 py-1 bg-custom-light-text rounded-md cursor-default hover:brightness-95"
-                            key={id}
+                      <InnerContainer className="w-full flex flex-row p-2 max-h-[15vh] items-center justify-start gap-1 flex-wrap border-[1px] border-custom-light-text">
+                        {members.map((user: string) => (
+                          <div
+                            className="flex items-center justify-start gap-1 px-2 py-1 bg-custom-light-text rounded-md cursor-default hover:brightness-95"
+                            key={user}
                           >
-                            {id}
-                          </p>
+                            <p className="text-sm">{user} </p>
+                            {user !== id && (
+                              <div
+                                onClick={() => handleRemove(user)}
+                                className="bg-white/60 p-1 rounded-full hover:bg-white"
+                              >
+                                <Image
+                                  src="/icons/icon_close.svg"
+                                  alt="Close"
+                                  width={10}
+                                  height={10}
+                                />
+                              </div>
+                            )}
+                          </div>
                         ))}
                       </InnerContainer>
                     </div>

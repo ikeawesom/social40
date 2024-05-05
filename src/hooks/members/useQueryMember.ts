@@ -18,6 +18,10 @@ export function useQueryMember(id: string) {
     }
   };
 
+  const handleRemove = (user: string) => {
+    setMembers((members) => members.filter((id: string) => id !== user));
+  };
+
   useEffect(() => {
     const fetchMembers = async () => {
       const { data } = await getMembersData();
@@ -44,17 +48,22 @@ export function useQueryMember(id: string) {
   const resetQuery = () => {
     setQuery("");
     setFiltered([]);
+  };
+
+  const resetQueryMember = () => {
+    resetQuery();
     setMembers([id]);
   };
 
   return {
     members,
-    resetQuery,
     isDetail,
     setIsDetail,
     query,
     setQuery,
     filtered,
     handleAdd,
+    resetQueryMember,
+    handleRemove,
   };
 }
