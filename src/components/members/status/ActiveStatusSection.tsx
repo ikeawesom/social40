@@ -14,15 +14,15 @@ export default function ActiveStatusSection({ active }: { active: boolean }) {
         )}
       </div>
       {active ? (
-        <Notice
-          status="warning"
-          text="This status is currently active! Please be cautious in the activites this member participates in."
-        />
+        <Notice status="warning">
+          This status is currently active! Please be cautious in the activites
+          this member participates in.
+        </Notice>
       ) : (
-        <Notice
-          status="info"
-          text="Member is safe to participate in conducts as this status has ended. Continue monitoring the status and intensity of the conduct."
-        />
+        <Notice status="info">
+          Member is safe to participate in conducts as this status has ended.
+          Continue monitoring the status and intensity of the conduct.
+        </Notice>
       )}
     </DefaultCard>
   );
