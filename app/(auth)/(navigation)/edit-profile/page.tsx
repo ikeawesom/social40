@@ -44,7 +44,7 @@ export default async function EditProfilePage() {
       <>
         <HeaderBar text="Settings" back />
         <div className="grid place-items-center">
-          <div className="w-full flex flex-col items-center justify-start gap-4 max-w-[500px]">
+          <div className="w-full flex flex-col items-center justify-start gap-3 max-w-[500px]">
             {/* Edit Profile */}
             <DefaultCard className="w-full">
               <h1 className="text-custom-dark-text font-semibold text-start">
@@ -61,9 +61,25 @@ export default async function EditProfilePage() {
                 <EditProfileForm memberData={memberData} />
               </div>
             </DefaultCard>
+            <Link href="/docs/updates" className="w-full">
+              <DefaultCard className="hover:brightness-95 w-full py-2 px-3">
+                <div className="flex items-center justify-between w-full">
+                  <h1 className="text-custom-dark-text font-semibold text-start">
+                    View Updates
+                  </h1>
+                  <Image
+                    src="/icons/icon_arrow-down.svg"
+                    width={30}
+                    height={30}
+                    alt="Show"
+                    className="-rotate-90"
+                  />
+                </div>
+              </DefaultCard>
+            </Link>
             {/* View Hidden Activities */}
             <Link href="/hidden-activities" className="w-full">
-              <DefaultCard className="w-full">
+              <DefaultCard className="hover:brightness-95 w-full py-2  px-3">
                 <div className="flex items-center justify-between w-full">
                   <h1 className="text-custom-dark-text font-semibold text-start">
                     View Hidden Activities
