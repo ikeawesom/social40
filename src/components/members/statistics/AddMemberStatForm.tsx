@@ -18,6 +18,7 @@ import SecondaryButton from "../../utils/SecondaryButton";
 import { useQueryMember } from "@/src/hooks/members/useQueryMember";
 import { useSetVOC } from "@/src/hooks/members/useSetVOC";
 import { useSetATP } from "@/src/hooks/members/useSetATP";
+import AnnouncementTag from "../../announcements/AnnouncementTag";
 
 const DEFAULT_DATE = { day: 1, month: 1, year: 2024 };
 
@@ -300,25 +301,31 @@ export default function AddMemberStatForm({ id }: { id: string }) {
                       </div>
                       <InnerContainer className="w-full flex flex-row p-2 max-h-[15vh] items-center justify-start gap-1 flex-wrap border-[1px] border-custom-light-text">
                         {members.map((user: string) => (
-                          <div
-                            className="flex items-center justify-start gap-1 px-2 py-1 bg-custom-light-text rounded-md cursor-default hover:brightness-95"
-                            key={user}
+                          // <div
+                          //   className="flex items-center justify-start gap-1 px-2 py-1 bg-custom-light-text rounded-md cursor-default hover:brightness-95"
+                          //   key={user}
+                          // >
+                          //   <p className="text-sm">{user} </p>
+                          //   {user !== id && (
+                          //     <div
+                          //       onClick={() => handleRemove(user)}
+                          //       className="bg-white/60 p-1 rounded-full hover:bg-white"
+                          //     >
+                          //       <Image
+                          //         src="/icons/icon_close.svg"
+                          //         alt="Close"
+                          //         width={10}
+                          //         height={10}
+                          //       />
+                          //     </div>
+                          //   )}
+                          // </div>
+                          <AnnouncementTag
+                            isDelete={user !== id}
+                            onClick={() => handleRemove(user)}
                           >
                             <p className="text-sm">{user} </p>
-                            {user !== id && (
-                              <div
-                                onClick={() => handleRemove(user)}
-                                className="bg-white/60 p-1 rounded-full hover:bg-white"
-                              >
-                                <Image
-                                  src="/icons/icon_close.svg"
-                                  alt="Close"
-                                  width={10}
-                                  height={10}
-                                />
-                              </div>
-                            )}
-                          </div>
+                          </AnnouncementTag>
                         ))}
                       </InnerContainer>
                     </div>
