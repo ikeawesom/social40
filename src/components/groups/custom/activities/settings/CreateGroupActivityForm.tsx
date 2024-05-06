@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import FormInputContainer from "@/src/components/utils/FormInputContainer";
 import { LoadingIconBright } from "@/src/components/utils/LoadingIcon";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
@@ -8,10 +7,13 @@ import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { ACTIVITY_TYPE } from "@/src/utils/constants";
-import SecondaryButton from "@/src/components/utils/SecondaryButton";
-import { twMerge } from "tailwind-merge";
+import {
+  ACTIVITY_TYPE,
+  GROUP_ACTIVITY_PARTICIPANTS,
+} from "@/src/utils/constants";
 import SelectMembers from "./SelectMembers";
+import Toggle from "@/src/components/utils/Toggle";
+import HRow from "@/src/components/utils/HRow";
 
 export default function CreateGroupActivityForm({
   groupID,
@@ -34,7 +36,8 @@ export default function CreateGroupActivityForm({
     },
     restrict: false,
     level: "Light",
-    pt: true,
+    pt: false,
+    needHA: false,
   });
   const [loading, setLoading] = useState(false);
   const [startD, setStartD] = useState({
@@ -47,9 +50,8 @@ export default function CreateGroupActivityForm({
     min: "00",
   });
 
-  const [advancedMode, setMode] = useState(false);
   const [addMembers, setAddMembers] = useState({
-    check: false,
+    check: Object.keys(GROUP_ACTIVITY_PARTICIPANTS)[0],
     members: [] as string[],
   });
   const [done, setDone] = useState("");
@@ -104,6 +106,10 @@ export default function CreateGroupActivityForm({
       onSubmit={handleSubmit}
       className="w-full flex flex-col items-start justify-start gap-3"
     >
+      <div className="w-full">
+        <h1 className="font-bold text-custom-dark-text">General</h1>
+        <HRow className="" />
+      </div>
       <FormInputContainer
         inputName="title"
         labelText="Enter a title for this activity"
@@ -117,15 +123,7 @@ export default function CreateGroupActivityForm({
           onChange={handleChange}
         />
       </FormInputContainer>
-      <SecondaryButton
-        onClick={() => setInput({ ...input, pt: !input.pt })}
-        className={twMerge(
-          "w-fit",
-          input.pt && "bg-custom-light-orange border-custom-orange"
-        )}
-      >
-        {input.pt ? "This is a PT activity" : "This is not a PT activity"}
-      </SecondaryButton>
+
       <FormInputContainer
         inputName="desc"
         labelText="Enter a short description of this activity"
@@ -245,82 +243,104 @@ export default function CreateGroupActivityForm({
             ))}
           </select>
         </div>
-        {/* <input
-          type="text"
-          name="time"
-          required
-          placeholder="HH:MM"
-          value={input.time}
-          onChange={handleChange}
-        /> */}
       </FormInputContainer>
 
-      <div className="w-full flex items-center justify-between">
-        <h1 className="text-sm text-custom-dark-text font-bold">
-          Advanced Settings
+      <div className="w-full mt-2">
+        <h1 className="text-custom-dark-text font-bold">
+          Heat Acclimitisation (HA)
         </h1>
-
-        <Image
-          onClick={() => setMode(!advancedMode)}
-          src="/icons/icon_arrow-down.svg"
-          alt="Show"
-          width={30}
-          height={30}
-          className={`duration-300 ease-in-out ${
-            advancedMode ? "rotate-180" : ""
-          }`}
-        />
-      </div>
-      {advancedMode && (
-        <>
-          <FormInputContainer
-            inputName="type"
-            labelText="What kind of activity is this?"
-          >
-            <select
-              className="w-full"
-              id="type"
-              name="type"
-              required
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                setInput({ ...input, level: e.target.value });
-              }}
-            >
-              {ACTIVITY_TYPE.map((item: string) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
-          </FormInputContainer>
-          <div className="w-full flex items-center justify-between gap-2 flex-wrap">
-            <SecondaryButton
-              className={twMerge(
-                !addMembers.check &&
-                  "bg-custom-light-orange border-custom-orange"
-              )}
-              onClick={() => setAddMembers({ ...addMembers, check: false })}
-            >
-              Select All Members (Default)
-            </SecondaryButton>
-            <SecondaryButton
-              className={twMerge(
-                addMembers.check &&
-                  "bg-custom-light-orange border-custom-orange"
-              )}
-              onClick={() => setAddMembers({ ...addMembers, check: true })}
-            >
-              Select Custom Members{" "}
-              {addMembers.check &&
-                addMembers.members.length > 0 &&
-                `( ${addMembers.members.length} )`}
-            </SecondaryButton>
+        <HRow />
+        <div className="w-full">
+          <div className="w-full flex items-center justify-between gap-2 py-2">
+            <p className="text-sm">This is a HA activity</p>
+            <Toggle
+              className="shadow-none border-none"
+              buttonClassName="border-[1px]"
+              disable={() => setInput({ ...input, pt: false })}
+              enable={() => setInput({ ...input, pt: true })}
+              disabled={!input.pt}
+            />
           </div>
-          {addMembers.check && (
-            <SelectMembers addMembers={addMembers} setMembers={setAddMembers} />
-          )}
-        </>
+
+          <div className="w-full flex items-center justify-between gap-2 py-2 cursor-not-allowed">
+            <div>
+              <p className="text-sm opacity-50">This activity requires HA</p>
+              <p className="text-xs text-custom-grey-text opacity-50">
+                Coming soon...
+              </p>
+            </div>
+            <Toggle
+              forceDisable={true}
+              className="shadow-none border-none"
+              buttonClassName="border-[1px]"
+              disable={() => setInput({ ...input, needHA: false })}
+              enable={() => setInput({ ...input, needHA: true })}
+              disabled={!input.needHA}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full mt-2">
+        <h1 className="text-custom-dark-text font-bold">Advanced Settings</h1>
+        <HRow />
+      </div>
+
+      <FormInputContainer
+        inputName="type"
+        labelText="What kind of activity is this?"
+      >
+        <select
+          className="w-full"
+          id="type"
+          name="type"
+          required
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            setInput({ ...input, level: e.target.value });
+          }}
+        >
+          {ACTIVITY_TYPE.map((item: string) => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+      </FormInputContainer>
+
+      <div className="w-full flex items-center justify-between gap-2 flex-wrap">
+        <FormInputContainer
+          inputName="type"
+          labelText="Who will join this activity?"
+        >
+          <select
+            className="w-full"
+            name="type"
+            onChange={(e) =>
+              setAddMembers({ ...addMembers, check: e.target.value })
+            }
+          >
+            {Object.keys(GROUP_ACTIVITY_PARTICIPANTS).map((type: string) => {
+              const { text, isDefault } = GROUP_ACTIVITY_PARTICIPANTS[type];
+              return (
+                <option
+                  className="text-xs px-2 self-stretch w-fit"
+                  key={type}
+                  value={type}
+
+                  // activated={addMembers.check === type}
+                  // onChange={() => setAddMembers({ ...addMembers, check: type })}
+                >
+                  {text} {isDefault && "(Default)"}
+                </option>
+              );
+            })}
+          </select>
+        </FormInputContainer>
+      </div>
+      {addMembers.check === "custom" && (
+        <SelectMembers addMembers={addMembers} setMembers={setAddMembers} />
       )}
+
       <PrimaryButton
         disabled={loading}
         type="submit"
