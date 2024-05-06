@@ -8,6 +8,8 @@ import { useHostname } from "@/src/hooks/useHostname";
 import { useRouter } from "next/navigation";
 import SecondaryButton from "../utils/SecondaryButton";
 import { twMerge } from "tailwind-merge";
+import Toggle from "../utils/Toggle";
+import HRow from "../utils/HRow";
 
 export type StatusInputType = {
   title: string;
@@ -126,15 +128,16 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
             value={statusDetails.title}
             onChange={handleChange}
           />
-          <SecondaryButton
-            className={twMerge(
-              "w-fit justify-self-start text-sm mt-1",
-              checked.status && "bg-custom-light-orange border-custom-orange"
-            )}
-            onClick={() => setChecked({ ...checked, status: !checked.status })}
-          >
-            Medical Leave
-          </SecondaryButton>
+          <div className="w-full flex items-center justify-start gap-2 mt-2 rounded-md">
+            <p className="text-sm">This is a medical leave</p>
+            <Toggle
+              className="shadow-none border-none"
+              buttonClassName="border-[1px]"
+              disable={() => setChecked({ ...checked, status: false })}
+              enable={() => setChecked({ ...checked, status: true })}
+              disabled={!checked.status}
+            />
+          </div>
         </div>
 
         <div className="w-full flex flex-col items-start justify-center gap-1">
@@ -326,53 +329,32 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
               commanders.
             </label>
           </div> */}
-          <div className="flex items-center justify-start gap-4">
-            {/* <input
-              type="checkbox"
-              required
-              id="cfm"
-              // className="h-fit flex-1"
-              name="cfm"
-              onChange={handleCheck}
+          <HRow />
+          <div>
+            <p className="text-sm mb-1">
+              I have confirmed that the details provided above is accurate to
+              the best of my knowledge.
+            </p>
+            <Toggle
+              className="shadow-none border-none w-fit"
+              buttonClassName="border-[1px]"
+              disable={() => setChecked({ ...checked, cfm: false })}
+              enable={() => setChecked({ ...checked, cfm: true })}
+              disabled={!checked.cfm}
             />
-            <label htmlFor="cfm" className="flex-3 text-sm">
-              I have confirmed that the details provided above is accurate to
-              the best of my knowledge.
-            </label> */}
-            <SecondaryButton
-              className={twMerge(
-                "text-sm",
-                checked.cfm && "border-custom-green bg-custom-light-green"
-              )}
-              onClick={() => {
-                setChecked({ ...checked, cfm: !checked.cfm });
-              }}
-            >
-              I have confirmed that the details provided above is accurate to
-              the best of my knowledge.
-            </SecondaryButton>
           </div>
-          <div className="flex items-center justify-start gap-4">
-            {/* <input
-              type="checkbox"
-              required
-              id="consent"
-              className="w-1/6"
-              name="consent"
-              onChange={handleCheck}
-            /> */}
-            <SecondaryButton
-              className={twMerge(
-                "text-sm",
-                checked.consent && "border-custom-green bg-custom-light-green"
-              )}
-              onClick={() => {
-                setChecked({ ...checked, consent: !checked.consent });
-              }}
-            >
+          <div className="mt-2">
+            <p className="text-sm mb-1">
               I consent that this information can be used for tracking when
               needed.
-            </SecondaryButton>
+            </p>
+            <Toggle
+              className="shadow-none border-none w-fit"
+              buttonClassName="border-[1px]"
+              disable={() => setChecked({ ...checked, consent: false })}
+              enable={() => setChecked({ ...checked, consent: true })}
+              disabled={!checked.consent}
+            />
           </div>
         </div>
         <PrimaryButton
