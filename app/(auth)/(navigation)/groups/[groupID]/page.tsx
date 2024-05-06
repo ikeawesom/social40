@@ -15,6 +15,8 @@ import CosSection from "@/src/components/groups/custom/cos/CosSection";
 import { GroupActivitiesServer } from "@/src/components/groups/custom/activities/GroupActivitiesServer";
 import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 import { GroupStrengthServer } from "@/src/components/groups/custom/strength/GroupStrengthServer";
+import DefaultCard from "@/src/components/DefaultCard";
+import StrengthSectionSkeleton from "@/src/components/groups/custom/strength/StrengthSectionSkeleton";
 
 export async function generateMetadata({
   params,
@@ -40,8 +42,6 @@ export default async function GroupPage({
   if (data) {
     const memberID = data.value;
     try {
-      const host = process.env.HOST;
-
       // check if member is in group
       const res = await dbHandler.get({
         col_name: `GROUPS/${groupID}/MEMBERS`,
@@ -81,8 +81,6 @@ export default async function GroupPage({
                 {admin && <GroupRequested groupID={groupID} />}
 
                 {cos && cos.state && (
-                  // (cos?.admins?.includes(memberID) ||
-                  //   cos?.members?.includes(memberID)) &&
                   <CosSection
                     cos={cos}
                     curMemberID={memberID}
@@ -90,13 +88,15 @@ export default async function GroupPage({
                   />
                 )}
 
-                <Suspense fallback={<DefaultSkeleton className="h-[40vh]" />}>
-                  <GroupStrengthServer
-                    admin={admin}
-                    currentMember={JSON.parse(JSON.stringify(currentMember))}
-                    groupID={groupID}
-                  />
-                </Suspense>
+                <DefaultCard className="w-full flex flex-col items-start justify-start gap-2">
+                  <Suspense fallback={<StrengthSectionSkeleton />}>
+                    <GroupStrengthServer
+                      admin={admin}
+                      currentMember={JSON.parse(JSON.stringify(currentMember))}
+                      groupID={groupID}
+                    />
+                  </Suspense>
+                </DefaultCard>
 
                 {/* <GroupLeaderboard memberData={groupMembersData} /> */}
                 <Suspense fallback={<DefaultSkeleton className="h-[30vh]" />}>

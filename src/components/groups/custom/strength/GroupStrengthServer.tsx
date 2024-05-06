@@ -40,7 +40,7 @@ export async function GroupStrengthServer({
     const parsed = JSON.parse(JSON.stringify(membersList));
 
     return (
-      <DefaultCard className="w-full flex flex-col items-start justify-start gap-2">
+      <>
         <Suspense fallback={<StrengthSkeleton />}>
           <GroupNumbersServer
             membersList={parsed}
@@ -67,7 +67,7 @@ export async function GroupStrengthServer({
             </>
           </>
         )}
-      </DefaultCard>
+      </>
     );
   } catch (err: any) {
     return (
