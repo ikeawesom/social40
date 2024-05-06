@@ -178,11 +178,10 @@ export default function GroupMemberTab({
           }
         }}
         className={twMerge(
-          "w-full py-2 px-3 shadow-sm duration-300 flex items-center justify-between cursor-pointer",
-          curMember.memberID === groupMemberID && !handleBibo.state.state
-            ? "bg-custom-light-orange hover:brightness-95"
-            : "hover:bg-custom-light-text",
-
+          "w-full py-2 px-3 shadow-sm duration-150 flex items-center justify-between cursor-pointer bg-white hover:brightness-95",
+          curMember.memberID === groupMemberID &&
+            !handleBibo.state.state &&
+            "bg-custom-light-orange",
           handleBibo.state.members.includes(groupMemberID) &&
             "bg-custom-light-orange",
           className
