@@ -50,13 +50,13 @@ export default function GroupMembers({
     useHandleSelectActions(groupID);
 
   return (
-    <>
+    <div className="w-full">
       {loading && (
         <Modal className="h-[20vh] grid place-items-center">
           <ModalLoading />
         </Modal>
       )}
-      <div className="w-full flex flex-col items-start justify-start gap-2 max-h-[80vh]">
+      <div className="w-full flex flex-col items-start justify-start gap-2">
         <h1
           onClick={() => setShow(!show)}
           className={twMerge(
@@ -68,114 +68,114 @@ export default function GroupMembers({
         </h1>
         {show && (
           <>
+            {isAdmin && (
+              <div className="w-full flex flex-col gap-2 items-start justify-start">
+                <SecondaryButton
+                  disabled={loading}
+                  onClick={() => {
+                    if (select.state) {
+                      setSelect({ ...select, members: [], state: false });
+                    } else {
+                      setSelect({ ...select, state: true });
+                    }
+                  }}
+                  className="w-fit"
+                >
+                  {loading ? (
+                    <LoadingIconBright width={20} height={20} />
+                  ) : select.state ? (
+                    "Cancel"
+                  ) : (
+                    "Select"
+                  )}
+                </SecondaryButton>
+                {select.state && (
+                  <form
+                    onSubmit={handleSubmit}
+                    className="w-full flex flex-col items-start justify-start gap-2"
+                  >
+                    {select.members.length > 0 && (
+                      <div className="w-full">
+                        <p className="text-sm text-custom-grey-text">
+                          Selected: {select.members.length}
+                        </p>
+                        <InnerContainer className="mb-2 border-[1px] border-custom-light-text flex-row items-center justify-start gap-2 flex-wrap p-2 max-h-[10vh]">
+                          {select.members.map((id: string) => (
+                            <AnnouncementTag
+                              onClick={() =>
+                                setSelect({
+                                  ...select,
+                                  members: select.members.filter(
+                                    (s: string) => s != id
+                                  ),
+                                })
+                              }
+                              isDelete
+                              key={id}
+                            >
+                              {id}
+                            </AnnouncementTag>
+                          ))}
+                        </InnerContainer>
+                      </div>
+                    )}
+                    <p
+                      className="self-end underline text-sm text-custom-grey-text cursor-pointer"
+                      onClick={() => {
+                        const curArray = select.members;
+                        Object.keys(membersList).forEach((id: string) => {
+                          if (!select.members.includes(id)) curArray.push(id);
+                        });
+                        setSelect({ ...select, members: curArray });
+                      }}
+                    >
+                      Select All
+                    </p>
+                    <div className="flex items-end justify-start gap-2 w-full">
+                      <FormInputContainer
+                        inputName="actions"
+                        labelText="What actions to take?"
+                      >
+                        <select
+                          name="actions"
+                          onChange={(e) => setActions(e.target.value)}
+                        >
+                          {Object.keys(GROUP_MEMBERS_SELECT_OPTIONS).map(
+                            (action: string, index: number) => {
+                              if (
+                                !select.members.includes(owner) ||
+                                (select.members.includes(owner) &&
+                                  GROUP_MEMBERS_SELECT_OPTIONS[action]
+                                    .withOwner)
+                              ) {
+                                return (
+                                  <option value={action} key={index}>
+                                    {action}
+                                  </option>
+                                );
+                              }
+                            }
+                          )}
+                        </select>
+                      </FormInputContainer>
+                      <PrimaryButton
+                        disabled={loading || select.members.length === 0}
+                        type="submit"
+                        className="w-fit border-[1px] border-custom-primary"
+                      >
+                        Go
+                      </PrimaryButton>
+                    </div>
+                  </form>
+                )}
+              </div>
+            )}
             <QueryInput
               placeholder="Search for Member ID"
               handleSearch={handleSearch}
               search={search}
             />
-            <InnerContainer className="max-h-[60vh] relative">
-              {isAdmin && (
-                <div className="w-full flex flex-col gap-2 items-start justify-start p-2 pt-0 sticky top-0 left-0 z-10 bg-white shadow-sm">
-                  <SecondaryButton
-                    disabled={loading}
-                    onClick={() => {
-                      if (select.state) {
-                        setSelect({ ...select, members: [], state: false });
-                      } else {
-                        setSelect({ ...select, state: true });
-                      }
-                    }}
-                    className="w-fit"
-                  >
-                    {loading ? (
-                      <LoadingIconBright width={20} height={20} />
-                    ) : select.state ? (
-                      "Cancel"
-                    ) : (
-                      "Select"
-                    )}
-                  </SecondaryButton>
-                  {select.state && (
-                    <form
-                      onSubmit={handleSubmit}
-                      className="w-full flex flex-col items-start justify-start gap-2"
-                    >
-                      {select.members.length > 0 && (
-                        <div className="w-full">
-                          <p className="text-sm text-custom-grey-text">
-                            Selected: {select.members.length}
-                          </p>
-                          <InnerContainer className="mb-2 border-[1px] border-custom-light-text flex-row items-center justify-start gap-2 flex-wrap p-2 max-h-[10vh]">
-                            {select.members.map((id: string) => (
-                              <AnnouncementTag
-                                onClick={() =>
-                                  setSelect({
-                                    ...select,
-                                    members: select.members.filter(
-                                      (s: string) => s != id
-                                    ),
-                                  })
-                                }
-                                isDelete
-                                key={id}
-                              >
-                                {id}
-                              </AnnouncementTag>
-                            ))}
-                          </InnerContainer>
-                        </div>
-                      )}
-                      <p
-                        className="self-end underline text-sm text-custom-grey-text cursor-pointer"
-                        onClick={() => {
-                          const curArray = select.members;
-                          Object.keys(membersList).forEach((id: string) => {
-                            if (!select.members.includes(id)) curArray.push(id);
-                          });
-                          setSelect({ ...select, members: curArray });
-                        }}
-                      >
-                        Select All
-                      </p>
-                      <div className="flex items-end justify-start gap-2 w-full">
-                        <FormInputContainer
-                          inputName="actions"
-                          labelText="What actions to take?"
-                        >
-                          <select
-                            name="actions"
-                            onChange={(e) => setActions(e.target.value)}
-                          >
-                            {Object.keys(GROUP_MEMBERS_SELECT_OPTIONS).map(
-                              (action: string, index: number) => {
-                                if (
-                                  !select.members.includes(owner) ||
-                                  (select.members.includes(owner) &&
-                                    GROUP_MEMBERS_SELECT_OPTIONS[action]
-                                      .withOwner)
-                                ) {
-                                  return (
-                                    <option value={action} key={index}>
-                                      {action}
-                                    </option>
-                                  );
-                                }
-                              }
-                            )}
-                          </select>
-                        </FormInputContainer>
-                        <PrimaryButton
-                          disabled={loading || select.members.length === 0}
-                          type="submit"
-                          className="w-fit border-[1px] border-custom-primary"
-                        >
-                          Go
-                        </PrimaryButton>
-                      </div>
-                    </form>
-                  )}
-                </div>
-              )}
+            <InnerContainer className="max-h-[60vh]">
               {Object.keys(itemList).map((item) => (
                 <GroupMemberTab
                   handleBibo={{ state: select, action: setSelect }}
@@ -196,6 +196,6 @@ export default function GroupMembers({
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }
