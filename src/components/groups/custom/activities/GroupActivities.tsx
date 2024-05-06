@@ -5,7 +5,7 @@ import DefaultCard from "../../../DefaultCard";
 import InnerContainer from "../../../utils/InnerContainer";
 import { twMerge } from "tailwind-merge";
 import GroupActivityTab from "./settings/GroupActivityTab";
-import CreateActivityButton from "./settings/CreateActivityButton";
+import CreateActivityButton from "./settings/create/CreateActivityButton";
 import useQueryObj from "@/src/hooks/useQueryObj";
 import QueryInput from "../../../utils/QueryInput";
 import { DateToTimestamp, ActiveTimestamp } from "@/src/utils/getCurrentDate";
