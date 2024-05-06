@@ -13,7 +13,7 @@ export default function ModalLoading({
 }) {
   return (
     <div className={twMerge("p-4 w-full grid place-items-center", className)}>
-      <LoadingIcon height={30} width={30} />
+      <LoadingIcon height={40} width={40} />
       {children ?? (
         <p className="text-xs text-custom-grey-text mt-2">
           {text ?? "Working..."}
