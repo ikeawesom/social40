@@ -259,6 +259,29 @@ export const VERSION_MAP = {
 };
 
 export const ACTIVITY_TYPE = ["Light", "Moderate", "Strenuous"];
+export const GROUP_ACTIVITY_PARTICIPANTS = {
+  all: {
+    text: "All Members",
+    isDefault: true,
+  },
+  admins: {
+    text: "Only Admins",
+    isDefault: false,
+  },
+  members: {
+    text: "Only Members",
+    isDefault: false,
+  },
+  custom: {
+    text: "Custom",
+    isDefault: false,
+  },
+} as {
+  [type: string]: {
+    isDefault: boolean;
+    text: string;
+  };
+};
 
 export const VERSION_NUMBER = Object.keys(VERSION_MAP)[0] as string;
 export const VERSION_TITLE = VERSION_MAP[VERSION_NUMBER].title;

@@ -14,12 +14,12 @@ export default function SelectMembers({
 }: {
   setMembers: React.Dispatch<
     React.SetStateAction<{
-      check: boolean;
+      check: string;
       members: string[];
     }>
   >;
   addMembers: {
-    check: boolean;
+    check: string;
     members: string[];
   };
 }) {
