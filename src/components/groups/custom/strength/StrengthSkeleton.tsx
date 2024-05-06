@@ -8,7 +8,6 @@ export default function StrengthSkeleton() {
       <DefaultSkeleton className="h-[10px] w-[150px]" />
       <DefaultSkeleton className="h-[10px] w-[150px]" />
       <DefaultSkeleton className="h-[10px] w-[80px]" />
-      <DefaultSkeleton className="h-[8px] w-[100px]" />
     </div>
   );
 }
