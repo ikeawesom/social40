@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import Notice from "../utils/Notice";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import {
+  ROLES_HIERARCHY,
   VERSION_NUMBER,
+  VERSION_OBJ,
   VERSION_TITLE,
   VERSION_UPDATES,
 } from "@/src/utils/constants";
@@ -17,13 +19,15 @@ export default function UpdatesSection({
 }: {
   memberData: MEMBER_SCHEMA;
 }) {
-  const { memberID, dismissedUpdates } = memberData;
+  const { memberID, dismissedUpdates, role } = memberData;
   const [show, setShow] = useState<boolean>();
 
   useEffect(() => {
     if (
-      dismissedUpdates !== undefined &&
-      dismissedUpdates.includes(VERSION_NUMBER)
+      (dismissedUpdates !== undefined &&
+        dismissedUpdates.includes(VERSION_NUMBER)) ||
+      (VERSION_OBJ.adminOnly &&
+        ROLES_HIERARCHY[role].rank <= ROLES_HIERARCHY["admin"].rank)
     ) {
       setShow(false);
     } else {
