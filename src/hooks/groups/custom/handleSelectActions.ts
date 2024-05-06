@@ -3,12 +3,12 @@
 import { dbHandler } from "@/src/firebase/db";
 import handleResponses from "@/src/utils/handleResponses";
 
-export default async function handleBookIn(membersList: string[]) {
+export async function handleModify(membersList: string[], data: any) {
   const arrayList = membersList.map(async (memberID: string) => {
     const res = await dbHandler.edit({
       col_name: "MEMBERS",
       id: memberID,
-      data: { bookedIn: true },
+      data,
     });
     if (!res.status)
       return handleResponses({ status: false, error: res.error });
