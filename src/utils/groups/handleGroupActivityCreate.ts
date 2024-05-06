@@ -14,7 +14,7 @@ import {
   GROUP_ACTIVITY_SCHEMA,
 } from "../schemas/group-activities";
 import { FALLOUTS_SCHEMA } from "../schemas/activities";
-import { ACTIVITY_PARTICIPANT_SCHEMA } from "../schemas/members";
+import { ACTIVITY_PARTICIPANT_SCHEMA, MEMBER_SCHEMA } from "../schemas/members";
 import { STATUS_SCHEMA } from "../schemas/statuses";
 import { GROUP_ACTIVITIES_SCHEMA } from "../schemas/groups";
 
@@ -88,6 +88,26 @@ export async function first(groupID: string, input: any, memberID: string) {
   }
 }
 
+async function filterMembers(members: string[]) {
+  let temp = [] as string[];
+
+  const promiseArr = members.map(async (id: string) => {
+    const { data } = await dbHandler.get({ col_name: "MEMBERS", id });
+    const memberData = data as MEMBER_SCHEMA;
+    const { isOnCourse, bookedIn } = memberData;
+    if (isOnCourse || !bookedIn) {
+      // do not join activity
+      return handleResponses();
+    }
+    return handleResponses({ data: id });
+  });
+
+  const resolvedArr = await Promise.all(promiseArr);
+  resolvedArr.forEach((item: any) => {
+    if (item.data) temp.push(item.data);
+  });
+  return temp;
+}
 export async function second(
   addMembers: {
     check: string;
@@ -96,7 +116,7 @@ export async function second(
   groupID: string
 ) {
   try {
-    let membersData: string[];
+    let membersData = [] as string[];
 
     if (addMembers.check === "all") {
       const resX = await dbHandler.getSpecific({
@@ -107,9 +127,9 @@ export async function second(
 
       if (!resX.status) throw new Error(resX.error);
 
-      membersData = Object.keys(resX.data);
+      membersData = await filterMembers(Object.keys(resX.data));
     } else if (addMembers.check === "custom") {
-      membersData = addMembers.members;
+      membersData = await filterMembers(addMembers.members);
     } else if (addMembers.check === "admins") {
       const { error, data } = await dbHandler.getSpecific({
         path: `GROUPS/${groupID}/MEMBERS`,
@@ -118,7 +138,7 @@ export async function second(
         value: "member",
       });
       if (error) throw new Error(error);
-      membersData = Object.keys(data);
+      membersData = await filterMembers(Object.keys(data));
     } else {
       const { error, data } = await dbHandler.getSpecific({
         path: `GROUPS/${groupID}/MEMBERS`,
@@ -127,7 +147,7 @@ export async function second(
         value: "member",
       });
       if (error) throw new Error(error);
-      membersData = Object.keys(data);
+      membersData = await filterMembers(Object.keys(data));
     }
 
     return handleResponses({ data: membersData });
