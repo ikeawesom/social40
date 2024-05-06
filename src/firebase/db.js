@@ -94,6 +94,8 @@ class DbClass {
       value,
       orderCol,
       ascending,
+      orderCol2,
+      ascending2,
       field2,
       criteria2,
       value2,
@@ -103,7 +105,13 @@ class DbClass {
       const colRef = collection(FIREBASE_DB, path);
       var q;
 
-      if (field2 && orderCol) {
+      if (orderCol && orderCol2) {
+        q = query(
+          colRef,
+          orderBy(orderCol, !ascending ? "desc" : "asc"),
+          orderBy(orderCol2, !ascending2 ? "desc" : "asc")
+        );
+      } else if (field2 && orderCol) {
         q = query(
           colRef,
           where(field, criteria, value),
