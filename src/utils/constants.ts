@@ -95,6 +95,19 @@ export const BADGE_COLORS = {
 export const MAX_LENGTH = 30;
 
 export const VERSION_MAP = {
+  "1.3.0": {
+    version: "1.3.0",
+    title: "Select Actions",
+    desc: "Easily select and manage your group members.",
+    updates: [
+      "Increased loading performances in group page",
+      "Commanders can now manage group members using the new Select feature in your groups",
+      "Easily book in and book out members, give and reward permissions to members and also mark members as 'ON-COURSE'",
+      "Members marked ON-COURSE will now no longer be automatically added into activities",
+      "Currently supports: Book In/Out, Make/Remove Admin, Remove from Group, Mark/Unmark as ON-COURSE",
+    ],
+    adminOnly: true,
+  },
   "1.2.1": {
     version: "1.2.1",
     title: "Personal Statistics",
@@ -255,6 +268,7 @@ export const VERSION_MAP = {
     title: string;
     desc: string;
     updates: string[];
+    adminOnly?: boolean;
   };
 };
 
@@ -319,9 +333,10 @@ export const GROUP_ACTIVITY_CREATION_PROGRESS = [
 ];
 
 export const VERSION_NUMBER = Object.keys(VERSION_MAP)[0] as string;
-export const VERSION_TITLE = VERSION_MAP[VERSION_NUMBER].title;
-export const VERSION_DESC = VERSION_MAP[VERSION_NUMBER].desc;
-export const VERSION_UPDATES = VERSION_MAP[VERSION_NUMBER].updates;
+export const VERSION_OBJ = VERSION_MAP[VERSION_NUMBER];
+export const VERSION_TITLE = VERSION_OBJ.title;
+export const VERSION_DESC = VERSION_OBJ.desc;
+export const VERSION_UPDATES = VERSION_OBJ.updates;
 
 export const MONTHS = [
   "JANUARY",
