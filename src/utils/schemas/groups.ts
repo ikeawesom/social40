@@ -35,6 +35,7 @@ export type GROUP_MEMBERS_SCHEMA = {
   displayName: string; // display name of member
   bookedIn?: boolean;
   pfp?: string;
+  isOnCourse?: boolean;
 };
 
 export function initGroupObject({
