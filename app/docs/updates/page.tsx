@@ -10,16 +10,20 @@ export default function PatchNotesPage() {
           Version Updates
         </h1>
         {Object.keys(VERSION_MAP).map((versionNumber: string) => {
-          const { version, desc, title, updates } = VERSION_MAP[versionNumber];
+          const { version, desc, title, updates, date } =
+            VERSION_MAP[versionNumber];
           const emptyUpdates = updates.length === 0;
           return (
             <div
               key={versionNumber}
               className="flex flex-col w-full items-start justify-center"
             >
-              <h1 className="text-custom-dark-text text-2xl font-semibold">
+              <h1 className="text-custom-dark-text text-2xl font-semibold my-1">
                 v{version}: {title}
               </h1>
+              <p className="text-sm text-custom-grey-text">
+                Released on: {date}
+              </p>
               <HRow />
               <p className="text-custom-dark-text">{desc}</p>
               {!emptyUpdates && (

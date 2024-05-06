@@ -12,12 +12,12 @@ export default function SelectMemberTab({
 }: {
   setMembers: React.Dispatch<
     React.SetStateAction<{
-      check: boolean;
+      check: string;
       members: string[];
     }>
   >;
   memberData: GROUP_MEMBERS_SCHEMA;
-  addMembers: { check: boolean; members: string[] };
+  addMembers: { check: string; members: string[] };
 }) {
   let curMembers = addMembers.members;
 

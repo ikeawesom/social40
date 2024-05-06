@@ -1,16 +1,15 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import ActivityRemarkData from "@/src/components/groups/custom/activities/ActivityRemarkData";
-import CreateGroupActivityForm from "@/src/components/groups/custom/activities/settings/CreateGroupActivityForm";
+import CreateGroupActivityForm from "@/src/components/groups/custom/activities/settings/create/CreateGroupActivityForm";
 import GroupActivityData from "@/src/components/groups/custom/activities/settings/GroupActivityData";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
-import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { cookies } from "next/headers";
-import React, { Suspense } from "react";
+import React from "react";
 
 export default async function ActivityPage({
   params,

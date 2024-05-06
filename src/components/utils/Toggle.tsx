@@ -3,25 +3,38 @@
 import React from "react";
 import SecondaryButton from "./SecondaryButton";
 import Image from "next/image";
+import { twMerge } from "tailwind-merge";
 
 export default function Toggle({
   disable,
   disabled,
   enable,
   forceDisable,
+  className,
+  buttonClassName,
 }: {
   disabled: boolean;
   enable: () => void;
   disable: () => void;
   forceDisable?: boolean;
+  className?: string;
+  buttonClassName?: string;
 }) {
   return (
-    <div className="flex items-center justify-center gap-1 rounded-full shadow-inner border-[1px] border-custom-light-text">
+    <div
+      className={twMerge(
+        "flex items-center justify-center gap-1 rounded-full shadow-inner border-[1px] border-custom-light-text",
+        className
+      )}
+    >
       <SecondaryButton
         onClick={enable}
         disabled={forceDisable}
         activated={!disabled}
-        className="py-1 px-1 flex items-center justify-center rounded-full border-0 shadow-none"
+        className={twMerge(
+          "py-1 px-1 flex items-center justify-center rounded-full border-0 shadow-none",
+          buttonClassName
+        )}
       >
         <Image
           alt="Yes"
@@ -34,7 +47,10 @@ export default function Toggle({
         disabled={forceDisable}
         onClick={disable}
         activated={disabled}
-        className="py-1 px-1 flex items-center justify-center rounded-full border-0 shadow-none"
+        className={twMerge(
+          "py-1 px-1 flex items-center justify-center rounded-full border-0 shadow-none",
+          buttonClassName
+        )}
       >
         <Image
           alt="Yes"

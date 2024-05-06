@@ -9,15 +9,20 @@ import {
 import useQueryObj from "@/src/hooks/useQueryObj";
 import QueryInput from "../../utils/QueryInput";
 import { twMerge } from "tailwind-merge";
-import { GROUP_ROLES_HEIRARCHY } from "@/src/utils/constants";
+import {
+  GROUP_MEMBERS_SELECT_OPTIONS,
+  GROUP_ROLES_HEIRARCHY,
+} from "@/src/utils/constants";
 import InviteMemberForm from "./InviteMemberForm";
 import HRow from "../../utils/HRow";
-import PrimaryButton from "../../utils/PrimaryButton";
-import handleBookIn from "@/src/hooks/groups/custom/handleBookIn";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { LoadingIconBright } from "../../utils/LoadingIcon";
 import SecondaryButton from "../../utils/SecondaryButton";
+import AnnouncementTag from "../../announcements/AnnouncementTag";
+import FormInputContainer from "../../utils/FormInputContainer";
+import PrimaryButton from "../../utils/PrimaryButton";
+import Modal from "../../utils/Modal";
+import ModalLoading from "../../utils/ModalLoading";
+import { useHandleSelectActions } from "@/src/hooks/groups/custom/useHandleSelectActions";
 
 export default function GroupMembers({
   membersList,
@@ -28,140 +33,169 @@ export default function GroupMembers({
   groupID: string;
   curMember: GROUP_MEMBERS_SCHEMA;
 }) {
-  const router = useRouter();
   const [show, setShow] = useState(false);
   const [online, setOnline] = useState(0);
   const { itemList, search, handleSearch } = useQueryObj({ obj: membersList });
-  const admin =
+  const isAdmin =
     GROUP_ROLES_HEIRARCHY[curMember.role].rank >=
     GROUP_ROLES_HEIRARCHY["admin"].rank;
 
-  const [biboLoad, setBiboLoad] = useState(false);
-  const [bookingIn, setBookingIn] = useState({
-    state: false,
-    members: [] as string[],
-  });
-
-  const confirmBookIn = async () => {
-    if (
-      confirm(
-        "Are you sure you want to book in selected members of this group?"
-      )
-    ) {
-      setBiboLoad(true);
-      try {
-        const res = await handleBookIn(bookingIn.members);
-        if (!res.status) throw new Error(res.error);
-        toast.success("Successfully booked in selected members in group");
-        router.refresh();
-        setBookingIn({ members: [], state: false });
-      } catch (err: any) {
-        toast.error(err.message);
-      }
-      setBiboLoad(false);
-    }
-  };
+  const owner = Object.keys(membersList).filter(
+    (id: string) => membersList[id].role === "owner"
+  )[0];
 
   const addOnline = () => setOnline((online) => online + 1);
 
+  const { loading, handleSubmit, select, setActions, setSelect } =
+    useHandleSelectActions(groupID);
+
   return (
-    <div className="w-full flex flex-col items-start justify-start gap-2 max-h-[80vh]">
-      <h1
-        onClick={() => setShow(!show)}
-        className={twMerge(
-          "text-start cursor-pointer underline text-sm duration-150",
-          !show ? "text-custom-grey-text" : "text-custom-primary"
-        )}
-      >
-        {show ? "Hide Breakdown" : "View Breakdown"}
-      </h1>
-      {show && (
-        <>
-          <QueryInput
-            placeholder="Search for Member ID"
-            handleSearch={handleSearch}
-            search={search}
-          />
-          {/* <div className="flex items-center justify-end gap-1 w-fit">
-            <p className="text-xs text-custom-grey-text">{online} in camp</p>
-            <StatusDot className="w-1 h-1" status />
-          </div> */}
-          <InnerContainer className="max-h-[60vh] relative">
-            {admin && (
-              <div className="w-full flex flex-col gap-2 items-start justify-start p-2 pt-0 sticky top-0 left-0 z-10 bg-white shadow-sm">
-                <SecondaryButton
-                  disabled={biboLoad}
-                  onClick={() => {
-                    if (bookingIn.state) {
-                      setBookingIn({ ...bookingIn, members: [], state: false });
-                    } else {
-                      setBookingIn({ ...bookingIn, state: true });
-                    }
-                  }}
-                  className="w-fit"
-                >
-                  {biboLoad ? (
-                    <LoadingIconBright width={20} height={20} />
-                  ) : bookingIn.state ? (
-                    "Cancel"
-                  ) : (
-                    "Book In Members"
-                  )}
-                </SecondaryButton>
-                {bookingIn.state && (
-                  <form className="w-full flex items-center justify-between gap-4">
-                    <p
-                      className="underline text-sm text-custom-grey-text cursor-pointer"
-                      onClick={() => {
-                        const curArray = bookingIn.members;
-                        Object.keys(membersList).forEach((id: string) => {
-                          if (!bookingIn.members.includes(id))
-                            curArray.push(id);
-                        });
-                        setBookingIn({ ...bookingIn, members: curArray });
-                      }}
-                    >
-                      Select All
-                    </p>
-                    <div className="flex gap-2 items-center justify-end">
-                      <p className="text-sm text-custom-grey-text">
-                        Selected: {bookingIn.members.length}
-                      </p>
-                      <PrimaryButton
-                        disabled={biboLoad || bookingIn.members.length < 1}
-                        onClick={confirmBookIn}
-                        className="w-fit"
-                      >
-                        {biboLoad ? (
-                          <LoadingIconBright width={20} height={20} />
-                        ) : (
-                          "Confirm"
-                        )}
-                      </PrimaryButton>
-                    </div>
-                  </form>
-                )}
-              </div>
-            )}
-            {Object.keys(itemList).map((item) => (
-              <GroupMemberTab
-                handleBibo={{ state: bookingIn, action: setBookingIn }}
-                addOnline={addOnline}
-                curMember={curMember}
-                groupID={groupID}
-                key={item}
-                data={itemList[item]}
-              />
-            ))}
-          </InnerContainer>
-          {admin && (
-            <>
-              <HRow />
-              <InviteMemberForm membersList={membersList} groupID={groupID} />
-            </>
-          )}
-        </>
+    <>
+      {loading && (
+        <Modal className="h-[20vh] grid place-items-center">
+          <ModalLoading />
+        </Modal>
       )}
-    </div>
+      <div className="w-full flex flex-col items-start justify-start gap-2 max-h-[80vh]">
+        <h1
+          onClick={() => setShow(!show)}
+          className={twMerge(
+            "text-start cursor-pointer underline text-sm duration-150",
+            !show ? "text-custom-grey-text" : "text-custom-primary"
+          )}
+        >
+          {show ? "Hide Breakdown" : "View Breakdown"}
+        </h1>
+        {show && (
+          <>
+            <QueryInput
+              placeholder="Search for Member ID"
+              handleSearch={handleSearch}
+              search={search}
+            />
+            <InnerContainer className="max-h-[60vh] relative">
+              {isAdmin && (
+                <div className="w-full flex flex-col gap-2 items-start justify-start p-2 pt-0 sticky top-0 left-0 z-10 bg-white shadow-sm">
+                  <SecondaryButton
+                    disabled={loading}
+                    onClick={() => {
+                      if (select.state) {
+                        setSelect({ ...select, members: [], state: false });
+                      } else {
+                        setSelect({ ...select, state: true });
+                      }
+                    }}
+                    className="w-fit"
+                  >
+                    {loading ? (
+                      <LoadingIconBright width={20} height={20} />
+                    ) : select.state ? (
+                      "Cancel"
+                    ) : (
+                      "Select"
+                    )}
+                  </SecondaryButton>
+                  {select.state && (
+                    <form
+                      onSubmit={handleSubmit}
+                      className="w-full flex flex-col items-start justify-start gap-2"
+                    >
+                      {select.members.length > 0 && (
+                        <div className="w-full">
+                          <p className="text-sm text-custom-grey-text">
+                            Selected: {select.members.length}
+                          </p>
+                          <InnerContainer className="mb-2 border-[1px] border-custom-light-text flex-row items-center justify-start gap-2 flex-wrap p-2 max-h-[10vh]">
+                            {select.members.map((id: string) => (
+                              <AnnouncementTag
+                                onClick={() =>
+                                  setSelect({
+                                    ...select,
+                                    members: select.members.filter(
+                                      (s: string) => s != id
+                                    ),
+                                  })
+                                }
+                                isDelete
+                                key={id}
+                              >
+                                {id}
+                              </AnnouncementTag>
+                            ))}
+                          </InnerContainer>
+                        </div>
+                      )}
+                      <p
+                        className="self-end underline text-sm text-custom-grey-text cursor-pointer"
+                        onClick={() => {
+                          const curArray = select.members;
+                          Object.keys(membersList).forEach((id: string) => {
+                            if (!select.members.includes(id)) curArray.push(id);
+                          });
+                          setSelect({ ...select, members: curArray });
+                        }}
+                      >
+                        Select All
+                      </p>
+                      <div className="flex items-end justify-start gap-2 w-full">
+                        <FormInputContainer
+                          inputName="actions"
+                          labelText="What actions to take?"
+                        >
+                          <select
+                            name="actions"
+                            onChange={(e) => setActions(e.target.value)}
+                          >
+                            {Object.keys(GROUP_MEMBERS_SELECT_OPTIONS).map(
+                              (action: string, index: number) => {
+                                if (
+                                  !select.members.includes(owner) ||
+                                  (select.members.includes(owner) &&
+                                    GROUP_MEMBERS_SELECT_OPTIONS[action]
+                                      .withOwner)
+                                ) {
+                                  return (
+                                    <option value={action} key={index}>
+                                      {action}
+                                    </option>
+                                  );
+                                }
+                              }
+                            )}
+                          </select>
+                        </FormInputContainer>
+                        <PrimaryButton
+                          disabled={loading || select.members.length === 0}
+                          type="submit"
+                          className="w-fit border-[1px] border-custom-primary"
+                        >
+                          Go
+                        </PrimaryButton>
+                      </div>
+                    </form>
+                  )}
+                </div>
+              )}
+              {Object.keys(itemList).map((item) => (
+                <GroupMemberTab
+                  handleBibo={{ state: select, action: setSelect }}
+                  addOnline={addOnline}
+                  curMember={curMember}
+                  groupID={groupID}
+                  key={item}
+                  data={itemList[item]}
+                />
+              ))}
+            </InnerContainer>
+            {isAdmin && (
+              <>
+                <HRow />
+                <InviteMemberForm membersList={membersList} groupID={groupID} />
+              </>
+            )}
+          </>
+        )}
+      </div>
+    </>
   );
 }

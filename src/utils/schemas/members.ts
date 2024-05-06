@@ -11,6 +11,7 @@ export type MEMBER_SCHEMA = {
   role: string;
   badges: BADGE_SCHEMA[];
   pfp?: string;
+  isOnCourse?: boolean;
 
   // stats
   ipptID: string;

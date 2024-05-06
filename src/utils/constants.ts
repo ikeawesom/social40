@@ -95,6 +95,20 @@ export const BADGE_COLORS = {
 export const MAX_LENGTH = 30;
 
 export const VERSION_MAP = {
+  "1.3.0": {
+    version: "1.3.0",
+    title: "Select Actions",
+    desc: "Easily select and manage your group members.",
+    updates: [
+      "Increased loading performances in group page",
+      "Commanders can now manage group members using the new Select feature in your groups",
+      "Easily book in and book out members, give and reward permissions to members and also mark members as 'ON-COURSE'",
+      "Members marked ON-COURSE will now no longer be automatically added into activities",
+      "Currently supports: Book In/Out, Make/Remove Admin, Remove from Group, Mark/Unmark as ON-COURSE",
+    ],
+    adminOnly: true,
+    date: "07/05/2024",
+  },
   "1.2.1": {
     version: "1.2.1",
     title: "Personal Statistics",
@@ -105,6 +119,7 @@ export const VERSION_MAP = {
       "Currently supports IPPT, ATP, VOC and SOC",
       "Members can earn Social40 points through these personal statistics",
     ],
+    date: "06/05/2024",
   },
   "1.2.0": {
     version: "1.2.0",
@@ -115,6 +130,7 @@ export const VERSION_MAP = {
       "Plan your COS accurately with easy-to-use UI",
       "Easily manage your monthly plan without worrying about keeping track of points",
     ],
+    date: "05/05/2024",
   },
   "1.1.0": {
     version: "1.1.0",
@@ -125,6 +141,7 @@ export const VERSION_MAP = {
       "Say goodbye to manual tracking of HA",
       "HA Reports can be downloaded into spreadsheets for other administrative uses if needed",
     ],
+    date: "26/04/2024",
   },
   "1.0.0": {
     version: "1.0.0",
@@ -133,6 +150,7 @@ export const VERSION_MAP = {
     updates: [
       "After many updates and feedback, we have optimized this app to support 40SAR's relevant needs. We are thus happy to announce its first official release!",
     ],
+    date: "21/04/2024",
   },
   "0.5.1": {
     version: "0.5.1",
@@ -141,6 +159,7 @@ export const VERSION_MAP = {
     updates: [
       "Commanders can now mass book in soldiers via respective group pages",
     ],
+    date: "04/03/2024",
   },
   "0.5.0": {
     version: "0.5.0",
@@ -150,6 +169,7 @@ export const VERSION_MAP = {
       "Admins can now create posts to broadcast announcements",
       "Friends feature has been removed",
     ],
+    date: "27/02/2024",
   },
   "0.4.0": {
     version: "0.4.0",
@@ -159,6 +179,7 @@ export const VERSION_MAP = {
       "Only active statuses will be shown on the main group page",
       "A link is available to view all past statuses of every member in the group",
     ],
+    date: "19/02/2024",
   },
   "0.3.3": {
     version: "0.3.3",
@@ -167,6 +188,7 @@ export const VERSION_MAP = {
     updates: [
       "Introducting Profile Pictures! Users can now add profile pictures to their Social40 accounts",
     ],
+    date: "06/02/2024",
   },
   "0.3.2": {
     version: "0.3.2",
@@ -175,6 +197,7 @@ export const VERSION_MAP = {
     updates: [
       "Commanders can now download participation data from group activities into spreadsheets",
     ],
+    date: "06/02/2024",
   },
   "0.3.1": {
     version: "0.3.1",
@@ -187,12 +210,14 @@ export const VERSION_MAP = {
       "Commanders can more easily manage participation as present fall outs are already automatically not added",
       "Commanders can view Strengths, MCs and Statuses distinctively",
     ],
+    date: "24/01/2024",
   },
   "0.3.0": {
     version: "0.3.0",
     title: "Beta Release",
     desc: "First stable beta release. Some features may still be unstable.",
     updates: [],
+    date: "27/11/2023",
   },
   "0.2.3": {
     version: "0.2.3",
@@ -204,6 +229,7 @@ export const VERSION_MAP = {
       "Activity owners can view all remarks made by participants",
       "Serves to provide feedback to commanders regarding training",
     ],
+    date: "19/11/2023",
   },
   "0.2.2": {
     version: "0.2.2",
@@ -216,6 +242,7 @@ export const VERSION_MAP = {
       "Members can request to participate in the activity, which will be tracked on their public profile",
       "Their latest activities will be monitored to track their HA statuses",
     ],
+    date: "16/11/2024",
   },
   "0.2.1": {
     version: "0.2.1",
@@ -224,6 +251,7 @@ export const VERSION_MAP = {
     updates: [
       "Group activities can now be added via the group dashboard by the group owner",
     ],
+    date: "16/11/2024",
   },
   "0.1.2": {
     version: "0.1.2",
@@ -233,6 +261,7 @@ export const VERSION_MAP = {
       "COS, commanders and above can now view the BIBO statuses of members with a simple member ID search.",
       "BIBO statuses can now be generated into excel sheets for easier references.",
     ],
+    date: "07/11/2024",
   },
   "0.1.1": {
     version: "0.1.1",
@@ -242,12 +271,14 @@ export const VERSION_MAP = {
       "Status feature are now available for both members and groups.",
       "Commanders and above can now endorse statuses of others, NOT themselves.",
     ],
+    date: "02/11/2024",
   },
   "0.1.0": {
     version: "0.1.0",
     title: "First Release",
     desc: "Please note that this is still a beta testing version. Some features may still be unstable.",
     updates: [],
+    date: "28/10/2024",
   },
 } as {
   [versionNumber: string]: {
@@ -255,15 +286,76 @@ export const VERSION_MAP = {
     title: string;
     desc: string;
     updates: string[];
+    adminOnly?: boolean;
+    date: string;
+  };
+};
+
+export const GROUP_MEMBERS_SELECT_OPTIONS = {
+  "Book In": {
+    withOwner: true,
+  },
+  "Book Out": {
+    withOwner: true,
+  },
+  "Mark as On-Course": {
+    withOwner: true,
+  },
+  "Unmark as On-Course": {
+    withOwner: true,
+  },
+  "Remove from Group": {
+    withOwner: false,
+  },
+  "Make Admin": {
+    withOwner: false,
+  },
+  "Remove Admin": {
+    withOwner: false,
+  },
+} as {
+  [action: string]: {
+    withOwner: boolean;
   };
 };
 
 export const ACTIVITY_TYPE = ["Light", "Moderate", "Strenuous"];
+export const GROUP_ACTIVITY_PARTICIPANTS = {
+  all: {
+    text: "All Members",
+    isDefault: true,
+  },
+  admins: {
+    text: "Only Admins",
+    isDefault: false,
+  },
+  members: {
+    text: "Only Members",
+    isDefault: false,
+  },
+  custom: {
+    text: "Custom",
+    isDefault: false,
+  },
+} as {
+  [type: string]: {
+    isDefault: boolean;
+    text: string;
+  };
+};
+
+export const GROUP_ACTIVITY_CREATION_PROGRESS = [
+  "Creating group activity...",
+  "Collecting participants...",
+  "Verifiying and adding participants...",
+  "Finishing up...",
+];
 
 export const VERSION_NUMBER = Object.keys(VERSION_MAP)[0] as string;
-export const VERSION_TITLE = VERSION_MAP[VERSION_NUMBER].title;
-export const VERSION_DESC = VERSION_MAP[VERSION_NUMBER].desc;
-export const VERSION_UPDATES = VERSION_MAP[VERSION_NUMBER].updates;
+export const VERSION_OBJ = VERSION_MAP[VERSION_NUMBER];
+export const VERSION_TITLE = VERSION_OBJ.title;
+export const VERSION_DESC = VERSION_OBJ.desc;
+export const VERSION_UPDATES = VERSION_OBJ.updates;
 
 export const MONTHS = [
   "JANUARY",

@@ -12,6 +12,13 @@ import { toast } from "sonner";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { useHostname } from "@/src/hooks/useHostname";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
+import Toggle from "@/src/components/utils/Toggle";
+
+const DEFAULT_CHECKS = {
+  check1: false,
+  check2: false,
+  check3: false,
+};
 
 export default function DeleteGroupActivity({
   activityData,
@@ -23,11 +30,7 @@ export default function DeleteGroupActivity({
 
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
-  const [checks, setChecks] = useState({
-    check1: false,
-    check2: false,
-    check3: false,
-  });
+  const [checks, setChecks] = useState(DEFAULT_CHECKS);
   const [confirm, setConfirm] = useState("");
 
   const allChecked = checks.check1 && checks.check2 && checks.check3;
@@ -54,6 +57,16 @@ export default function DeleteGroupActivity({
     setLoading(false);
   };
 
+  const handleToggleShow = () => {
+    if (show) {
+      setShow(false);
+      setChecks(DEFAULT_CHECKS);
+      setConfirm("");
+    } else {
+      setShow(true);
+    }
+  };
+
   return (
     <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
       <div className="flex items-center justify-between w-full">
@@ -62,7 +75,7 @@ export default function DeleteGroupActivity({
         </h1>
 
         <Image
-          onClick={() => setShow(!show)}
+          onClick={handleToggleShow}
           src="/icons/icon_arrow-down.svg"
           alt="Show"
           width={30}
@@ -76,34 +89,43 @@ export default function DeleteGroupActivity({
           onSubmit={handleSubmit}
           className="w-full flex flex-col items-start justify-start gap-3"
         >
-          <SecondaryButton
-            className={
-              checks.check1 ? "border-custom-red bg-custom-light-red" : ""
-            }
-            onClick={() => setChecks({ ...checks, check1: !checks.check1 })}
-          >
-            I understand that deleting this activity will forfeit the
-            participation of every member
-          </SecondaryButton>
+          <div>
+            <p className="text-sm">
+              I understand that deleting this activity will forfeit the
+              participation of every member
+            </p>
+            <Toggle
+              className="w-fit mt-2"
+              buttonClassName="border-[1px]"
+              disable={() => setChecks({ ...checks, check1: false })}
+              enable={() => setChecks({ ...checks, check1: true })}
+              disabled={!checks.check1}
+            />
+          </div>
+          <div>
+            <p className="text-sm">
+              I understand that this action is irreversible and may affect heat
+              acclimatisation (HA) tracking
+            </p>
+            <Toggle
+              className="w-fit mt-2"
+              buttonClassName="border-[1px]"
+              disable={() => setChecks({ ...checks, check2: false })}
+              enable={() => setChecks({ ...checks, check2: true })}
+              disabled={!checks.check2}
+            />
+          </div>
 
-          <SecondaryButton
-            className={
-              checks.check2 ? "border-custom-red bg-custom-light-red" : ""
-            }
-            onClick={() => setChecks({ ...checks, check2: !checks.check2 })}
-          >
-            I understand that this action is irreversible and may affect heat
-            acclimatisation (HA) tracking
-          </SecondaryButton>
-
-          <SecondaryButton
-            className={
-              checks.check3 ? "border-custom-red bg-custom-light-red" : ""
-            }
-            onClick={() => setChecks({ ...checks, check3: !checks.check3 })}
-          >
-            I want to delete this activity
-          </SecondaryButton>
+          <div>
+            <p className="text-sm">I want to delete this activity</p>
+            <Toggle
+              className="w-fit mt-2"
+              buttonClassName="border-[1px]"
+              disable={() => setChecks({ ...checks, check3: false })}
+              enable={() => setChecks({ ...checks, check3: true })}
+              disabled={!checks.check3}
+            />
+          </div>
 
           {allChecked && (
             <FormInputContainer

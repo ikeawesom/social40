@@ -2,11 +2,10 @@ import InnerContainer from "@/src/components/utils/InnerContainer";
 import LoadingIcon from "@/src/components/utils/LoadingIcon";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import SelectMemberTab from "./SelectMemberTab";
-import { twMerge } from "tailwind-merge";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { GroupDetailsType } from "@/src/utils/schemas/groups";
+import SelectMemberQuery from "./SelectMemberQuery";
 
 export default function SelectMembers({
   setMembers,
@@ -14,12 +13,12 @@ export default function SelectMembers({
 }: {
   setMembers: React.Dispatch<
     React.SetStateAction<{
-      check: boolean;
+      check: string;
       members: string[];
     }>
   >;
   addMembers: {
-    check: boolean;
+    check: string;
     members: string[];
   };
 }) {
@@ -56,27 +55,22 @@ export default function SelectMembers({
   }, [groupID]);
 
   if (groupID !== "") {
-    return (
-      <InnerContainer
-        className={twMerge(
-          "max-h-[50vh]",
-          loading && "w-full flex items-center justify-center h-[20vh]"
-        )}
-      >
-        {loading ? (
+    if (!groupMembers)
+      return (
+        <InnerContainer
+          className={"w-full flex items-center justify-center h-[20vh]"}
+        >
           <LoadingIcon height={40} width={40} />
-        ) : (
-          groupMembers &&
-          Object.keys(groupMembers).map((memberID: string) => (
-            <SelectMemberTab
-              key={memberID}
-              setMembers={setMembers}
-              memberData={groupMembers[memberID]}
-              addMembers={addMembers}
-            />
-          ))
-        )}
-      </InnerContainer>
+        </InnerContainer>
+      );
+
+    return (
+      <SelectMemberQuery
+        addMembers={addMembers}
+        groupMembers={groupMembers}
+        loading={loading}
+        setMembers={setMembers}
+      />
     );
   }
 }
