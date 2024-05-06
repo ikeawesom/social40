@@ -15,6 +15,7 @@ import Link from "next/link";
 import { contentfulImageLoader } from "../../profile/edit/ProfilePicSection";
 import ModalLoading from "../../utils/ModalLoading";
 import ModalHeader from "../../utils/ModalHeader";
+import Badge from "../../utils/Badge";
 
 export default function GroupMemberTab({
   data,
@@ -46,6 +47,7 @@ export default function GroupMemberTab({
   const router = useRouter();
   const displayName = data.displayName as string;
   const groupMemberID = data.memberID;
+  const isOnCourse = data.isOnCourse;
   const bookedIn = data.bookedIn as boolean;
   const role = data.role;
   const pfp = data.pfp;
@@ -187,7 +189,7 @@ export default function GroupMemberTab({
           className
         )}
       >
-        <div className="flex items-center justify-start gap-3">
+        <div className="flex items-center justify-start gap-3 w-full">
           <div className="overflow-hidden rounded-full shadow-lg w-10 h-10 relative">
             <Image
               loader={contentfulImageLoader}
@@ -198,7 +200,7 @@ export default function GroupMemberTab({
               className="object-cover"
             />
           </div>
-          <div className="flex flex-col items-start justify-center">
+          <div className="flex flex-col items-start justify-center prima">
             <div className="flex items-center justify-start gap-1">
               <h1 className="font-bold text-sm text-custom-dark-text">
                 {displayName}
@@ -216,9 +218,21 @@ export default function GroupMemberTab({
                 ? groupMemberID.substring(0, MAX_LENGTH - 3) + "..."
                 : groupMemberID}
             </p>
-            <p className="text-xs text-custom-grey-text">
-              Joined on: {dateStr}
-            </p>
+            {curMember.memberID === groupMemberID && (
+              <p className="text-xs text-custom-grey-text">
+                Joined on: {dateStr}
+              </p>
+            )}
+            {isOnCourse && (
+              <Badge
+                backgroundColor="bg-custom-light-green"
+                borderColor="border-custom-green/50"
+                textColor="text-custom-green"
+                className="mt-2"
+              >
+                ON COURSE
+              </Badge>
+            )}
           </div>
         </div>
       </div>
