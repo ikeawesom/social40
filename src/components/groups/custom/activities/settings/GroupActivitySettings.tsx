@@ -13,6 +13,8 @@ import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { DateToString } from "@/src/utils/getCurrentDate";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import { twMerge } from "tailwind-merge";
+import Toggle from "@/src/components/utils/Toggle";
+import HRow from "@/src/components/utils/HRow";
 
 export default function GroupActivitySettings({
   activityData,
@@ -249,17 +251,19 @@ export default function GroupActivitySettings({
               </div>
             </FormInputContainer>
 
-            <SecondaryButton
-              onClick={() => setInput({ ...input, isPT: !input.isPT })}
-              className={twMerge(
-                "w-fit",
-                input.isPT && "bg-custom-light-orange border-custom-orange"
-              )}
-            >
-              {input.isPT
-                ? "This is a PT activity"
-                : "This is not a PT activity"}
-            </SecondaryButton>
+            <div className="w-full">
+              <HRow />
+              <div className="w-full flex items-center justify-between gap-2 py-2">
+                <p className="text-sm">This is a HA activity</p>
+                <Toggle
+                  className="shadow-none border-none"
+                  buttonClassName="border-[1px]"
+                  disable={() => setInput({ ...input, isPT: false })}
+                  enable={() => setInput({ ...input, isPT: true })}
+                  disabled={!input.isPT}
+                />
+              </div>
+            </div>
 
             {!noChanges && (
               <FormInputContainer
@@ -278,7 +282,7 @@ export default function GroupActivitySettings({
             <PrimaryButton
               disabled={loading || noChanges || invalidUser}
               type="submit"
-              className="grid place-items-center mt-2"
+              className="grid place-items-center"
             >
               {loading ? (
                 <LoadingIconBright width={20} height={20} />
