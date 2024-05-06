@@ -258,6 +258,31 @@ export const VERSION_MAP = {
   };
 };
 
+export const GROUP_MEMBERS_SELECT_OPTIONS = {
+  "Book In": {
+    withOwner: true,
+  },
+  "Book Out": {
+    withOwner: true,
+  },
+  "Mark as On-Course": {
+    withOwner: true,
+  },
+  "Remove from Group": {
+    withOwner: false,
+  },
+  "Make Admin": {
+    withOwner: false,
+  },
+  "Remove Admin": {
+    withOwner: false,
+  },
+} as {
+  [action: string]: {
+    withOwner: boolean;
+  };
+};
+
 export const ACTIVITY_TYPE = ["Light", "Moderate", "Strenuous"];
 export const GROUP_ACTIVITY_PARTICIPANTS = {
   all: {
