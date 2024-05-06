@@ -79,7 +79,7 @@ export default async function GroupCOSPage({
             >
               <COSMembersSection
                 curMemberID={memberID}
-                groupData={groupData}
+                groupData={JSON.parse(JSON.stringify(groupData))}
                 admins={admins}
                 members={cos.members ?? []}
               />
