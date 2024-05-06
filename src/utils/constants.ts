@@ -283,6 +283,13 @@ export const GROUP_ACTIVITY_PARTICIPANTS = {
   };
 };
 
+export const GROUP_ACTIVITY_CREATION_PROGRESS = [
+  "Creating group activity...",
+  "Collecting participants...",
+  "Verifiying and adding participants...",
+  "Finishing up...",
+];
+
 export const VERSION_NUMBER = Object.keys(VERSION_MAP)[0] as string;
 export const VERSION_TITLE = VERSION_MAP[VERSION_NUMBER].title;
 export const VERSION_DESC = VERSION_MAP[VERSION_NUMBER].desc;
