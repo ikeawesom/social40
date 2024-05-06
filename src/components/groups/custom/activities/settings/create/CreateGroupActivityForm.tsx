@@ -121,8 +121,8 @@ export default function CreateGroupActivityForm({
       toast.success("Created activity. Bringing you there now...");
     } catch (err: any) {
       toast.error(err.message);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
