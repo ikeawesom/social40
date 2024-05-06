@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Badge from "@/src/components/utils/Badge";
 import { CreateCOSPlan } from "@/src/utils/groups/COS/handleCOS";
-import { handleReload } from "@/src/components/navigation/HeaderBar";
+import Toggle from "@/src/components/utils/Toggle";
 
 export const getType = (day: number) => {
   return day === 0 || day === 6 ? "weekend" : day === 5 ? "friday" : "standard";
@@ -89,6 +89,7 @@ export default function CreatePlanSection({
         day: date.getDate(),
         month: curMonth,
         type,
+        disabled: false,
       } as CosDailyType;
       dates[curDay] = template;
       date.setDate(date.getDate() + 1);
@@ -121,6 +122,18 @@ export default function CreatePlanSection({
     });
   };
 
+  const handleToggleDisable = (date: string) => {
+    setPlan({
+      ...plan,
+      [date]: {
+        ...plan[date],
+        disabled: Object.keys(plan[date]).includes("disabled")
+          ? !plan[date].disabled ?? true
+          : true,
+      },
+    });
+  };
+
   const handleAssignMember = (
     e: React.ChangeEvent<HTMLSelectElement>,
     date: string
@@ -138,7 +151,7 @@ export default function CreatePlanSection({
       toast.success(
         `Nice, your plan for ${MONTHS[selectedMonth]} was saved successfully.`
       );
-      handleReload(router);
+      router.push(`/groups/${groupID}/COS/${selectedMonth}`);
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -174,7 +187,7 @@ export default function CreatePlanSection({
               </FormInputContainer>
               <InnerContainer className="items-start max-h-[50vh]">
                 {Object.keys(plan).map((date: string) => {
-                  const { day, month, type } = plan[date];
+                  const { day, month, type, disabled } = plan[date];
                   const newScore =
                     Number(memberPoints[plan[date].memberID]) +
                     Number(COS_TYPES[type]);
@@ -184,13 +197,13 @@ export default function CreatePlanSection({
                       className="w-full p-3 border-b-[1px] border-custom-light-text"
                     >
                       <div className="flex items-center justify-between gap-2 mb-2">
-                        <div className="flex items-center justify-start gap-2">
-                          <h1 className="font-bold text-sm text-custom-dark-text">
-                            {day} {MONTHS[month]}
-                          </h1>
-                          {type === "weekend" && <Badge>WEEKEND</Badge>}
+                        <div>
+                          {type === "weekend" && (
+                            <Badge className="mb-2">WEEKEND</Badge>
+                          )}
                           {type === "public" && (
                             <Badge
+                              className="mb-2"
                               backgroundColor="bg-purple-50"
                               borderColor="border-purple-300"
                               textColor="text-purple-300"
@@ -198,16 +211,31 @@ export default function CreatePlanSection({
                               HOLIDAY
                             </Badge>
                           )}
+                          <div className="flex items-center justify-start gap-2">
+                            <h1 className="font-bold text-sm text-custom-dark-text">
+                              {day} {MONTHS[month]}
+                            </h1>
+                            <Toggle
+                              disable={() => handleToggleDisable(date)}
+                              disabled={disabled ?? false}
+                              enable={() => handleToggleDisable(date)}
+                            />
+                          </div>
                         </div>
-                        <p className="text-xs self-start items-end text-custom-grey-text">
-                          To earn: {COS_TYPES[type]}
-                        </p>
+                        {!disabled && (
+                          <div className="self-start">
+                            <p className="text-xs items-end text-custom-grey-text custom-red mb-1">
+                              To earn: {COS_TYPES[type]}
+                            </p>
+                          </div>
+                        )}
                       </div>
                       <FormInputContainer
                         inputName="assignMember"
                         labelText="Assign:"
                       >
                         <select
+                          disabled={disabled}
                           name="assignMember"
                           className="w-fit"
                           onChange={(e) => handleAssignMember(e, date)}
@@ -219,16 +247,20 @@ export default function CreatePlanSection({
                           ))}
                         </select>
                       </FormInputContainer>
-                      <h1 className="mt-2 text-sm font-bold text-custom-green">
-                        Points: {memberPoints[plan[date].memberID]} {" >> "}{" "}
-                        {newScore}
-                      </h1>
-                      <p
-                        onClick={() => togglePublicHols(date)}
-                        className="w-fit text-xs mt-2 text-custom-grey-text underline cursor-pointer hover:text-custom-primary"
-                      >
-                        Toggle as Public Holiday
-                      </p>
+                      {!disabled && (
+                        <>
+                          <h1 className="mt-2 text-sm font-bold text-custom-green">
+                            Points: {memberPoints[plan[date].memberID]} {" >> "}{" "}
+                            {newScore}
+                          </h1>
+                          <p
+                            onClick={() => togglePublicHols(date)}
+                            className="w-fit text-xs mt-2 text-custom-grey-text underline cursor-pointer hover:text-custom-primary"
+                          >
+                            Toggle as Public Holiday
+                          </p>
+                        </>
+                      )}
                     </div>
                   );
                 })}

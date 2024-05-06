@@ -12,6 +12,7 @@ export type CosDailyType = {
   day: number;
   month: number;
   type: "standard" | "friday" | "weekend" | "public";
+  disabled?: boolean;
   // points: number; inferred from COS type
 };
 

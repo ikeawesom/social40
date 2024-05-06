@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { getType } from "./CreatePlanSection";
 import Notice from "@/src/components/utils/Notice";
+import Toggle from "@/src/components/utils/Toggle";
 
 export default function MonthlyPlanList({
   sortedPlans,
@@ -87,20 +88,22 @@ export default function MonthlyPlanList({
   const getNewParticipantsScores = () => {
     let pointsObj = {} as { [memberID: string]: { old: number; new: number } };
     Object.keys(sortedPlans).forEach((date: string) => {
-      const { memberID, type } = sortedPlans[date];
+      const { memberID, type, disabled } = sortedPlans[date];
 
-      const oldPoint = Object.keys(pointsObj).includes(memberID)
-        ? pointsObj[memberID].new
-        : Number(membersOriginalScores[memberID]);
-      const newPoint = oldPoint + Number(COS_TYPES[type]);
+      if (!disabled) {
+        const oldPoint = Object.keys(pointsObj).includes(memberID)
+          ? pointsObj[memberID].new
+          : Number(membersOriginalScores[memberID]);
+        const newPoint = oldPoint + Number(COS_TYPES[type]);
 
-      if (Object.keys(pointsObj).includes(memberID)) {
-        pointsObj[memberID].new = newPoint;
-      } else {
-        pointsObj[memberID] = {
-          old: membersOriginalScores[memberID],
-          new: newPoint,
-        };
+        if (Object.keys(pointsObj).includes(memberID)) {
+          pointsObj[memberID].new = newPoint;
+        } else {
+          pointsObj[memberID] = {
+            old: membersOriginalScores[memberID],
+            new: newPoint,
+          };
+        }
       }
     });
     return sortScores(pointsObj);
@@ -117,6 +120,18 @@ export default function MonthlyPlanList({
     setPlans({
       ...plans,
       [date]: { ...plans[date], memberID: e.target.value },
+    });
+  };
+
+  const handleToggleDisable = (date: string) => {
+    setPlans({
+      ...plans,
+      [date]: {
+        ...plans[date],
+        disabled: Object.keys(plans[date]).includes("disabled")
+          ? !plans[date].disabled ?? true
+          : true,
+      },
     });
   };
 
@@ -308,7 +323,7 @@ export default function MonthlyPlanList({
       </div>
       <div className="w-full flex flex-col items-start justify-start gap-2">
         {Object.keys(plans).map((date: string) => {
-          const { day, memberID, month, type, finished, takenOver } =
+          const { day, memberID, month, type, finished, disabled } =
             plans[date];
           const points = COS_TYPES[type];
           const dutyOver = finished || confirmed;
@@ -317,35 +332,56 @@ export default function MonthlyPlanList({
             <DefaultCard className="w-full p-3" key={date}>
               <div className="flex items-center justify-between">
                 <div>
-                  {type === "weekend" && (
-                    <Badge className="mb-2">WEEKEND</Badge>
-                  )}
-                  {type === "public" && (
-                    <Badge
-                      className="mb-2"
-                      backgroundColor="bg-purple-50"
-                      borderColor="border-purple-300"
-                      textColor="text-purple-300"
-                    >
-                      HOLIDAY
-                    </Badge>
-                  )}
-                  <p
-                    className={twMerge(
-                      "text-xs text-custom-grey-text flex items-center justify-start mb-1",
-                      memberID !== ori[date].memberID &&
-                        "text-custom-dark-text font-bold"
+                  <div className="flex items-center justify-start gap-2">
+                    {type === "weekend" && (
+                      <Badge className="mb-2">WEEKEND</Badge>
                     )}
-                  >
-                    {day} {MONTHS[month]}
-                    {memberID !== ori[date].memberID && "*"}
-                  </p>
+                    {type === "public" && (
+                      <Badge
+                        className="mb-2"
+                        backgroundColor="bg-purple-50"
+                        borderColor="border-purple-300"
+                        textColor="text-purple-300"
+                      >
+                        HOLIDAY
+                      </Badge>
+                    )}
+                    {disabled && (
+                      <Badge
+                        className="mb-2"
+                        backgroundColor="bg-custom-light-red"
+                        borderColor="border-custom-red/30"
+                        textColor="text-custom-red"
+                      >
+                        DISABLED
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="flex items-center justify-start gap-2 mb-2">
+                    <p
+                      className={twMerge(
+                        "text-xs text-custom-grey-text flex items-center justify-start",
+                        memberID !== ori[date].memberID &&
+                          "text-custom-dark-text font-bold"
+                      )}
+                    >
+                      {day} {MONTHS[month]}
+                      {memberID !== ori[date].memberID && "*"}
+                    </p>
+                    <Toggle
+                      forceDisable={!unlocked || dutyOver}
+                      disable={() => handleToggleDisable(date)}
+                      disabled={disabled ?? false}
+                      enable={() => handleToggleDisable(date)}
+                    />
+                  </div>
                   {dutyOver ? (
                     <h1 className="font-bold text-custom-dark-text">
                       {memberID}
                     </h1>
                   ) : (
                     <select
+                      disabled={disabled}
                       onChange={(e) => onChangeMember(e, date)}
                       value={memberID}
                       className={twMerge(
@@ -360,7 +396,7 @@ export default function MonthlyPlanList({
                       ))}
                     </select>
                   )}
-                  {!dutyOver && (
+                  {!dutyOver && !disabled && (
                     <p
                       onClick={() => togglePublicHols(date)}
                       className={twMerge(
@@ -372,17 +408,19 @@ export default function MonthlyPlanList({
                     </p>
                   )}
                 </div>
-                <div className="self-start">
-                  {!dutyOver ? (
-                    <p className="text-xs text-custom-grey-text text-end mb-2">
-                      To earn: {points}
-                    </p>
-                  ) : (
-                    <p className="text-xs font-bold text-custom-green text-end mb-2">
-                      +{points} points
-                    </p>
-                  )}
-                </div>
+                {!disabled && (
+                  <div className="self-start">
+                    {!dutyOver ? (
+                      <p className="text-xs text-custom-grey-text text-end mb-2">
+                        To earn: {points}
+                      </p>
+                    ) : (
+                      <p className="text-xs font-bold text-custom-green text-end mb-2">
+                        +{points} points
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
               {allowed && (
                 <div className="flex items-center justify-end mt-2">
@@ -391,11 +429,13 @@ export default function MonthlyPlanList({
                       await handleFinishMember(date, memberID)
                     }
                     className="w-fit px-3"
-                    disabled={dutyOver || loading || !unlocked}
+                    disabled={dutyOver || loading || !unlocked || disabled}
                   >
                     {dutyOver
                       ? "Confirmed"
-                      : `Confirm Duty (+${points} points)`}
+                      : !disabled
+                      ? `Confirm Duty (+${points} points)`
+                      : "NO COS"}
                   </PrimaryButton>
                 </div>
               )}

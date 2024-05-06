@@ -2,6 +2,7 @@
 
 import DefaultCard from "@/src/components/DefaultCard";
 import Badge from "@/src/components/utils/Badge";
+import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 import { MONTHS } from "@/src/utils/constants";
 import { DateToString } from "@/src/utils/getCurrentDate";
 import {
@@ -50,34 +51,34 @@ export default function CosPlansSection({
                 Seems like there is no COS plan for this month...
               </p>
             </div>
-          ) : (
-            todayCOS && (
-              <DefaultCard>
-                {todayCOS.type === "weekend" && (
-                  <Badge className="mb-2">WEEKEND</Badge>
-                )}
-                {todayCOS.type === "public" && (
-                  <Badge
-                    className="mb-2"
-                    backgroundColor="bg-purple-50"
-                    borderColor="border-purple-300"
-                    textColor="text-purple-300"
-                  >
-                    HOLIDAY
-                  </Badge>
-                )}
-                <p className="text-xs text-custom-grey-text mb-1">
-                  COS for today, {dateStr}
-                </p>
-                <h1 className="font-bold">{todayCOS.memberID}</h1>
-                <Link
-                  className="text-xs underline text-custom-primary hover:opacity-70"
-                  href={`/groups/${cosData[curMonth].groupID}/COS/${curMonth}`}
+          ) : todayCOS ? (
+            <DefaultCard>
+              {todayCOS.type === "weekend" && (
+                <Badge className="mb-2">WEEKEND</Badge>
+              )}
+              {todayCOS.type === "public" && (
+                <Badge
+                  className="mb-2"
+                  backgroundColor="bg-purple-50"
+                  borderColor="border-purple-300"
+                  textColor="text-purple-300"
                 >
-                  See Monthly Plan
-                </Link>
-              </DefaultCard>
-            )
+                  HOLIDAY
+                </Badge>
+              )}
+              <p className="text-xs text-custom-grey-text mb-1">
+                COS for today, {dateStr}
+              </p>
+              <h1 className="font-bold">{todayCOS.memberID}</h1>
+              <Link
+                className="text-xs underline text-custom-primary hover:opacity-70"
+                href={`/groups/${cosData[curMonth].groupID}/COS/${curMonth}`}
+              >
+                See Monthly Plan
+              </Link>
+            </DefaultCard>
+          ) : (
+            <DefaultSkeleton className="h-[10vh]" />
           )}
           <div
             className={twMerge(

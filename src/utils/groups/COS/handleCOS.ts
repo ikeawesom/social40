@@ -2,19 +2,26 @@
 
 import { dbHandler } from "@/src/firebase/db";
 import handleResponses from "../../handleResponses";
-import { GROUP_SCHEMA } from "../../schemas/groups";
 import { COS_DAILY_SCHEMA, CosDailyType } from "../../schemas/cos";
 import { MEMBER_SCHEMA } from "../../schemas/members";
-import { getMemberPoints } from "./getMemberPoints";
+import { GROUP_SCHEMA } from "../../schemas/groups";
 
-export async function getParticipantsOriginalPoints(plan: {
-  [date: string]: CosDailyType;
-}) {
-  const participants = [] as string[];
-  Object.keys(plan).forEach((date: string) => {
-    const { memberID: id } = plan[date];
-    if (!participants.includes(id)) participants.push(id);
+export async function getParticipantsOriginalPoints(groupID: string) {
+  const { data, error } = await dbHandler.get({
+    col_name: "GROUPS",
+    id: groupID,
   });
+  if (error) return handleResponses({ status: false, error });
+
+  const groupData = data as GROUP_SCHEMA;
+  const { cos } = groupData;
+  if (!cos)
+    return handleResponses({
+      status: false,
+      error: "COS is disabled for this group.",
+    });
+
+  const participants = cos.members;
 
   const promiseArr = participants.map(async (id: string) => {
     const { data, error } = await dbHandler.get({ col_name: "MEMBERS", id });
@@ -99,7 +106,7 @@ export async function CreateCOSPlan(
 ) {
   try {
     const { error: pointsErr, data } = await getParticipantsOriginalPoints(
-      plan
+      groupID
     );
     if (pointsErr) throw new Error(pointsErr);
 
@@ -147,19 +154,11 @@ export async function EditCOSPlan(
   }
 ) {
   try {
-    const { error: pointsErr, data } = await getParticipantsOriginalPoints(
-      plans
-    );
-    if (pointsErr) throw new Error(pointsErr);
-
-    const oriScores = data;
-
     const { error } = await dbHandler.edit({
       col_name: `GROUPS/${groupID}/COS`,
       id: `${month}`,
       data: {
         plans,
-        membersOriginalScores: oriScores,
       },
     });
     if (error) throw new Error(error);
