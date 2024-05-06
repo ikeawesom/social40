@@ -62,10 +62,10 @@ export default async function GroupSettingsPage({
           <div className="w-full grid place-items-center">
             <div className="flex flex-col items-center justify-center gap-4 w-full max-w-[500px]">
               <EditGroupForm groupData={data} />
-              <PurgeMembersSection
+              {/* <PurgeMembersSection
                 groupID={groupID}
                 groupMembers={JSON.parse(JSON.stringify(groupMembers))}
-              />
+              /> */}
               {owner && <DeleteGroupSection groupData={data} />}
             </div>
           </div>
