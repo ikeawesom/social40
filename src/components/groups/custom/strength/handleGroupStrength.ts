@@ -11,7 +11,7 @@ export async function getUpdatedMembers(membersList: GroupDetailsType) {
     });
 
     if (error) return { id: null, bookedIn: null, pfp: null };
-    return { id: data.memberID, bookedIn: data.bookedIn, pfp: data.pfp ?? "" };
+    return { id: data.memberID, bookedIn: data.bookedIn, pfp: data.pfp ?? "", course: data.isOnCourse ?? false };
   });
 
   const resolvedArr = await Promise.all(promiseArr);
@@ -21,6 +21,7 @@ export async function getUpdatedMembers(membersList: GroupDetailsType) {
       ...membersList[item.id],
       bookedIn: item.bookedIn,
       pfp: item.pfp,
+      isOnCourse: item.course
     };
   });
 
