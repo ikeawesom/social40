@@ -3,7 +3,6 @@ import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useHADetails } from "@/src/hooks/groups/custom/useHADetails";
-import { GroupDetailsType } from "../GroupMembers";
 import {
   addReport,
   handleGroupMemberHA,
@@ -17,6 +16,7 @@ import {
   HA_REPORT_SCHEMA,
   isHAType,
 } from "@/src/utils/schemas/ha";
+import { GroupDetailsType } from "@/src/utils/schemas/groups";
 
 export default function HAForm({
   groupID,

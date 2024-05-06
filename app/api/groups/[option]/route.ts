@@ -1,4 +1,3 @@
-import { GroupDetailsType } from "@/src/components/groups/custom/GroupMembers";
 import { StatusListType } from "@/src/components/profile/StatsSection";
 import { dbHandler } from "@/src/firebase/db";
 import { WaitListData } from "@/src/hooks/groups/custom/requests/useGroupRequests";
@@ -6,7 +5,11 @@ import { getMethod } from "@/src/utils/API/getAPIMethod";
 import { getJoinedGroups } from "@/src/utils/groups/getJoinedGroups";
 import { getOwnedGroups } from "@/src/utils/groups/getOwnedGroups";
 import handleResponses from "@/src/utils/handleResponses";
-import { GROUP_MEMBERS_SCHEMA, GROUP_SCHEMA } from "@/src/utils/schemas/groups";
+import {
+  GROUP_MEMBERS_SCHEMA,
+  GROUP_SCHEMA,
+  GroupDetailsType,
+} from "@/src/utils/schemas/groups";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { WAITLIST_SCHEMA } from "@/src/utils/schemas/waitlist";
 import { NextRequest, NextResponse } from "next/server";

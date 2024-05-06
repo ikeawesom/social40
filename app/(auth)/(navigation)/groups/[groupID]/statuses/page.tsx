@@ -1,6 +1,4 @@
 import React from "react";
-import { GroupDetailsType } from "@/src/components/groups/custom/GroupMembers";
-import { GroupStatusType } from "@/src/components/groups/custom/GroupStrengthSection";
 import FullStatusList from "@/src/components/groups/custom/statuses/FullStatusList";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
@@ -8,7 +6,11 @@ import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { GROUP_ROLES_HEIRARCHY } from "@/src/utils/constants";
-import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
+import {
+  GROUP_MEMBERS_SCHEMA,
+  GroupDetailsType,
+  GroupStatusType,
+} from "@/src/utils/schemas/groups";
 import { cookies } from "next/headers";
 
 export default async function Page({

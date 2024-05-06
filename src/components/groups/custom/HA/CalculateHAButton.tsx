@@ -4,11 +4,11 @@ import React from "react";
 import Modal from "../../../utils/Modal";
 import PrimaryButton from "../../../utils/PrimaryButton";
 import Image from "next/image";
-import { GroupDetailsType } from "../GroupMembers";
 import { useHADetails } from "@/src/hooks/groups/custom/useHADetails";
 import HAForm from "./HAForm";
 import { twMerge } from "tailwind-merge";
 import ModalHeader from "@/src/components/utils/ModalHeader";
+import { GroupDetailsType } from "@/src/utils/schemas/groups";
 
 export default function CalculateHAButton({
   membersList,

@@ -2,7 +2,10 @@
 import React, { useState } from "react";
 import InnerContainer from "../../utils/InnerContainer";
 import GroupMemberTab from "./GroupMemberTab";
-import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
+import {
+  GROUP_MEMBERS_SCHEMA,
+  GroupDetailsType,
+} from "@/src/utils/schemas/groups";
 import useQueryObj from "@/src/hooks/useQueryObj";
 import QueryInput from "../../utils/QueryInput";
 import { twMerge } from "tailwind-merge";
@@ -15,10 +18,6 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { LoadingIconBright } from "../../utils/LoadingIcon";
 import SecondaryButton from "../../utils/SecondaryButton";
-
-export type GroupDetailsType = {
-  [memberID: string]: GROUP_MEMBERS_SCHEMA;
-};
 
 export default function GroupMembers({
   membersList,
