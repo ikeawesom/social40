@@ -23,7 +23,7 @@ export async function GroupActivitiesServer({
       <GroupActivities
         groupID={groupID}
         admin={admin}
-        activitiesData={groupActivitiesData}
+        activitiesData={JSON.parse(JSON.stringify(groupActivitiesData))}
       />
     );
   } catch (err: any) {
