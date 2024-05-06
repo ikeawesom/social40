@@ -268,6 +268,9 @@ export const GROUP_MEMBERS_SELECT_OPTIONS = {
   "Mark as On-Course": {
     withOwner: true,
   },
+  "Unmark as On-Course": {
+    withOwner: true,
+  },
   "Remove from Group": {
     withOwner: false,
   },
