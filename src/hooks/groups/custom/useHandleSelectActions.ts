@@ -36,7 +36,6 @@ export function useHandleSelectActions(groupID: string) {
         if (!res.status) throw new Error(res.error);
         toast.success("Successfully welcomed back selected members.");
         router.refresh();
-        handleReload(router);
       } catch (err: any) {
         toast.error(err.message);
       }
@@ -56,7 +55,6 @@ export function useHandleSelectActions(groupID: string) {
         if (!res.status) throw new Error(res.error);
         toast.success("Happy book out selected members!");
         router.refresh();
-        handleReload(router);
       } catch (err: any) {
         toast.error(err.message);
       }
@@ -77,7 +75,6 @@ export function useHandleSelectActions(groupID: string) {
         if (!res.status) throw new Error(res.error);
         toast.success("Great, we marked these members as on-course.");
         router.refresh();
-        handleReload(router);
       } catch (err: any) {
         toast.error(err.message);
       }
@@ -98,8 +95,6 @@ export function useHandleSelectActions(groupID: string) {
         if (!res.status) throw new Error(res.error);
         toast.success("Welcome back, members as on-course!");
         router.refresh();
-        handleReload(router);
-        setSelect({ members: [], state: false });
       } catch (err: any) {
         toast.error(err.message);
       }
@@ -117,7 +112,6 @@ export function useHandleSelectActions(groupID: string) {
         if (!res.status) throw new Error(res.error);
         toast.success("Goodbye to those members.");
         router.refresh();
-        handleReload(router);
       } catch (err: any) {
         toast.error(err.message);
       }
@@ -133,7 +127,6 @@ export function useHandleSelectActions(groupID: string) {
         if (!res.status) throw new Error(res.error);
         toast.success("Great, new admins here!");
         router.refresh();
-        handleReload(router);
       } catch (err: any) {
         toast.error(err.message);
       }
@@ -151,7 +144,6 @@ export function useHandleSelectActions(groupID: string) {
         if (!res.status) throw new Error(res.error);
         toast.success("Well, that was unfortunate for those members.");
         router.refresh();
-        handleReload(router);
       } catch (err: any) {
         toast.error(err.message);
       }
@@ -178,6 +170,8 @@ export function useHandleSelectActions(groupID: string) {
       } else if (actions === "Remove Admin") {
         await confirmRemAdmin();
       }
+      reset();
+      handleReload(router);
     } catch (err: any) {
       toast.error(err.message);
     }
