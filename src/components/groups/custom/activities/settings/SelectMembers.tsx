@@ -1,15 +1,12 @@
 import InnerContainer from "@/src/components/utils/InnerContainer";
 import LoadingIcon from "@/src/components/utils/LoadingIcon";
-import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import SelectMemberTab from "./SelectMemberTab";
-import { dbHandler } from "@/src/firebase/db";
-import handleResponses from "@/src/utils/handleResponses";
 import { twMerge } from "tailwind-merge";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import { GroupDetailsType } from "../../GroupMembers";
+import { GroupDetailsType } from "@/src/utils/schemas/groups";
 
 export default function SelectMembers({
   setMembers,

@@ -3,11 +3,11 @@ import HRow from "@/src/components/utils/HRow";
 import { ActiveTimestamp } from "@/src/utils/getCurrentDate";
 import React from "react";
 import { twMerge } from "tailwind-merge";
-import { GroupStatusType } from "../GroupStrengthSection";
 import useQueryObj from "@/src/hooks/useQueryObj";
 import QueryInput from "@/src/components/utils/QueryInput";
 import StatusDetails from "../StatusDetails";
 import Link from "next/link";
+import { GroupStatusType } from "@/src/utils/schemas/groups";
 
 export default function FullStatusList({
   groupStatusList,

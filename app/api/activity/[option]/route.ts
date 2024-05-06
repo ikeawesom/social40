@@ -1,4 +1,3 @@
-import { GroupDetailsType } from "@/src/components/groups/custom/GroupMembers";
 import { dbHandler } from "@/src/firebase/db";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { getMethod } from "@/src/utils/API/getAPIMethod";

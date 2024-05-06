@@ -1,5 +1,14 @@
 import { Timestamp } from "firebase/firestore";
 import getCurrentDate from "../getCurrentDate";
+import { STATUS_SCHEMA } from "./statuses";
+
+export type GroupStatusType = {
+  [memberID: string]: { [statusID: string]: STATUS_SCHEMA };
+};
+
+export type GroupDetailsType = {
+  [memberID: string]: GROUP_MEMBERS_SCHEMA;
+};
 
 export type GROUP_SCHEMA = {
   groupID: string;

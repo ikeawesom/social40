@@ -5,9 +5,9 @@ import { LoadingIconBright } from "../../utils/LoadingIcon";
 import { Onboarding } from "@/src/utils/onboarding";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import { GroupDetailsType } from "./GroupMembers";
 import { handleReload } from "../../navigation/HeaderBar";
 import { useRouter } from "next/navigation";
+import { GroupDetailsType } from "@/src/utils/schemas/groups";
 
 export default function InviteMemberForm({
   groupID,
