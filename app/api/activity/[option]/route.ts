@@ -44,6 +44,14 @@ function isActive(a: Timestamp, start: Timestamp, end: Timestamp) {
   return date <= endDate && date >= startDate;
 }
 
+function isActivePlusOne(a: Timestamp, start: Timestamp, end: Timestamp) {
+  const date = TimestampToDate(a);
+  const startDate = TimestampToDate(start);
+  const endDate = TimestampToDate(end);
+  endDate.setDate(endDate.getDate() + 1);
+  return date <= endDate && date >= startDate;
+}
+
 export async function POST(req: NextRequest) {
   const { option } = getMethod(req.url);
   const fetchedData = await req.json();
@@ -55,7 +63,7 @@ export async function POST(req: NextRequest) {
     // console.log(input);
 
     const addMembers = fetchedData.addMembers as {
-      check: boolean;
+      check: string;
       members: string[];
     };
 
@@ -127,7 +135,7 @@ export async function POST(req: NextRequest) {
     // get list of group members
     let membersData: string[];
 
-    if (!addMembers.check) {
+    if (addMembers.check === "all") {
       const resX = await dbHandler.getSpecific({
         path: `GROUPS/${groupID}/MEMBERS`,
         orderCol: "dateJoined",
@@ -141,9 +149,27 @@ export async function POST(req: NextRequest) {
 
       membersData = Object.keys(resX.data);
       console.log(`3. data: ${membersData}`);
-    } else {
+    } else if (addMembers.check === "custom") {
       membersData = addMembers.members;
       console.log(`2: not check ${membersData}`);
+    } else if (addMembers.check === "admins") {
+      const { error, data } = await dbHandler.getSpecific({
+        path: `GROUPS/${groupID}/MEMBERS`,
+        field: "role",
+        criteria: "!=",
+        value: "member",
+      });
+      if (error) return NextResponse.json({ status: false, error });
+      membersData = Object.keys(data);
+    } else {
+      const { error, data } = await dbHandler.getSpecific({
+        path: `GROUPS/${groupID}/MEMBERS`,
+        field: "role",
+        criteria: "==",
+        value: "member",
+      });
+      if (error) return NextResponse.json({ status: false, error });
+      membersData = Object.keys(data);
     }
 
     const promiseList = membersData.map(async (selectedMemberID: string) => {
@@ -159,7 +185,7 @@ export async function POST(req: NextRequest) {
       const statusData = res.data as { [statusID: string]: STATUS_SCHEMA };
       if (Object.keys(statusData).length > 0) {
         console.log("Checking:", selectedMemberID);
-        const { startDate, endDate, statusTitle } =
+        const { startDate, endDate, statusTitle, mc } =
           statusData[Object.keys(statusData)[0]];
         console.log(
           "Latest status:",
@@ -174,19 +200,32 @@ export async function POST(req: NextRequest) {
           TimestampToDate(endDate)
         );
 
-        if (!isActive(timestamp, startDate, endDate)) {
-          // if status is over, add as participant
+        const activeStatus = isActive(timestamp, startDate, endDate);
+        // handles MC/status plus 1
+        const statusPlusOne = isActivePlusOne(timestamp, startDate, endDate);
+        if (!activeStatus && !statusPlusOne) {
+          // if status/MC is over, add as participant
           const res = await helperParticipate(selectedMemberID, fetchedID);
           if (!res.status)
             return handleResponses({ status: false, error: res.error });
         } else {
           // status is current, add to fall out
+          let reason = "";
+
+          if (activeStatus) {
+            // status is active
+            reason = `${statusTitle} (${
+              TimestampToDateString(startDate).split(" ")[0]
+            }-${TimestampToDateString(endDate).split(" ")[0]})`;
+          } else {
+            // status is +1
+            reason = `${mc ? "MC + 1" : `STATUS + 1: ${statusTitle}`}`;
+          }
+
           const to_add = {
             activityID: fetchedID,
             memberID: selectedMemberID,
-            reason: `${statusTitle} (${
-              TimestampToDateString(startDate).split(" ")[0]
-            }-${TimestampToDateString(endDate).split(" ")[0]})`,
+            reason,
             verifiedBy: memberID,
           } as FALLOUTS_SCHEMA;
 
