@@ -17,6 +17,7 @@ import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 import { GroupStrengthServer } from "@/src/components/groups/custom/strength/GroupStrengthServer";
 import DefaultCard from "@/src/components/DefaultCard";
 import StrengthSectionSkeleton from "@/src/components/groups/custom/strength/StrengthSectionSkeleton";
+import GroupLeaderboard from "@/src/components/groups/custom/GroupLeaderboard";
 
 export async function generateMetadata({
   params,
@@ -97,8 +98,18 @@ export default async function GroupPage({
                     />
                   </Suspense>
                 </DefaultCard>
-
-                {/* <GroupLeaderboard memberData={groupMembersData} /> */}
+                <DefaultCard className="w-full">
+                  <h1 className="text-custom-dark-text font-semibold">
+                    Overall Leaderboard
+                  </h1>
+                  <Suspense fallback={<DefaultSkeleton className="h-[30vh]" />}>
+                    <GroupLeaderboard
+                      curMember={memberID}
+                      groupID={groupID}
+                      admin={admin}
+                    />
+                  </Suspense>
+                </DefaultCard>
                 <Suspense fallback={<DefaultSkeleton className="h-[30vh]" />}>
                   <GroupActivitiesServer groupID={groupID} admin={admin} />
                 </Suspense>

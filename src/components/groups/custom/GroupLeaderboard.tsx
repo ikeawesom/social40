@@ -1,15 +1,52 @@
-import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import React from "react";
-import ComingSoonCard from "../../utils/ComingSoonCard";
+import { dbHandler } from "@/src/firebase/db";
+import ErrorSection from "../../utils/ErrorSection";
+import { GroupDetailsType } from "@/src/utils/schemas/groups";
+import { getMemberPoints } from "@/src/utils/groups/leaderboard";
+import GroupLeaderboardClient from "./leaderboard/GroupLeaderboardClient";
 
-export type MembersDataType = {
-  [memberID: string]: MEMBER_SCHEMA;
-};
+export default async function GroupLeaderboard({
+  admin,
+  groupID,
+  curMember,
+}: {
+  admin: boolean;
+  groupID: string;
+  curMember: string;
+}) {
+  try {
+    const { error, data } = await dbHandler.getSpecific({
+      path: `GROUPS/${groupID}/MEMBERS`,
+      orderCol: "memberID",
+      ascending: true,
+    });
+    if (error) throw new Error(error);
 
-export type LeaderboardType = {
-  memberData: { [memberID: string]: MEMBER_SCHEMA };
-};
+    const groupMembers = data as GroupDetailsType;
+    const { data: scoreData, error: scoreError } = await getMemberPoints(
+      groupMembers
+    );
 
-export default function GroupLeaderboard({ memberData }: LeaderboardType) {
-  return <ComingSoonCard text="Leaderboard" />;
+    if (scoreError) throw new Error(scoreError);
+
+    const sortedScores = {} as GroupDetailsType;
+
+    Object.keys(scoreData)
+      .sort((a, b) => scoreData[b].points - scoreData[a].points)
+      .filter((id: string) => scoreData[id].points > 0)
+      .forEach((id: string) => {
+        sortedScores[id] = scoreData[id];
+      });
+
+    return (
+      <GroupLeaderboardClient
+        groupID={groupID}
+        admin={admin}
+        curMember={curMember}
+        scores={JSON.parse(JSON.stringify(sortedScores))}
+      />
+    );
+  } catch (err: any) {
+    return <ErrorSection errorMsg={err.message} />;
+  }
 }
