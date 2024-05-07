@@ -385,13 +385,18 @@ export type DefaultStatsType = {
   scoringType: "ASC" | "DESC";
   criteria?: any;
   timing?: boolean;
+  weightage: number;
+  bestScore: number;
 };
+
 export const DEFAULT_STATS = {
   IPPT: {
     name: "IPPT",
     featured: true,
     scoringType: "DESC",
     criteria: { gold: 85, silver: 75, pass: 61 },
+    weightage: 35,
+    bestScore: 100,
   },
   ATP: {
     name: "ATP",
@@ -401,9 +406,25 @@ export const DEFAULT_STATS = {
       mm: 29,
       pass: 21,
     },
+    weightage: 25,
+    bestScore: 100,
   },
-  VOC: { name: "VOC", featured: true, scoringType: "ASC", timing: true },
-  SOC: { name: "SOC", featured: false, scoringType: "ASC", timing: true },
+  VOC: {
+    name: "VOC",
+    featured: true,
+    scoringType: "ASC",
+    timing: true,
+    weightage: 15,
+    bestScore: 1000,
+  },
+  SOC: {
+    name: "SOC",
+    featured: false,
+    scoringType: "ASC",
+    timing: true,
+    weightage: 5,
+    bestScore: 1000,
+  },
 } as { [type: string]: DefaultStatsType };
 
 export type GAME_TYPE = {
