@@ -42,8 +42,9 @@ export async function calculateIPPT(stats: IPPTStats) {
     // if (!res.ok) throw new Error(route);
 
     // const data = await res.json();
-    const ageGroup = getAgeGroup(age)
-    const result = getIpptScore(ageGroup, pushups, situps, timing);
+    const ageGroup = getAgeGroup(age);
+    const updatedTime = Math.ceil((timing + 1) / 10) * 10;
+    const result = getIpptScore(ageGroup, pushups, situps, updatedTime);
 
     return handleResponses({ data: result.score });
   } catch (err: any) {
