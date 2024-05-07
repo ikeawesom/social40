@@ -6,6 +6,7 @@ import { ATP_SCHEMA, IPPT_SCHEMA, VOC_SCHEMA } from "../schemas/statistics";
 import { DateToTimestamp } from "../getCurrentDate";
 import { BADGE_SCHEMA, MEMBER_SCHEMA } from "../schemas/members";
 import { BADGE_COLORS } from "../constants";
+import { getAgeGroup, getIpptScore } from "ippt-utils";
 
 export async function getMembersData() {
   try {
@@ -30,19 +31,21 @@ export async function calculateIPPT(stats: IPPTStats) {
   const { age, pushups, situps, timing } = stats;
 
   try {
-    const route = `https://ippt.vercel.app/api?${new URLSearchParams({
-      age: `${age}`,
-      pushups: `${pushups}`,
-      situps: `${situps}`,
-      run: `${timing}`,
-    })}`;
+    // const route = `https://ippt.vercel.app/api?${new URLSearchParams({
+    //   age: `${age}`,
+    //   pushups: `${pushups}`,
+    //   situps: `${situps}`,
+    //   run: `${timing}`,
+    // })}`;
 
-    const res = await fetch(route);
-    if (!res.ok) throw new Error(route);
+    // const res = await fetch(route);
+    // if (!res.ok) throw new Error(route);
 
-    const data = await res.json();
+    // const data = await res.json();
+    const ageGroup = getAgeGroup(age)
+    const result = getIpptScore(ageGroup, pushups, situps, timing);
 
-    return handleResponses({ data: data.total });
+    return handleResponses({ data: result.score });
   } catch (err: any) {
     return handleResponses({ status: false, error: err.message });
   }
