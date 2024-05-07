@@ -88,17 +88,26 @@ export async function first(groupID: string, input: any, memberID: string) {
   }
 }
 
-async function filterMembers(members: string[]) {
+async function filterMembers(members: string[], allowOnCourse?: boolean) {
   let temp = [] as string[];
 
   const promiseArr = members.map(async (id: string) => {
     const { data } = await dbHandler.get({ col_name: "MEMBERS", id });
     const memberData = data as MEMBER_SCHEMA;
     const { isOnCourse, bookedIn } = memberData;
-    if (isOnCourse || !bookedIn) {
-      // do not join activity
+    if (allowOnCourse) {
+      if (isOnCourse) {
+        // allow those on course to join
+        return handleResponses({ data: id });
+      }
       return handleResponses();
     }
+
+    if (isOnCourse || !bookedIn) {
+      // those on course or not booked in will not join activity
+      return handleResponses();
+    }
+
     return handleResponses({ data: id });
   });
 
@@ -128,6 +137,16 @@ export async function second(
       if (!resX.status) throw new Error(resX.error);
 
       membersData = await filterMembers(Object.keys(resX.data));
+    } else if (addMembers.check === "course") {
+      const resX = await dbHandler.getSpecific({
+        path: `GROUPS/${groupID}/MEMBERS`,
+        orderCol: "dateJoined",
+        ascending: false,
+      });
+
+      if (!resX.status) throw new Error(resX.error);
+
+      membersData = await filterMembers(Object.keys(resX.data), true);
     } else if (addMembers.check === "custom") {
       membersData = await filterMembers(addMembers.members);
     } else if (addMembers.check === "admins") {

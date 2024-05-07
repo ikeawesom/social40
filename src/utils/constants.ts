@@ -333,6 +333,10 @@ export const GROUP_ACTIVITY_PARTICIPANTS = {
     text: "Only Members",
     isDefault: false,
   },
+  course: {
+    text: "Members On Course",
+    isDefault: false,
+  },
   custom: {
     text: "Custom",
     isDefault: false,
