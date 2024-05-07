@@ -25,7 +25,6 @@ export default function JoinedActivitiesList({
     const now = new Date();
     const { activityDate } = activitiesData[id];
     const date = new Date(activityDate.seconds * 1000);
-    date.setHours(date.getHours() + 8);
     return !showAll ? date >= now : true;
   });
 
