@@ -30,7 +30,6 @@ export function useHandleSelectActions(groupID: string) {
         "Are you sure you want to book in selected members of this group?"
       )
     ) {
-      setLoading(true);
       try {
         const res = await handleModify(select.members, { bookedIn: true });
         if (!res.status) throw new Error(res.error);
@@ -39,7 +38,6 @@ export function useHandleSelectActions(groupID: string) {
       } catch (err: any) {
         toast.error(err.message);
       }
-      setLoading(false);
     }
   };
 
@@ -49,7 +47,6 @@ export function useHandleSelectActions(groupID: string) {
         "Are you sure you want to book out selected members of this group?"
       )
     ) {
-      setLoading(true);
       try {
         const res = await handleModify(select.members, { bookedIn: false });
         if (!res.status) throw new Error(res.error);
@@ -58,7 +55,6 @@ export function useHandleSelectActions(groupID: string) {
       } catch (err: any) {
         toast.error(err.message);
       }
-      setLoading(false);
     }
   };
 
@@ -66,7 +62,6 @@ export function useHandleSelectActions(groupID: string) {
     if (
       confirm("Are you sure you want to mark the selected members on-course?")
     ) {
-      setLoading(true);
       try {
         const res = await handleModify(select.members, {
           isOnCourse: true,
@@ -78,7 +73,6 @@ export function useHandleSelectActions(groupID: string) {
       } catch (err: any) {
         toast.error(err.message);
       }
-      setLoading(false);
     }
   };
 
@@ -86,7 +80,6 @@ export function useHandleSelectActions(groupID: string) {
     if (
       confirm("Are you sure you want to unmark the selected members on-course?")
     ) {
-      setLoading(true);
       try {
         const res = await handleModify(select.members, {
           isOnCourse: false,
@@ -98,7 +91,6 @@ export function useHandleSelectActions(groupID: string) {
       } catch (err: any) {
         toast.error(err.message);
       }
-      setLoading(false);
     }
   };
 
@@ -106,7 +98,6 @@ export function useHandleSelectActions(groupID: string) {
     if (
       confirm("Are you sure you want to remove these members from this group?")
     ) {
-      setLoading(true);
       try {
         const res = await removeMembers(groupID, select.members);
         if (!res.status) throw new Error(res.error);
@@ -115,13 +106,11 @@ export function useHandleSelectActions(groupID: string) {
       } catch (err: any) {
         toast.error(err.message);
       }
-      setLoading(false);
     }
   };
 
   const confirmAdmin = async () => {
     if (confirm("Are you sure you want to make these members admins?")) {
-      setLoading(true);
       try {
         const res = await manageAdmin(groupID, select.members, true);
         if (!res.status) throw new Error(res.error);
@@ -130,7 +119,6 @@ export function useHandleSelectActions(groupID: string) {
       } catch (err: any) {
         toast.error(err.message);
       }
-      setLoading(false);
     }
   };
 
@@ -138,7 +126,6 @@ export function useHandleSelectActions(groupID: string) {
     if (
       confirm("Are you sure you want to remove permissions from these members?")
     ) {
-      setLoading(true);
       try {
         const res = await manageAdmin(groupID, select.members, false);
         if (!res.status) throw new Error(res.error);
@@ -147,7 +134,6 @@ export function useHandleSelectActions(groupID: string) {
       } catch (err: any) {
         toast.error(err.message);
       }
-      setLoading(false);
     }
   };
 
@@ -170,13 +156,13 @@ export function useHandleSelectActions(groupID: string) {
       } else if (actions === "Remove Admin") {
         await confirmRemAdmin();
       }
-      reset();
-      handleReload(router);
     } catch (err: any) {
       toast.error(err.message);
+    } finally {
+      reset();
+      setLoading(false);
+      handleReload(router);
     }
-    setLoading(false);
-    reset();
   };
   return { loading, select, handleSubmit, setSelect, setActions };
 }
