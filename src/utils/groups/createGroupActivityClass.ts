@@ -74,6 +74,7 @@ export class createGroupActivityClass {
 
     try {
       const { error } = await third(
+        this.config.addMembers.check,
         memberID,
         fetchedID,
         membersData,
