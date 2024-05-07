@@ -111,6 +111,7 @@ export default function ActivityWaitlist({
       toast.error(err.message);
     }
     setLoading(false);
+    handleReload(router);
   };
 
   const massReject = async () => {
@@ -135,6 +136,7 @@ export default function ActivityWaitlist({
       toast.error(err.message);
     }
     setLoading(false);
+    handleReload(router);
   };
 
   return (
