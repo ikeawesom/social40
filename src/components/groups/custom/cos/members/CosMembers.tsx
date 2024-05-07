@@ -54,7 +54,7 @@ export default function CosMembers({
                 <>
                   <div className="flex flex-col items-center justify-start mt-2 gap-1">
                     <Link
-                      className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
+                      className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-150"
                       href={`/members/${clickedID}`}
                     >
                       View Profile
@@ -64,7 +64,7 @@ export default function CosMembers({
                     {admins.includes(memberID) && (
                       <div className="flex flex-col items-center justify-start mt-2 gap-1 cursor-pointer">
                         <div
-                          className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
+                          className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-150"
                           onClick={() => toggleAdmin(clickedID)}
                         >
                           {admins.includes(clickedID)
@@ -76,7 +76,7 @@ export default function CosMembers({
                     {admins.includes(memberID) && (
                       <div className="flex flex-col items-center justify-start mt-2 gap-1 cursor-pointer">
                         <div
-                          className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
+                          className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-150"
                           onClick={() => handleRemove(clickedID)}
                         >
                           Remove as Participant
@@ -90,7 +90,7 @@ export default function CosMembers({
                 <div className="flex flex-col items-center justify-start mt-2 gap-1 cursor-pointer">
                   <div
                     className={twMerge(
-                      "w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200",
+                      "w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-150",
                       modify && "bg-custom-light-text"
                     )}
                     onClick={() => {

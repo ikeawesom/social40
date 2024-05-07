@@ -65,7 +65,7 @@ export default async function GroupFeedCard({
       <DefaultCard className="w-full flex flex-col items-start justify-start">
         <Link
           href={`/groups/${groupID}`}
-          className="text-xs text-custom-grey-text duration-200 hover:opacity-70"
+          className="text-xs text-custom-grey-text duration-150 hover:opacity-70"
         >
           {groupID}
         </Link>
@@ -77,7 +77,7 @@ export default async function GroupFeedCard({
             }/activity?${new URLSearchParams({
               id: activityID,
             })}`}
-            className="text-start font-semibold text-lg text-custom-dark-text duration-200 hover:opacity-70"
+            className="text-start font-semibold text-lg text-custom-dark-text duration-150 hover:opacity-70"
           >
             {activityTitle}
           </Link>

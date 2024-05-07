@@ -37,7 +37,7 @@ export default function HomeHeaderBar({
           key="announcements"
           href={`/home?${new URLSearchParams({ activity: "announcements" })}`}
           className={twMerge(
-            "text-custom-grey-text font-semibold flex-1 px-4 py-2 border-b-2 text-center duration-200 hover:bg-custom-light-text",
+            "text-custom-grey-text font-semibold flex-1 px-4 py-2 border-b-2 text-center duration-150 hover:bg-custom-light-text",
             params === "announcements" &&
               "border-b-custom-primary text-custom-primary"
           )}
@@ -48,7 +48,7 @@ export default function HomeHeaderBar({
           key="groups"
           href={`/home?${new URLSearchParams({ activity: "groups" })}`}
           className={twMerge(
-            "text-custom-grey-text font-semibold flex-1 px-4 py-2 border-b-2 text-center duration-200 hover:bg-custom-light-text",
+            "text-custom-grey-text font-semibold flex-1 px-4 py-2 border-b-2 text-center duration-150 hover:bg-custom-light-text",
             params === "groups" && "border-b-custom-primary text-custom-primary"
           )}
         >

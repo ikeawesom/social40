@@ -76,7 +76,7 @@ export default async function ActivityRemarkData({
             href={`/groups/${groupID}/activity?${new URLSearchParams({
               id: activityID,
             })}`}
-            className="text-sm text-custom-grey-text text-start duration-200 hover:opacity-70"
+            className="text-sm text-custom-grey-text text-start duration-150 hover:opacity-70"
           >
             {activityTitle}
           </Link>

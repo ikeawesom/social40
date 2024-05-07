@@ -50,7 +50,7 @@ export default function FalloutsCard({
               return (
                 <div
                   key={memberID}
-                  className="w-full flex flex-col items-start justify-center py-2 px-3 duration-200 hover:bg-custom-light-text"
+                  className="w-full flex flex-col items-start justify-center py-2 px-3 duration-150 hover:bg-custom-light-text"
                 >
                   <h1 className="text-custom-dark-text font-semibold text-sm">
                     {displayName}

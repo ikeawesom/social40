@@ -193,7 +193,7 @@ export default function ParticipantContainer({
                     handleClick(mem);
                   }}
                   className={twMerge(
-                    "cursor-pointer w-full flex flex-col items-start justify-center py-2 px-3 duration-200 hover:bg-custom-light-text",
+                    "cursor-pointer w-full flex flex-col items-start justify-center py-2 px-3 duration-150 hover:bg-custom-light-text",
                     selected.state && selected.selectedIDs.includes(mem)
                       ? "bg-custom-light-orange hover:brightness-90"
                       : "hover:bg-custom-light-text"

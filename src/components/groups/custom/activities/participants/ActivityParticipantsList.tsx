@@ -103,7 +103,7 @@ export default function ActivityParticipantsList({
               <div className="flex flex-col items-center justify-start mt-2 gap-1">
                 <div
                   className={twMerge(
-                    "w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200",
+                    "w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-150",
                     fall.status && "bg-custom-light-text"
                   )}
                   onClick={() => setFall({ ...fall, status: !fall.status })}
@@ -138,7 +138,7 @@ export default function ActivityParticipantsList({
                 )}
               </div>
               <div
-                className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
+                className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-150"
                 onClick={async () => await handleFallout("Others")}
               >
                 Others
@@ -156,7 +156,7 @@ export default function ActivityParticipantsList({
               <ModalHeader close={() => setCurMember("")} heading={curMember} />
               <div className="flex flex-col items-center justify-start mt-2 gap-1">
                 <Link
-                  className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
+                  className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-150"
                   href={route}
                 >
                   View Profile
@@ -165,7 +165,7 @@ export default function ActivityParticipantsList({
               {admin && (
                 <div className="flex flex-col items-center justify-start mt-2 gap-1">
                   <div
-                    className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
+                    className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-150"
                     onClick={() => setCfm(true)}
                   >
                     Kick From Activity

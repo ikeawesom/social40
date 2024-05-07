@@ -54,7 +54,7 @@ export default function FullStatusList({
                         key={statusID}
                         href={`/members/${memberID}/${statusID}`}
                         className={twMerge(
-                          "rounded-md w-full flex px-3 py-2 bg-white max-[320px]:flex-col max-[320px]:items-start items-center max-[320px]:gap-1 gap-2 justify-between hover:bg-custom-light-text duration-200",
+                          "rounded-md w-full flex px-3 py-2 bg-white max-[320px]:flex-col max-[320px]:items-start items-center max-[320px]:gap-1 gap-2 justify-between hover:bg-custom-light-text duration-150",
                           active ? "bg-custom-light-red" : ""
                         )}
                       >

@@ -30,7 +30,7 @@ export default function RequestedUser({
   return (
     <div
       className={twMerge(
-        "w-full rounded-lg py-2 px-3 shadow-sm hover:bg-custom-light-text duration-300 gap-1 flex flex-col items-start justify-center",
+        "w-full rounded-lg py-2 px-3 shadow-sm hover:bg-custom-light-text duration-150 gap-1 flex flex-col items-start justify-center",
         className
       )}
     >
@@ -42,7 +42,7 @@ export default function RequestedUser({
             : memberID}
         </p>
       </div>
-      <div className="flex items-center justify-between gap-4 duration-200 w-full">
+      <div className="flex items-center justify-between gap-4 duration-150 w-full">
         <PrimaryButton
           className="py-1 border-[1px] border-transparent"
           onClick={() => accept(memberID, groupID, displayName, password)}

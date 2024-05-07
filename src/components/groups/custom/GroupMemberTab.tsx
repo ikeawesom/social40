@@ -125,7 +125,7 @@ export default function GroupMemberTab({
               <ModalHeader close={() => setShow(false)} heading={displayName} />
               <div className="flex flex-col items-center justify-start mt-2 gap-1">
                 <Link
-                  className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
+                  className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-150"
                   href={route}
                 >
                   View Profile
@@ -136,14 +136,14 @@ export default function GroupMemberTab({
                   (aboveAdmin ? (
                     <div
                       onClick={() => handleAdmin(false)}
-                      className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
+                      className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-150"
                     >
                       Remove as Group Admin
                     </div>
                   ) : (
                     <div
                       onClick={() => handleAdmin(true)}
-                      className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
+                      className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-150"
                     >
                       Make Group Admin
                     </div>
@@ -151,7 +151,7 @@ export default function GroupMemberTab({
                 {curAdmin && !owner && !same && (
                   <div
                     onClick={handleRemove}
-                    className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-200"
+                    className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-150"
                   >
                     Remove from Group
                   </div>

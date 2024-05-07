@@ -47,7 +47,7 @@ export default function DeleteGroupSection({
     <>
       <SecondaryButton
         onClick={() => setShowModal(true)}
-        className="border-custom-red text-custom-red font-semibold hover:bg-custom-red hover:text-custom-light-text duration-200"
+        className="border-custom-red text-custom-red font-semibold hover:bg-custom-red hover:text-custom-light-text duration-150"
       >
         Delete Group
       </SecondaryButton>

@@ -46,7 +46,7 @@ export default function AuthPage({
                 Already have an account?{" "}
                 <span>
                   <Link
-                    className="text-orange-500 hover:brightness-90 duration-300"
+                    className="text-orange-500 hover:brightness-90 duration-150"
                     href={`?${new URLSearchParams({ new_user: "false" })}`}
                   >
                     Sign in.
@@ -61,7 +61,7 @@ export default function AuthPage({
                 New here?{" "}
                 <span>
                   <Link
-                    className="text-orange-500 hover:brightness-90 duration-300"
+                    className="text-orange-500 hover:brightness-90 duration-150"
                     href={`?${new URLSearchParams({ new_user: "true" })}`}
                   >
                     Sign up.

@@ -176,11 +176,11 @@ export default function ActivityWaitlist({
               return (
                 <div
                   key={memberID}
-                  className="w-full flex flex-col items-start justify-center py-2 px-3 duration-200 hover:bg-custom-light-text"
+                  className="w-full flex flex-col items-start justify-center py-2 px-3 duration-150 hover:bg-custom-light-text"
                 >
                   <Link
                     href={`/members/${memberID}`}
-                    className="text-custom-dark-text text-sm font-semibold hover:opacity-70 duration-200"
+                    className="text-custom-dark-text text-sm font-semibold hover:opacity-70 duration-150"
                   >
                     {memberID}
                   </Link>

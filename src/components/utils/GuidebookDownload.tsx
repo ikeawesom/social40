@@ -9,7 +9,7 @@ export default function GuidebookDownload() {
         <span>
           <Link
             href="https://bit.ly/social40-guidebook"
-            className="text-custom-primary font-semibold text-sm hover:underline duration-200"
+            className="text-custom-primary font-semibold text-sm hover:underline duration-150"
           >
             Social40 Guidebook
           </Link>

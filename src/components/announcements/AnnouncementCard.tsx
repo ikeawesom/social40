@@ -46,7 +46,7 @@ export default function AnnouncementCard({
       <div className="w-full flex items-center justify-between gap-2 pb-1">
         <Link
           href={`/members/${createdBy}`}
-          className="text-xs text-custom-grey-text duration-200 hover:opacity-70"
+          className="text-xs text-custom-grey-text duration-150 hover:opacity-70"
         >
           {createdBy}
         </Link>

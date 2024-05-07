@@ -23,7 +23,7 @@ export default function ModalHeader({
         <h1 className="text-custom-dark-text font-semibold">
           {heading ?? "Modal Heading"}
         </h1>
-        <button onClick={close} className="hover:opacity-75 duration-200">
+        <button onClick={close} className="hover:opacity-75 duration-150">
           <Image
             src="/icons/icon_close.svg"
             alt="Close"

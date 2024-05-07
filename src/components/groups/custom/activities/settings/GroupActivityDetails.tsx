@@ -23,7 +23,7 @@ export default async function GroupActivityDetails({
         <div className="w-full flex flex-col items-start justify-center">
           <Link
             href={`/groups/${activityData.groupID}`}
-            className="text-xs text-custom-grey-text duration-200 hover:opacity-70 mb-1"
+            className="text-xs text-custom-grey-text duration-150 hover:opacity-70 mb-1"
           >
             {activityData.groupID}
           </Link>

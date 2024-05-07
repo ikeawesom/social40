@@ -85,7 +85,7 @@ export default async function ActivityRemarks({
                     remarkid: remarkID,
                   })}`}
                   className={twMerge(
-                    "w-full flex flex-col items-start justify-center py-2 px-3 duration-200 ",
+                    "w-full flex flex-col items-start justify-center py-2 px-3 duration-150 ",
                     !status
                       ? "bg-custom-light-red hover:brightness-95"
                       : "hover:bg-custom-light-text"

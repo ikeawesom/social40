@@ -53,7 +53,7 @@ export default function ResetPasswordButton({
       </p>
       <SecondaryButton
         onClick={handleReset}
-        className="grid place-items-center text-centerborder-custom-red text-custom-red font-semibold hover:bg-custom-red hover:text-custom-light-text duration-200"
+        className="grid place-items-center text-centerborder-custom-red text-custom-red font-semibold hover:bg-custom-red hover:text-custom-light-text duration-150"
         disabled={loading}
       >
         {loading ? (

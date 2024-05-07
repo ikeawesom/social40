@@ -179,7 +179,7 @@ Keys drawn timing: 0001`;
         !pendingPrevFinish &&
         curDayCOS === curMemberID && (
           <WhatsappShareButton url={shareWS}>
-            <span className="flex flex-row items-center justify-between gap-1 px-3 py-2 rounded-md shadow-sm bg-white  duration-200 border-[1px] cursor-pointer hover:brightness-95">
+            <span className="flex flex-row items-center justify-between gap-1 px-3 py-2 rounded-md shadow-sm bg-white  duration-150 border-[1px] cursor-pointer hover:brightness-95">
               <img src="/icons/whatsapp.svg" alt="" width={20} />
               <p className="text-sm">Send HOTO message</p>
             </span>
