@@ -1,5 +1,6 @@
 import HRow from "@/src/components/utils/HRow";
 import { VERSION_MAP } from "@/src/utils/constants";
+import Link from "next/link";
 import React from "react";
 
 export default function PatchNotesPage() {
@@ -10,7 +11,7 @@ export default function PatchNotesPage() {
           Version Updates
         </h1>
         {Object.keys(VERSION_MAP).map((versionNumber: string) => {
-          const { version, desc, title, updates, date } =
+          const { version, desc, title, updates, date, link } =
             VERSION_MAP[versionNumber];
           const emptyUpdates = updates.length === 0;
           return (
@@ -36,6 +37,15 @@ export default function PatchNotesPage() {
                       {update}
                     </li>
                   ))}
+                  {link && (
+                    <Link
+                      className="mt-2 underline text-custom-primary text-sm hover:opacity-70"
+                      href={link}
+                      target="_blank"
+                    >
+                      View Demo
+                    </Link>
+                  )}
                 </ul>
               )}
             </div>

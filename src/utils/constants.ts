@@ -108,6 +108,7 @@ export const VERSION_MAP = {
     ],
     adminOnly: true,
     date: "07/05/2024",
+    link: "https://social40.notion.site/v1-3-0-Select-Actions-70acf7745c114483abcc64d5c3703500",
   },
   "1.2.1": {
     version: "1.2.1",
@@ -120,6 +121,7 @@ export const VERSION_MAP = {
       "Members can earn Social40 points through these personal statistics",
     ],
     date: "06/05/2024",
+    link: "https://social40.notion.site/v1-2-1-Personal-Statistics-c520a2d031a34faab09d8596b2e15d0f?pvs=74",
   },
   "1.2.0": {
     version: "1.2.0",
@@ -288,6 +290,7 @@ export const VERSION_MAP = {
     updates: string[];
     adminOnly?: boolean;
     date: string;
+    link?: string;
   };
 };
 
