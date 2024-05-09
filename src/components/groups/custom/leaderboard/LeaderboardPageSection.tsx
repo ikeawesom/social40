@@ -204,7 +204,11 @@ export async function LeaderboardPageSection({
         <div className="w-full flex items-start justify-start gap-2 flex-col">
           {Object.keys(remainingMembers).map((id: string) => {
             return (
-              <LeaderboardMember curMember={curMember} member={scoresPFP[id]} />
+              <LeaderboardMember
+                key={id}
+                curMember={curMember}
+                member={scoresPFP[id]}
+              />
             );
           })}
           {emptyMembers && !emptyPodium && (
