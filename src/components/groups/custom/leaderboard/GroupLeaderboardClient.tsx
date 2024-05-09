@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import LeaderboardTab from "./LeaderboardTab";
 import LeaderboardTabSkeleton from "./LeaderboardTabSkeleton";
 import Link from "next/link";
+import ErrorSection from "@/src/components/utils/ErrorSection";
 
 type ScoreCatType = "ALL" | "COMMANDERS" | "MEMBERS";
 const ScoreCat = ["ALL", "COMMANDERS", "MEMBERS"];
@@ -91,22 +92,28 @@ export default function GroupLeaderboardClient({
       {top !== undefined && filtered.length > 0 ? (
         <>
           <div className="w-full flex items-start justify-start gap-2 flex-col mt-4">
-            {filtered.map((id: string) => {
-              return (
-                <LeaderboardTab
-                  curMember={curMember}
-                  isBest={id === Object.keys(top)[0]}
-                  key={id}
-                  member={top[id]}
-                />
-              );
-            })}
+            <LeaderboardTab
+              curMember={curMember}
+              type={"GOLD"}
+              member={top[filtered[0]]}
+            />
+            <LeaderboardTab
+              curMember={curMember}
+              type={"SILVER"}
+              member={top[filtered[1]]}
+            />
+            <LeaderboardTab
+              curMember={curMember}
+              type={"BRONZE"}
+              member={top[filtered[2]]}
+            />
           </div>
           {!filtered.includes(curMember) &&
             ((admin && cat !== "MEMBERS") || (!admin && cat === "MEMBERS")) && (
               <div className="w-full flex-col items-center justify-center">
                 <p className="text-center text-custom-grey-text">:</p>
                 <LeaderboardTab
+                  type="DEFAULT"
                   className="shadow-sm border-[1px] border-custom-light-text/50 hover:bg-custom-light-text/70"
                   curMember={curMember}
                   member={top[curMember]}
@@ -114,6 +121,10 @@ export default function GroupLeaderboardClient({
               </div>
             )}
         </>
+      ) : filtered.length === 0 ? (
+        <ErrorSection>
+          Oops, looks like nobody here is qualified on the leaderboard!
+        </ErrorSection>
       ) : (
         <div className="flex flex-col w-full items-start justify-start gap-3 mt-4">
           <LeaderboardTabSkeleton isBest />
@@ -123,7 +134,7 @@ export default function GroupLeaderboardClient({
       )}
       <Link
         className="text-start underline text-sm duration-150 text-custom-grey-text hover:text-custom-primary mt-3"
-        href={`/groups/${groupID}/leaderboards`}
+        href={`/groups/${groupID}/leaderboard`}
       >
         View all leaderboards
       </Link>
