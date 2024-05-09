@@ -1,4 +1,17 @@
 export const VERSION_MAP = {
+  "1.4.0": {
+    version: "1.4.0",
+    title: "Leaderboard",
+    desc: "Strive for the best and get to the top! Based on the new statistics feature that members add, they can compete within groups to be at the top! Through these friendly competition, we aim to build and instill motivation within soldiers to do their best in their training. Who knows, the top scorers may be granted extra privileges? ",
+    updates: [
+      "Leaderboard shown in respective groups",
+      "Top 3 best scorers for each scoring category will be displayed on a podium",
+      "Non-scorers will not be displayed",
+    ],
+    adminOnly: true,
+    date: "07/05/2024",
+    link: "https://social40.notion.site/v1-4-0-Leaderboard-566f1d15044d4ff88382b4a2e010caa2",
+  },
   "1.3.0": {
     version: "1.3.0",
     title: "Select Actions",
