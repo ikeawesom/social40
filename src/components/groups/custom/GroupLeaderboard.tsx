@@ -2,7 +2,10 @@ import React from "react";
 import { dbHandler } from "@/src/firebase/db";
 import ErrorSection from "../../utils/ErrorSection";
 import { GroupDetailsType } from "@/src/utils/schemas/groups";
-import { getMemberPoints } from "@/src/utils/groups/leaderboard";
+import {
+  appendMemberPFP,
+  getMemberOverallPoints,
+} from "@/src/utils/groups/leaderboard";
 import GroupLeaderboardClient from "./leaderboard/GroupLeaderboardClient";
 
 export default async function GroupLeaderboard({
@@ -23,19 +26,26 @@ export default async function GroupLeaderboard({
     if (error) throw new Error(error);
 
     const groupMembers = data as GroupDetailsType;
-    const { data: scoreData, error: scoreError } = await getMemberPoints(
+    const { data: scoreData, error: scoreError } = await getMemberOverallPoints(
       groupMembers
     );
-
     if (scoreError) throw new Error(scoreError);
+
+    const { data: sortedPFPScoresRes, error: pfpErr } = await appendMemberPFP(
+      scoreData
+    );
+
+    if (pfpErr) throw new Error(pfpErr);
 
     const sortedScores = {} as GroupDetailsType;
 
-    Object.keys(scoreData)
-      .sort((a, b) => scoreData[b].points - scoreData[a].points)
-      .filter((id: string) => scoreData[id].points > 0)
+    Object.keys(sortedPFPScoresRes)
+      .sort(
+        (a, b) => sortedPFPScoresRes[b].points - sortedPFPScoresRes[a].points
+      )
+      .filter((id: string) => sortedPFPScoresRes[id].points > 0)
       .forEach((id: string) => {
-        sortedScores[id] = scoreData[id];
+        sortedScores[id] = sortedPFPScoresRes[id];
       });
 
     return (

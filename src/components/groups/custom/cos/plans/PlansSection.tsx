@@ -5,7 +5,7 @@ import { COS_MONTHLY_SCHEMA } from "@/src/utils/schemas/cos";
 import React from "react";
 import CreatePlanSection from "./CreatePlanSection";
 import CosPlansSection from "./CosPlansSection";
-import { getMemberPoints } from "@/src/utils/groups/COS/getMemberPoints";
+import { getMemberCOSPoints } from "@/src/utils/groups/COS/getMemberCOSPoints";
 
 export default async function PlansSection({
   groupID,
@@ -29,7 +29,7 @@ export default async function PlansSection({
 
     const cosData = data as COS_MONTHLY_SCHEMA;
 
-    const { data: memberRes, error: memberError } = await getMemberPoints(
+    const { data: memberRes, error: memberError } = await getMemberCOSPoints(
       members
     );
 

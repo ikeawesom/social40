@@ -2,7 +2,7 @@
 
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import { dbHandler } from "@/src/firebase/db";
-import { getMemberPoints } from "@/src/utils/groups/COS/getMemberPoints";
+import { getMemberCOSPoints } from "@/src/utils/groups/COS/getMemberCOSPoints";
 import {
   FinishCosDuty,
   GetDisplayName,
@@ -45,7 +45,7 @@ export default function CosHOTOSection({
     setLoading(true);
 
     try {
-      const { error: oldScoreErr, data: scoreRes } = await getMemberPoints([
+      const { error: oldScoreErr, data: scoreRes } = await getMemberCOSPoints([
         curMemberID,
       ]);
       if (oldScoreErr) throw new Error(oldScoreErr);
