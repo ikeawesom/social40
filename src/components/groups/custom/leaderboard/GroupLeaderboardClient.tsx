@@ -73,6 +73,8 @@ export default function GroupLeaderboardClient({
     filtered = Object.keys(top).splice(0, 3);
   }
 
+  const curMemberPoints = top ? top[curMember].points ?? 0 : 0;
+
   return (
     <div className="w-full flex items-start justify-start flex-col gap-0 mt-2">
       <div className="w-full flex items-center justify-center rounded-md overflow-hidden shadow-sm border-[1px] border-custom-light-text">
@@ -109,7 +111,8 @@ export default function GroupLeaderboardClient({
             />
           </div>
           {!filtered.includes(curMember) &&
-            ((admin && cat !== "MEMBERS") || (!admin && cat === "MEMBERS")) && (
+            ((admin && cat !== "MEMBERS") || (!admin && cat === "MEMBERS")) &&
+            curMemberPoints > 0 && (
               <div className="w-full flex-col items-center justify-center">
                 <p className="text-center text-custom-grey-text">:</p>
                 <LeaderboardTab
