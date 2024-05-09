@@ -4,15 +4,16 @@ import Image from "next/image";
 import { contentfulImageLoader } from "@/src/components/profile/edit/ProfilePicSection";
 import { twMerge } from "tailwind-merge";
 import Link from "next/link";
+import { PodiumType } from "@/src/utils/constants";
 
 export default function LeaderboardTab({
   member,
-  isBest,
+  type,
   curMember,
   className,
 }: {
   member: GROUP_MEMBERS_SCHEMA;
-  isBest?: boolean;
+  type: PodiumType;
   curMember: string;
   className?: string;
 }) {
@@ -22,9 +23,15 @@ export default function LeaderboardTab({
       <div
         className={twMerge(
           "relative overflow-hidden flex items-center justify-between gap-4 bg-gradient-to-r to-transparent p-3 rounded-lg w-full duration-150",
-          isBest
+          type === "GOLD"
             ? "from-custom-orange/50 hover:brightness-105"
-            : !sameMember && "from-custom-grey-text/20 hover:brightness-75",
+            : type === "SILVER"
+            ? "from-gray-200"
+            : type === "BRONZE"
+            ? "from-[#d3795d]"
+            : !sameMember
+            ? "from-custom-grey-text/20 hover:brightness-75"
+            : "bg-white",
           className
         )}
       >
@@ -32,7 +39,7 @@ export default function LeaderboardTab({
           <div
             className={twMerge(
               "overflow-hidden rounded-full shadow-lg relative flex items-center justify-center",
-              isBest ? "w-[70px] h-[70px]" : "w-[50px] h-[50px]"
+              type === "GOLD" ? "w-[70px] h-[70px]" : "w-[45px] h-[45px]"
             )}
           >
             <Image
@@ -48,12 +55,13 @@ export default function LeaderboardTab({
             <Link
               href={`/members/${member.memberID}`}
               className={twMerge(
-                "font-bold text-lg hover:opacity-70 duration-150 flex items-center justify-start gap-1",
-                sameMember && "text-custom-primary"
+                "font-bold hover:opacity-70 duration-150 flex items-center justify-start gap-1",
+                sameMember && "text-custom-primary",
+                type === "GOLD" ? "text-lg" : "text-base"
               )}
             >
               {member.displayName}
-              {isBest && (
+              {type === "GOLD" && (
                 <Image
                   className="drop-shadow-md brightness-105 -translate-y-1"
                   alt="Crown"
@@ -63,13 +71,20 @@ export default function LeaderboardTab({
                 />
               )}
             </Link>
-            <p className="text-sm text-custom-grey-text">{member.memberID}</p>
+            <p
+              className={twMerge(
+                "text-custom-grey-text",
+                type === "GOLD" ? "text-sm" : "text-xs"
+              )}
+            >
+              {member.memberID}
+            </p>
           </div>
         </div>
         <h1 className="font-bold text-xl text-custom-primary">
           {member.points}
         </h1>
-        {isBest && <div className="shimmer slow" />}
+        {type === "GOLD" && <div className="shimmer slow" />}
       </div>
     );
   }
