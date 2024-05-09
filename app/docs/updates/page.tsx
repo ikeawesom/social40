@@ -1,5 +1,5 @@
 import HRow from "@/src/components/utils/HRow";
-import { VERSION_MAP } from "@/src/utils/constants";
+import { VERSION_MAP } from "@/src/utils/versions";
 import Link from "next/link";
 import React from "react";
 

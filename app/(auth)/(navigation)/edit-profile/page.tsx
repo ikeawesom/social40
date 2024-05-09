@@ -7,13 +7,14 @@ import HRow from "@/src/components/utils/HRow";
 import SignoutButton from "@/src/components/utils/SignoutButton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import { ROLES_HIERARCHY, VERSION_NUMBER } from "@/src/utils/constants";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import NewMemberSection from "@/src/components/profile/edit/new-member/NewMemberSection";
 import Link from "next/link";
 import ProfilePicSection from "@/src/components/profile/edit/ProfilePicSection";
+import { VERSION_NUMBER } from "@/src/utils/versions";
+import { ROLES_HIERARCHY } from "@/src/utils/constants";
 
 export default async function EditProfilePage() {
   const cookieStore = cookies();
