@@ -57,7 +57,7 @@ export default function PodiumMember({
         </div>
         {isBest && (
           <Image
-            className="absolute -top-10 left-1/2 -translate-x-1/2 z-40 drop-shadow-md"
+            className="absolute -top-10 left-1/2 -translate-x-1/2 z-30 drop-shadow-md"
             alt="Crown"
             width={60}
             height={60}
