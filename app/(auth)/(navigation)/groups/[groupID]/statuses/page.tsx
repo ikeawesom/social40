@@ -12,6 +12,7 @@ import {
   GroupStatusType,
 } from "@/src/utils/schemas/groups";
 import { cookies } from "next/headers";
+import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 
 export default async function Page({
   params,
@@ -93,13 +94,11 @@ export default async function Page({
       return (
         <>
           <HeaderBar back text={`All Statuses`} />
-          <div className="grid place-items-center">
-            <div className="max-w-[500px] w-full">
-              <div className="flex flex-col items-center justify-start w-full gap-6">
-                <FullStatusList groupStatusList={sortedGroupStatusList} />
-              </div>
+          <PageCenterWrapper>
+            <div className="flex flex-col items-center justify-start w-full gap-6">
+              <FullStatusList groupStatusList={sortedGroupStatusList} />
             </div>
-          </div>
+          </PageCenterWrapper>
         </>
       );
     } catch (err: any) {

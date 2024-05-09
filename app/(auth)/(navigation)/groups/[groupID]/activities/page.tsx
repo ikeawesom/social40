@@ -1,6 +1,7 @@
 import AllActivities from "@/src/components/groups/custom/activities/AllActivities";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
+import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 import { dbHandler } from "@/src/firebase/db";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
@@ -35,14 +36,12 @@ export default async function GroupPage({
   return (
     <>
       <HeaderBar back text={`Activities`} />
-      <div className="grid place-items-center">
-        <div className="max-w-[500px] w-full">
-          <AllActivities
-            activities={JSON.parse(JSON.stringify(groupActivities))}
-            memberID={memberID}
-          />
-        </div>
-      </div>
+      <PageCenterWrapper>
+        <AllActivities
+          activities={JSON.parse(JSON.stringify(groupActivities))}
+          memberID={memberID}
+        />
+      </PageCenterWrapper>
     </>
   );
 }

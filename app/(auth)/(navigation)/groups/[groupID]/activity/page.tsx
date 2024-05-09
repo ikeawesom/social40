@@ -10,6 +10,7 @@ import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { cookies } from "next/headers";
 import React from "react";
+import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 
 export default async function ActivityPage({
   params,
@@ -55,31 +56,26 @@ export default async function ActivityPage({
       return (
         <>
           <HeaderBar back text={title} />
-          <div className="w-full grid place-items-center">
-            <div className="max-w-[500px] w-full">
-              {view ? (
-                remark ? (
-                  <ActivityRemarkData
-                    remarkID={query["remarkid"]}
-                    groupID={groupID}
-                    activityID={query["id"]}
-                  />
-                ) : (
-                  <GroupActivityData
-                    activityID={query["id"]}
-                    groupID={groupID}
-                  />
-                )
+          <PageCenterWrapper>
+            {view ? (
+              remark ? (
+                <ActivityRemarkData
+                  remarkID={query["remarkid"]}
+                  groupID={groupID}
+                  activityID={query["id"]}
+                />
               ) : (
-                <DefaultCard className="w-full">
-                  <CreateGroupActivityForm
-                    memberID={memberID}
-                    groupID={groupID}
-                  />
-                </DefaultCard>
-              )}
-            </div>
-          </div>
+                <GroupActivityData activityID={query["id"]} groupID={groupID} />
+              )
+            ) : (
+              <DefaultCard className="w-full">
+                <CreateGroupActivityForm
+                  memberID={memberID}
+                  groupID={groupID}
+                />
+              </DefaultCard>
+            )}
+          </PageCenterWrapper>
         </>
       );
     } catch (err) {

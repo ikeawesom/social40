@@ -10,6 +10,7 @@ import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { Suspense } from "react";
+import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 
 export const metadata: Metadata = {
   title: "COS",
@@ -50,42 +51,40 @@ export default async function GroupCOSPage({
     return (
       <>
         <HeaderBar text={`COS Plan for ${groupID}`} back />
-        <div className="grid place-items-center">
-          <div className="max-w-[500px] w-full flex flex-col items-start justify-start gap-4">
-            <Suspense
-              fallback={
-                <div className="flex flex-col w-full items-start justify-start gap-2">
-                  <DefaultSkeleton className="h-[30px] max-w-[150px]" />
-                  <DefaultSkeleton className="h-[14vh]" />
-                </div>
-              }
-            >
-              <PlansSection
-                curMemberID={memberID}
-                groupID={groupID}
-                members={cos.members ?? []}
-                admins={admins}
-              />
-            </Suspense>
-            <Suspense
-              fallback={
-                <div className="flex flex-col w-full items-start justify-start gap-2">
-                  <DefaultSkeleton className="h-[30px] max-w-[150px]" />
-                  <DefaultSkeleton className="h-[15px]" />
-                  <DefaultSkeleton className="h-[15px]" />
-                  <DefaultSkeleton className="h-[15px]" />
-                </div>
-              }
-            >
-              <COSMembersSection
-                curMemberID={memberID}
-                groupData={JSON.parse(JSON.stringify(groupData))}
-                admins={admins}
-                members={cos.members ?? []}
-              />
-            </Suspense>
-          </div>
-        </div>
+        <PageCenterWrapper className="flex flex-col items-start justify-start gap-4">
+          <Suspense
+            fallback={
+              <div className="flex flex-col w-full items-start justify-start gap-2">
+                <DefaultSkeleton className="h-[30px] max-w-[150px]" />
+                <DefaultSkeleton className="h-[14vh]" />
+              </div>
+            }
+          >
+            <PlansSection
+              curMemberID={memberID}
+              groupID={groupID}
+              members={cos.members ?? []}
+              admins={admins}
+            />
+          </Suspense>
+          <Suspense
+            fallback={
+              <div className="flex flex-col w-full items-start justify-start gap-2">
+                <DefaultSkeleton className="h-[30px] max-w-[150px]" />
+                <DefaultSkeleton className="h-[15px]" />
+                <DefaultSkeleton className="h-[15px]" />
+                <DefaultSkeleton className="h-[15px]" />
+              </div>
+            }
+          >
+            <COSMembersSection
+              curMemberID={memberID}
+              groupData={JSON.parse(JSON.stringify(groupData))}
+              admins={admins}
+              members={cos.members ?? []}
+            />
+          </Suspense>
+        </PageCenterWrapper>
       </>
     );
   } catch (err: any) {
