@@ -2,16 +2,36 @@ import { dbHandler } from "@/src/firebase/db";
 import handleResponses from "../handleResponses";
 import { GROUP_MEMBERS_SCHEMA, GroupDetailsType } from "../schemas/groups";
 import { MEMBER_SCHEMA } from "../schemas/members";
-import { DEFAULT_STATS } from "../constants";
+import { DEFAULT_STATS, DUTY_WEIGHTAGE, TOTAL_DUTY_POINTS } from "../constants";
 
 type MemberScoresType = {
   type: string;
   score: number;
 };
 
-const TOTAL_DUTY_POINTS = 30;
+export async function appendMemberPFP(members: GroupDetailsType) {
+  try {
+    let temp = {} as GroupDetailsType;
+    const promiseArr = Object.keys(members).map(async (id: string) => {
+      const { data, error } = await dbHandler.get({ col_name: "MEMBERS", id });
+      if (error) return handleResponses({ status: false, error });
 
-export async function getMemberPoints(members: GroupDetailsType) {
+      const memberData = data as MEMBER_SCHEMA;
+      const { pfp, memberID } = memberData;
+      return handleResponses({ data: { memberID, pfp } });
+    });
+    const resolvedArr = await Promise.all(promiseArr);
+    resolvedArr.forEach((item: any) => {
+      if (item.error) throw new Error(item.error);
+      const { memberID, pfp } = item.data;
+      temp[memberID] = { ...members[memberID], pfp };
+    });
+    return handleResponses({ data: temp });
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
+}
+export async function getMemberOverallPoints(members: GroupDetailsType) {
   try {
     const temp = {} as GroupDetailsType;
     const promiseArr = Object.keys(members).map(async (id: string) => {
@@ -20,7 +40,6 @@ export async function getMemberPoints(members: GroupDetailsType) {
 
       const memberData = data as MEMBER_SCHEMA;
       const {
-        pfp,
         dutyPoints: { cos: cosPoints, gd: gdPoints },
       } = memberData;
 
@@ -59,9 +78,8 @@ export async function getMemberPoints(members: GroupDetailsType) {
         score += (typeScore / 100) * weightage;
       });
 
-      score +=
-        (cosPoints / TOTAL_DUTY_POINTS) * 10 +
-        (gdPoints / TOTAL_DUTY_POINTS) * 10;
+      score += (cosPoints / TOTAL_DUTY_POINTS) * DUTY_WEIGHTAGE;
+      // + (gdPoints / TOTAL_DUTY_POINTS) * DUTY_WEIGHTAGE;
 
       score = Math.ceil(score);
 
@@ -72,7 +90,6 @@ export async function getMemberPoints(members: GroupDetailsType) {
         memberID,
         role,
         points: score,
-        pfp,
       } as GROUP_MEMBERS_SCHEMA;
 
       return handleResponses({
@@ -106,4 +123,53 @@ export async function calculateScore(path: string, id: string) {
     return data[bestIndex].score as number;
   }
   return 0;
+}
+
+export async function calculateMembersScores(path: string, members: string[]) {
+  try {
+    const promiseArr = members.map(async (id: string) => {
+      const score = await calculateScore(path, id);
+      return handleResponses({ data: { id, score } });
+    });
+    const resolvedArr = await Promise.all(promiseArr);
+    const temp = {} as {
+      [id: string]: { id: string; score: number; pfp: string | undefined };
+    };
+    resolvedArr.forEach((item: any) => {
+      const { id } = item.data;
+      temp[id] = item.data;
+    });
+    return handleResponses({ data: temp });
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
+}
+
+export async function getMembersCOSLeaderboardPoints(members: string[]) {
+  try {
+    const temp = {} as {
+      [id: string]: { points: number; pfp: string | undefined };
+    };
+    const promiseArr = members.map(async (id: string) => {
+      const { data, error } = await dbHandler.get({
+        col_name: "MEMBERS",
+        id,
+      });
+      if (error) return handleResponses({ status: false, error });
+      return handleResponses({ data });
+    });
+
+    const resolvedArr = await Promise.all(promiseArr);
+
+    resolvedArr.forEach((item: any) => {
+      if (!item.status) throw new Error(item.error);
+      const data = item.data as MEMBER_SCHEMA;
+      const points = data.dutyPoints?.cos ?? 0;
+      const { pfp } = data;
+      temp[data.memberID] = { points, pfp };
+    });
+    return handleResponses({ data: temp });
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
 }

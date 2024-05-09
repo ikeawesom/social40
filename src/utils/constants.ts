@@ -414,18 +414,63 @@ export const DEFAULT_STATS = {
     featured: true,
     scoringType: "ASC",
     timing: true,
-    weightage: 15,
-    bestScore: 1000,
+    weightage: 20,
+    bestScore: 960,
   },
   SOC: {
     name: "SOC",
     featured: false,
     scoringType: "ASC",
     timing: true,
-    weightage: 5,
-    bestScore: 1000,
+    weightage: 10,
+    bestScore: 284,
   },
 } as { [type: string]: DefaultStatsType };
+
+export const LEADERBOARD_CATS = {
+  OVERALL: {
+    name: "OVERALL",
+    timing: false,
+  },
+  IPPT: {
+    name: "IPPT",
+    timing: false,
+  },
+  ATP: {
+    name: "ATP",
+    timing: false,
+  },
+  VOC: {
+    name: "VOC",
+    timing: true,
+  },
+  SOC: {
+    name: "SOC",
+    timing: true,
+  },
+  COS: {
+    name: "COS",
+    timing: false,
+  },
+  "guard-duty": {
+    name: "Guard Duty",
+    timing: false,
+  },
+} as LeaderboardCatType;
+
+export type LeaderboardCatType = {
+  [type: string]: { name: string; timing: boolean };
+};
+
+export type PodiumType = "GOLD" | "SILVER" | "BRONZE" | "DEFAULT";
+export const PODIUM_INDEX_TYPE = {
+  0: "SILVER",
+  1: "GOLD",
+  2: "BRONZE",
+} as { [index: number]: string };
+
+export const TOTAL_DUTY_POINTS = 30;
+export const DUTY_WEIGHTAGE = 10;
 
 export type GAME_TYPE = {
   id: string;
