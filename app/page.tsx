@@ -1,10 +1,9 @@
 import Hero from "@/src/components/Hero";
 import PageWrapper from "@/src/components/PageWrapper";
 import FeedbackModal from "@/src/components/feedback/FeedbackModal";
-import GuidebookDownload from "@/src/components/utils/GuidebookDownload";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import InstallButton from "@/src/utils/InstallButton";
-import { VERSION_DESC, VERSION_NUMBER } from "@/src/utils/constants";
+import { VERSION_NUMBER } from "@/src/utils/versions";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import Image from "next/image";

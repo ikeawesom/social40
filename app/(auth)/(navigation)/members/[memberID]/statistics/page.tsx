@@ -3,6 +3,7 @@ import StatisticSkeleton from "@/src/components/members/statistics/StatisticSkel
 import StatsScrollSection from "@/src/components/members/statistics/StatsScrollSection";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
+import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 import { dbHandler } from "@/src/firebase/db";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { cookies } from "next/headers";
@@ -36,14 +37,12 @@ export default async function MemberPage({
     return (
       <>
         <HeaderBar text={`${clickedMemberID}'s Statistics`} back />
-        <div className="grid place-items-center">
-          <div className="flex flex-col items-stretch justify-start gap-2 max-w-[500px] w-full">
-            <StatsScrollSection id={clickedMemberID} />
-            <Suspense key={statType} fallback={<StatisticSkeleton />}>
-              <StatisticFeed id={clickedMemberID} type={statType} />
-            </Suspense>
-          </div>
-        </div>
+        <PageCenterWrapper className="flex flex-col items-stretch justify-start gap-2">
+          <StatsScrollSection id={clickedMemberID} />
+          <Suspense key={statType} fallback={<StatisticSkeleton />}>
+            <StatisticFeed id={clickedMemberID} type={statType} />
+          </Suspense>
+        </PageCenterWrapper>
       </>
     );
   } catch (err: any) {

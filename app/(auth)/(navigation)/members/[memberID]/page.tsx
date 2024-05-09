@@ -19,6 +19,7 @@ import React, { Suspense } from "react";
 import Image from "next/image";
 import HRow from "@/src/components/utils/HRow";
 import MainStatisticsSection from "@/src/components/members/statistics/MainStatisticsSection";
+import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 
 export async function generateMetadata({
   params,
@@ -88,54 +89,53 @@ export default async function MemberPage({
       return (
         <>
           <HeaderBar text={clickedMemberID} back />
-          <div className="grid place-items-center">
-            <div className="flex flex-col items-stretch justify-start gap-4 max-w-[500px] w-full">
-              <DefaultCard className="flex flex-col items-start justify-center gap-2">
-                {pfp && (
-                  <div className="w-full flex items-center justify-center py-2 relative rounded-lg mb-1 overflow-hidden">
+          <PageCenterWrapper className="flex flex-col items-stretch justify-start gap-4">
+            <DefaultCard className="flex flex-col items-start justify-center gap-2">
+              {pfp && (
+                <div className="w-full flex items-center justify-center py-2 relative rounded-lg mb-1 overflow-hidden">
+                  <Image
+                    src={pfp}
+                    fill
+                    sizes="100%"
+                    alt="Profile"
+                    className="object-cover brightness-50 hover:brightness-75 duration-150"
+                  />
+                  <div className="overflow-hidden rounded-full shadow-2xl sm:w-40 sm:h-40 w-32 h-32 relative flex items-center justify-center">
                     <Image
                       src={pfp}
                       fill
                       sizes="100%"
                       alt="Profile"
-                      className="object-cover brightness-50 hover:brightness-75 duration-150"
+                      className="object-cover"
                     />
-                    <div className="overflow-hidden rounded-full shadow-2xl sm:w-40 sm:h-40 w-32 h-32 relative flex items-center justify-center">
-                      <Image
-                        src={pfp}
-                        fill
-                        sizes="100%"
-                        alt="Profile"
-                        className="object-cover"
-                      />
-                    </div>
                   </div>
-                )}
-                <div className="flex w-full items-center justify-between">
-                  <MemberPoints points={viewMemberData.points} />
                 </div>
-                <div className="flex flex-col items-start justify-center">
-                  <h1 className="text-xl text-custom-dark-text flex items-center justify-start gap-2">
-                    {rankName} <BookedStatus status={viewMemberData.bookedIn} />
-                  </h1>
+              )}
+              <div className="flex w-full items-center justify-between">
+                <MemberPoints points={viewMemberData.points} />
+              </div>
+              <div className="flex flex-col items-start justify-center">
+                <h1 className="text-xl text-custom-dark-text flex items-center justify-start gap-2">
+                  {rankName} <BookedStatus status={viewMemberData.bookedIn} />
+                </h1>
+                <p className="text-sm text-custom-grey-text">
+                  {viewMemberData.memberID}
+                </p>
+                {sameMember && (
                   <p className="text-sm text-custom-grey-text">
-                    {viewMemberData.memberID}
+                    Created on:{" "}
+                    {TimestampToDateString(viewMemberData.createdOn)}
                   </p>
-                  {sameMember && (
-                    <p className="text-sm text-custom-grey-text">
-                      Created on:{" "}
-                      {TimestampToDateString(viewMemberData.createdOn)}
-                    </p>
-                  )}
-                </div>
-                <MemberBadges badges={viewMemberData.badges} />
-                <HRow />
-                <MainStatisticsSection
-                  curID={memberID}
-                  clickedMemberID={clickedMemberID}
-                  permission={higher}
-                />
-                {/* {(permission || sameMember) && (
+                )}
+              </div>
+              <MemberBadges badges={viewMemberData.badges} />
+              <HRow />
+              <MainStatisticsSection
+                curID={memberID}
+                clickedMemberID={clickedMemberID}
+                permission={higher}
+              />
+              {/* {(permission || sameMember) && (
                   <>
                     <div className="flex items-center justify-center gap-1 w-full flex-col">
                       <h1 className="text-custom-dark-text font-bold">
@@ -161,29 +161,28 @@ export default async function MemberPage({
                     </div>
                   </>
                 )} */}
-              </DefaultCard>
+            </DefaultCard>
+            <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
+              <JoinedActivities clickedMemberID={clickedMemberID} />
+            </Suspense>
+            {(permission || sameMember) && (
               <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
-                <JoinedActivities clickedMemberID={clickedMemberID} />
+                <DefaultCard className="w-full">
+                  <StatusFeed viewProfile memberID={clickedMemberID} />
+                </DefaultCard>
               </Suspense>
-              {(permission || sameMember) && (
-                <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
-                  <DefaultCard className="w-full">
-                    <StatusFeed viewProfile memberID={clickedMemberID} />
-                  </DefaultCard>
-                </Suspense>
-              )}
-              {higher && !sameMember && !normalMember && (
-                // global member permissions
-                <PermissionForm
-                  currentMember={currentMemberData}
-                  viewMember={viewMemberData}
-                />
-              )}
-              {permission && higher && !sameMember && (
-                <ResetPasswordButton memberID={viewMemberData.memberID} />
-              )}
-            </div>
-          </div>
+            )}
+            {higher && !sameMember && !normalMember && (
+              // global member permissions
+              <PermissionForm
+                currentMember={currentMemberData}
+                viewMember={viewMemberData}
+              />
+            )}
+            {permission && higher && !sameMember && (
+              <ResetPasswordButton memberID={viewMemberData.memberID} />
+            )}
+          </PageCenterWrapper>
         </>
       );
     } catch (err: any) {

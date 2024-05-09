@@ -3,7 +3,7 @@ import React from "react";
 import CosMembers from "./CosMembers";
 import AddMembersSection from "./AddMembersSection";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
-import { getMemberPoints } from "@/src/utils/groups/COS/getMemberPoints";
+import { getMemberCOSPoints } from "@/src/utils/groups/COS/getMemberCOSPoints";
 
 export default async function COSMembersSection({
   members,
@@ -17,7 +17,7 @@ export default async function COSMembersSection({
   curMemberID: string;
 }) {
   try {
-    const { data, error } = await getMemberPoints(members);
+    const { data, error } = await getMemberCOSPoints(members);
     if (error) throw new Error(error);
 
     const membersPoints = data as { [memberID: string]: number };

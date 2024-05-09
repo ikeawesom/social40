@@ -36,6 +36,7 @@ export type GROUP_MEMBERS_SCHEMA = {
   bookedIn?: boolean;
   pfp?: string;
   isOnCourse?: boolean;
+  points?: number; // points
 };
 
 export function initGroupObject({

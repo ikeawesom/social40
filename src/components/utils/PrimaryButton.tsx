@@ -9,6 +9,7 @@ export type ButtonType = {
   className?: string;
   type?: "button" | "submit" | "reset" | undefined;
   activated?: boolean;
+  activatedStyles?: string;
 };
 
 export default function PrimaryButton(props: ButtonType) {

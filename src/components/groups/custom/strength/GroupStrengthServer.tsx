@@ -1,6 +1,5 @@
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
 import { dbHandler } from "@/src/firebase/db";
-import DefaultCard from "@/src/components/DefaultCard";
 import { getUpdatedMembers, sortMembersList } from "./handleGroupStrength";
 import { Suspense } from "react";
 import { GroupNumbersServer } from "./GroupNumbersServer";
@@ -10,6 +9,7 @@ import HRow from "@/src/components/utils/HRow";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 import CalculateHAButton from "../HA/CalculateHAButton";
+import ErrorSection from "@/src/components/utils/ErrorSection";
 
 export async function GroupStrengthServer({
   groupID,
@@ -59,7 +59,7 @@ export async function GroupStrengthServer({
               <Link
                 href={`/groups/${groupID}/HA-report`}
                 className={twMerge(
-                  "text-start cursor-pointer underline text-sm duration-150 text-custom-grey-text"
+                  "text-start underline text-sm duration-150 text-custom-grey-text hover:text-custom-primary"
                 )}
               >
                 View HA Reports
@@ -70,18 +70,6 @@ export async function GroupStrengthServer({
       </>
     );
   } catch (err: any) {
-    return (
-      <div className="w-full h-[10vh] grid place-items-center p-4 text-center">
-        <div className="flex flex-col items-center justify-center gap-2">
-          <p className="text-sm">
-            Hmm, an error has occurred and we are unable to load the strength.
-            Please try again later.
-          </p>
-          <p className="text-sm text-custom-grey-text">
-            ERROR: {err.message ?? "Unknown Error"}
-          </p>
-        </div>
-      </div>
-    );
+    return <ErrorSection errorMsg={err.message} />;
   }
 }

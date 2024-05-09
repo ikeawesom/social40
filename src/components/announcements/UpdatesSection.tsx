@@ -3,16 +3,16 @@
 import { useEffect, useState } from "react";
 import Notice from "../utils/Notice";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
+import { ROLES_HIERARCHY } from "@/src/utils/constants";
+import { setDismissUpdate } from "@/src/utils/profile/setDismissUpdate";
+import { toast } from "sonner";
+import Link from "next/link";
 import {
-  ROLES_HIERARCHY,
   VERSION_NUMBER,
   VERSION_OBJ,
   VERSION_TITLE,
   VERSION_UPDATES,
-} from "@/src/utils/constants";
-import { setDismissUpdate } from "@/src/utils/profile/setDismissUpdate";
-import { toast } from "sonner";
-import Link from "next/link";
+} from "@/src/utils/versions";
 
 export default function UpdatesSection({
   memberData,

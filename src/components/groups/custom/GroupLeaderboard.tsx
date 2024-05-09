@@ -1,15 +1,62 @@
-import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import React from "react";
-import ComingSoonCard from "../../utils/ComingSoonCard";
+import { dbHandler } from "@/src/firebase/db";
+import ErrorSection from "../../utils/ErrorSection";
+import { GroupDetailsType } from "@/src/utils/schemas/groups";
+import {
+  appendMemberPFP,
+  getMemberOverallPoints,
+} from "@/src/utils/groups/leaderboard";
+import GroupLeaderboardClient from "./leaderboard/GroupLeaderboardClient";
 
-export type MembersDataType = {
-  [memberID: string]: MEMBER_SCHEMA;
-};
+export default async function GroupLeaderboard({
+  admin,
+  groupID,
+  curMember,
+}: {
+  admin: boolean;
+  groupID: string;
+  curMember: string;
+}) {
+  try {
+    const { error, data } = await dbHandler.getSpecific({
+      path: `GROUPS/${groupID}/MEMBERS`,
+      orderCol: "memberID",
+      ascending: true,
+    });
+    if (error) throw new Error(error);
 
-export type LeaderboardType = {
-  memberData: { [memberID: string]: MEMBER_SCHEMA };
-};
+    const groupMembers = data as GroupDetailsType;
+    const { data: scoreData, error: scoreError } = await getMemberOverallPoints(
+      groupMembers
+    );
+    if (scoreError) throw new Error(scoreError);
 
-export default function GroupLeaderboard({ memberData }: LeaderboardType) {
-  return <ComingSoonCard text="Leaderboard" />;
+    const { data: sortedPFPScoresRes, error: pfpErr } = await appendMemberPFP(
+      scoreData
+    );
+
+    if (pfpErr) throw new Error(pfpErr);
+
+    const sortedScores = {} as GroupDetailsType;
+
+    Object.keys(sortedPFPScoresRes)
+      .sort(
+        (a, b) => sortedPFPScoresRes[b].points - sortedPFPScoresRes[a].points
+      )
+      .filter((id: string) => sortedPFPScoresRes[id].points > 0)
+      .forEach((id: string) => {
+        sortedScores[id] = sortedPFPScoresRes[id];
+      });
+
+    return (
+      <GroupLeaderboardClient
+        groupID={groupID}
+        admin={admin}
+        curMember={curMember}
+        scores={JSON.parse(JSON.stringify(sortedScores))}
+      />
+    );
+  } catch (err: any) {
+    return <ErrorSection errorMsg={err.message} />;
+  }
 }

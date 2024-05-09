@@ -2,7 +2,7 @@ import { dbHandler } from "@/src/firebase/db";
 import handleResponses from "../../handleResponses";
 import { MEMBER_SCHEMA } from "../../schemas/members";
 
-export async function getMemberPoints(members: string[]) {
+export async function getMemberCOSPoints(members: string[]) {
   try {
     const membersPoints = {} as { [memberID: string]: number };
     const sortedMemberPoints = [] as { points: number; memberID: string }[];

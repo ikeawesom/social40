@@ -2,9 +2,10 @@ import MonthlyPlanList from "@/src/components/groups/custom/cos/plans/MonthlyPla
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
+import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 import { dbHandler } from "@/src/firebase/db";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import { getMemberPoints } from "@/src/utils/groups/COS/getMemberPoints";
+import { getMemberCOSPoints } from "@/src/utils/groups/COS/getMemberCOSPoints";
 import { COS_DAILY_SCHEMA, CosDailyType } from "@/src/utils/schemas/cos";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { Metadata } from "next";
@@ -65,7 +66,7 @@ export default async function GroupsMonthlyCOSPage({
       sortedPlans[date] = plans[date];
     });
 
-    const { data: memberRes, error: memberError } = await getMemberPoints(
+    const { data: memberRes, error: memberError } = await getMemberCOSPoints(
       members
     );
 
@@ -75,18 +76,16 @@ export default async function GroupsMonthlyCOSPage({
     return (
       <>
         <HeaderBar back text={`COS Plan for ${groupID}`} />
-        <div className="grid place-items-center">
-          <div className="max-w-[500px] w-full flex flex-col items-start justify-start gap-4">
-            <MonthlyPlanList
-              membersOriginalScores={membersOriginalScores}
-              confirmed={confirmed ?? false}
-              memberPoints={memberPoints}
-              sortedPlans={sortedPlans}
-              groupData={groupData}
-              month={month}
-            />
-          </div>
-        </div>
+        <PageCenterWrapper className="flex flex-col items-start justify-start gap-4">
+          <MonthlyPlanList
+            membersOriginalScores={membersOriginalScores}
+            confirmed={confirmed ?? false}
+            memberPoints={memberPoints}
+            sortedPlans={sortedPlans}
+            groupData={groupData}
+            month={month}
+          />
+        </PageCenterWrapper>
       </>
     );
   } catch (err: any) {
