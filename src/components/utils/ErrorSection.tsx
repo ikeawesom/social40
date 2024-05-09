@@ -7,7 +7,7 @@ export default function ErrorSection({
   className,
 }: {
   children?: React.ReactNode;
-  errorMsg: string;
+  errorMsg?: string;
   className?: string;
 }) {
   return (
@@ -22,9 +22,11 @@ export default function ErrorSection({
           {children ??
             "Hmm, an error has occurred and we are unable to load this section. Please try again later."}
         </p>
-        <p className="text-sm text-custom-grey-text">
-          ERROR: {errorMsg ?? "Unknown Error"}
-        </p>
+        {errorMsg && (
+          <p className="text-sm text-custom-grey-text">
+            ERROR: {errorMsg ?? "Unknown Error"}
+          </p>
+        )}
       </div>
     </div>
   );
