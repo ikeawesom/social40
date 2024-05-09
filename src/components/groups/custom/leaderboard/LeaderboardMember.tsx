@@ -34,7 +34,7 @@ export default function LeaderboardMember({
         </div>
         <div>
           <Link
-            href={`members/${memberID}`}
+            href={`/members/${memberID}`}
             className="font-bold hover:text-custom-primary duration-150"
           >
             {displayName}
