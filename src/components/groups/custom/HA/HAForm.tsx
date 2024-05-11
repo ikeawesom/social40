@@ -56,8 +56,6 @@ export default function HAForm({
         data: dailyActivitiesRef.current,
       } as HA_REPORT_SCHEMA;
 
-      console.log(dailyActivities);
-
       const res = await addReport(groupID, to_add);
       const { data: id } = res;
 
