@@ -11,6 +11,7 @@
   "dependencies": {
     "encoding": "^0.1.13",
     "file-saver": "^2.0.5",
+    "firebase": "^10.11.1",
     "html5-qrcode": "^2.3.8",
     "ippt-utils": "^0.1.4",
     "next": "^14.2.3",
