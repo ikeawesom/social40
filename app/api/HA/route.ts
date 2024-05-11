@@ -1,8 +1,8 @@
 import { dbHandler } from "@/src/firebase/db";
-import { DateToString } from "@/src/utils/getCurrentDate";
+import getCurrentDate, { DateToString } from "@/src/utils/getCurrentDate";
 import { handleGroupMemberHA } from "@/src/utils/groups/HA/handleGroupMemberHA";
 import handleResponses from "@/src/utils/handleResponses";
-import { AllDatesActivitiesType } from "@/src/utils/schemas/ha";
+import { DailyHAType } from "@/src/utils/schemas/ha";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { NextResponse } from "next/server";
 
@@ -42,19 +42,25 @@ async function calculateHA() {
         memberID
       );
       if (error) return handleResponses({ status: false, error });
+
       const {
         dailyActivities,
-        HA: { isHA, id, displayName },
+        HA: { isHA, id },
       } = data;
+
+      const to_add = {
+        memberID: id,
+        dailyActivities: dailyActivities,
+        isHA,
+        lastUpdated: getCurrentDate(),
+      } as DailyHAType;
+
       const { error: addErr } = await dbHandler.add({
         col_name: "HA",
         id,
-        to_add: {
-          memberID: id,
-          dailyActivities: dailyActivities as AllDatesActivitiesType,
-          isHA,
-        },
+        to_add,
       });
+
       if (addErr) return handleResponses({ status: false, error: addErr });
       return handleResponses();
     });

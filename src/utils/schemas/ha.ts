@@ -1,3 +1,12 @@
+import { Timestamp } from "firebase/firestore";
+
+export type DailyHAType = {
+  memberID: string;
+  dailyActivities: AllDatesActivitiesType;
+  isHA: boolean;
+  lastUpdated: Timestamp;
+};
+
 export type isHAType = {
   id: string;
   displayName: string;
