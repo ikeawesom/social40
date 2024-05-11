@@ -28,7 +28,7 @@ export function handleHA(
   const trimmedList = trimList(start, timestampList);
 
   const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
-  console.log("Trimmed:", debugTrim);
+  // console.log("Trimmed:", debugTrim);
 
   if (trimmedList.length < 1) return false;
 
@@ -52,7 +52,7 @@ export function handleHA(
   let i = 0;
   while (i < trimmedList.length) {
     const day = resetDay(trimmedList[i]);
-    console.log("Current day:", day);
+    // console.log("Current day:", day);
     if (checkedDates.includes(day))
       // checked for the day, continue to next day
       continue;
@@ -60,16 +60,16 @@ export function handleHA(
     // day difference is 1 day
     const dayDiff = getDateDiff(day, prevDay);
 
-    console.log(
-      `Cur: ${day.getDate()} | Prev: ${prevDay.getDate()} | DayDiff: ${dayDiff}`
-    );
+    // console.log(
+    //   `Cur: ${day.getDate()} | Prev: ${prevDay.getDate()} | DayDiff: ${dayDiff}`
+    // );
 
     prevDay = resetDay(trimmedList[i]);
 
     if (dayDiff > MAX_INTERVAL_BREAK + 1) {
       // break has exceed 2 days
       // reset variables
-      console.log("break has exceed 2 days, reset");
+      // console.log("break has exceed 2 days, reset");
       // console.log("----\n\n");
       checkedDates = [day];
       breaksTaken = 0;
@@ -77,19 +77,19 @@ export function handleHA(
     }
 
     if (dayDiff <= 1) {
-      console.log("Valid");
+      // console.log("Valid");
       checkedDates.push(day);
     } else {
       // day difference exceeded 1 day
       // increment breaks taken
-      console.log("break taken");
+      // console.log("break taken");
       breaksTaken += 1;
       checkedDates.push(day);
 
       if (breaksTaken > MAX_BREAKS) {
         // more than 1 break taken during 10 day period
         // reset variables
-        console.log("more than 1 break, reset");
+        // console.log("more than 1 break, reset");
         checkedDates = [day];
         breaksTaken = 0;
         i = lastBreakIndex;
@@ -102,8 +102,8 @@ export function handleHA(
 
     if (checkedDates.length === MAX_ACTIVITIES) {
       // if criterias have been met, set final index to continue searching from
-      console.log("Passed dates:", checkedDates);
-      console.log("Clocked initial HA");
+      // console.log("Passed dates:", checkedDates);
+      // console.log("Clocked initial HA");
       clockedHA = true;
       // console.log("checked dates:", checkedDates);
 
@@ -126,7 +126,7 @@ export function handleHA(
         // console.log("CurDay:", curDay);
         if (curDay > endDate) {
           reset();
-          console.log("activity is after 14 day window, HA has broken");
+          // console.log("activity is after 14 day window, HA has broken");
           break;
         } // activity is after 14 day window, HA has broken
 
@@ -136,9 +136,9 @@ export function handleHA(
 
         if (diffDay > MAX_INTERVAL) {
           reset();
-          console.log(
-            "activity within 14 day window has exceeded 7 days, HA has broken"
-          );
+          // console.log(
+          //   "activity within 14 day window has exceeded 7 days, HA has broken"
+          // );
           break;
         } // activity within 14 day window has exceeded 7 days, HA has broken
 
@@ -154,7 +154,7 @@ export function handleHA(
         endDate = resetDay(trimmedList[j]);
         endDate.setDate(endDate.getDate() + MAX_SECOND_INTERVAL);
       }
-      console.log("second checked:", secondCheckDates);
+      // console.log("second checked:", secondCheckDates);
     }
 
     if (clockedHA && haCurrency) {
@@ -224,42 +224,42 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
 
 // debug
 
-let list = [] as Timestamp[];
-list.push(DateToTimestamp(new Date(2024, 3, 11, 12, 0, 0)));
-list.push(DateToTimestamp(new Date(2024, 3, 15, 12, 0, 0)));
-list.push(DateToTimestamp(new Date(2024, 3, 16, 12, 0, 0)));
-list.push(DateToTimestamp(new Date(2024, 3, 17, 12, 0, 0)));
-list.push(DateToTimestamp(new Date(2024, 3, 18, 12, 0, 0)));
-list.push(DateToTimestamp(new Date(2024, 3, 19, 12, 0, 0)));
-list.push(DateToTimestamp(new Date(2024, 3, 22, 12, 0, 0)));
-list.push(DateToTimestamp(new Date(2024, 3, 22, 12, 0, 0)));
-list.push(DateToTimestamp(new Date(2024, 3, 23, 12, 0, 0)));
-list.push(DateToTimestamp(new Date(2024, 3, 24, 12, 0, 0)));
-list.push(DateToTimestamp(new Date(2024, 3, 25, 12, 0, 0)));
-list.push(DateToTimestamp(new Date(2024, 3, 26, 12, 0, 0)));
-list.push(DateToTimestamp(new Date(2024, 3, 29, 12, 0, 0)));
-list.push(DateToTimestamp(new Date(2024, 4, 2, 12, 0, 0)));
-list.push(DateToTimestamp(new Date(2024, 4, 2, 12, 0, 0)));
-list.push(DateToTimestamp(new Date(2024, 4, 6, 12, 0, 0)));
+// let list = [] as Timestamp[];
+// list.push(DateToTimestamp(new Date(2024, 3, 11, 12, 0, 0)));
+// list.push(DateToTimestamp(new Date(2024, 3, 15, 12, 0, 0)));
+// list.push(DateToTimestamp(new Date(2024, 3, 16, 12, 0, 0)));
+// list.push(DateToTimestamp(new Date(2024, 3, 17, 12, 0, 0)));
+// list.push(DateToTimestamp(new Date(2024, 3, 18, 12, 0, 0)));
+// list.push(DateToTimestamp(new Date(2024, 3, 19, 12, 0, 0)));
+// list.push(DateToTimestamp(new Date(2024, 3, 22, 12, 0, 0)));
+// list.push(DateToTimestamp(new Date(2024, 3, 22, 12, 0, 0)));
+// list.push(DateToTimestamp(new Date(2024, 3, 23, 12, 0, 0)));
+// list.push(DateToTimestamp(new Date(2024, 3, 24, 12, 0, 0)));
+// list.push(DateToTimestamp(new Date(2024, 3, 25, 12, 0, 0)));
+// list.push(DateToTimestamp(new Date(2024, 3, 26, 12, 0, 0)));
+// list.push(DateToTimestamp(new Date(2024, 3, 29, 12, 0, 0)));
+// list.push(DateToTimestamp(new Date(2024, 4, 2, 12, 0, 0)));
+// list.push(DateToTimestamp(new Date(2024, 4, 2, 12, 0, 0)));
+// list.push(DateToTimestamp(new Date(2024, 4, 6, 12, 0, 0)));
 
-// list.push(DateToTimestamp(new Date(2024, 3, 1)));
-// list.push(DateToTimestamp(new Date(2024, 3, 5)));
-// list.push(DateToTimestamp(new Date(2024, 3, 6)));
-// list.push(DateToTimestamp(new Date(2024, 3, 7)));
-// list.push(DateToTimestamp(new Date(2024, 3, 8)));
-// list.push(DateToTimestamp(new Date(2024, 3, 9)));
-// list.push(DateToTimestamp(new Date(2024, 3, 15)));
-// list.push(DateToTimestamp(new Date(2024, 3, 16)));
-// list.push(DateToTimestamp(new Date(2024, 3, 17)));
-// list.push(DateToTimestamp(new Date(2024, 3, 18)));
-// list.push(DateToTimestamp(new Date(2024, 3, 19)));
-// list.push(DateToTimestamp(new Date(2024, 3, 22)));
-// list.push(DateToTimestamp(new Date(2024, 3, 23)));
-// list.push(DateToTimestamp(new Date(2024, 3, 24)));
-// list.push(DateToTimestamp(new Date(2024, 3, 25)));
-// list.push(DateToTimestamp(new Date(2024, 3, 26)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 1)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 5)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 6)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 7)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 8)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 9)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 15)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 16)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 17)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 18)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 19)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 22)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 23)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 24)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 25)));
+// // list.push(DateToTimestamp(new Date(2024, 3, 26)));
 
-const startDate = new Date(2024, 1, 1);
-const startTimestamp = DateToTimestamp(startDate);
+// const startDate = new Date(2024, 1, 1);
+// const startTimestamp = DateToTimestamp(startDate);
 
-console.log(handleHA(startTimestamp, list, true));
+// console.log(handleHA(startTimestamp, list, true));
