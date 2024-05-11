@@ -84,18 +84,19 @@ export function handleHA(
       // increment breaks taken
       console.log("break taken");
       breaksTaken += 1;
-      lastBreakIndex = i;
       checkedDates.push(day);
-    }
 
-    if (breaksTaken > MAX_BREAKS) {
-      // more than 1 break taken during 10 day period
-      // reset variables
-      console.log("more than 1 break, reset");
-      checkedDates = [day];
-      breaksTaken = 0;
-      i = lastBreakIndex;
-      continue;
+      if (breaksTaken > MAX_BREAKS) {
+        // more than 1 break taken during 10 day period
+        // reset variables
+        console.log("more than 1 break, reset");
+        checkedDates = [day];
+        breaksTaken = 0;
+        i = lastBreakIndex;
+        continue;
+      }
+
+      lastBreakIndex = i;
     }
 
     if (checkedDates.length === MAX_ACTIVITIES) {
