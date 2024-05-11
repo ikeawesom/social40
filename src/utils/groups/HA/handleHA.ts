@@ -49,7 +49,8 @@ export function handleHA(
     haCurrency = true;
   }
 
-  for (let i = 1; i < trimmedList.length; i++) {
+  let i = 0;
+  while (i < trimmedList.length) {
     const day = resetDay(trimmedList[i]);
     console.log("Current day:", day);
     if (checkedDates.includes(day))
@@ -72,7 +73,7 @@ export function handleHA(
       // console.log("----\n\n");
       checkedDates = [day];
       breaksTaken = 0;
-      i = lastBreakIndex - 1;
+      i = lastBreakIndex;
       continue;
     }
 
@@ -158,6 +159,7 @@ export function handleHA(
       console.log("Clocked overall HA");
       return true;
     }
+    i++;
   }
 
   return false;
