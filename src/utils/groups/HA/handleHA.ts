@@ -41,6 +41,7 @@ export function handleHA(
   let breaksTaken = 0;
   let clockedHA = false;
   let haCurrency = true;
+  let lastBreakIndex = 0;
 
   function reset() {
     breaksTaken = 0;
@@ -68,9 +69,10 @@ export function handleHA(
       // break has exceed 2 days
       // reset variables
       console.log("break has exceed 2 days, reset");
-      console.log("----\n\n");
+      // console.log("----\n\n");
       checkedDates = [day];
       breaksTaken = 0;
+      i = lastBreakIndex - 1;
       continue;
     }
 
@@ -82,6 +84,7 @@ export function handleHA(
       // increment breaks taken
       console.log("break taken");
       breaksTaken += 1;
+      lastBreakIndex = i;
       checkedDates.push(day);
     }
 
@@ -196,10 +199,10 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
   timestampList.forEach((day: Timestamp) => {
     const curDay = new Date(day.seconds * 1000);
     const resetCurDay = resetDay(day);
-    console.log("Cur:", curDay);
-    console.log("First:", curDay >= startDate);
-    console.log("Second:", !checked.includes(resetCurDay.getTime()));
-    console.log("Third:", curDay <= nowDate);
+    // console.log("Cur:", curDay);
+    // console.log("First:", curDay >= startDate);
+    // console.log("Second:", !checked.includes(resetCurDay.getTime()));
+    // console.log("Third:", curDay <= nowDate);
     if (
       curDay >= startDate &&
       !checked.includes(resetCurDay.getTime()) &&
@@ -209,8 +212,8 @@ export function trimList(start: Timestamp, timestampList: Timestamp[]) {
       checked.push(resetCurDay.getTime());
     }
   });
-  const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
-  console.log("[PROG] Trimmed:", debugTrim);
+  // const debugTrim = trimmedList.map((item) => new Date(item.seconds * 1000));
+  // console.log("[PROG] Trimmed:", debugTrim);
 
   return trimmedList;
 }
