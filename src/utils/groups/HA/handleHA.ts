@@ -73,7 +73,6 @@ export function handleHA(
       // console.log("----\n\n");
       checkedDates = [day];
       breaksTaken = 0;
-      i = lastBreakIndex;
       continue;
     }
 
@@ -159,7 +158,7 @@ export function handleHA(
       console.log("Clocked overall HA");
       return true;
     }
-    i++;
+    i += 1;
   }
 
   return false;
