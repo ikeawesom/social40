@@ -94,6 +94,7 @@ export function handleHA(
       console.log("more than 1 break, reset");
       checkedDates = [day];
       breaksTaken = 0;
+      i = lastBreakIndex;
       continue;
     }
 
