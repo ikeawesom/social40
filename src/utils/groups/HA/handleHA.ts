@@ -93,6 +93,7 @@ export function handleHA(
         checkedDates = [day];
         breaksTaken = 0;
         i = lastBreakIndex;
+        prevDay = resetDay(trimmedList[lastBreakIndex]);
         continue;
       }
 
