@@ -1,3 +1,7 @@
+export const dynamic = "force-dynamic"; // static by default, unless reading the request
+export const maxDuration = 59; // This function can run for a maximum of 5 seconds
+export const runtime = "nodejs";
+
 import { dbHandler } from "@/src/firebase/db";
 import getCurrentDate, { DateToString } from "@/src/utils/getCurrentDate";
 import { handleGroupMemberHA } from "@/src/utils/groups/HA/handleGroupMemberHA";
