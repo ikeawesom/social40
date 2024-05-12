@@ -29,7 +29,7 @@ export default function Notice({
     >
       <div
         className={twMerge(
-          status === "info" && "text-blue-800",
+          status === "info" && "text-blue-700",
           status === "success" && "text-custom-green",
           status === "error" && "text-custom-red",
           status === "warning" && "text-custom-orange",

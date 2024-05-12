@@ -17,7 +17,6 @@ export type GROUP_SCHEMA = {
   cos?: { state: boolean; admins: string[]; members: string[] };
   createdBy: string; // memberID of owner
   createdOn: Timestamp;
-  lastUpdatedHA?: Timestamp;
 };
 
 export type GROUP_ACTIVITIES_SCHEMA = {

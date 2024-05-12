@@ -47,7 +47,7 @@ export default async function GroupPage({
       if (error) throw new Error(error);
 
       const { groupData, admin, owner, currentMember } = data;
-      const { createdBy, groupName, groupDesc, cos, lastUpdatedHA } = groupData;
+      const { createdBy, groupName, groupDesc, cos } = groupData;
 
       return (
         <>
@@ -72,7 +72,6 @@ export default async function GroupPage({
               <DefaultCard className="w-full flex flex-col items-start justify-start gap-2">
                 <Suspense fallback={<StrengthSectionSkeleton />}>
                   <GroupStrengthServer
-                    lastUpdatedHA={lastUpdatedHA}
                     admin={admin}
                     currentMember={JSON.parse(JSON.stringify(currentMember))}
                     groupID={groupID}

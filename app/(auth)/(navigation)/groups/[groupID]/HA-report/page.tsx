@@ -1,13 +1,10 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import CalculateHAButton from "@/src/components/groups/custom/HA/CalculateHAButton";
-import LastUpdatedHANotice from "@/src/components/groups/custom/HA/LastUpdatedHANotice";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import HRow from "@/src/components/utils/HRow";
 import { dbHandler } from "@/src/firebase/db";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
-import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { HA_REPORT_SCHEMA } from "@/src/utils/schemas/ha";
 import { cookies } from "next/headers";
 import Link from "next/link";
@@ -25,13 +22,7 @@ export default async function HAReportPage({
   if (!data) return <SignInAgainScreen />;
 
   try {
-    const { data: groupDataRes, error: groupErr } = await dbHandler.get({
-      col_name: "GROUPS",
-      id: groupID,
-    });
-    if (groupErr || !groupID) throw new Error("Invalid group.");
-    const groupData = groupDataRes as GROUP_SCHEMA;
-    const { lastUpdatedHA } = groupData;
+    if (!groupID) throw new Error("Invalid group.");
 
     const { error, data: membersList } = await dbHandler.getSpecific({
       path: `GROUPS/${groupID}/MEMBERS`,
@@ -43,7 +34,7 @@ export default async function HAReportPage({
 
     const { data: reports, error: reportsError } = await dbHandler.getSpecific({
       path: `GROUPS/${groupID}/HA-REPORTS`,
-      orderCol: "createdOn",
+      orderCol: "groupID",
       ascending: false,
     });
 
@@ -72,12 +63,6 @@ export default async function HAReportPage({
               groupID={groupID}
               membersList={JSON.parse(JSON.stringify(membersList))}
             />
-            {lastUpdatedHA && (
-              <LastUpdatedHANotice
-                lastUpdatedHA={lastUpdatedHA}
-                containerClassName="w-fit"
-              />
-            )}
             {!empty && <HRow />}
             {Object.keys(reports).map((id: string) => {
               const data = reports[id] as HA_REPORT_SCHEMA;

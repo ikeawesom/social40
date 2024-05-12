@@ -17,7 +17,6 @@ import {
   isHAType,
 } from "@/src/utils/schemas/ha";
 import { GroupDetailsType } from "@/src/utils/schemas/groups";
-import { modifyHA } from "@/src/utils/groups/HA/modifyHA";
 
 export default function HAForm({
   groupID,
@@ -77,28 +76,22 @@ export default function HAForm({
 
       for (const memberID of members) {
         // console.log("Caclculating for", memberID);
-        const { data, error } = await handleGroupMemberHA(start, memberID);
-        if (error) throw new Error(error.message);
-        const {
-          dailyActivities: activityListPerDate,
-          HA: { isHA, id },
-        } = data;
-
-        // setCheckedStatus((init) => [...init, data.HA]);
-        checkedStatus.current.push(data.HA);
-        dailyActivitiesRef.current[memberID] = activityListPerDate;
-        setDailyActivities({
-          ...dailyActivities,
-          [memberID]: activityListPerDate,
-        });
-        // console.log(`${memberID}: ${data.isHA}`);
-
-        const { error: editErr } = await modifyHA(
-          id,
-          activityListPerDate,
-          isHA
+        const { status, data, error } = await handleGroupMemberHA(
+          start,
+          memberID
         );
-        if (editErr) throw new Error(editErr);
+
+        if (status) {
+          // setCheckedStatus((init) => [...init, data.HA]);
+          checkedStatus.current.push(data.HA);
+          dailyActivitiesRef.current[memberID] = data.dailyActivities;
+          setDailyActivities({
+            ...dailyActivities,
+            [memberID]: data.dailyActivities,
+          });
+          // console.log(`${memberID}: ${data.isHA}`);
+        }
+        if (error) throw new Error(error.message);
       }
       setDone(true);
     } catch (err: any) {

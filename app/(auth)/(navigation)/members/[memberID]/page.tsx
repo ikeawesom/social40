@@ -20,7 +20,6 @@ import Image from "next/image";
 import HRow from "@/src/components/utils/HRow";
 import MainStatisticsSection from "@/src/components/members/statistics/MainStatisticsSection";
 import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
-import { MemberHASection } from "@/src/components/members/HA/MemberHASection";
 
 export async function generateMetadata({
   params,
@@ -112,9 +111,9 @@ export default async function MemberPage({
                   </div>
                 </div>
               )}
-              {/* <div className="flex w-full items-center justify-between">
+              <div className="flex w-full items-center justify-between">
                 <MemberPoints points={viewMemberData.points} />
-              </div> */}
+              </div>
               <div className="flex flex-col items-start justify-center">
                 <h1 className="text-xl text-custom-dark-text flex items-center justify-start gap-2">
                   {rankName} <BookedStatus status={viewMemberData.bookedIn} />
@@ -163,10 +162,6 @@ export default async function MemberPage({
                   </>
                 )} */}
             </DefaultCard>
-            <Suspense fallback={<DefaultSkeleton className="h-[20vh]" />}>
-              {permission && <MemberHASection memberID={clickedMemberID} />}
-            </Suspense>
-
             <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
               <JoinedActivities clickedMemberID={clickedMemberID} />
             </Suspense>

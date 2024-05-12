@@ -2,15 +2,11 @@
 import { Timestamp } from "firebase/firestore";
 import handleResponses from "../../handleResponses";
 import { dbHandler } from "@/src/firebase/db";
-import getCurrentDate, {
-  DateToString,
-  DateToTimestamp,
-} from "../../getCurrentDate";
+import { DateToString, DateToTimestamp } from "../../getCurrentDate";
 import { handleHA, resetDay } from "./handleHA";
 import { MEMBER_SCHEMA } from "../../schemas/members";
 import {
   AllDatesActivitiesType,
-  DailyHAType,
   EachActivityType,
   HA_REPORT_SCHEMA,
   isHAType,
@@ -112,28 +108,13 @@ export async function handleGroupMemberHA(
     const isCommander =
       ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
 
-    console.log("Calculating for:", memberID);
+    // console.log("Calculating for:",memberID)
 
     const clockedHA = handleHA(
       startTimestamp,
       updateTimestampList,
       isCommander
     );
-
-    const toEditDaily = {
-      dailyActivities: activityListPerDate,
-      isHA: clockedHA,
-      lastUpdated: getCurrentDate(),
-      memberID,
-    } as DailyHAType;
-
-    const { error: dailyErr } = await dbHandler.edit({
-      col_name: "HA",
-      id: memberID,
-      data: toEditDaily,
-    });
-
-    if (dailyErr) throw new Error(dailyErr);
 
     return handleResponses({
       data: {
@@ -150,7 +131,7 @@ export async function addReport(groupID: string, report: HA_REPORT_SCHEMA) {
   try {
     const { data, error } = await dbHandler.addGeneral({
       path: `GROUPS/${groupID}/HA-REPORTS`,
-      to_add: { ...report, createdOn: getCurrentDate() } as HA_REPORT_SCHEMA,
+      to_add: report,
     });
 
     if (error) throw new Error(error);
