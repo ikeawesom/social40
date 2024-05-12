@@ -10,15 +10,19 @@ import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 import CalculateHAButton from "../HA/CalculateHAButton";
 import ErrorSection from "@/src/components/utils/ErrorSection";
+import { Timestamp } from "firebase/firestore";
+import LastUpdatedHANotice from "../HA/LastUpdatedHANotice";
 
 export async function GroupStrengthServer({
   groupID,
   admin,
   currentMember,
+  lastUpdatedHA,
 }: {
   groupID: string;
   currentMember: GROUP_MEMBERS_SCHEMA;
   admin: boolean;
+  lastUpdatedHA: Timestamp;
 }) {
   try {
     // get group members
@@ -55,6 +59,7 @@ export async function GroupStrengthServer({
             </Suspense>
             <>
               <HRow />
+              <LastUpdatedHANotice lastUpdatedHA={lastUpdatedHA} />
               <CalculateHAButton groupID={groupID} membersList={parsed} />
               <Link
                 href={`/groups/${groupID}/HA-report`}

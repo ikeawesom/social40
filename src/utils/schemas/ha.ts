@@ -14,6 +14,7 @@ export type isHAType = {
 };
 
 export type HA_REPORT_SCHEMA = {
+  createdOn: Timestamp;
   groupID: string;
   reportID: string;
   members: isHAType[];
