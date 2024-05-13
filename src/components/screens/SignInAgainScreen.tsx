@@ -5,9 +5,11 @@ import SignoutButton from "../utils/SignoutButton";
 import { useRouter } from "next/navigation";
 import LoadingScreenSmall from "./LoadingScreenSmall";
 import { handleReload } from "../navigation/HeaderBar";
+import { useTimer } from "@/src/hooks/useTimer";
 
 export default function SignInAgainScreen() {
   const [loading, setLoading] = useState(true);
+  const { isFinished, seconds } = useTimer(10);
   const router = useRouter();
   useEffect(() => {
     // test
@@ -16,6 +18,7 @@ export default function SignInAgainScreen() {
     if (!reloaded) {
       handleReload(router);
       localStorage.setItem("load", "true");
+      router.refresh();
     } else {
       localStorage.removeItem("load");
       setTimeout(() => {
@@ -34,7 +37,12 @@ export default function SignInAgainScreen() {
     }
   }, []);
 
-  if (loading) return <LoadingScreenSmall />;
+  useEffect(() => {
+    if (isFinished) router.push("/auth", { scroll: false });
+  }, [isFinished]);
+
+  if (loading)
+    return <LoadingScreenSmall text={`Re-authenticating: ${seconds}s`} />;
 
   return (
     <div className="grid place-items-center h-[50vh]">
