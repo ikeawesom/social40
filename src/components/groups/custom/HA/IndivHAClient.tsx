@@ -2,7 +2,7 @@
 
 import DefaultCard from "@/src/components/DefaultCard";
 import HRow from "@/src/components/utils/HRow";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import { DateToString } from "@/src/utils/getCurrentDate";
 import { DailyHAType } from "@/src/utils/schemas/ha";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -37,6 +37,8 @@ export default function IndivHAClient({
         <div className="w-full flex flex-col items-start justify-start gap-2">
           {Object.keys(members).map((id: string) => {
             const { isHA, lastUpdated, memberID } = members[id];
+            const updatedTiming = new Date(lastUpdated.seconds * 1000);
+            updatedTiming.setHours(updatedTiming.getHours() - 8);
             return (
               <Link
                 href={`/members/${memberID}`}
@@ -70,7 +72,7 @@ export default function IndivHAClient({
                       </span>
                     )}
                     <p className="text-start text-sm text-custom-grey-text">
-                      Last updated: {TimestampToDateString(lastUpdated)}
+                      Last updated: {DateToString(updatedTiming)}
                     </p>
                   </div>
                 </DefaultCard>
