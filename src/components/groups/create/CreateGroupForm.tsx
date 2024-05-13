@@ -11,6 +11,7 @@ import { useMemberID } from "@/src/hooks/useMemberID";
 import { useRouter } from "next/navigation";
 import { createGroup } from "@/src/utils/groups/createGroup";
 import ModalHeader from "../../utils/ModalHeader";
+import Toggle from "../../utils/Toggle";
 
 type FormType = {
   className?: string;
@@ -117,7 +118,7 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
           onChange={handleTextArea}
           value={groupDetails.desc}
         />
-        <SecondaryButton
+        {/* <SecondaryButton
           onClick={() =>
             setGroupDetails({
               ...groupDetails,
@@ -132,6 +133,26 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
         >
           {groupDetails.cos.state ? "COS Enabled" : "Enable COS"}
         </SecondaryButton>
+        <div> */}
+        <div className="w-full flex items-center justify-start gap-2">
+          <p className="text-sm">Enable COS</p>
+          <Toggle
+            disable={() =>
+              setGroupDetails({
+                ...groupDetails,
+                cos: { ...groupDetails.cos, state: false },
+              })
+            }
+            enable={() =>
+              setGroupDetails({
+                ...groupDetails,
+                cos: { ...groupDetails.cos, state: true },
+              })
+            }
+            disabled={!groupDetails.cos.state}
+          />
+        </div>
+
         <PrimaryButton
           disabled={loading}
           type="submit"
