@@ -67,7 +67,7 @@ export async function GroupStrengthServer({
                   "text-start underline text-sm duration-150 text-custom-grey-text hover:text-custom-primary"
                 )}
               >
-                View HA Reports
+                View Group HA Reports
               </Link>
             </>
           </>
