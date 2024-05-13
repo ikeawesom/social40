@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Modal from "@/src/components/utils/Modal";
 import ModalHeader from "@/src/components/utils/ModalHeader";
+import Link from "next/link";
 
 export default function LastUpdatedHAQuestion() {
   const [show, setShow] = useState(false);
@@ -15,9 +16,16 @@ export default function LastUpdatedHAQuestion() {
             Social40 automatically calculates each individual member's HA
             currency from{" "}
             <span className="font-bold">0000 to 0800 UTC+8 every midnight</span>
-            . <br />
-            This is to make HA tracking more seamless and efficient!
+            . This is to make HA tracking more seamless and efficient!
           </p>
+          <div className="w-full flex items-center justify-start mt-1">
+            <Link
+              className="text-start underline text-sm duration-150 text-custom-primary hover:opacity-70"
+              href=""
+            >
+              Learn More
+            </Link>
+          </div>
         </Modal>
       )}
       <Image
@@ -28,6 +36,7 @@ export default function LastUpdatedHAQuestion() {
             ? "/icons/icon_question.svg"
             : "/icons/icon_question_primary.svg"
         }
+        className="cursor-pointer"
         width={20}
         height={20}
       />
