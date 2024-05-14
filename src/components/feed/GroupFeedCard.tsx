@@ -10,6 +10,7 @@ import SecondaryButton from "../utils/SecondaryButton";
 import DismissButton from "./DismissButton";
 import ShowButton from "./ShowButton";
 import ActivityStatusTab from "./ActivityStatusTab";
+import Image from "next/image";
 
 export default async function GroupFeedCard({
   activityData,
@@ -21,7 +22,8 @@ export default async function GroupFeedCard({
   show?: boolean;
 }) {
   try {
-    const { activityID, groupID, activityDesc, activityTitle } = activityData;
+    const { activityID, groupID, activityDesc, activityTitle, isPT } =
+      activityData;
     const host = process.env.HOST as string;
 
     const res = await FetchGroupActivityData.getMain({
@@ -70,9 +72,18 @@ export default async function GroupFeedCard({
             }/activity?${new URLSearchParams({
               id: activityID,
             })}`}
-            className="text-start font-semibold text-lg text-custom-dark-text duration-150 hover:opacity-70"
+            className="text-start font-semibold text-lg text-custom-dark-text flex items-start justify-start gap-2 hover:opacity-70"
           >
             {activityTitle}
+            {isPT && (
+              <Image
+                alt="PT activity"
+                className="my-1"
+                src="/icons/features/icon_activities_active.svg"
+                width={20}
+                height={20}
+              />
+            )}
           </Link>
           <ActivityStatusTab active={active} />
         </div>
