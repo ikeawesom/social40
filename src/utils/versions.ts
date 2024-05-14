@@ -7,7 +7,7 @@ export const VERSION_MAP = {
       "Every member’s individual HA currency is calculated automatically",
       "HA Currencies will now be displayed on each member’s individual profile",
       "Tracking data can be downloaded into an excel sheet if needed",
-      "Group activities that require HA to participate in will **automatically** reject non-HA members to join",
+      "Group activities that require HA to participate in will automatically reject non-HA members to join",
       "Non-HA members will not be allowed to request to join such group activities which require HA",
     ],
     adminOnly: true,
