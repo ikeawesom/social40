@@ -21,7 +21,7 @@ export default function LastUpdatedHAQuestion() {
           <div className="w-full flex items-center justify-start mt-1">
             <Link
               className="text-start underline text-sm duration-150 text-custom-primary hover:opacity-70"
-              href=""
+              href="https://social40.notion.site/v1-5-0-New-Automated-Heat-Acclimatisation-HA-System-9d6a732195034ff8b11869d0f4c9cfae"
             >
               Learn More
             </Link>
