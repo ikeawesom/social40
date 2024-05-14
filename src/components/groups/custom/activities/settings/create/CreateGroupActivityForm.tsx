@@ -89,7 +89,7 @@ export default function CreateGroupActivityForm({
     setInput({ ...input, time: `${startT.hour}:${startT.min}` });
   }, [startT]);
 
-  const handleLogic = async (usingHA?: boolean) => {
+  const handleLogic = async () => {
     try {
       const createGroupClass = new createGroupActivityClass({
         addMembers,
@@ -106,7 +106,7 @@ export default function CreateGroupActivityForm({
       if (errB) throw new Error(errB);
       setLoadingStage((loadingStage) => loadingStage + 1);
 
-      if (usingHA) {
+      if (input.needHA) {
         createGroupClass.setNonHAMembers(nonHAmembers ?? []);
       }
 
@@ -117,12 +117,6 @@ export default function CreateGroupActivityForm({
       const { error: errD, data } = await createGroupClass.addToGroupCol();
       if (errD) throw new Error(errD);
       setLoadingStage((loadingStage) => loadingStage + 1);
-
-      // const PostObj = GetPostObj({ groupID, memberID, input, addMembers });
-      // const res = await fetch(`${host}/api/activity/group-create`, PostObj);
-      // const body = await res.json();
-
-      // if (!body.status) throw new Error(body.error);
 
       router.refresh();
       router.replace(
@@ -143,31 +137,31 @@ export default function CreateGroupActivityForm({
     setLoading(true);
     setUseHA({ warning: false, loading: false });
   };
-  const handleUseHA = async () => {
-    resetModal();
-    await handleLogic(true);
-  };
-  const handleIgnoreHA = async () => {
-    resetModal();
-    await handleLogic(false);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     if (input.needHA) {
+      // show warning modal
       setUseHA({ ...useHA, warning: true, loading: true });
+
+      // get filtered group members based on selection
       const { data: filtered, error: filterErr } = await second(
         addMembers,
         groupID
       );
       if (filterErr) throw new Error(filterErr);
+
+      // filter who are not HA
       const { data, error } = await getNonHAMembers(filtered);
       if (error) throw new Error(error);
+
       if (Object.keys(data).length > 0) {
+        // if have members not HA, display warning
         setNonHAMembers(Object.keys(data));
         setUseHA({ ...useHA, warning: true, loading: false });
       } else {
+        // if no not HA, remove modal
         resetModal();
         await handleLogic();
       }
@@ -199,7 +193,6 @@ export default function CreateGroupActivityForm({
               <Notice status="error" noHeader>
                 <h1 className="font-bold">
                   WARNING: The following members are not Heat Acclimitised (HA).
-                  Please be wary when adding them to this activity!
                 </h1>
               </Notice>
               <InnerContainer className="w-full max-h-[20vh]">
@@ -218,15 +211,14 @@ export default function CreateGroupActivityForm({
                   </div>
                 ))}
               </InnerContainer>
-              <div className="w-full flex items-center justify-center gap-2 flex-col">
-                <p
-                  onClick={handleIgnoreHA}
-                  className="text-sm underline text-custom-red text-center"
-                >
-                  Ignore warning and add members (Not Recommended)
+              <div className="w-full flex items-start justify-center gap-2 flex-col">
+                <p className="text-sm text-custom-red text-center">
+                  Due to safety reasons, these members will{" "}
+                  <span className="font-bold">not</span> be added into the
+                  activity.
                 </p>
-                <PrimaryButton onClick={handleUseHA}>
-                  Do not add members
+                <PrimaryButton onClick={handleLogic}>
+                  Accept & Continue
                 </PrimaryButton>
               </div>
             </div>
