@@ -38,7 +38,6 @@ export default function IndivHAClient({
           {Object.keys(members).map((id: string) => {
             const { isHA, lastUpdated, memberID } = members[id];
             const updatedTiming = new Date(lastUpdated.seconds * 1000);
-            updatedTiming.setHours(updatedTiming.getHours() - 8);
             return (
               <Link
                 href={`/members/${memberID}`}
