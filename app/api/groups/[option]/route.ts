@@ -28,18 +28,6 @@ export async function POST(request: NextRequest) {
     // fetched joined groups
     const res = await getJoinedGroups({ memberID });
     return NextResponse.json({ status: true, data: res });
-  } else if (option === "memberof") {
-    // check if member in group
-    const res = await dbHandler.get({
-      col_name: `GROUPS/${groupID}/MEMBERS`,
-      id: memberID,
-    });
-
-    if (!res.status)
-      return NextResponse.json({ status: false, error: res.error });
-
-    const memberData = res.data as GROUP_MEMBERS_SCHEMA;
-    return NextResponse.json({ status: true, data: memberData });
   } else if (option === "custom") {
     // custom group data
     const res = await dbHandler.get({ col_name: "GROUPS", id: groupID });
@@ -230,16 +218,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ status: false, error: resA.error });
 
     return NextResponse.json({ status: true });
-  } else if (option === "get-activities") {
-    const res = await dbHandler.getSpecific({
-      path: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
-      orderCol: "activityDate",
-      ascending: false,
-    });
-    if (!res.status)
-      return NextResponse.json({ status: false, error: res.error });
-
-    return NextResponse.json({ data: res.data, status: true });
   } else if (option === "display-update") {
     // debugging purposes only
     const { groupMembers } = fetchedData;

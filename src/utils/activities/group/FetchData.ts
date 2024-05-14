@@ -72,25 +72,39 @@ class FetchGroupActivityClass {
     host,
   }: GroupActivityClassType) {
     try {
-      // check if logged in member is member of group
-      const UserObj = GetPostObj({
-        memberID: memberID,
-        groupID: groupID,
+      // check if member in group
+      const { data: memData, error: memErr } = await dbHandler.get({
+        col_name: `GROUPS/${groupID}/MEMBERS`,
+        id: memberID,
       });
-      const res = await fetch(`${host}/api/groups/memberof`, UserObj);
-      const body = await res.json();
 
-      // get group activity data
-      const PostObjActivity = GetPostObj({ activityID: activityID });
-      const resA = await fetch(
-        `${host}/api/activity/group-get`,
-        PostObjActivity
-      );
-      const bodyA = await resA.json();
+      if (memErr) throw new Error(memErr);
 
-      if (!bodyA.status) throw new Error(bodyA.error);
+      // fetch activity data
+      const { data, error } = await dbHandler.get({
+        col_name: "GROUP-ACTIVITIES",
+        id: activityID,
+      });
+      if (error) throw new Error(error);
 
-      const activityData = bodyA.data.activityData as GROUP_ACTIVITY_SCHEMA;
+      // fetch participants data
+      const { data: dataA, error: errA } = await dbHandler.getDocs({
+        col_name: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
+      });
+      if (errA) throw new Error(errA);
+
+      const resData = dataA as any[];
+      const participants = {} as {
+        [memberID: string]: GROUP_ACTIVITY_PARTICIPANT;
+      };
+
+      resData.forEach((item: any) => {
+        const data = item.data() as GROUP_ACTIVITY_PARTICIPANT;
+        const member = data.memberID as string;
+        participants[member] = data;
+      });
+
+      const activityData = data as GROUP_ACTIVITY_SCHEMA;
       const { needsHA } = activityData;
 
       const { data: memberHARes, error: haErr } = await dbHandler.get({
@@ -105,9 +119,7 @@ class FetchGroupActivityClass {
 
       const notHA = needsHA ? (isHA ? false : true) : false;
 
-      const participantsDataRes = await addDisplayName(
-        bodyA.data.participantsData
-      );
+      const participantsDataRes = await addDisplayName(participants);
       if (!participantsDataRes.status)
         throw new Error(participantsDataRes.error);
 
@@ -124,7 +136,7 @@ class FetchGroupActivityClass {
       const active = ActiveTimestamp(date);
 
       const restrictionStatus = activityData.groupRestriction;
-      const currentMember = body.status;
+      // const currentMember = true;
 
       const resB = await dbHandler.getSpecific({
         path: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
@@ -144,10 +156,9 @@ class FetchGroupActivityClass {
       const owner = activityData.createdBy === memberID;
 
       let admin = false;
-      if (body.status) {
-        const role = body.data.role;
-        admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
-      }
+
+      const role = memData.role;
+      admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
 
       return handleResponses({
         data: {
