@@ -1,10 +1,11 @@
 import React from "react";
 import SignInAgainScreen from "../screens/SignInAgainScreen";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
-import GroupFeedCard from "./GroupFeedCard";
 import ErrorActivities from "../screens/ErrorActivities";
+import { dbHandler } from "@/src/firebase/db";
+import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
+import FeedGroupClient from "./FeedGroupClient";
 
 export default async function FeedGroup({
   groupID,
@@ -16,30 +17,30 @@ export default async function FeedGroup({
   if (!memberID) return <SignInAgainScreen />;
 
   try {
-    const host = process.env.HOST;
-
-    const postObj = GetPostObj({ memberID, groupID });
-
     // fetch activities with groupID
-    const res = await fetch(`${host}/api/groups/get-activities`, postObj);
-    const body = await res.json();
+    const { data: activitiesRes, error: actErr } = await dbHandler.getSpecific({
+      path: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
+      orderCol: "activityDate",
+      ascending: false,
+    });
+    if (actErr) throw new Error(actErr);
 
-    if (!body.status) throw new Error(body.error);
-
-    const groupActivities = body.data as {
+    const groupActivities = activitiesRes as {
       [activityID: string]: GROUP_ACTIVITY_SCHEMA;
     };
 
     // get all hidden activity IDs from member data
-    const resB = await fetch(`${host}/api/activity/get-hidden`, postObj);
-    const bodyB = await resB.json();
+    const { data: memberRes, error: hiddenErr } = await dbHandler.get({
+      col_name: "MEMBERS",
+      id: memberID,
+    });
+    if (hiddenErr) throw new Error(hiddenErr);
 
-    if (!bodyB.status) throw new Error(bodyB.error);
-
-    const hiddenActivitiesKeys = bodyB.data as string[];
+    const memberData = memberRes as MEMBER_SCHEMA;
+    const hiddenActivities = memberData.hiddenActivities ?? [];
 
     // filter hidden activity IDs from all activities keys
-    hiddenActivitiesKeys.forEach((id: string) => {
+    Object.keys(hiddenActivities).forEach((id: string) => {
       delete groupActivities[id];
     });
 
@@ -48,20 +49,7 @@ export default async function FeedGroup({
         <ErrorActivities text="Well, looks like there are no activites here for you." />
       );
 
-    return (
-      <div className="flex w-full flex-col items-start justify-start gap-4">
-        {Object.keys(groupActivities).map((activityID: string) => {
-          const data = groupActivities[activityID] as GROUP_ACTIVITY_SCHEMA;
-          return (
-            <GroupFeedCard
-              key={activityID}
-              memberID={memberID}
-              activityData={data}
-            />
-          );
-        })}
-      </div>
-    );
+    return <FeedGroupClient groupID={groupID} hidden={hiddenActivities} />;
   } catch (err) {
     return ErrorScreenHandler(err);
   }
