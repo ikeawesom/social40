@@ -1,19 +1,23 @@
-import DefaultCard from "@/src/components/DefaultCard";
-import CalculateHAButton from "@/src/components/groups/custom/HA/CalculateHAButton";
+import GroupHALoadingSkeleton from "@/src/components/groups/custom/HA/GroupHALoadingSkeleton";
+import GroupHAServerSection from "@/src/components/groups/custom/HA/GroupHAServerSection";
+import HAOptions from "@/src/components/groups/custom/HA/HAOptions";
+import IndivaHAServerSection from "@/src/components/groups/custom/HA/IndivaHAServerSection";
+import LastUpdatedHANotice from "@/src/components/groups/custom/HA/LastUpdatedHANotice";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
-import HRow from "@/src/components/utils/HRow";
+import CenterFeedSkeleton from "@/src/components/utils/CenterFeedSkeleton";
 import { dbHandler } from "@/src/firebase/db";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import { HA_REPORT_SCHEMA } from "@/src/utils/schemas/ha";
+import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { cookies } from "next/headers";
-import Link from "next/link";
-import { twMerge } from "tailwind-merge";
+import { Suspense } from "react";
 
 export default async function HAReportPage({
   params,
+  searchParams,
 }: {
   params: { [groupID: string]: string };
+  searchParams: { [type: string]: string };
 }) {
   const cookieStore = cookies();
   const groupID = params.groupID;
@@ -22,72 +26,36 @@ export default async function HAReportPage({
   if (!data) return <SignInAgainScreen />;
 
   try {
-    if (!groupID) throw new Error("Invalid group.");
+    const type =
+      searchParams.type !== "group" && searchParams.type !== "indiv"
+        ? "group"
+        : searchParams.type ?? "group";
 
-    const { error, data: membersList } = await dbHandler.getSpecific({
-      path: `GROUPS/${groupID}/MEMBERS`,
-      orderCol: "dateJoined",
-      ascending: false,
+    const { data: groupDataRes, error: groupErr } = await dbHandler.get({
+      col_name: "GROUPS",
+      id: groupID,
     });
-
-    if (error) throw new Error(error);
-
-    const { data: reports, error: reportsError } = await dbHandler.getSpecific({
-      path: `GROUPS/${groupID}/HA-REPORTS`,
-      orderCol: "groupID",
-      ascending: false,
-    });
-
-    if (reportsError) throw new Error(reportsError);
-
-    const empty = Object.keys(reports).length === 0;
-
+    if (groupErr || !groupID) throw new Error("Invalid group.");
+    const groupData = groupDataRes as GROUP_SCHEMA;
+    const { lastUpdatedHA } = groupData;
     return (
       <>
         <HeaderBar back text={`HA Reports for ${groupID}`} />
         <div className="w-full grid place-items-center">
           <div className="flex flex-col items-center justify-center gap-2 w-full max-w-[500px] text-center">
-            {empty && (
-              <>
-                <h1 className="text-3xl font-bold text-custom-dark-text mt-4">
-                  No reports created.
-                </h1>
-                <p className="text-sm text-custom-grey-text mb-4">
-                  {" "}
-                  Start cooking one now!
-                </p>
-              </>
+            {lastUpdatedHA && (
+              <LastUpdatedHANotice lastUpdatedHA={lastUpdatedHA} />
             )}
-            <CalculateHAButton
-              className={twMerge(empty ? "w-fit" : "w-full mt-3")}
-              groupID={groupID}
-              membersList={JSON.parse(JSON.stringify(membersList))}
-            />
-            {!empty && <HRow />}
-            {Object.keys(reports).map((id: string) => {
-              const data = reports[id] as HA_REPORT_SCHEMA;
-              const { time, members, reportID } = data;
-              const HAmembers = members.filter((member) => member.isHA);
-              return (
-                <Link
-                  key={reportID}
-                  href={`/groups/${groupID}/HA-report/${reportID}`}
-                  className="w-full"
-                >
-                  <DefaultCard className="w-full duration-150 hover:bg-custom-light-text items-start justify-start flex flex-col px-3 py-2">
-                    <h1 className="text-lg">
-                      <span className="font-bold text-custom-primary">
-                        {HAmembers.length}
-                      </span>{" "}
-                      HA personnel
-                    </h1>
-                    <p className="text-xs text-custom-grey-text">
-                      Last updated: {time.to}
-                    </p>
-                  </DefaultCard>
-                </Link>
-              );
-            })}
+            <HAOptions type={type} />
+            {type === "indiv" ? (
+              <Suspense fallback={<CenterFeedSkeleton height="h-[8vh]" />}>
+                <IndivaHAServerSection key={type} groupID={groupID} />
+              </Suspense>
+            ) : (
+              <Suspense fallback={<GroupHALoadingSkeleton />} key={type}>
+                <GroupHAServerSection groupID={groupID} />
+              </Suspense>
+            )}
           </div>
         </div>
       </>

@@ -5,8 +5,6 @@ import LoadingIcon, {
   LoadingIconBright,
 } from "@/src/components/utils/LoadingIcon";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
-import { useHostname } from "@/src/hooks/useHostname";
-import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import {
@@ -19,6 +17,14 @@ import Toggle from "@/src/components/utils/Toggle";
 import HRow from "@/src/components/utils/HRow";
 import { createGroupActivityClass } from "@/src/utils/groups/createGroupActivityClass";
 import Image from "next/image";
+import Modal from "@/src/components/utils/Modal";
+import ModalHeader from "@/src/components/utils/ModalHeader";
+import Notice from "@/src/components/utils/Notice";
+import { getNonHAMembers } from "../../../HA/getNonHAMembers";
+import ModalLoading from "@/src/components/utils/ModalLoading";
+import InnerContainer from "@/src/components/utils/InnerContainer";
+import { second } from "@/src/utils/groups/handleGroupActivityCreate";
+import Link from "next/link";
 
 export default function CreateGroupActivityForm({
   groupID,
@@ -60,6 +66,12 @@ export default function CreateGroupActivityForm({
     members: [] as string[],
   });
   const [done, setDone] = useState("");
+  const [useHA, setUseHA] = useState({
+    warning: false,
+    loading: false,
+  });
+
+  const [nonHAmembers, setNonHAMembers] = useState<string[]>();
 
   useEffect(() => {
     if (done !== "")
@@ -77,9 +89,7 @@ export default function CreateGroupActivityForm({
     setInput({ ...input, time: `${startT.hour}:${startT.min}` });
   }, [startT]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleLogic = async () => {
     try {
       const createGroupClass = new createGroupActivityClass({
         addMembers,
@@ -96,6 +106,10 @@ export default function CreateGroupActivityForm({
       if (errB) throw new Error(errB);
       setLoadingStage((loadingStage) => loadingStage + 1);
 
+      if (input.needHA) {
+        createGroupClass.setNonHAMembers(nonHAmembers ?? []);
+      }
+
       const { error: errC } = await createGroupClass.addParticipants();
       if (errC) throw new Error(errC);
       setLoadingStage((loadingStage) => loadingStage + 1);
@@ -103,12 +117,6 @@ export default function CreateGroupActivityForm({
       const { error: errD, data } = await createGroupClass.addToGroupCol();
       if (errD) throw new Error(errD);
       setLoadingStage((loadingStage) => loadingStage + 1);
-
-      // const PostObj = GetPostObj({ groupID, memberID, input, addMembers });
-      // const res = await fetch(`${host}/api/activity/group-create`, PostObj);
-      // const body = await res.json();
-
-      // if (!body.status) throw new Error(body.error);
 
       router.refresh();
       router.replace(
@@ -125,6 +133,44 @@ export default function CreateGroupActivityForm({
     }
   };
 
+  const resetModal = () => {
+    setLoading(true);
+    setUseHA({ warning: false, loading: false });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    if (input.needHA) {
+      // show warning modal
+      setUseHA({ ...useHA, warning: true, loading: true });
+
+      // get filtered group members based on selection
+      const { data: filtered, error: filterErr } = await second(
+        addMembers,
+        groupID
+      );
+      if (filterErr) throw new Error(filterErr);
+
+      // filter who are not HA
+      const { data, error } = await getNonHAMembers(filtered);
+      if (error) throw new Error(error);
+
+      if (Object.keys(data).length > 0) {
+        // if have members not HA, display warning
+        setNonHAMembers(Object.keys(data));
+        setUseHA({ ...useHA, warning: true, loading: false });
+      } else {
+        // if no not HA, remove modal
+        resetModal();
+        await handleLogic();
+      }
+    } else {
+      await handleLogic();
+    }
+    setLoading(false);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
@@ -134,7 +180,52 @@ export default function CreateGroupActivityForm({
       onSubmit={handleSubmit}
       className="w-full flex flex-col items-start justify-start gap-3"
     >
-      {loading ? (
+      {useHA.warning && (
+        <Modal>
+          <ModalHeader
+            close={() => setUseHA({ ...useHA, warning: false })}
+            heading="HA Warning"
+          />
+          {useHA.loading ? (
+            <ModalLoading />
+          ) : (
+            <div className="flex flex-col items-start justify-start gap-3">
+              <Notice status="error" noHeader>
+                <h1 className="font-bold">
+                  WARNING: The following members are not Heat Acclimitised (HA).
+                </h1>
+              </Notice>
+              <InnerContainer className="w-full max-h-[20vh]">
+                {nonHAmembers?.map((id: string, index: number) => (
+                  <div
+                    key={index}
+                    className="text-sm w-full px-2 py-2 border-b-[1px] border-custom-light-text flex items-center justify-between gap-3"
+                  >
+                    <h1 className="font-bold text-custom-dark-text">{id}</h1>
+                    <Link
+                      className="text-xs text-custom-primary underline hover:opacity-70"
+                      href={`/members/${id}`}
+                    >
+                      View Profile
+                    </Link>
+                  </div>
+                ))}
+              </InnerContainer>
+              <div className="w-full flex items-start justify-center gap-2 flex-col">
+                <p className="text-sm text-custom-red text-center">
+                  Due to safety reasons, these members will{" "}
+                  <span className="font-bold">not</span> be added into the
+                  activity.
+                </p>
+                <PrimaryButton onClick={handleLogic}>
+                  Accept & Continue
+                </PrimaryButton>
+              </div>
+            </div>
+          )}
+        </Modal>
+      )}
+      {loading && !useHA.warning && !useHA.loading ? (
         <div className="w-full rounded-md bg-custom-light-green/50 p-2">
           {GROUP_ACTIVITY_CREATION_PROGRESS.map(
             (text: string, index: number) => (
@@ -312,17 +403,15 @@ export default function CreateGroupActivityForm({
                 />
               </div>
 
-              <div className="w-full flex items-center justify-between gap-2 py-2 cursor-not-allowed">
+              <div className="w-full flex items-center justify-between gap-2 py-2">
                 <div>
-                  <p className="text-sm opacity-50">
-                    This activity requires HA
-                  </p>
-                  <p className="text-xs text-custom-grey-text opacity-50">
+                  <p className="text-sm">This activity requires HA</p>
+                  {/* <p className="text-xs text-custom-grey-text opacity-50">
                     Coming soon...
-                  </p>
+                  </p> */}
                 </div>
                 <Toggle
-                  forceDisable={true}
+                  // forceDisable={true}
                   className="shadow-none border-none"
                   buttonClassName="border-[1px]"
                   disable={() => setInput({ ...input, needHA: false })}

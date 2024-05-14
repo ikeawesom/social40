@@ -9,6 +9,8 @@ import { dbHandler } from "@/src/firebase/db";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "next/navigation";
+import Toggle from "@/src/components/utils/Toggle";
+import FormInputContainer from "@/src/components/utils/FormInputContainer";
 
 export default function EditGroupForm({
   groupData,
@@ -77,35 +79,42 @@ export default function EditGroupForm({
         className="w-full flex flex-col items-start justify-center gap-4"
         onSubmit={handleSubmit}
       >
-        <input
-          placeholder="Choose a group name"
-          name="groupName"
-          required
-          value={inputGroup.groupName}
-          onChange={handleChange}
-        />
-        <input
-          placeholder="Write a group desciption"
-          name="groupDesc"
-          required
-          value={inputGroup.groupDesc}
-          onChange={handleChange}
-        />
-        <SecondaryButton
-          onClick={() =>
-            setInputGroup({
-              ...inputGroup,
-              cos: { ...inputGroup.cos, state: !inputGroup.cos.state },
-            })
-          }
-          className={twMerge(
-            "w-fit",
-            inputGroup.cos.state &&
-              "bg-custom-light-orange border-custom-orange"
-          )}
-        >
-          {inputGroup.cos.state ? "COS Enabled" : "Enable COS"}
-        </SecondaryButton>
+        <FormInputContainer inputName="groupname" labelText="Group Name">
+          <input
+            placeholder="Choose a group name"
+            name="groupName"
+            required
+            value={inputGroup.groupName}
+            onChange={handleChange}
+          />
+        </FormInputContainer>
+        <FormInputContainer inputName="groupDesc" labelText="Group Description">
+          <input
+            placeholder="Write a group desciption"
+            name="groupDesc"
+            required
+            value={inputGroup.groupDesc}
+            onChange={handleChange}
+          />
+        </FormInputContainer>
+        <div className="w-full flex items-center justify-start gap-2">
+          <p className="text-sm">Enable COS</p>
+          <Toggle
+            disable={() =>
+              setInputGroup({
+                ...inputGroup,
+                cos: { ...inputGroup.cos, state: false },
+              })
+            }
+            enable={() =>
+              setInputGroup({
+                ...inputGroup,
+                cos: { ...inputGroup.cos, state: true },
+              })
+            }
+            disabled={!inputGroup.cos.state}
+          />
+        </div>
         <PrimaryButton
           disabled={noChange || loading}
           className="grid place-items-center"

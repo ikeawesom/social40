@@ -9,6 +9,7 @@ import handleResponses from "../../handleResponses";
 import { ROLES_HIERARCHY } from "../../constants";
 import { dbHandler } from "@/src/firebase/db";
 import { MEMBER_SCHEMA } from "../../schemas/members";
+import { DailyHAType } from "../../schemas/ha";
 
 type GroupActivityClassType = {
   memberID: string;
@@ -90,6 +91,20 @@ class FetchGroupActivityClass {
       if (!bodyA.status) throw new Error(bodyA.error);
 
       const activityData = bodyA.data.activityData as GROUP_ACTIVITY_SCHEMA;
+      const { needsHA } = activityData;
+
+      const { data: memberHARes, error: haErr } = await dbHandler.get({
+        col_name: "HA",
+        id: memberID,
+      });
+
+      if (haErr) throw new Error(haErr);
+
+      const haData = memberHARes as DailyHAType;
+      const { isHA } = haData;
+
+      const notHA = needsHA ? (isHA ? false : true) : false;
+
       const participantsDataRes = await addDisplayName(
         bodyA.data.participantsData
       );
@@ -123,9 +138,8 @@ class FetchGroupActivityClass {
 
       const fallouts = falloutsRes.data;
 
-      const canJoin =
-        !restrictionStatus || (currentMember && restrictionStatus);
-      !currentParticipant;
+      const canJoin = (!restrictionStatus || !currentParticipant) && !notHA;
+      // (currentMember && restrictionStatus)
 
       const owner = activityData.createdBy === memberID;
 

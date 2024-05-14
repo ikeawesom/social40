@@ -16,6 +16,7 @@ import {
   REMARKS_SCHEMA,
 } from "@/src/utils/schemas/group-activities";
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
+import { DailyHAType } from "@/src/utils/schemas/ha";
 import {
   ACTIVITY_PARTICIPANT_SCHEMA,
   MEMBER_SCHEMA,
@@ -330,8 +331,39 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: false, error: res.error });
     return NextResponse.json({ status: true });
   } else if (option === "group-participate") {
-    const date = getCurrentDate();
+    // get group activity data
+    const { data, error } = await dbHandler.get({
+      col_name: "GROUP-ACTIVITIES",
+      id: activityID,
+    });
+    if (error)
+      return NextResponse.json({ status: false, error: error.message });
+    const activityData = data as GROUP_ACTIVITY_SCHEMA;
+    const { needsHA } = activityData;
+
+    let canJoin = true;
+
+    if (needsHA) {
+      // check if member is HA
+      const { data, error } = await dbHandler.get({
+        col_name: "HA",
+        id: memberID,
+      });
+      if (error)
+        return NextResponse.json({ status: false, error: error.message });
+      const haData = data as DailyHAType;
+      const { isHA } = haData;
+      canJoin = isHA;
+    }
+
+    if (!canJoin)
+      return NextResponse.json({
+        status: false,
+        error: "Oops, we can't do that as this member is not HA!",
+      });
+
     // add to group participants subcollection
+    const date = getCurrentDate();
     const to_add = {
       memberID,
       dateJoined: date,

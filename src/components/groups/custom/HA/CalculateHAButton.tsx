@@ -28,7 +28,7 @@ export default function CalculateHAButton({
           <ModalHeader
             close={disable}
             className="mb-2"
-            heading="Calculate HA"
+            heading="Calculate Group HA"
           />
           <HAForm membersList={membersList} groupID={groupID} />
         </Modal>
@@ -37,7 +37,7 @@ export default function CalculateHAButton({
         className={twMerge("flex items-center justify-center gap-2", className)}
         onClick={enable}
       >
-        Calculate HA
+        Calculate Group HA
         <Image
           alt=""
           src="/icons/features/icon_bolt.svg"

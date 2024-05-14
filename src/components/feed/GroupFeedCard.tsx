@@ -10,6 +10,7 @@ import SecondaryButton from "../utils/SecondaryButton";
 import DismissButton from "./DismissButton";
 import ShowButton from "./ShowButton";
 import ActivityStatusTab from "./ActivityStatusTab";
+import Image from "next/image";
 
 export default async function GroupFeedCard({
   activityData,
@@ -21,7 +22,8 @@ export default async function GroupFeedCard({
   show?: boolean;
 }) {
   try {
-    const { activityID, groupID, activityDesc, activityTitle } = activityData;
+    const { activityID, groupID, activityDesc, activityTitle, isPT } =
+      activityData;
     const host = process.env.HOST as string;
 
     const res = await FetchGroupActivityData.getMain({
@@ -33,15 +35,8 @@ export default async function GroupFeedCard({
 
     if (!res.status) throw new Error(res.error);
 
-    const {
-      owner,
-      canJoin,
-      active,
-      dateStr,
-      currentParticipant,
-      participantsData,
-      fallouts,
-    } = res.data;
+    const { canJoin, active, dateStr, currentParticipant, participantsData } =
+      res.data;
 
     const resA = await FetchGroupActivityData.getRequests({
       activityID,
@@ -77,9 +72,18 @@ export default async function GroupFeedCard({
             }/activity?${new URLSearchParams({
               id: activityID,
             })}`}
-            className="text-start font-semibold text-lg text-custom-dark-text duration-150 hover:opacity-70"
+            className="text-start font-semibold text-lg text-custom-dark-text flex items-start justify-start gap-2 hover:opacity-70"
           >
             {activityTitle}
+            {isPT && (
+              <Image
+                alt="PT activity"
+                className="my-1"
+                src="/icons/features/icon_activities_active.svg"
+                width={20}
+                height={20}
+              />
+            )}
           </Link>
           <ActivityStatusTab active={active} />
         </div>
@@ -116,11 +120,9 @@ export default async function GroupFeedCard({
           )}
         </Link>
 
-        <div className="w-full mt-2 flex items-center justify-between gap-3 max-[300px]:flex-wrap">
+        <div className="w-full mt-2 flex items-center justify-end gap-3 max-[350px]:flex-wrap">
           {!currentParticipant ? (
             <JoinGroupActivityButton
-              fallout={Object.keys(fallouts).includes(memberID)}
-              active={active}
               activityID={activityID}
               canJoin={canJoin}
               memberID={memberID}
@@ -130,11 +132,9 @@ export default async function GroupFeedCard({
           ) : (
             <SecondaryButton
               disabled
-              className="border-custom-green text-custom-green text-xs px-3"
+              className="border-custom-green text-custom-green text-xs px-3 min-w-fit"
             >
-              {active
-                ? "You are participating in this activity"
-                : "You have participated in this activity"}
+              {active ? "Participating" : "Participated"}
             </SecondaryButton>
           )}
           {show ? (

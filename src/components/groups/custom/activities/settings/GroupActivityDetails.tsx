@@ -10,13 +10,15 @@ import { SuspenseGroupActivityFetchType } from "./GroupActivityData";
 import ActivityStatusTab from "@/src/components/feed/ActivityStatusTab";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
+import Image from "next/image";
+import Notice from "@/src/components/utils/Notice";
 
 export default async function GroupActivityDetails({
   activityData,
 }: SuspenseGroupActivityFetchType) {
   try {
     const active = ActiveTimestamp(activityData.activityDate);
-    const { activityLevel } = activityData;
+    const { activityLevel, needsHA, isPT } = activityData;
 
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
@@ -28,8 +30,17 @@ export default async function GroupActivityDetails({
             {activityData.groupID}
           </Link>
           <div className="flex items-center justify-between gap-x-4 flex-wrap w-full">
-            <h1 className="text-custom-dark-text font-semibold text-2xl">
+            <h1 className="text-start font-semibold text-2xl text-custom-dark-text flex items-start justify-start gap-2">
               {activityData.activityTitle}
+              {isPT && (
+                <Image
+                  alt="PT activity"
+                  className="my-1"
+                  src="/icons/features/icon_activities_active.svg"
+                  width={20}
+                  height={20}
+                />
+              )}
             </h1>
             <ActivityStatusTab active={active} />
           </div>
@@ -37,7 +48,7 @@ export default async function GroupActivityDetails({
             {activityData.activityDesc}
           </h4>
 
-          {activityLevel !== undefined && (
+          {activityLevel && (
             <h4 className="text-custom-dark-text">
               Activity Level:{" "}
               <span
@@ -54,6 +65,7 @@ export default async function GroupActivityDetails({
               </span>
             </h4>
           )}
+
           <p className="text-custom-dark-text text-sm">
             {active ? "Begins on: " : "Ended on: "}
             {TimestampToDateString(activityData.activityDate)}
@@ -68,6 +80,12 @@ export default async function GroupActivityDetails({
             Created on: {TimestampToDateString(activityData.createdOn)}
           </p>
         </div>
+        {needsHA && (
+          <Notice noHeader status="warning">
+            <span className="font-bold">IMPORTANT:</span> This activity requires
+            HA
+          </Notice>
+        )}
       </DefaultCard>
     );
   } catch (err: any) {

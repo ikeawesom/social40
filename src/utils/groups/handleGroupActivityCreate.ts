@@ -59,6 +59,7 @@ export async function first(groupID: string, input: any, memberID: string) {
         dateCutOff: cutOff,
       },
       isPT: input.pt,
+      needsHA: input.needHA,
     } as GROUP_ACTIVITY_SCHEMA;
 
     const res = await dbHandler.addGeneral({

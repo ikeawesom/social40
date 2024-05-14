@@ -25,6 +25,7 @@ export class createGroupActivityClass {
   fetchedID: string | null;
   groupData: GROUP_ACTIVITIES_SCHEMA | null;
   members: string[];
+  nonHAMembers: string[];
   constructor({
     addMembers,
     groupID,
@@ -36,6 +37,7 @@ export class createGroupActivityClass {
     this.fetchedID = null;
     this.groupData = null;
     this.members = [];
+    this.nonHAMembers = [];
   }
 
   async createGroupActivity() {
@@ -44,7 +46,7 @@ export class createGroupActivityClass {
       const { error, data } = await first(groupID, input, memberID);
       if (error) throw new Error(error);
       const { timestamp, fetchedID, groupData } = data;
-      console.log(data);
+
       this.timestamp = timestamp;
       this.fetchedID = fetchedID;
       this.groupData = groupData;
@@ -69,7 +71,9 @@ export class createGroupActivityClass {
 
   async addParticipants() {
     const { memberID } = this.config;
-    const membersData = this.members;
+    const membersData = this.members.filter(
+      (id: string) => !this.nonHAMembers.includes(id)
+    );
     const fetchedID = this.fetchedID ?? "";
 
     try {
@@ -167,6 +171,10 @@ export class createGroupActivityClass {
     } catch (err: any) {
       return handleResponses({ status: false, error: err.message });
     }
+  }
+
+  setNonHAMembers(members: string[]) {
+    this.nonHAMembers = members;
   }
 
   isActive(a: any, start: Timestamp, end: Timestamp) {

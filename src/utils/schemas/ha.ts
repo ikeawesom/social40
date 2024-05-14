@@ -1,3 +1,12 @@
+import { Timestamp } from "firebase/firestore";
+
+export type DailyHAType = {
+  memberID: string;
+  dailyActivities: AllDatesActivitiesType;
+  isHA: boolean;
+  lastUpdated: Timestamp;
+};
+
 export type isHAType = {
   id: string;
   displayName: string;
@@ -5,6 +14,7 @@ export type isHAType = {
 };
 
 export type HA_REPORT_SCHEMA = {
+  createdOn: Timestamp;
   groupID: string;
   reportID: string;
   members: isHAType[];

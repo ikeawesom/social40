@@ -52,7 +52,7 @@ export default function GroupActivities({
       />
       <InnerContainer
         className={twMerge(
-          "min-h-[10vh] my-2 overflow-y-visible overflow-x-hidden",
+          "min-h-[10vh] max-h-[60vh] my-2 overflow-y-visible overflow-x-hidden",
           empty && "grid place-items-center justify-center overflow-hidden p-4"
         )}
       >
