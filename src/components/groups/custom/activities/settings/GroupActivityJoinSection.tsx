@@ -47,8 +47,6 @@ export default async function GroupActivityJoinSection({
               </p>
             )}
             <JoinGroupActivityButton
-              fallout={isFallout}
-              active={active}
               activityID={activityData.activityID}
               memberID={memberID}
               canJoin={canJoin}

@@ -119,8 +119,6 @@ export default async function GroupFeedCard({
         <div className="w-full mt-2 flex items-center justify-between gap-3 max-[300px]:flex-wrap">
           {!currentParticipant ? (
             <JoinGroupActivityButton
-              fallout={Object.keys(fallouts).includes(memberID)}
-              active={active}
               activityID={activityID}
               canJoin={canJoin}
               memberID={memberID}
