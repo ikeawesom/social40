@@ -33,15 +33,8 @@ export default async function GroupFeedCard({
 
     if (!res.status) throw new Error(res.error);
 
-    const {
-      owner,
-      canJoin,
-      active,
-      dateStr,
-      currentParticipant,
-      participantsData,
-      fallouts,
-    } = res.data;
+    const { canJoin, active, dateStr, currentParticipant, participantsData } =
+      res.data;
 
     const resA = await FetchGroupActivityData.getRequests({
       activityID,
@@ -116,7 +109,7 @@ export default async function GroupFeedCard({
           )}
         </Link>
 
-        <div className="w-full mt-2 flex items-center justify-between gap-3 max-[300px]:flex-wrap">
+        <div className="w-full mt-2 flex items-center justify-end gap-3 max-[350px]:flex-wrap">
           {!currentParticipant ? (
             <JoinGroupActivityButton
               activityID={activityID}
@@ -128,11 +121,9 @@ export default async function GroupFeedCard({
           ) : (
             <SecondaryButton
               disabled
-              className="border-custom-green text-custom-green text-xs px-3"
+              className="border-custom-green text-custom-green text-xs px-3 min-w-fit"
             >
-              {active
-                ? "You are participating in this activity"
-                : "You have participated in this activity"}
+              {active ? "Participating" : "Participated"}
             </SecondaryButton>
           )}
           {show ? (
