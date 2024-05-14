@@ -1,4 +1,19 @@
 export const VERSION_MAP = {
+  "1.5.0": {
+    version: "1.5.0",
+    title: "Automated Heat Acclimatisation (HA) System",
+    desc: "Never worry about tracking your soldiers' HA again. ",
+    updates: [
+      "Every member’s individual HA currency is calculated automatically",
+      "HA Currencies will now be displayed on each member’s individual profile",
+      "Tracking data can be downloaded into an excel sheet if needed",
+      "Group activities that require HA to participate in will **automatically** reject non-HA members to join",
+      "Non-HA members will not be allowed to request to join such group activities which require HA",
+    ],
+    adminOnly: true,
+    date: "14/05/2024",
+    link: "https://social40.notion.site/v1-5-0-New-Automated-Heat-Acclimatisation-HA-System-9d6a732195034ff8b11869d0f4c9cfae",
+  },
   "1.4.0": {
     version: "1.4.0",
     title: "Leaderboard",
