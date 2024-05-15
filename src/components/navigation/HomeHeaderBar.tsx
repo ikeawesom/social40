@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
-import { MAX_LENGTH } from "@/src/utils/constants";
+import { MAX_LENGTH } from "@/src/utils/settings";
 import Link from "next/link";
 
 export default function HomeHeaderBar({
