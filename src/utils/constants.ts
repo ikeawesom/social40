@@ -92,8 +92,6 @@ export const BADGE_COLORS = {
   [key: string]: BadgeColorsType;
 };
 
-export const MAX_LENGTH = 30;
-
 export const GROUP_MEMBERS_SELECT_OPTIONS = {
   "Book In": {
     withOwner: true,
