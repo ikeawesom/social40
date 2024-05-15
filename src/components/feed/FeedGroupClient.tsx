@@ -49,6 +49,8 @@ export default function FeedGroupClient({
         delete data[id];
       });
 
+      if (Object.keys(data).length === 0) throw new Error("undefined");
+
       setActivityData({
         pointer: lastPointer,
         activities: { ...activityData.activities, ...data },
@@ -67,14 +69,14 @@ export default function FeedGroupClient({
 
   const handleScroll = async () => {
     if (finished) return;
-    // console.log("here");
     // console.log("H:", document.documentElement.scrollHeight);
     // console.log("T:", document.documentElement.scrollTop);
     // console.log("W:", window.innerHeight);
 
     if (
-      window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.scrollHeight
+      window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.scrollHeight &&
+      !loading
     ) {
       setLoading(true);
       setTimeout(() => {
@@ -92,7 +94,6 @@ export default function FeedGroupClient({
 
   useEffect(() => {
     if (!finished) fetchData();
-    if (finished) setLoading(false);
   }, [fetch]);
 
   if (Object.keys(activityData.activities).length === 0)
@@ -102,12 +103,13 @@ export default function FeedGroupClient({
     <div
       className={twMerge(
         "flex w-full flex-col items-center justify-center gap-4",
-        !finished && "pb-6"
+        !finished && "pb-4"
       )}
     >
-      {Object.keys(activityData.activities).map((id: string) => {
+      {Object.keys(activityData.activities).map((id: string, index: number) => {
         return (
           <FeedGroupCardClient
+            index={index}
             activityData={JSON.parse(
               JSON.stringify(activityData.activities[id])
             )}

@@ -21,9 +21,11 @@ import FeedGroupCardSkeleton from "./FeedGroupCardSkeleton";
 export default function FeedGroupCardClient({
   activityData,
   memberID,
+  index,
 }: {
   activityData: GROUP_ACTIVITY_SCHEMA;
   memberID: string;
+  index: number;
 }) {
   const [updatedData, setUpdatedData] = useState<{
     canJoin: boolean;
@@ -95,9 +97,10 @@ export default function FeedGroupCardClient({
   } = updatedData;
 
   const participantNumber = Object.keys(participantsData).length;
-  // const randomIndex = Math.floor(Math.random() * participantNumber);
+  const randomIndex = Math.floor(Math.random() * participantNumber);
 
-  const randomParticipant = Object.keys(participantsData)[0];
+  const randomParticipant =
+    Object.keys(participantsData)[index % Object.keys(participantsData).length];
   const oneParticipant = participantNumber === 1;
   const noParticipant = participantNumber === 0;
 
