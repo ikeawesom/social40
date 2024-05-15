@@ -5,30 +5,32 @@ import handleResponses from "../handleResponses";
 import { GROUP_ACTIVITIES_SCHEMA } from "../schemas/groups";
 
 export async function FetchPaginateActivity({
-  groupID,
   lastPointer,
   hidden,
+  limit,
+  path,
 }: {
-  groupID: string;
-  hidden: string[];
+  hidden?: string[];
   lastPointer?: any;
+  limit?: number;
+  path: string;
 }) {
   try {
     let pointerRef = null;
 
     if (lastPointer) {
       const { error, data } = await dbHandler.getRef({
-        col_name: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
+        col_name: path,
         id: lastPointer,
       });
       if (!error) pointerRef = data;
     }
 
     const { data: paginateRes, error: pagiErr } = await dbHandler.getPaginate({
-      path: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
+      path: path,
       orderCol: "activityDate",
       ascending: false,
-      limitNo: 5,
+      limitNo: limit ?? 5,
       queryNext: pointerRef,
     });
 
@@ -39,7 +41,7 @@ export async function FetchPaginateActivity({
     // filter hidden activity IDs from all activities keys
     const actArr = [] as GROUP_ACTIVITIES_SCHEMA[];
     Object.keys(limitedData).forEach((id: string) => {
-      if (!hidden.includes(id)) actArr.push(limitedData[id]);
+      if (!hidden?.includes(id)) actArr.push(limitedData[id]);
     });
 
     return handleResponses({

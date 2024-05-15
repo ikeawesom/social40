@@ -34,9 +34,9 @@ export default function FeedGroupClient({
 
     try {
       const { data: pagiData, error } = await FetchPaginateActivity({
-        groupID,
         hidden,
         lastPointer: lastRef,
+        path: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
       });
 
       if (error) throw new Error(error);
@@ -85,7 +85,7 @@ export default function FeedGroupClient({
 
         return (
           <FeedGroupCardClient
-            onDismiss={() => handleRemove(index)}
+            toggleView={() => handleRemove(index)}
             key={activityID}
             index={index}
             activityData={data}

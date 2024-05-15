@@ -29,8 +29,8 @@ export default async function FeedGroup({
 
     // fetch activities with groupID
     const { data: activitiesRes, error: actErr } = await FetchPaginateActivity({
-      groupID,
       hidden: hiddenActivities,
+      path: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
     });
     if (actErr) throw new Error(actErr);
     const { data, lastPointer } = activitiesRes;
