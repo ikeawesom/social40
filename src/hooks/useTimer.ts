@@ -8,10 +8,12 @@ export function useTimer(duration: number) {
       setInterval(() => {
         setSeconds((seconds) => seconds - 1);
       }, 1000);
-    } else {
-      setFinish(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (seconds < 0) setFinish(true);
+  }, [seconds]);
 
   return { seconds, isFinished };
 }

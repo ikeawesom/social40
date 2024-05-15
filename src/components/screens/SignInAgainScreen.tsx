@@ -31,7 +31,7 @@ export default function SignInAgainScreen() {
 
         setTimeout(() => {
           router.push("/auth", { scroll: false });
-          // setLoading(false);
+          setLoading(false);
         }, 1400);
       }, 2000);
     }
