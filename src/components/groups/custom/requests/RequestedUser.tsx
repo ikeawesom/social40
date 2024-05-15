@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { twMerge } from "tailwind-merge";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import { WAITLIST_SCHEMA } from "@/src/utils/schemas/waitlist";
-import { MAX_LENGTH } from "@/src/utils/constants";
+import { MAX_LENGTH } from "@/src/utils/settings";
 
 type GroupItemType = {
   className?: string;

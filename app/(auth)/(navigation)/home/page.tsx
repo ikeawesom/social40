@@ -1,6 +1,7 @@
 import FeedSkeleton from "@/src/components/FeedSkeleton";
 import AnnouncementSection from "@/src/components/announcements/AnnouncementSection";
 import CreateAnnouncementForm from "@/src/components/announcements/CreateAnnouncementForm";
+import MaintenanceSection from "@/src/components/announcements/MaintenanceSection";
 import UpdatesSection from "@/src/components/announcements/UpdatesSection";
 import ActivityFeedSkeleton from "@/src/components/feed/ActivityFeedSkeleton";
 import FeedGroup from "@/src/components/feed/FeedGroup";
@@ -18,6 +19,7 @@ import {
   MEMBER_CREATED_GROUPS_SCHEMA,
   MEMBER_SCHEMA,
 } from "@/src/utils/schemas/members";
+import { IS_DEBUG } from "@/src/utils/settings";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -130,6 +132,7 @@ export default async function Home({
           <HomeHeaderBar text="Social40" params={activityType} />
           <div className="w-full grid place-items-center mt-[5.5rem]">
             <div className="flex flex-col w-full items-center justify-start gap-4 max-w-[500px]">
+              {IS_DEBUG.status && <MaintenanceSection />}
               <UpdatesSection
                 memberData={JSON.parse(JSON.stringify(memberData))}
               />

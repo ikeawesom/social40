@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
-import { MAX_LENGTH } from "@/src/utils/constants";
+import { MAX_LENGTH } from "@/src/utils/settings";
 import { toast } from "sonner";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 

@@ -92,8 +92,6 @@ export const BADGE_COLORS = {
   [key: string]: BadgeColorsType;
 };
 
-export const MAX_LENGTH = 30;
-
 export const GROUP_MEMBERS_SELECT_OPTIONS = {
   "Book In": {
     withOwner: true,
@@ -154,7 +152,7 @@ export const GROUP_ACTIVITY_PARTICIPANTS = {
 export const GROUP_ACTIVITY_CREATION_PROGRESS = [
   "Creating group activity...",
   "Collecting participants...",
-  "Verifiying and adding participants...",
+  "Verifying and adding participants...",
   "Finishing up...",
 ];
 
