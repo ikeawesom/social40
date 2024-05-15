@@ -152,7 +152,7 @@ export const GROUP_ACTIVITY_PARTICIPANTS = {
 export const GROUP_ACTIVITY_CREATION_PROGRESS = [
   "Creating group activity...",
   "Collecting participants...",
-  "Verifiying and adding participants...",
+  "Verifying and adding participants...",
   "Finishing up...",
 ];
 
