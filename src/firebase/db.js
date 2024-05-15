@@ -65,6 +65,16 @@ class DbClass {
       return handleResponses({ error: e.message, status: false });
     }
   }
+  async getRef({ col_name, id }) {
+    const docRef = doc(FIREBASE_DB, col_name, id);
+    try {
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) return handleResponses({ data: docSnap });
+      return handleResponses({ error: "Data not found.", status: false });
+    } catch (error) {
+      return handleResponses({ error: error.message, status: false });
+    }
+  }
 
   async get({ col_name, id }) {
     const docRef = doc(FIREBASE_DB, col_name, id);
@@ -87,29 +97,18 @@ class DbClass {
     }
   }
 
-  async handleCursor({ queryNext }) {
-    const path = decodeCursor(queryNext);
-    const pathSplit = path.split("/");
-    const id = pathSplit[pathSplit.length - 1];
-    const remainPath = pathSplit.filter((str) => str !== id).join("/");
-    const docRef = doc(FIREBASE_DB, remainPath, id);
-    const qA = await getDoc(docRef);
-    return qA;
-  }
-
   async getPaginate({ path, orderCol, ascending, limitNo, queryNext }) {
     try {
       const colRef = collection(FIREBASE_DB, path);
       var docList = {};
-      let lastVisible;
       let q;
 
       if (queryNext) {
-        const qA = await this.handleCursor({ queryNext });
+        // queryNext: documentSnapshot
         q = query(
           colRef,
-          orderBy(orderCol ?? "", ascending ? "asc" : "desc"),
-          startAfter(qA),
+          orderBy(orderCol, ascending ? "asc" : "desc"),
+          startAfter(queryNext),
           limit(limitNo)
         );
       } else {
@@ -121,13 +120,18 @@ class DbClass {
       }
 
       const qSnap = await getDocs(q);
+      let lastPointer;
+
       qSnap.forEach((doc) => {
         docList[doc.id] = doc.data();
+        lastPointer = doc.data().activityID;
       });
-      lastVisible = qSnap.docs[qSnap.docs.length - 1];
 
       return handleResponses({
-        data: { data: docList, lastPointer: encodeCursor(lastVisible) },
+        data: {
+          data: docList,
+          lastPointer,
+        },
       });
     } catch (err) {
       return handleResponses({ error: err.message, status: false });
@@ -213,11 +217,3 @@ class DbClass {
 }
 
 export const dbHandler = new DbClass();
-
-export const encodeCursor = (snapshot) => {
-  return Buffer.from(snapshot.ref.path).toString("base64");
-};
-
-export const decodeCursor = (cursor) => {
-  return Buffer.from(cursor, "base64").toString("utf8");
-};
