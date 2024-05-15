@@ -1,11 +1,11 @@
 import React from "react";
 import SignInAgainScreen from "../screens/SignInAgainScreen";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
-import ErrorActivities from "../screens/ErrorActivities";
 import { dbHandler } from "@/src/firebase/db";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import FeedGroupClient from "./FeedGroupClient";
+import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
+import { FetchPaginateActivity } from "@/src/utils/home/ActivityFeed";
 
 export default async function FeedGroup({
   groupID,
@@ -17,18 +17,6 @@ export default async function FeedGroup({
   if (!memberID) return <SignInAgainScreen />;
 
   try {
-    // fetch activities with groupID
-    const { data: activitiesRes, error: actErr } = await dbHandler.getSpecific({
-      path: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
-      orderCol: "activityDate",
-      ascending: false,
-    });
-    if (actErr) throw new Error(actErr);
-
-    const groupActivities = activitiesRes as {
-      [activityID: string]: GROUP_ACTIVITY_SCHEMA;
-    };
-
     // get all hidden activity IDs from member data
     const { data: memberRes, error: hiddenErr } = await dbHandler.get({
       col_name: "MEMBERS",
@@ -39,17 +27,23 @@ export default async function FeedGroup({
     const memberData = memberRes as MEMBER_SCHEMA;
     const hiddenActivities = memberData.hiddenActivities ?? [];
 
-    // filter hidden activity IDs from all activities keys
-    Object.keys(hiddenActivities).forEach((id: string) => {
-      delete groupActivities[id];
+    // fetch activities with groupID
+    const { data: activitiesRes, error: actErr } = await FetchPaginateActivity({
+      groupID,
+      hidden: hiddenActivities,
     });
+    if (actErr) throw new Error(actErr);
+    const { data, lastPointer } = activitiesRes;
+    const groupActivities = data as GROUP_ACTIVITIES_SCHEMA[];
 
-    if (Object.keys(groupActivities).length === 0)
-      return (
-        <ErrorActivities text="Well, looks like there are no activites here for you." />
-      );
-
-    return <FeedGroupClient groupID={groupID} hidden={hiddenActivities} />;
+    return (
+      <FeedGroupClient
+        lastPointer={lastPointer}
+        activities={groupActivities}
+        groupID={groupID}
+        hidden={hiddenActivities}
+      />
+    );
   } catch (err) {
     return ErrorScreenHandler(err);
   }
