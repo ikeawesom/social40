@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "next/navigation";
 import StatusDot from "../../utils/StatusDot";
-import { GROUP_ROLES_HEIRARCHY, MAX_LENGTH } from "@/src/utils/constants";
+import { GROUP_ROLES_HEIRARCHY } from "@/src/utils/constants";
 import Modal from "../../utils/Modal";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -16,6 +16,7 @@ import { contentfulImageLoader } from "../../profile/edit/ProfilePicSection";
 import ModalLoading from "../../utils/ModalLoading";
 import ModalHeader from "../../utils/ModalHeader";
 import Badge from "../../utils/Badge";
+import { MAX_LENGTH } from "@/src/utils/settings";
 
 export default function GroupMemberTab({
   data,
