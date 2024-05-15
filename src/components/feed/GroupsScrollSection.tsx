@@ -20,6 +20,7 @@ export default function GroupsScrollSection({
         {groupsList.map((groupID: string) => {
           return (
             <Link
+              scroll={false}
               key={groupID}
               href={`/home?${new URLSearchParams({
                 activity: "groups",
