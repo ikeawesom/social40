@@ -5,12 +5,12 @@ import GroupActivityData from "@/src/components/groups/custom/activities/setting
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
-import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { cookies } from "next/headers";
 import React from "react";
 import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
+import { dbHandler } from "@/src/firebase/db";
 
 export default async function ActivityPage({
   params,
@@ -41,18 +41,22 @@ export default async function ActivityPage({
 
       const remark = view && "remarkid" in query && query["remarkid"] !== "";
 
-      const groupPostObj = GetPostObj({ groupID, memberID });
-      const res = await fetch(`${host}/api/groups/memberof`, groupPostObj);
-      const body = await res.json();
+      const { data, error } = await dbHandler.get({
+        col_name: `GROUPS/${groupID}/MEMBERS`,
+        id: memberID,
+      });
+      // const body = await res.json();
 
       let admin = false;
-      if (body.status) {
-        const role = body.data.role;
+      if (data) {
+        const role = data.role;
         admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
       }
 
       // only group owners can create new activities
-      if (!view && !admin) return <RestrictedScreen />;
+
+      if (!admin || error) return <RestrictedScreen />;
+
       return (
         <>
           <HeaderBar back text={title} />
