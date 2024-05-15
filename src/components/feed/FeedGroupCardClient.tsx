@@ -17,15 +17,19 @@ import DismissButton from "./DismissButton";
 import Image from "next/image";
 import { useHostname } from "@/src/hooks/useHostname";
 import FeedGroupCardSkeleton from "./FeedGroupCardSkeleton";
+import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
+import { twMerge } from "tailwind-merge";
 
 export default function FeedGroupCardClient({
   activityData,
   memberID,
   index,
+  onDismiss,
 }: {
-  activityData: GROUP_ACTIVITY_SCHEMA;
+  activityData: GROUP_ACTIVITIES_SCHEMA;
   memberID: string;
   index: number;
+  onDismiss: () => void;
 }) {
   const [updatedData, setUpdatedData] = useState<{
     canJoin: boolean;
@@ -37,11 +41,19 @@ export default function FeedGroupCardClient({
     };
     requested: boolean;
   }>();
+  const [remove, setRemove] = useState(false);
 
   const { activityID, groupID, activityDesc, activityTitle, isPT } =
     activityData;
 
   const { host } = useHostname();
+
+  const hideAnimation = () => {
+    setRemove(true);
+    setTimeout(() => {
+      onDismiss();
+    }, 500);
+  };
 
   const fetchData = async () => {
     try {
@@ -82,8 +94,8 @@ export default function FeedGroupCardClient({
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (memberID !== "") fetchData();
+  }, [memberID]);
 
   if (!updatedData) return <FeedGroupCardSkeleton />;
 
@@ -97,7 +109,7 @@ export default function FeedGroupCardClient({
   } = updatedData;
 
   const participantNumber = Object.keys(participantsData).length;
-  const randomIndex = Math.floor(Math.random() * participantNumber);
+  // const randomIndex = Math.floor(Math.random() * participantNumber);
 
   const randomParticipant =
     Object.keys(participantsData)[index % Object.keys(participantsData).length];
@@ -105,7 +117,12 @@ export default function FeedGroupCardClient({
   const noParticipant = participantNumber === 0;
 
   return (
-    <DefaultCard className="w-full flex flex-col items-start justify-start">
+    <DefaultCard
+      className={twMerge(
+        "w-full flex flex-col items-start justify-start",
+        remove && "dismiss-activity"
+      )}
+    >
       <Link
         href={`/groups/${groupID}`}
         className="text-xs text-custom-grey-text duration-150 hover:opacity-70"
@@ -185,6 +202,7 @@ export default function FeedGroupCardClient({
         )}
 
         <DismissButton
+          onDismiss={hideAnimation}
           activityID={activityID}
           host={host}
           memberID={memberID}

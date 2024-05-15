@@ -10,24 +10,25 @@ export default function DismissButton({
   activityID,
   host,
   memberID,
+  onDismiss,
 }: {
   memberID: string;
   activityID: string;
   host: string;
+  onDismiss?: () => void;
 }) {
   const [loading, setLoading] = useState(false);
 
-  const router = useRouter();
   const handleDismiss = async () => {
     setLoading(true);
+    if (onDismiss) onDismiss();
+
     try {
       const MemberObj = GetPostObj({ memberID, activityID });
       const res = await fetch(`${host}/api/activity/set-dismiss`, MemberObj);
       const body = await res.json();
 
       if (!body.status) throw new Error(body.error);
-      router.refresh();
-      toast.success("Activity dismissed.");
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -42,7 +43,7 @@ export default function DismissButton({
       disabled={loading}
       onClick={handleDismiss}
     >
-      {loading ? <LoadingIcon width={30} height={30} /> : "Dismiss"}
+      {loading ? <LoadingIcon width={15} height={15} /> : "Dismiss"}
     </SecondaryButton>
   );
 }
