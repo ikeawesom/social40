@@ -9,37 +9,36 @@ import { useTimer } from "@/src/hooks/useTimer";
 
 export default function SignInAgainScreen() {
   const [loading, setLoading] = useState(true);
-  const { isFinished, seconds } = useTimer(10);
+  const { seconds } = useTimer(10);
+
   const router = useRouter();
   useEffect(() => {
-    // test
-    const reloaded = localStorage.getItem("load");
+    const duration = 1400;
 
-    if (!reloaded) {
-      handleReload(router);
-      localStorage.setItem("load", "true");
-      router.refresh();
-    } else {
-      localStorage.removeItem("load");
+    const id = localStorage.getItem("localMemberID");
+
+    if (id) {
       setTimeout(() => {
-        const id = localStorage.getItem("localMemberID");
-        if (id) {
-          router.refresh();
-          router.push("/home", { scroll: false });
-          localStorage.removeItem("localMemberID");
-        }
-
-        setTimeout(() => {
-          router.push("/auth", { scroll: false });
-          setLoading(false);
-        }, 1400);
-      }, 2000);
+        router.push("/home", { scroll: false });
+        localStorage.removeItem("localMemberID");
+      }, duration);
+    } else {
+      setTimeout(() => {
+        router.push("/auth", { scroll: false });
+      }, duration);
     }
+    // test
+    // const reloaded = localStorage.getItem("load");
+    // if (!reloaded) {
+    //   handleReload(router);
+    //   localStorage.setItem("load", "true");
+    //   router.refresh();
+    // } else {
+    //   localStorage.removeItem("load");
+    //   setTimeout(() => {
+    //   }, 2000);
+    // }
   }, []);
-
-  useEffect(() => {
-    if (isFinished) router.push("/auth", { scroll: false });
-  }, [isFinished]);
 
   if (loading)
     return <LoadingScreenSmall text={`Re-authenticating: ${seconds}s`} />;
