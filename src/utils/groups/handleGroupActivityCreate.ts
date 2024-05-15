@@ -296,7 +296,7 @@ export async function third(
 
       //   if (!res.status)
       //     return handleResponses({ status: false, error: res.error });
-      }
+      // }
       return handleResponses();
     });
 
