@@ -11,12 +11,22 @@ export async function FetchPaginateActivity({
   lastPointer: any;
 }) {
   try {
+    let pointerRef = null;
+
+    if (lastPointer) {
+      const { error, data } = await dbHandler.getRef({
+        col_name: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
+        id: lastPointer,
+      });
+      if (!error) pointerRef = data;
+    }
+
     const { data: paginateRes, error: pagiErr } = await dbHandler.getPaginate({
       path: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
       orderCol: "activityDate",
       ascending: false,
       limitNo: 5,
-      queryNext: lastPointer ?? null,
+      queryNext: pointerRef,
     });
 
     if (pagiErr) throw new Error(pagiErr);
