@@ -3,25 +3,24 @@ import React, { useState } from "react";
 import SecondaryButton from "../utils/SecondaryButton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import LoadingIcon from "../utils/LoadingIcon";
 
 export default function DismissButton({
   activityID,
   host,
   memberID,
-  onDismiss,
+  toggleView,
 }: {
   memberID: string;
   activityID: string;
   host: string;
-  onDismiss?: () => void;
+  toggleView?: () => void;
 }) {
   const [loading, setLoading] = useState(false);
 
   const handleDismiss = async () => {
     setLoading(true);
-    if (onDismiss) onDismiss();
+    if (toggleView) toggleView();
 
     try {
       const MemberObj = GetPostObj({ memberID, activityID });

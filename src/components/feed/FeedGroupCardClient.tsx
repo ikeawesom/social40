@@ -1,10 +1,7 @@
 "use client";
 
 import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
-import {
-  GROUP_ACTIVITY_PARTICIPANT,
-  GROUP_ACTIVITY_SCHEMA,
-} from "@/src/utils/schemas/group-activities";
+import { GROUP_ACTIVITY_PARTICIPANT } from "@/src/utils/schemas/group-activities";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -19,17 +16,20 @@ import { useHostname } from "@/src/hooks/useHostname";
 import FeedGroupCardSkeleton from "./FeedGroupCardSkeleton";
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
 import { twMerge } from "tailwind-merge";
+import ShowButton from "./ShowButton";
 
 export default function FeedGroupCardClient({
   activityData,
   memberID,
   index,
-  onDismiss,
+  toggleView,
+  show,
 }: {
+  show?: boolean;
   activityData: GROUP_ACTIVITIES_SCHEMA;
   memberID: string;
   index: number;
-  onDismiss: () => void;
+  toggleView: () => void;
 }) {
   const [updatedData, setUpdatedData] = useState<{
     canJoin: boolean;
@@ -41,17 +41,17 @@ export default function FeedGroupCardClient({
     };
     requested: boolean;
   }>();
-  const [remove, setRemove] = useState(false);
+  const [toggle, setToggle] = useState(false);
 
   const { activityID, groupID, activityDesc, activityTitle, isPT } =
     activityData;
 
   const { host } = useHostname();
 
-  const hideAnimation = () => {
-    setRemove(true);
+  const toggleAnimation = () => {
+    setToggle(true);
     setTimeout(() => {
-      onDismiss();
+      toggleView();
     }, 500);
   };
 
@@ -120,7 +120,7 @@ export default function FeedGroupCardClient({
     <DefaultCard
       className={twMerge(
         "w-full flex flex-col items-start justify-start",
-        remove && "dismiss-activity"
+        toggle && (!show ? "dismiss-activity" : "show-activity")
       )}
     >
       <Link
@@ -200,13 +200,21 @@ export default function FeedGroupCardClient({
             {active ? "Participating" : "Participated"}
           </SecondaryButton>
         )}
-
-        <DismissButton
-          onDismiss={hideAnimation}
-          activityID={activityID}
-          host={host}
-          memberID={memberID}
-        />
+        {show ? (
+          <ShowButton
+            toggleView={toggleAnimation}
+            activityID={activityID}
+            host={host}
+            memberID={memberID}
+          />
+        ) : (
+          <DismissButton
+            toggleView={toggleAnimation}
+            activityID={activityID}
+            host={host}
+            memberID={memberID}
+          />
+        )}
       </div>
     </DefaultCard>
   );
