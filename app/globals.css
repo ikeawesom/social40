@@ -76,3 +76,20 @@ select:not(.custom) {
     transform: translateX(100%);
   }
 }
+
+.show-activity {
+  animation: dissolve-top 400ms forwards ease-in-out;
+}
+
+@keyframes dissolve-top {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0;
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
