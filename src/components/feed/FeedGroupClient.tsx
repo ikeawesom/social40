@@ -74,7 +74,7 @@ export default function FeedGroupClient({
     // console.log("W:", window.innerHeight);
 
     if (
-      window.innerHeight + document.documentElement.scrollTop >=
+      window.innerHeight + document.documentElement.scrollTop + 1 >=
         document.documentElement.scrollHeight &&
       !loading
     ) {
@@ -103,7 +103,7 @@ export default function FeedGroupClient({
     <div
       className={twMerge(
         "flex w-full flex-col items-center justify-center gap-4",
-        !finished && "pb-4"
+        !finished && "pb-6"
       )}
     >
       {Object.keys(activityData.activities).map((id: string, index: number) => {
