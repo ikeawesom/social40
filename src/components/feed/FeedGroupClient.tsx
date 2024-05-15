@@ -1,60 +1,51 @@
 "use client";
 
 import { FetchPaginateActivity } from "@/src/utils/home/ActivityFeed";
-import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import FeedGroupCardClient from "./FeedGroupCardClient";
 import { useMemberID } from "@/src/hooks/useMemberID";
-import ActivityFeedSkeleton from "./ActivityFeedSkeleton";
 import LoadingIcon from "../utils/LoadingIcon";
 import { twMerge } from "tailwind-merge";
-
-export type PaginatedActivityData = {
-  activities: {
-    [id: string]: GROUP_ACTIVITY_SCHEMA;
-  };
-  pointer: any;
-};
+import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
+import { useInView } from "react-intersection-observer";
+import { sleep } from "@/src/utils/sleep";
+import ErrorActivities from "../screens/ErrorActivities";
 
 export default function FeedGroupClient({
   hidden,
   groupID,
+  activities,
+  lastPointer,
 }: {
   hidden: string[];
   groupID: string;
+  activities: GROUP_ACTIVITIES_SCHEMA[];
+  lastPointer: string;
 }) {
-  const [loading, setLoading] = useState(false);
   const { memberID } = useMemberID();
-  const [activityData, setActivityData] = useState<PaginatedActivityData>({
-    activities: {},
-    pointer: null,
-  });
-  const [fetch, setFetch] = useState(0);
+  const [activityData, setActivityData] = useState(activities);
+  const [lastRef, setLastRef] = useState(lastPointer);
   const [finished, setFinished] = useState(false);
 
   const fetchData = async () => {
+    await sleep(400);
     if (finished) return;
 
     try {
       const { data: pagiData, error } = await FetchPaginateActivity({
         groupID,
-        lastPointer: activityData.pointer ?? null,
+        hidden,
+        lastPointer: lastRef,
       });
 
       if (error) throw new Error(error);
       const { data, lastPointer } = pagiData;
 
-      hidden.forEach((id: string) => {
-        delete data[id];
-      });
+      if (data.length === 0) throw new Error("undefined");
 
-      if (Object.keys(data).length === 0) throw new Error("undefined");
-
-      setActivityData({
-        pointer: lastPointer,
-        activities: { ...activityData.activities, ...data },
-      });
+      setActivityData((prev: GROUP_ACTIVITIES_SCHEMA[]) => [...prev, ...data]);
+      setLastRef(lastPointer);
     } catch (err: any) {
       const { message } = err;
       if (message.includes("undefined")) {
@@ -64,40 +55,23 @@ export default function FeedGroupClient({
         toast.error(err.message);
       }
     }
-    setLoading(false);
   };
 
-  const handleScroll = async () => {
-    if (finished) return;
-    // console.log("H:", document.documentElement.scrollHeight);
-    // console.log("T:", document.documentElement.scrollTop);
-    // console.log("W:", window.innerHeight);
+  const { ref, inView } = useInView();
+  useEffect(() => {
+    if (!finished && inView) fetchData();
+  }, [inView]);
 
-    if (
-      window.innerHeight + document.documentElement.scrollTop + 1 >=
-        document.documentElement.scrollHeight &&
-      !loading
-    ) {
-      setLoading(true);
-      setTimeout(() => {
-        setFetch((fetch) => fetch + 1);
-      }, 1000);
-    }
+  const handleRemove = (index: number) => {
+    let temp = [...activityData];
+    temp.splice(index, 1);
+    setActivityData(temp);
   };
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!finished) fetchData();
-  }, [fetch]);
-
-  if (Object.keys(activityData.activities).length === 0)
-    return <ActivityFeedSkeleton />;
+  if (activityData.length === 0)
+    return (
+      <ErrorActivities text="Well, looks like there are no activites here for you." />
+    );
 
   return (
     <div
@@ -106,20 +80,21 @@ export default function FeedGroupClient({
         !finished && "pb-6"
       )}
     >
-      {Object.keys(activityData.activities).map((id: string, index: number) => {
+      {activityData.map((data: GROUP_ACTIVITIES_SCHEMA, index: number) => {
+        const { activityID } = data;
+
         return (
           <FeedGroupCardClient
+            onDismiss={() => handleRemove(index)}
+            key={activityID}
             index={index}
-            activityData={JSON.parse(
-              JSON.stringify(activityData.activities[id])
-            )}
+            activityData={data}
             memberID={memberID}
-            key={id}
           />
         );
       })}
-      {loading && !finished && (
-        <div className="grid place-items-center w-full">
+      {!finished && (
+        <div ref={ref} className="grid place-items-center w-full">
           <LoadingIcon height={40} width={40} />
         </div>
       )}
