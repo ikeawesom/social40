@@ -29,7 +29,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const pathname = window.location.pathname;
         const localMemberID = localStorage.getItem("localMemberID");
         setMember(localMemberID);
-        console.log("set member");
 
         try {
           if (localMemberID) {
@@ -40,8 +39,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const res = await fetch(`${host}/api/auth/handle-uid`, postObj);
             const body = await res.json();
             if (!body.status) throw new Error(body.error);
-            localStorage.removeItem("localMemberID");
+            // localStorage.removeItem("localMemberID");
           } else {
+            console.log("no localstorage found");
             const postObj = GetPostObj({
               uid: userAuth.uid,
             });
@@ -52,6 +52,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const body = await res.json();
             if (!body.status) throw new Error(body.error);
             localStorage.setItem("localMemberID", body.data);
+            setMember(body.data);
+            console.log("set member in localstorage");
           }
           if (pathname.includes("auth")) {
             router.push("/home", { scroll: false });

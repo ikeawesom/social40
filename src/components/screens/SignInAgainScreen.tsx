@@ -4,41 +4,34 @@ import Image from "next/image";
 import SignoutButton from "../utils/SignoutButton";
 import { useRouter } from "next/navigation";
 import LoadingScreenSmall from "./LoadingScreenSmall";
-import { handleReload } from "../navigation/HeaderBar";
 import { useTimer } from "@/src/hooks/useTimer";
+import { useAuth } from "@/src/contexts/AuthContext";
 
 export default function SignInAgainScreen() {
   const [loading, setLoading] = useState(true);
   const { seconds } = useTimer(10);
+  const { memberID } = useAuth();
 
   const router = useRouter();
   useEffect(() => {
     const duration = 1400;
 
     const id = localStorage.getItem("localMemberID");
-
+    router.refresh();
     if (id) {
       setTimeout(() => {
         router.push("/home", { scroll: false });
-        localStorage.removeItem("localMemberID");
       }, duration);
     } else {
       setTimeout(() => {
         router.push("/auth", { scroll: false });
       }, duration);
     }
-    // test
-    // const reloaded = localStorage.getItem("load");
-    // if (!reloaded) {
-    //   handleReload(router);
-    //   localStorage.setItem("load", "true");
-    //   router.refresh();
-    // } else {
-    //   localStorage.removeItem("load");
-    //   setTimeout(() => {
-    //   }, 2000);
-    // }
-  }, []);
+  }, [memberID]);
+
+  useEffect(() => {
+    if (seconds < 2) router.push("/auth", { scroll: false });
+  }, [seconds]);
 
   if (loading)
     return <LoadingScreenSmall text={`Re-authenticating: ${seconds}s`} />;
