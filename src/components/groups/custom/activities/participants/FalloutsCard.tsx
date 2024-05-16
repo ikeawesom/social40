@@ -22,7 +22,7 @@ export default function FalloutsCard({
     <DefaultCard className="w-full">
       <div className="flex items-center justify-between w-full">
         <h1 className="text-custom-dark-text font-semibold text-start">
-          Fallouts ( {Object.keys(itemList).length} )
+          Did Not Participate ( {Object.keys(itemList).length} )
         </h1>
 
         <Image
