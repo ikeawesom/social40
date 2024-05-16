@@ -1,6 +1,6 @@
 import { dbHandler } from "@/src/firebase/db";
 import { DEFAULT_STATS } from "@/src/utils/constants";
-import handleResponses from "@/src/utils/handleResponses";
+import handleResponses from "@/src/utils/helpers/handleResponses";
 
 export default async function StatisticsSection({ id }: { id: string }) {
   try {

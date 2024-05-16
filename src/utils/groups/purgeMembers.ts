@@ -1,7 +1,7 @@
 "use server";
 
 import { dbHandler } from "@/src/firebase/db";
-import handleResponses from "../handleResponses";
+import handleResponses from "../helpers/handleResponses";
 import { authHandler } from "@/src/firebase/auth";
 import { MEMBER_SCHEMA } from "../schemas/members";
 import { getAuth } from "firebase/auth";

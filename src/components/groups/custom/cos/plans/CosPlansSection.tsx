@@ -4,7 +4,7 @@ import DefaultCard from "@/src/components/DefaultCard";
 import Badge from "@/src/components/utils/Badge";
 import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 import { MONTHS } from "@/src/utils/constants";
-import { DateToString } from "@/src/utils/getCurrentDate";
+import { DateToString } from "@/src/utils/helpers/getCurrentDate";
 import {
   COS_DAILY_SCHEMA,
   COS_MONTHLY_SCHEMA,

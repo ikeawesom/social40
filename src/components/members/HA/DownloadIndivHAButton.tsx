@@ -5,7 +5,7 @@ import LoadingIcon from "../../utils/LoadingIcon";
 import SecondaryButton from "../../utils/SecondaryButton";
 import Image from "next/image";
 import { useDownloadIndivHA } from "@/src/utils/members/useDownloadIndivHA";
-import { StringToDate } from "@/src/utils/getCurrentDate";
+import { StringToDate } from "@/src/utils/helpers/getCurrentDate";
 
 export default function DownloadIndivHAButton({
   memberID,

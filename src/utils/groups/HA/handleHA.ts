@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import { DateToTimestamp } from "../../getCurrentDate";
+import { DateToTimestamp } from "../../helpers/getCurrentDate";
 
 // takes in the start timestamp to calculate from
 // takes in a list of sorted timestamps

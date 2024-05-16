@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import { cookies } from "next/headers";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import GroupHeader from "@/src/components/groups/custom/GroupHeader";
 import GroupRequested from "@/src/components/groups/custom/requests/GroupRequested";

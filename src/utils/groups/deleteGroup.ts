@@ -1,6 +1,6 @@
 import { dbHandler } from "@/src/firebase/db";
 import { GROUP_MEMBERS_SCHEMA } from "../schemas/groups";
-import handleResponses from "../handleResponses";
+import handleResponses from "../helpers/handleResponses";
 import { WAITLIST_SCHEMA } from "../schemas/waitlist";
 import {
   GROUP_ACTIVITY_PARTICIPANT,

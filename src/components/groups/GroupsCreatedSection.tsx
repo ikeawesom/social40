@@ -7,7 +7,7 @@ import {
   DateToString,
   TimestampToDate,
   TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
+} from "@/src/utils/helpers/getCurrentDate";
 
 export default function GroupsCreatedSection({
   ownedGroups,

@@ -8,7 +8,10 @@ import GroupActivityTab from "./settings/GroupActivityTab";
 import CreateActivityButton from "./settings/create/CreateActivityButton";
 import useQueryObj from "@/src/hooks/useQueryObj";
 import QueryInput from "../../../utils/QueryInput";
-import { DateToTimestamp, ActiveTimestamp } from "@/src/utils/getCurrentDate";
+import {
+  DateToTimestamp,
+  ActiveTimestamp,
+} from "@/src/utils/helpers/getCurrentDate";
 import Link from "next/link";
 
 export type GroupActivitiesType = {

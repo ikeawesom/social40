@@ -7,7 +7,7 @@ import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import HRow from "@/src/components/utils/HRow";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
@@ -16,7 +16,7 @@ import { Metadata } from "next";
 import {
   ActiveTimestamp,
   TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
+} from "@/src/utils/helpers/getCurrentDate";
 import RevokeStatus from "@/src/components/status/RevokeStatus";
 
 export const metadata: Metadata = {

@@ -6,7 +6,7 @@ import { LoadingIconBright } from "../utils/LoadingIcon";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { toast } from "sonner";
 import DefaultCard from "../DefaultCard";
-import handleResponses from "@/src/utils/handleResponses";
+import handleResponses from "@/src/utils/helpers/handleResponses";
 
 export default function ResetPasswordButton({
   memberID,

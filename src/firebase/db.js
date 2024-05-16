@@ -15,7 +15,7 @@ import {
   CACHE_SIZE_UNLIMITED,
   orderBy,
 } from "firebase/firestore";
-import handleResponses from "../utils/handleResponses";
+import handleResponses from "../utils/helpers/handleResponses";
 
 // const FIREBASE_DB = getFirestore(FIREBASE_APP);
 export const FIREBASE_DB = initializeFirestore(FIREBASE_APP, {

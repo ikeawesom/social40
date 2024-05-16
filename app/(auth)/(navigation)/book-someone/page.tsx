@@ -5,7 +5,7 @@ import BiboScanner from "@/src/components/bibo/BiboScanner";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { cookies } from "next/headers";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 

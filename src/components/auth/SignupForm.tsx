@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import PrimaryButton from "../utils/PrimaryButton";
 import { dbHandler } from "@/src/firebase/db";
 import { initWaitListee } from "@/src/utils/schemas/waitlist";
-import getCurrentDate from "@/src/utils/getCurrentDate";
+import getCurrentDate from "@/src/utils/helpers/getCurrentDate";
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
 import { LoadingIconBright } from "../utils/LoadingIcon";
 

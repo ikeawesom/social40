@@ -1,6 +1,6 @@
 import React from "react";
 import SignInAgainScreen from "../screens/SignInAgainScreen";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { dbHandler } from "@/src/firebase/db";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import FeedGroupClient from "./FeedGroupClient";

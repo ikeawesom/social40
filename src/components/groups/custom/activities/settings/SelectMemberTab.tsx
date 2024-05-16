@@ -1,5 +1,5 @@
 import { dbHandler } from "@/src/firebase/db";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import React, { useEffect, useState } from "react";

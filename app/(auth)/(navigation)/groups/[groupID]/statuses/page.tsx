@@ -4,7 +4,7 @@ import HeaderBar from "@/src/components/navigation/HeaderBar";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { GROUP_ROLES_HEIRARCHY } from "@/src/utils/constants";
 import {
   GROUP_MEMBERS_SCHEMA,

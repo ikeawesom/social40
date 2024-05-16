@@ -9,7 +9,7 @@ import GroupsJoinedSection from "@/src/components/groups/GroupsJoinedSection";
 import { ownedGroupsType } from "@/src/utils/groups/getOwnedGroups";
 import GroupsCreatedSection from "@/src/components/groups/GroupsCreatedSection";
 import { Metadata } from "next";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 
 export const metadata: Metadata = {

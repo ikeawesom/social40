@@ -5,7 +5,7 @@ import GroupActivityData from "@/src/components/groups/custom/activities/setting
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { cookies } from "next/headers";
 import React from "react";

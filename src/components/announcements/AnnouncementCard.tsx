@@ -4,7 +4,7 @@ import React from "react";
 import DefaultCard from "../DefaultCard";
 import Link from "next/link";
 import HRow from "../utils/HRow";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 import Image from "next/image";
 import { deletePost } from "./submitPostData";
 import { toast } from "sonner";

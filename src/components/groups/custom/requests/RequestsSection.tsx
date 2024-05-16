@@ -13,7 +13,7 @@ import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import HRow from "@/src/components/utils/HRow";
-import handleResponses from "@/src/utils/handleResponses";
+import handleResponses from "@/src/utils/helpers/handleResponses";
 import { handleReload } from "@/src/components/navigation/HeaderBar";
 import { useRouter } from "next/navigation";
 

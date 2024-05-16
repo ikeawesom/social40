@@ -1,11 +1,14 @@
 import { ActivityWaitlistType } from "@/src/components/groups/custom/activities/ActivityWaitlist";
 import { GetPostObj } from "../../API/GetPostObj";
-import { TimestampToDateString, ActiveTimestamp } from "../../getCurrentDate";
+import {
+  TimestampToDateString,
+  ActiveTimestamp,
+} from "../../helpers/getCurrentDate";
 import {
   GROUP_ACTIVITY_SCHEMA,
   GROUP_ACTIVITY_PARTICIPANT,
 } from "../../schemas/group-activities";
-import handleResponses from "../../handleResponses";
+import handleResponses from "../../helpers/handleResponses";
 import { ROLES_HIERARCHY } from "../../constants";
 import { dbHandler } from "@/src/firebase/db";
 import { MEMBER_SCHEMA } from "../../schemas/members";

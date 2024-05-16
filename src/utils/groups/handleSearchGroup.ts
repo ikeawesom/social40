@@ -1,8 +1,8 @@
 import { dbHandler } from "@/src/firebase/db";
 import { MEMBER_SCHEMA } from "../schemas/members";
 import { initWaitListee } from "../schemas/waitlist";
-import getCurrentDate from "../getCurrentDate";
-import handleResponses from "../handleResponses";
+import getCurrentDate from "../helpers/getCurrentDate";
+import handleResponses from "../helpers/handleResponses";
 import { memberInGroup } from "../onboarding/OnboardGroupMember";
 
 export default async function handleSearchGroup({

@@ -4,7 +4,7 @@ import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 import { dbHandler } from "@/src/firebase/db";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { getMemberCOSPoints } from "@/src/utils/groups/COS/getMemberCOSPoints";
 import { COS_DAILY_SCHEMA, CosDailyType } from "@/src/utils/schemas/cos";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";

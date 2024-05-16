@@ -10,7 +10,7 @@ import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
 import { useHostname } from "@/src/hooks/useHostname";
 import { toast } from "sonner";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import handleResponses from "@/src/utils/handleResponses";
+import handleResponses from "@/src/utils/helpers/handleResponses";
 import { twMerge } from "tailwind-merge";
 
 export default function ActivityDownloadSection({

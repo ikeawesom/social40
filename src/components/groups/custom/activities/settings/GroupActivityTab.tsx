@@ -1,7 +1,7 @@
 import {
   DateToTimestamp,
   TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
+} from "@/src/utils/helpers/getCurrentDate";
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
 import Link from "next/link";
 import React from "react";

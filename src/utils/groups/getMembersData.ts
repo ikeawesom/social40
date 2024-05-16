@@ -1,7 +1,7 @@
 "use server";
 
 import { dbHandler } from "@/src/firebase/db";
-import handleResponses from "../handleResponses";
+import handleResponses from "../helpers/handleResponses";
 import { MEMBER_SCHEMA } from "../schemas/members";
 
 export async function getMembersData(membersID: string[]) {

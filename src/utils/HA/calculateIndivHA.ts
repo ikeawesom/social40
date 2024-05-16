@@ -1,8 +1,8 @@
 "use server";
 import { dbHandler } from "@/src/firebase/db";
-import getCurrentDate, { DateToString } from "../getCurrentDate";
+import getCurrentDate, { DateToString } from "../helpers/getCurrentDate";
 import { handleGroupMemberHA } from "../groups/HA/handleGroupMemberHA";
-import handleResponses from "../handleResponses";
+import handleResponses from "../helpers/handleResponses";
 import { DailyHAType } from "../schemas/ha";
 import { MEMBER_SCHEMA } from "../schemas/members";
 import { getMembersData } from "../groups/getMembersData";

@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import { DateToString } from "@/src/utils/getCurrentDate";
+import { DateToString } from "@/src/utils/helpers/getCurrentDate";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import { twMerge } from "tailwind-merge";
 import Toggle from "@/src/components/utils/Toggle";

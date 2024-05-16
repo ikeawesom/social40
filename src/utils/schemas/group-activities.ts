@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import getCurrentDate from "../getCurrentDate";
+import getCurrentDate from "../helpers/getCurrentDate";
 
 export type GROUP_ACTIVITY_SCHEMA = {
   activityID: string;

@@ -1,7 +1,6 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import BookedStatus from "@/src/components/members/BookedStatus";
 import MemberBadges from "@/src/components/members/MemberBadges";
-import MemberPoints from "@/src/components/members/MemberPoints";
 import PermissionForm from "@/src/components/members/PermissionForm";
 import ResetPasswordButton from "@/src/components/members/ResetPasswordButton";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
@@ -10,9 +9,8 @@ import StatusFeed from "@/src/components/profile/stats/StatusFeed";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
 import React, { Suspense } from "react";
@@ -21,6 +19,7 @@ import HRow from "@/src/components/utils/HRow";
 import MainStatisticsSection from "@/src/components/members/statistics/MainStatisticsSection";
 import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 import { MemberHASection } from "@/src/components/members/HA/MemberHASection";
+import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 
 export async function generateMetadata({
   params,

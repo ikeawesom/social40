@@ -1,6 +1,6 @@
 import HRow from "@/src/components/utils/HRow";
 import { dbHandler } from "@/src/firebase/db";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { COS_MONTHLY_SCHEMA } from "@/src/utils/schemas/cos";
 import React from "react";
 import CreatePlanSection from "./CreatePlanSection";

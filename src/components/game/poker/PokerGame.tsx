@@ -6,7 +6,7 @@ import { PokerMenuForm } from "./PokerMenuForm";
 import { usePokerState } from "@/src/contexts/PokerContext";
 import { doc, onSnapshot } from "firebase/firestore";
 import { FIREBASE_DB } from "@/src/firebase/db";
-import getCurrentDate from "@/src/utils/getCurrentDate";
+import getCurrentDate from "@/src/utils/helpers/getCurrentDate";
 import { PokerRoomType } from "@/src/utils/schemas/pokerGame";
 import PrimaryButton from "../../utils/PrimaryButton";
 

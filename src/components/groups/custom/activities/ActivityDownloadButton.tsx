@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { ExportExcel } from "@/src/utils/ExportExcel";
+import { ExportExcel } from "@/src/utils/helpers/ExportExcel";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import { ACTIVITY_DATA_SCHEMA } from "@/src/utils/schemas/members";
 

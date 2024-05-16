@@ -1,8 +1,8 @@
 "use server";
 
 import { dbHandler } from "@/src/firebase/db";
-import getCurrentDate from "@/src/utils/getCurrentDate";
-import handleResponses from "@/src/utils/handleResponses";
+import getCurrentDate from "@/src/utils/helpers/getCurrentDate";
+import handleResponses from "@/src/utils/helpers/handleResponses";
 import { PokerRoomType } from "@/src/utils/schemas/pokerGame";
 
 export async function createRoom(memberID: string) {

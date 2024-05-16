@@ -4,8 +4,7 @@ import {
   ActiveTimestamp,
   DateToString,
   DateToTimestamp,
-  TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
+} from "@/src/utils/helpers/getCurrentDate";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import Image from "next/image";
 import Link from "next/link";

@@ -1,7 +1,7 @@
 "use server";
 
 import { dbHandler } from "@/src/firebase/db";
-import handleResponses from "../../handleResponses";
+import handleResponses from "../../helpers/handleResponses";
 import { COS_DAILY_SCHEMA, CosDailyType } from "../../schemas/cos";
 import { MEMBER_SCHEMA } from "../../schemas/members";
 import { GROUP_SCHEMA } from "../../schemas/groups";

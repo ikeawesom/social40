@@ -9,7 +9,7 @@ import { cookies } from "next/headers";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import StatsSection, {
   StatusListType,

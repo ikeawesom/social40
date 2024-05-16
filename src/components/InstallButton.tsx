@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import SecondaryButton from "../components/utils/SecondaryButton";
+import SecondaryButton from "./utils/SecondaryButton";
 import Image from "next/image";
 
 let deferredPrompt: any;

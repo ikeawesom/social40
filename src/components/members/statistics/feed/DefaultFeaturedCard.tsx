@@ -1,6 +1,6 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import { DEFAULT_STATS } from "@/src/utils/constants";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 import Image from "next/image";
 import React from "react";
 import { twMerge } from "tailwind-merge";

@@ -6,7 +6,7 @@ import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import ServerErrorScreen from "@/src/components/screens/ServerErrorScreen";
 import { dbHandler } from "@/src/firebase/db";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { GROUP_MEMBERS_SCHEMA, GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { cookies } from "next/headers";
 import React from "react";

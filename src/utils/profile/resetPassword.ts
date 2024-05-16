@@ -1,7 +1,7 @@
 import { authHandler } from "@/src/firebase/auth";
 import { FIREBASE_APP, SECONDARY_FIREBASE_APP } from "@/src/firebase/config";
 import { getAuth, updatePassword } from "firebase/auth";
-import handleResponses from "../handleResponses";
+import handleResponses from "../helpers/handleResponses";
 
 export default async function resetPassword(
   username: string,

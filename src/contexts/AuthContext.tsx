@@ -6,7 +6,7 @@ import { getAuth } from "firebase/auth";
 import { FIREBASE_APP } from "../firebase/config";
 import { authHandler } from "../firebase/auth";
 import { useHostname } from "../hooks/useHostname";
-import handleResponses from "../utils/handleResponses";
+import handleResponses from "../utils/helpers/handleResponses";
 import { GetPostObj } from "../utils/API/GetPostObj";
 
 type AuthContextType = {

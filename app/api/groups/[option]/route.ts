@@ -4,7 +4,7 @@ import { WaitListData } from "@/src/hooks/groups/custom/requests/useGroupRequest
 import { getMethod } from "@/src/utils/API/getAPIMethod";
 import { getJoinedGroups } from "@/src/utils/groups/getJoinedGroups";
 import { getOwnedGroups } from "@/src/utils/groups/getOwnedGroups";
-import handleResponses from "@/src/utils/handleResponses";
+import handleResponses from "@/src/utils/helpers/handleResponses";
 import {
   GROUP_MEMBERS_SCHEMA,
   GROUP_SCHEMA,

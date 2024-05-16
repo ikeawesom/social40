@@ -11,7 +11,7 @@ import ErrorActivities from "@/src/components/screens/ErrorActivities";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import { dbHandler } from "@/src/firebase/db";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 
 import {

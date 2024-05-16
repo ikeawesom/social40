@@ -2,8 +2,8 @@ import { Timestamp } from "firebase/firestore/lite";
 import getCurrentDate, {
   DateToTimestamp,
   TimestampToDate,
-} from "../getCurrentDate";
-import handleResponses from "../handleResponses";
+} from "../helpers/getCurrentDate";
+import handleResponses from "../helpers/handleResponses";
 import { dbHandler } from "@/src/firebase/db";
 import {
   GROUP_ACTIVITY_PARTICIPANT,

@@ -1,5 +1,5 @@
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { cookies } from "next/headers";
 import React, { Suspense } from "react";
 import ActivityWaitlist from "../ActivityWaitlist";
@@ -14,6 +14,7 @@ import GroupActivityJoinSection from "./GroupActivityJoinSection";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import FalloutsCard from "../participants/FalloutsCard";
 import ActivityDownloadSection from "../ActivityDownloadSection";
+import { getSimple } from "@/src/utils/helpers/parser";
 
 export type SuspenseGroupActivityFetchType = {
   memberID: string;
@@ -47,7 +48,12 @@ export default async function GroupActivityData({
 
       if (!res.status) throw new Error(res.error);
 
-      const { activityData, active, admin, fallouts } = res.data;
+      const {
+        activityData: activityUnparse,
+        active,
+        admin,
+        fallouts: falloutsunParsed,
+      } = res.data;
 
       const resA = await FetchGroupActivityData.getRequests({
         activityID,
@@ -57,11 +63,13 @@ export default async function GroupActivityData({
       });
 
       if (!resA.status) throw new Error(resA.error);
+      const { noRequests, requestsData: reqUnparsed } = resA.data;
 
-      const { noRequests, requestsData } = resA.data;
+      const activityData = getSimple(activityUnparse);
+      const requestsData = getSimple(reqUnparsed);
 
+      const fallouts = getSimple(falloutsunParsed);
       const falloutsLength = Object.keys(fallouts).length;
-
       return (
         <div className="w-full flex flex-col items-start justify-center gap-4">
           {!noRequests && admin && (

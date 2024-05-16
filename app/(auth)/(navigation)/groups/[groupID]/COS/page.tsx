@@ -5,7 +5,7 @@ import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 import { dbHandler } from "@/src/firebase/db";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { Metadata } from "next";
 import { cookies } from "next/headers";

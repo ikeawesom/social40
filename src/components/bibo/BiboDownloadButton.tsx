@@ -2,7 +2,7 @@ import React from "react";
 import { BIBO_DB_TYPE } from "@/src/utils/schemas/bibo";
 import SecondaryButton from "../utils/SecondaryButton";
 import Image from "next/image";
-import { ExportExcel } from "@/src/utils/ExportExcel";
+import { ExportExcel } from "@/src/utils/helpers/ExportExcel";
 
 type BiboArrType = {
   Date: string;

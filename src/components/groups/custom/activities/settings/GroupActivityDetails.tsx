@@ -1,10 +1,10 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import HRow from "@/src/components/utils/HRow";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import {
   ActiveTimestamp,
   TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
+} from "@/src/utils/helpers/getCurrentDate";
 import React from "react";
 import { SuspenseGroupActivityFetchType } from "./GroupActivityData";
 import ActivityStatusTab from "@/src/components/feed/ActivityStatusTab";

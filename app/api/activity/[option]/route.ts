@@ -6,8 +6,8 @@ import getCurrentDate, {
   StringToTimestamp,
   TimestampToDate,
   TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
-import handleResponses from "@/src/utils/handleResponses";
+} from "@/src/utils/helpers/getCurrentDate";
+import handleResponses from "@/src/utils/helpers/handleResponses";
 import { FALLOUTS_SCHEMA } from "@/src/utils/schemas/activities";
 import {
   GROUP_ACTIVITY_PARTICIPANT,

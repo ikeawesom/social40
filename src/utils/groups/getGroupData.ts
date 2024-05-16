@@ -5,7 +5,7 @@ import {
   GROUP_SCHEMA,
   GroupDetailsType,
 } from "../schemas/groups";
-import handleResponses from "../handleResponses";
+import handleResponses from "../helpers/handleResponses";
 
 export async function isMemberInGroup(groupID: string, memberID: string) {
   const res = await dbHandler.get({

@@ -7,7 +7,7 @@ import HeaderBar from "@/src/components/navigation/HeaderBar";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import CenterFeedSkeleton from "@/src/components/utils/CenterFeedSkeleton";
 import { dbHandler } from "@/src/firebase/db";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { cookies } from "next/headers";
 import { Suspense } from "react";

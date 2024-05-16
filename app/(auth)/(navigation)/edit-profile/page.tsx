@@ -6,7 +6,7 @@ import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import HRow from "@/src/components/utils/HRow";
 import SignoutButton from "@/src/components/utils/SignoutButton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { cookies } from "next/headers";
 import Image from "next/image";

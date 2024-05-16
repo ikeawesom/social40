@@ -4,7 +4,7 @@ import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import HRow from "@/src/components/utils/HRow";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 import {
   GROUP_ACTIVITY_SCHEMA,
   REMARKS_SCHEMA,

@@ -1,12 +1,12 @@
 import React from "react";
 import DefaultCard from "../../DefaultCard";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import JoinedActivitiesList from "./JoinedActivitiesList";
 import { dbHandler } from "@/src/firebase/db";
 import { ACTIVITY_PARTICIPANT_SCHEMA } from "@/src/utils/schemas/members";
-import handleResponses from "@/src/utils/handleResponses";
+import handleResponses from "@/src/utils/helpers/handleResponses";
 
 export default async function JoinedActivities({
   clickedMemberID,

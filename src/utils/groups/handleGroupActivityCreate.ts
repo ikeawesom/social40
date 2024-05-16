@@ -7,8 +7,8 @@ import getCurrentDate, {
   DateToTimestamp,
   TimestampToDate,
   TimestampToDateString,
-} from "../getCurrentDate";
-import handleResponses from "../handleResponses";
+} from "../helpers/getCurrentDate";
+import handleResponses from "../helpers/handleResponses";
 import {
   GROUP_ACTIVITY_PARTICIPANT,
   GROUP_ACTIVITY_SCHEMA,

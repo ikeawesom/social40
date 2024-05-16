@@ -2,7 +2,7 @@ import Hero from "@/src/components/Hero";
 import PageWrapper from "@/src/components/PageWrapper";
 import FeedbackModal from "@/src/components/feedback/FeedbackModal";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
-import InstallButton from "@/src/utils/InstallButton";
+import InstallButton from "@/src/components/InstallButton";
 import { VERSION_NUMBER } from "@/src/utils/versions";
 import { Metadata } from "next";
 import { cookies } from "next/headers";

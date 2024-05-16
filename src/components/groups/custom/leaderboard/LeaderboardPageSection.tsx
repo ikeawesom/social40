@@ -1,6 +1,6 @@
 import ComingSoonScreen from "@/src/components/screens/ComingSoonScreen";
 import { dbHandler } from "@/src/firebase/db";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import {
   DEFAULT_STATS,
   LEADERBOARD_CATS,

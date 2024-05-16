@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
-import { DateToString } from "@/src/utils/getCurrentDate";
+import { DateToString } from "@/src/utils/helpers/getCurrentDate";
 import Link from "next/link";
 import { contentfulImageLoader } from "../../profile/edit/ProfilePicSection";
 import ModalLoading from "../../utils/ModalLoading";

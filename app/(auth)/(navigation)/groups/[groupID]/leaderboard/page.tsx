@@ -5,7 +5,7 @@ import HeaderBar from "@/src/components/navigation/HeaderBar";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 import { dbHandler } from "@/src/firebase/db";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { LEADERBOARD_CATS, LeaderboardCatType } from "@/src/utils/constants";
 import { isMemberInGroup } from "@/src/utils/groups/getGroupData";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";

@@ -1,8 +1,8 @@
 "use server";
 
 import { dbHandler } from "@/src/firebase/db";
-import getCurrentDate from "@/src/utils/getCurrentDate";
-import handleResponses from "@/src/utils/handleResponses";
+import getCurrentDate from "@/src/utils/helpers/getCurrentDate";
+import handleResponses from "@/src/utils/helpers/handleResponses";
 import { ANNOUNCEMENT_SCHEMA } from "@/src/utils/schemas/announcements";
 
 export default async function submitPost(formData: ANNOUNCEMENT_SCHEMA) {

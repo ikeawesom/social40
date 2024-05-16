@@ -6,7 +6,7 @@ import {
   getDownloadURL,
   deleteObject,
 } from "firebase/storage";
-import handleResponses from "../utils/handleResponses";
+import handleResponses from "../utils/helpers/handleResponses";
 
 export const FB_STORAGE = getStorage(FIREBASE_APP);
 
