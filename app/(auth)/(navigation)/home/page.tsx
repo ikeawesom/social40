@@ -20,6 +20,7 @@ import {
   MEMBER_SCHEMA,
 } from "@/src/utils/schemas/members";
 import { IS_DEBUG } from "@/src/utils/settings";
+import { noShowUpdate } from "@/src/utils/versions";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -133,9 +134,11 @@ export default async function Home({
           <div className="w-full grid place-items-center mt-[5.5rem]">
             <div className="flex flex-col w-full items-center justify-start gap-4 max-w-[500px]">
               {IS_DEBUG.status && <MaintenanceSection />}
-              <UpdatesSection
-                memberData={JSON.parse(JSON.stringify(memberData))}
-              />
+              {!noShowUpdate && (
+                <UpdatesSection
+                  memberData={JSON.parse(JSON.stringify(memberData))}
+                />
+              )}
               {admin && <CreateAnnouncementForm memberID={memberID} />}
               <Suspense fallback={<FeedSkeleton />}>
                 <AnnouncementSection curMember={memberID} />

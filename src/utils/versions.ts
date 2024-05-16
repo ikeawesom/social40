@@ -1,4 +1,15 @@
 export const VERSION_MAP = {
+  "1.5.1": {
+    version: "1.5.1",
+    title: "Scrolling Activity Feed",
+    desc: "",
+    updates: [
+      "Increased performance in home activity feed",
+      "Scroll to load more activities feature, similar to social media",
+    ],
+    date: "16/05/2024",
+    noShow: true,
+  },
   "1.5.0": {
     version: "1.5.0",
     title: "Automated Heat Acclimatisation (HA) System",
@@ -220,13 +231,15 @@ export const VERSION_MAP = {
     title: string;
     desc: string;
     updates: string[];
-    adminOnly?: boolean;
+    adminOnly?: boolean; // only relevant for admins
     date: string;
     link?: string;
+    noShow?: boolean; // for minor changes only
   };
 };
 
 export const VERSION_NUMBER = Object.keys(VERSION_MAP)[0] as string;
+export const noShowUpdate = VERSION_MAP[VERSION_NUMBER].noShow;
 export const VERSION_OBJ = VERSION_MAP[VERSION_NUMBER];
 export const VERSION_TITLE = VERSION_OBJ.title;
 export const VERSION_DESC = VERSION_OBJ.desc;
