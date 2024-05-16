@@ -132,6 +132,7 @@ export default function GroupStatusesSection({
               )}
             </InnerContainer>
             <Link
+              scroll={false}
               href={`/groups/${groupID}/statuses`}
               className="text-sm underline text-custom-grey-text self-end hover:text-custom-primary duration-150"
             >

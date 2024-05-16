@@ -71,6 +71,7 @@ export default function CosPlansSection({
               </p>
               <h1 className="font-bold">{todayCOS.memberID}</h1>
               <Link
+                scroll={false}
                 className="text-xs underline text-custom-primary hover:opacity-70"
                 href={`/groups/${cosData[curMonth].groupID}/COS/${curMonth}`}
               >
@@ -91,6 +92,7 @@ export default function CosPlansSection({
                 const { month } = cosData[date];
                 return (
                   <Link
+                    scroll={false}
                     href={`/groups/${cosData[date].groupID}/COS/${cosData[date].month}`}
                     key={date}
                     className="w-full"

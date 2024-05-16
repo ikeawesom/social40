@@ -87,13 +87,14 @@ export default async function CosSection({
                 Hmm.. you do not have a COS planned for today, {dateStr}.
               </p>
               {cos.admins.includes(curMemberID) ? (
-                <Link href={`/groups/${groupID}/COS`}>
+                <Link scroll={false} href={`/groups/${groupID}/COS`}>
                   <PrimaryButton className="w-fit">
                     Start Planning
                   </PrimaryButton>
                 </Link>
               ) : (
                 <Link
+                  scroll={false}
                   href={`/groups/${groupID}/COS`}
                   className="text-xs underline text-custom-primary hover:opacity-70"
                 >
@@ -109,6 +110,7 @@ export default async function CosSection({
             {(cos.admins.includes(curMemberID) ||
               cos.members.includes(curMemberID)) && (
               <Link
+                scroll={false}
                 href={`/groups/${groupID}/COS`}
                 className="text-xs underline text-custom-primary hover:opacity-70"
               >

@@ -20,6 +20,7 @@ export default function MemberStatusTab({
 
   return (
     <Link
+      scroll={false}
       href={`/members/${memberID}/${statusID}`}
       className={twMerge(
         "w-full flex px-3 py-2 max-[320px]:flex-col max-[320px]:items-start items-center max-[320px]:gap-1 gap-2 justify-between hover:bg-custom-light-text duration-150",

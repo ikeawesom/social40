@@ -67,7 +67,11 @@ export default function FeedbackModal({
             take a short bit of your time.
           </p>
         </div>
-        <Link href="https://bit.ly/social40-feedback" onClick={handleSubmit}>
+        <Link
+          scroll={false}
+          href="https://bit.ly/social40-feedback"
+          onClick={handleSubmit}
+        >
           <PrimaryButton className="flex items-center justify-center">
             Begin Feedback
             <Image

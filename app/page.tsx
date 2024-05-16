@@ -31,7 +31,7 @@ export default async function Home() {
             <div className="flex items-center justify-between gap-3 w-full max-[400px]:flex-col">
               <InstallButton />
               {!data && !uid ? (
-                <Link href="/auth" className="w-full flex-1">
+                <Link scroll={false} href="/auth" className="w-full flex-1">
                   <PrimaryButton className="flex items-center justify-center text-lg">
                     Get started
                     <Image
@@ -43,7 +43,7 @@ export default async function Home() {
                   </PrimaryButton>
                 </Link>
               ) : (
-                <Link href="/home" className="w-full flex-1">
+                <Link scroll={false} href="/home" className="w-full flex-1">
                   <PrimaryButton className="flex items-center justify-center text-lg">
                     Go to home
                     <Image

@@ -51,6 +51,7 @@ export default function FullStatusList({
                     const active = ActiveTimestamp(statusData.endDate);
                     return (
                       <Link
+                        scroll={false}
                         key={statusID}
                         href={`/members/${memberID}/${statusID}`}
                         className={twMerge(

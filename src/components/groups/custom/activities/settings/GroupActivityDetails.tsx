@@ -24,6 +24,7 @@ export default async function GroupActivityDetails({
       <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
         <div className="w-full flex flex-col items-start justify-center">
           <Link
+            scroll={false}
             href={`/groups/${activityData.groupID}`}
             className="text-xs text-custom-grey-text duration-150 hover:opacity-70 mb-1"
           >

@@ -10,6 +10,7 @@ export default function GroupItem({ title, subtitle }: GroupItemType) {
   const route = `/groups/${title}`;
   return (
     <Link
+      scroll={false}
       href={route}
       className="flex flex-col items-start justify-center w-full bg-white rounded-lg py-2 px-3 shadow-sm hover:brightness-95 duration-150 cursor-pointer"
       key={title}

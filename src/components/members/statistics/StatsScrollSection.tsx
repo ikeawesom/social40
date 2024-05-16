@@ -19,6 +19,7 @@ export default function StatsScrollSection({ id }: { id: string }) {
           const { name } = stat;
           return (
             <Link
+              scroll={false}
               key={name}
               href={`/members/${id}/statistics?${new URLSearchParams({
                 type: name,

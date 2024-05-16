@@ -203,6 +203,7 @@ export default function CreateGroupActivityForm({
                   >
                     <h1 className="font-bold text-custom-dark-text">{id}</h1>
                     <Link
+                      scroll={false}
                       className="text-xs text-custom-primary underline hover:opacity-70"
                       href={`/members/${id}`}
                     >

@@ -40,6 +40,7 @@ export default function IndivHAClient({
             const updatedTiming = new Date(lastUpdated.seconds * 1000);
             return (
               <Link
+                scroll={false}
                 href={`/members/${memberID}`}
                 key={memberID}
                 className="w-full"

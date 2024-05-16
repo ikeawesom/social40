@@ -31,6 +31,7 @@ export default function AllActivityCard({
 
   return (
     <Link
+      scroll={false}
       className="w-full"
       href={`/groups/${groupID}/activity?${new URLSearchParams({
         id: activityID,

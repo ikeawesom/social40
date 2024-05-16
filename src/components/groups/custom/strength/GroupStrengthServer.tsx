@@ -62,6 +62,7 @@ export async function GroupStrengthServer({
               <LastUpdatedHANotice lastUpdatedHA={lastUpdatedHA} />
               <CalculateHAButton groupID={groupID} membersList={parsed} />
               <Link
+                scroll={false}
                 href={`/groups/${groupID}/HA-report`}
                 className={twMerge(
                   "text-start underline text-sm duration-150 text-custom-grey-text hover:text-custom-primary"

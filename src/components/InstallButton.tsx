@@ -24,7 +24,12 @@ export default function InstallButton() {
 
   if (install)
     return (
-      <Link href="" className="w-full flex-1" onClick={handleInstall}>
+      <Link
+        scroll={false}
+        href=""
+        className="w-full flex-1"
+        onClick={handleInstall}
+      >
         <SecondaryButton className="flex items-center justify-center gap-1 text-lg">
           Get the app
           <Image src="/icons/icon_download.svg" alt="" width={20} height={20} />

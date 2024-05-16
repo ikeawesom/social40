@@ -53,6 +53,7 @@ export default function LeaderboardTab({
           </div>
           <div>
             <Link
+              scroll={false}
               href={`/members/${member.memberID}`}
               className={twMerge(
                 "font-bold hover:opacity-70 duration-150 flex items-center justify-start gap-1",

@@ -126,6 +126,7 @@ export default function GroupMemberTab({
               <ModalHeader close={() => setShow(false)} heading={displayName} />
               <div className="flex flex-col items-center justify-start mt-2 gap-1">
                 <Link
+                  scroll={false}
                   className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-150"
                   href={route}
                 >

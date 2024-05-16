@@ -52,6 +52,7 @@ export default async function GroupHAServerSection({
         const HAmembers = members.filter((member) => member.isHA);
         return (
           <Link
+            scroll={false}
             key={reportID}
             href={`/groups/${groupID}/HA-report/${reportID}`}
             className="w-full"

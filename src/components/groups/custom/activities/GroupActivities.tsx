@@ -79,6 +79,7 @@ export default function GroupActivities({
       </InnerContainer>
       <div className="w-full flex items-center justify-end gap-x-4 gap-y-2 flex-wrap">
         <Link
+          scroll={false}
           href={`/groups/${groupID}/activities`}
           className="text-start underline text-sm duration-150 text-custom-grey-text hover:text-custom-primary"
         >

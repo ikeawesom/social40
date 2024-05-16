@@ -25,6 +25,7 @@ export default function GroupActivityTab({
 
   return (
     <Link
+      scroll={false}
       href={`/groups/${activityData.groupID}/activity?${new URLSearchParams({
         id: activityData.activityID,
       })}`}

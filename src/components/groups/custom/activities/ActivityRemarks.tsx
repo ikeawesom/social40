@@ -78,6 +78,7 @@ export default async function ActivityRemarks({
               const { status, readOn } = read;
               return (
                 <Link
+                  scroll={false}
                   key={remarkID}
                   href={`/groups/${groupID}/activity?${new URLSearchParams({
                     id: activityID,

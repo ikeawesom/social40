@@ -25,6 +25,7 @@ export default function LeaderboardScollSection({
           const { name } = stat;
           return (
             <Link
+              scroll={false}
               key={name}
               href={`/groups/${groupID}/leaderboard?${new URLSearchParams({
                 type,

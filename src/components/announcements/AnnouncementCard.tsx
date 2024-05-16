@@ -45,6 +45,7 @@ export default function AnnouncementCard({
     <DefaultCard className="w-full">
       <div className="w-full flex items-center justify-between gap-2 pb-1">
         <Link
+          scroll={false}
           href={`/members/${createdBy}`}
           className="text-xs text-custom-grey-text duration-150 hover:opacity-70"
         >

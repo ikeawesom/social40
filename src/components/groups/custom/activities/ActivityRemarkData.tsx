@@ -73,6 +73,7 @@ export default async function ActivityRemarkData({
       <div className="w-full flex flex-col items-center justify-start gap-2">
         <DefaultCard className="w-full flex flex-col items-start justify-start">
           <Link
+            scroll={false}
             href={`/groups/${groupID}/activity?${new URLSearchParams({
               id: activityID,
             })}`}

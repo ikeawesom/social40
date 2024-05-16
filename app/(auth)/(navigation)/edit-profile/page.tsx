@@ -62,7 +62,7 @@ export default async function EditProfilePage() {
                 <EditProfileForm memberData={memberData} />
               </div>
             </DefaultCard>
-            <Link href="/docs/updates" className="w-full">
+            <Link scroll={false} href="/docs/updates" className="w-full">
               <DefaultCard className="hover:brightness-95 w-full py-2 px-3">
                 <div className="flex items-center justify-between w-full">
                   <h1 className="text-custom-dark-text font-semibold text-start">
@@ -79,7 +79,7 @@ export default async function EditProfilePage() {
               </DefaultCard>
             </Link>
             {/* View Hidden Activities */}
-            <Link href="/hidden-activities" className="w-full">
+            <Link scroll={false} href="/hidden-activities" className="w-full">
               <DefaultCard className="hover:brightness-95 w-full py-2  px-3">
                 <div className="flex items-center justify-between w-full">
                   <h1 className="text-custom-dark-text font-semibold text-start">

@@ -179,6 +179,7 @@ export default function ActivityWaitlist({
                   className="w-full flex flex-col items-start justify-center py-2 px-3 duration-150 hover:bg-custom-light-text"
                 >
                   <Link
+                    scroll={false}
                     href={`/members/${memberID}`}
                     className="text-custom-dark-text text-sm font-semibold hover:opacity-70 duration-150"
                   >
