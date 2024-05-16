@@ -1,4 +1,4 @@
-import GroupFeedCard from "@/src/components/feed/GroupFeedCard";
+import HiddenActivitiesSection from "@/src/components/feed/HiddenActivitiesSection";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import ErrorActivities from "@/src/components/screens/ErrorActivities";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
@@ -34,10 +34,6 @@ export default async function EditProfilePage() {
 
     const { hiddenActivities } = memberData;
 
-    var groupActivitiesData = {} as {
-      [activiyID: string]: GROUP_ACTIVITY_SCHEMA;
-    };
-
     if (hiddenActivities === undefined || hiddenActivities.length === 0) {
       return (
         <>
@@ -50,14 +46,12 @@ export default async function EditProfilePage() {
     const activitiesPromise = hiddenActivities.map(
       async (activityID: string) => {
         try {
-          const ActivityObj = GetPostObj({ activityID });
-          const res = await fetch(
-            `${host}/api/activity/group-get`,
-            ActivityObj
-          );
-          const body = await res.json();
-          if (!body.status) {
-            // activity deleted
+          const { error, data } = await dbHandler.get({
+            col_name: "GROUP-ACTIVITIES",
+            id: activityID,
+          });
+          if (error) {
+            //// activity deleted
             // remove from hidden activities list
             hiddenActivities.filter((value: string) => value !== activityID);
             const resA = await dbHandler.edit({
@@ -69,8 +63,7 @@ export default async function EditProfilePage() {
             });
             if (!resA.status) throw new Error(resA.error);
           }
-
-          return handleResponses({ data: body.data });
+          return handleResponses({ data });
         } catch (err: any) {
           return handleResponses({ status: false, error: err.message });
         }
@@ -79,11 +72,11 @@ export default async function EditProfilePage() {
 
     const activitiesArr = await Promise.all(activitiesPromise);
 
+    const actArr = [] as GROUP_ACTIVITY_SCHEMA[];
     activitiesArr.forEach((item: any) => {
-      if (!item.status) throw new Error(item.error);
       if (item.data) {
-        const activityData = item.data.activityData as GROUP_ACTIVITY_SCHEMA;
-        groupActivitiesData[activityData.activityID] = activityData;
+        const activityData = item.data as GROUP_ACTIVITY_SCHEMA;
+        actArr.push(activityData);
       }
     });
 
@@ -92,19 +85,9 @@ export default async function EditProfilePage() {
         <HeaderBar text="Hidden Activities" back />
         <div className="grid place-items-center">
           <div className="max-w-[500px] flex w-full flex-col items-start justify-start gap-4">
-            {Object.keys(groupActivitiesData).map((activityID: string) => {
-              const data = groupActivitiesData[
-                activityID
-              ] as GROUP_ACTIVITY_SCHEMA;
-              return (
-                <GroupFeedCard
-                  show
-                  key={activityID}
-                  memberID={memberID}
-                  activityData={data}
-                />
-              );
-            })}
+            <HiddenActivitiesSection
+              groupActivitiesData={JSON.parse(JSON.stringify(actArr))}
+            />
           </div>
         </div>
       </>

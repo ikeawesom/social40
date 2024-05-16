@@ -3,6 +3,7 @@ import AnnouncementSection from "@/src/components/announcements/AnnouncementSect
 import CreateAnnouncementForm from "@/src/components/announcements/CreateAnnouncementForm";
 import MaintenanceSection from "@/src/components/announcements/MaintenanceSection";
 import UpdatesSection from "@/src/components/announcements/UpdatesSection";
+import ActivityFeedSkeleton from "@/src/components/feed/ActivityFeedSkeleton";
 import FeedGroup from "@/src/components/feed/FeedGroup";
 import GroupsScrollSection from "@/src/components/feed/GroupsScrollSection";
 import HomeHeaderBar from "@/src/components/navigation/HomeHeaderBar";
@@ -93,7 +94,7 @@ export default async function Home({
                 )}
                 <Suspense
                   key={searchParams.groupID}
-                  fallback={<FeedSkeleton />}
+                  fallback={<ActivityFeedSkeleton />}
                 >
                   <FeedGroup
                     memberID={memberID}

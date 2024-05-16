@@ -274,36 +274,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: false, error: resB.error });
 
     return NextResponse.json({ status: true, data: fetchedID });
-  } else if (option === "group-get") {
-    // fetch activity data
-    const res = await dbHandler.get({
-      col_name: "GROUP-ACTIVITIES",
-      id: activityID,
-    });
-    if (!res.status)
-      return NextResponse.json({ status: false, error: res.error });
-
-    // fetch participants data
-    const resA = await dbHandler.getDocs({
-      col_name: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
-    });
-    if (!resA.status)
-      return NextResponse.json({ status: false, error: resA.error });
-
-    const resData = resA.data as any[];
-    const participants = {} as {
-      [memberID: string]: GROUP_ACTIVITY_PARTICIPANT;
-    };
-
-    resData.forEach((item: any) => {
-      const data = item.data() as GROUP_ACTIVITY_PARTICIPANT;
-      const member = data.memberID as string;
-      participants[member] = data;
-    });
-
-    const to_send = { activityData: res.data, participantsData: participants };
-
-    return NextResponse.json({ status: true, data: to_send });
   } else if (option === "group-get-requests") {
     const res = await dbHandler.getSpecific({
       path: `GROUP-ACTIVITIES/${activityID}/WAITLIST`,
@@ -703,17 +673,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: false, error: res.error });
 
     return NextResponse.json({ status: true });
-  } else if (option === "get-hidden") {
-    const res = await dbHandler.get({ col_name: "MEMBERS", id: memberID });
-    if (!res.status)
-      return NextResponse.json({ status: false, error: res.error });
-
-    const data = res.data as MEMBER_SCHEMA;
-
-    const { hiddenActivities } = data;
-    if (hiddenActivities === undefined)
-      return NextResponse.json({ status: true, data: [] });
-    return NextResponse.json({ status: true, data: hiddenActivities });
   } else if (option === "set-dismiss") {
     const { activityID } = fetchedData;
     const res = await dbHandler.get({ col_name: "MEMBERS", id: memberID });

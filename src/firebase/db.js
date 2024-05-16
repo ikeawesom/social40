@@ -9,6 +9,7 @@ import {
   limit,
   query,
   getDocs,
+  startAfter,
   where,
   initializeFirestore,
   CACHE_SIZE_UNLIMITED,
@@ -64,6 +65,16 @@ class DbClass {
       return handleResponses({ error: e.message, status: false });
     }
   }
+  async getRef({ col_name, id }) {
+    const docRef = doc(FIREBASE_DB, col_name, id);
+    try {
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) return handleResponses({ data: docSnap });
+      return handleResponses({ error: "Data not found.", status: false });
+    } catch (error) {
+      return handleResponses({ error: error.message, status: false });
+    }
+  }
 
   async get({ col_name, id }) {
     const docRef = doc(FIREBASE_DB, col_name, id);
@@ -86,6 +97,46 @@ class DbClass {
     }
   }
 
+  async getPaginate({ path, orderCol, ascending, limitNo, queryNext }) {
+    try {
+      const colRef = collection(FIREBASE_DB, path);
+      var docList = {};
+      let q;
+
+      if (queryNext) {
+        // queryNext: documentSnapshot
+        q = query(
+          colRef,
+          orderBy(orderCol, ascending ? "asc" : "desc"),
+          startAfter(queryNext),
+          limit(limitNo)
+        );
+      } else {
+        q = query(
+          colRef,
+          orderBy(orderCol ?? "", ascending ? "asc" : "desc"),
+          limit(limitNo)
+        );
+      }
+
+      const qSnap = await getDocs(q);
+      let lastPointer;
+
+      qSnap.forEach((doc) => {
+        docList[doc.id] = doc.data();
+        lastPointer = doc.data().activityID;
+      });
+
+      return handleResponses({
+        data: {
+          data: docList,
+          lastPointer,
+        },
+      });
+    } catch (err) {
+      return handleResponses({ error: err.message, status: false });
+    }
+  }
   async getSpecific(args) {
     const {
       path,
@@ -135,9 +186,7 @@ class DbClass {
       }
 
       const qSnap = await getDocs(q);
-
       var docList = {};
-
       qSnap.forEach((doc) => {
         docList[doc.id] = doc.data();
       });
