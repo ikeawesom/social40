@@ -4,20 +4,19 @@ import ActiveStatusSection from "@/src/components/members/status/ActiveStatusSec
 import EndorseSection from "@/src/components/members/status/EndorseSection";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import HRow from "@/src/components/utils/HRow";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
-import { cookies } from "next/headers";
 import { Metadata } from "next";
 import {
   ActiveTimestamp,
   TimestampToDateString,
 } from "@/src/utils/helpers/getCurrentDate";
 import RevokeStatus from "@/src/components/status/RevokeStatus";
+import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 
 export const metadata: Metadata = {
   title: "Status",
@@ -28,15 +27,12 @@ export default async function CustomStatusPage({
 }: {
   params: { memberID: string; statusID: string };
 }) {
-  const cookieStore = cookies();
-  const data = cookieStore.get("memberID");
+  const { user, isAuthenticated } = await getMemberAuthServer();
+  if (!isAuthenticated || user === null) return;
+  const { memberID: adminID } = user;
+  const host = process.env.HOST;
 
-  if (!data) return <SignInAgainScreen />;
-
-  const adminID = data.value;
   try {
-    const host = process.env.HOST;
-
     const memberPostObj = GetPostObj({ memberID: adminID });
     const res = await fetch(`${host}/api/profile/member`, memberPostObj);
     const body = await res.json();

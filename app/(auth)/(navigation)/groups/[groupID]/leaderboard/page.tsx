@@ -2,7 +2,6 @@ import { LeaderboardPageSection } from "@/src/components/groups/custom/leaderboa
 import LeaderboardPageSkeleton from "@/src/components/groups/custom/leaderboard/LeaderboardPageSkeleton";
 import LeaderboardScollSection from "@/src/components/groups/custom/leaderboard/LeaderboardScollSection";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 import { dbHandler } from "@/src/firebase/db";
 import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
@@ -10,8 +9,8 @@ import { LEADERBOARD_CATS, LeaderboardCatType } from "@/src/utils/constants";
 import { isMemberInGroup } from "@/src/utils/groups/getGroupData";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { Metadata } from "next";
-import { cookies } from "next/headers";
 import { Suspense } from "react";
+import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 
 export const metadata: Metadata = {
   title: "Leaderboard",
@@ -24,12 +23,10 @@ export default async function LeaderboardPage({
   params: { [groupID: string]: string };
   searchParams: { type: string };
 }) {
+  const { user, isAuthenticated } = await getMemberAuthServer();
+  if (!isAuthenticated || user === null) return;
+  const { memberID } = user;
   const groupID = params.groupID;
-  const cookieStore = cookies();
-
-  const data = cookieStore.get("memberID");
-  if (!data) return <SignInAgainScreen />;
-  const memberID = data.value;
 
   try {
     const { error: memberErr } = await isMemberInGroup(groupID, memberID);

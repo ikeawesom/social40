@@ -2,12 +2,11 @@ import { StatisticFeed } from "@/src/components/members/statistics/feed/Statisti
 import StatisticSkeleton from "@/src/components/members/statistics/StatisticSkeleton";
 import StatsScrollSection from "@/src/components/members/statistics/StatsScrollSection";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 import { dbHandler } from "@/src/firebase/db";
 import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
-import { cookies } from "next/headers";
 import { Suspense } from "react";
+import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 
 export default async function MemberPage({
   params,
@@ -16,16 +15,12 @@ export default async function MemberPage({
   params: { memberID: string };
   searchParams: { type: string };
 }) {
+  const { user, isAuthenticated } = await getMemberAuthServer();
+  if (!isAuthenticated || user === null) return;
+  const { memberID } = user;
   const clickedMemberID = params.memberID;
-  const cookieStore = cookies();
-
-  const cookieData = cookieStore.get("memberID");
-
-  if (!cookieData) return <SignInAgainScreen />;
 
   try {
-    const memberID = cookieData.value;
-
     const { error } = await dbHandler.get({
       col_name: "MEMBERS",
       id: memberID,

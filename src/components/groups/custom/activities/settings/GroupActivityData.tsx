@@ -1,6 +1,4 @@
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
-import { cookies } from "next/headers";
 import React, { Suspense } from "react";
 import ActivityWaitlist from "../ActivityWaitlist";
 import GroupActivitySettings from "./GroupActivitySettings";
@@ -15,6 +13,7 @@ import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import FalloutsCard from "../participants/FalloutsCard";
 import ActivityDownloadSection from "../ActivityDownloadSection";
 import { getSimple } from "@/src/utils/helpers/parser";
+import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 
 export type SuspenseGroupActivityFetchType = {
   memberID: string;
@@ -29,96 +28,91 @@ export default async function GroupActivityData({
   groupID: string;
 }) {
   // fetch activity data
-  const cookieStore = cookies();
+  const { user, isAuthenticated } = await getMemberAuthServer();
+  if (!isAuthenticated || user === null) return;
+  const { memberID } = user;
 
-  const data = cookieStore.get("memberID");
+  try {
+    const host = process.env.HOST as string;
 
-  if (data) {
-    const memberID = data.value;
+    const res = await FetchGroupActivityData.getMain({
+      activityID,
+      groupID,
+      host,
+      memberID,
+    });
 
-    try {
-      const host = process.env.HOST as string;
+    if (!res.status) throw new Error(res.error);
 
-      const res = await FetchGroupActivityData.getMain({
-        activityID,
-        groupID,
-        host,
-        memberID,
-      });
+    const {
+      activityData: activityUnparse,
+      active,
+      admin,
+      fallouts: falloutsunParsed,
+    } = res.data;
 
-      if (!res.status) throw new Error(res.error);
+    const resA = await FetchGroupActivityData.getRequests({
+      activityID,
+      groupID,
+      host,
+      memberID,
+    });
 
-      const {
-        activityData: activityUnparse,
-        active,
-        admin,
-        fallouts: falloutsunParsed,
-      } = res.data;
+    if (!resA.status) throw new Error(resA.error);
+    const { noRequests, requestsData: reqUnparsed } = resA.data;
 
-      const resA = await FetchGroupActivityData.getRequests({
-        activityID,
-        groupID,
-        host,
-        memberID,
-      });
+    const activityData = getSimple(activityUnparse);
+    const requestsData = getSimple(reqUnparsed);
 
-      if (!resA.status) throw new Error(resA.error);
-      const { noRequests, requestsData: reqUnparsed } = resA.data;
+    const fallouts = getSimple(falloutsunParsed);
+    const falloutsLength = Object.keys(fallouts).length;
+    return (
+      <div className="w-full flex flex-col items-start justify-center gap-4">
+        {!noRequests && admin && (
+          <ActivityWaitlist
+            requestsData={requestsData}
+            activityID={activityID}
+          />
+        )}
+        <Suspense fallback={<DefaultSkeleton />}>
+          <GroupActivityDetails
+            activityData={activityData}
+            memberID={memberID}
+          />
 
-      const activityData = getSimple(activityUnparse);
-      const requestsData = getSimple(reqUnparsed);
+          <GroupActivityJoinSection
+            activityData={activityData}
+            memberID={memberID}
+          />
+        </Suspense>
 
-      const fallouts = getSimple(falloutsunParsed);
-      const falloutsLength = Object.keys(fallouts).length;
-      return (
-        <div className="w-full flex flex-col items-start justify-center gap-4">
-          {!noRequests && admin && (
-            <ActivityWaitlist
-              requestsData={requestsData}
-              activityID={activityID}
-            />
-          )}
+        <Suspense fallback={<DefaultSkeleton />}>
+          <ActivityParticipants
+            activityData={activityData}
+            memberID={memberID}
+          />
+        </Suspense>
+
+        {admin && !active && (
           <Suspense fallback={<DefaultSkeleton />}>
-            <GroupActivityDetails
-              activityData={activityData}
-              memberID={memberID}
-            />
-
-            <GroupActivityJoinSection
-              activityData={activityData}
-              memberID={memberID}
-            />
+            <ActivityRemarks activityID={activityID} groupID={groupID} />
           </Suspense>
-
-          <Suspense fallback={<DefaultSkeleton />}>
-            <ActivityParticipants
-              activityData={activityData}
-              memberID={memberID}
-            />
-          </Suspense>
-
-          {admin && !active && (
-            <Suspense fallback={<DefaultSkeleton />}>
-              <ActivityRemarks activityID={activityID} groupID={groupID} />
-            </Suspense>
-          )}
-          {admin && falloutsLength > 0 && <FalloutsCard fallouts={fallouts} />}
-          {admin && <GroupActivitySettings activityData={activityData} />}
-          {admin && <DeleteGroupActivity activityData={activityData} />}
-          {admin && (
-            <ActivityDownloadSection
-              activityData={activityData}
-              memberID={memberID}
-            />
-          )}
-          <p className="text-center self-center justify-center text-xs text-custom-grey-text">
-            Activity ID: {activityData.activityID}
-          </p>
-        </div>
-      );
-    } catch (err: any) {
-      return ErrorScreenHandler(err);
-    }
+        )}
+        {admin && falloutsLength > 0 && <FalloutsCard fallouts={fallouts} />}
+        {admin && <GroupActivitySettings activityData={activityData} />}
+        {admin && <DeleteGroupActivity activityData={activityData} />}
+        {admin && (
+          <ActivityDownloadSection
+            activityData={activityData}
+            memberID={memberID}
+          />
+        )}
+        <p className="text-center self-center justify-center text-xs text-custom-grey-text">
+          Activity ID: {activityData.activityID}
+        </p>
+      </div>
+    );
+  } catch (err: any) {
+    return ErrorScreenHandler(err);
   }
-  return <SignInAgainScreen />;
 }

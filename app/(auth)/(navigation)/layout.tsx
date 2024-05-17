@@ -1,25 +1,27 @@
 import Navbar from "@/src/components/navigation/Navbar";
 import MaintenanceScreen from "@/src/components/screens/MaintenanceScreen";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import { dbHandler } from "@/src/firebase/db";
+import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { IS_DEBUG } from "@/src/utils/settings";
-import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function NavLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies();
-  const cookieItem = cookieStore.get("memberID");
-
-  if (!cookieItem) return <SignInAgainScreen />;
+  const { user, isAuthenticated } = await getMemberAuthServer();
+  if (!isAuthenticated || user === null) {
+    console.log("User not authenticated");
+    redirect("/auth");
+  }
+  const { memberID } = user;
 
   if (IS_DEBUG.status) {
     if (IS_DEBUG.membersOnly) {
-      const id = cookieItem.value;
+      const id = memberID;
       const { data }: { data: MEMBER_SCHEMA } = await dbHandler.get({
         col_name: "MEMBERS",
         id,

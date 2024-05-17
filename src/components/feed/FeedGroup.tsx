@@ -1,5 +1,4 @@
 import React from "react";
-import SignInAgainScreen from "../screens/SignInAgainScreen";
 import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { dbHandler } from "@/src/firebase/db";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
@@ -14,8 +13,6 @@ export default async function FeedGroup({
   groupID: string;
   memberID: string;
 }) {
-  if (!memberID) return <SignInAgainScreen />;
-
   try {
     // get all hidden activity IDs from member data
     const { data: memberRes, error: hiddenErr } = await dbHandler.get({

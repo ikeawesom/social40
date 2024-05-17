@@ -5,9 +5,9 @@ import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import InstallButton from "@/src/components/InstallButton";
 import { VERSION_NUMBER } from "@/src/utils/versions";
 import { Metadata } from "next";
-import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
+import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 
 export const metadata: Metadata = {
   title: "Social 40",
@@ -15,13 +15,11 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const cookieStore = cookies();
-  const data = cookieStore.get("memberID");
-  const uid = cookieStore.get("uid");
+  const { user, isAuthenticated } = await getMemberAuthServer();
 
   return (
     <>
-      <FeedbackModal memberID={data?.value} />
+      <FeedbackModal memberID={user?.memberID} />
 
       <PageWrapper>
         <div className="grid place-items-center h-[80vh]">
@@ -30,7 +28,7 @@ export default async function Home() {
 
             <div className="flex items-center justify-between gap-3 w-full max-[400px]:flex-col">
               <InstallButton />
-              {!data && !uid ? (
+              {!isAuthenticated ? (
                 <Link scroll={false} href="/auth" className="w-full flex-1">
                   <PrimaryButton className="flex items-center justify-center text-lg">
                     Get started

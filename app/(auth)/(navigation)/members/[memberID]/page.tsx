@@ -6,13 +6,11 @@ import ResetPasswordButton from "@/src/components/members/ResetPasswordButton";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import JoinedActivities from "@/src/components/profile/activities/JoinedActivities";
 import StatusFeed from "@/src/components/profile/stats/StatusFeed";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
-import { cookies } from "next/headers";
 import React, { Suspense } from "react";
 import Image from "next/image";
 import HRow from "@/src/components/utils/HRow";
@@ -20,6 +18,7 @@ import MainStatisticsSection from "@/src/components/members/statistics/MainStati
 import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 import { MemberHASection } from "@/src/components/members/HA/MemberHASection";
 import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
+import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 
 export async function generateMetadata({
   params,
@@ -38,104 +37,101 @@ export default async function MemberPage({
   params: { memberID: string };
 }) {
   const clickedMemberID = params.memberID;
-  const cookieStore = cookies();
+  const { user, isAuthenticated } = await getMemberAuthServer();
+  if (!isAuthenticated || user === null) return;
+  const { memberID } = user;
+  const host = process.env.HOST;
 
-  const data = cookieStore.get("memberID");
-  if (data) {
-    const memberID = data.value;
-    try {
-      const host = process.env.HOST;
+  try {
+    // fetch current member data from server
+    const PostObj = GetPostObj({
+      memberID,
+    });
 
-      // fetch current member data from server
-      const PostObj = GetPostObj({
-        memberID,
-      });
+    const res = await fetch(`${host}/api/profile/member`, PostObj);
+    const data = await res.json();
 
-      const res = await fetch(`${host}/api/profile/member`, PostObj);
-      const data = await res.json();
+    if (!data.status) throw new Error(data.error);
 
-      if (!data.status) throw new Error(data.error);
+    const currentMemberData = data.data as MEMBER_SCHEMA;
+    const { role } = currentMemberData;
 
-      const currentMemberData = data.data as MEMBER_SCHEMA;
-      const { role } = currentMemberData;
+    // fetch clicked member data from server
+    const PostObjA = GetPostObj({
+      memberID: clickedMemberID,
+    });
 
-      // fetch clicked member data from server
-      const PostObjA = GetPostObj({
-        memberID: clickedMemberID,
-      });
+    const resA = await fetch(`${host}/api/profile/member`, PostObjA);
+    const dataA = await resA.json();
 
-      const resA = await fetch(`${host}/api/profile/member`, PostObjA);
-      const dataA = await resA.json();
+    if (!dataA.status) throw new Error(dataA.error);
 
-      if (!dataA.status) throw new Error(dataA.error);
+    const viewMemberData = dataA.data as MEMBER_SCHEMA;
 
-      const viewMemberData = dataA.data as MEMBER_SCHEMA;
+    const sameMember = viewMemberData.memberID === currentMemberData.memberID;
 
-      const sameMember = viewMemberData.memberID === currentMemberData.memberID;
+    const permission =
+      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
 
-      const permission =
-        ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
+    const higher =
+      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY[viewMemberData.role].rank;
 
-      const higher =
-        ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY[viewMemberData.role].rank;
+    const normalMember = role === "member";
 
-      const normalMember = role === "member";
+    const rankName =
+      `${viewMemberData.rank} ${viewMemberData.displayName}`.trim();
 
-      const rankName =
-        `${viewMemberData.rank} ${viewMemberData.displayName}`.trim();
+    const pfp = viewMemberData.pfp;
 
-      const pfp = viewMemberData.pfp;
-
-      return (
-        <>
-          <HeaderBar text={clickedMemberID} back />
-          <PageCenterWrapper className="flex flex-col items-stretch justify-start gap-4">
-            <DefaultCard className="flex flex-col items-start justify-center gap-2">
-              {pfp && (
-                <div className="w-full flex items-center justify-center py-2 relative rounded-lg mb-1 overflow-hidden">
+    return (
+      <>
+        <HeaderBar text={clickedMemberID} back />
+        <PageCenterWrapper className="flex flex-col items-stretch justify-start gap-4">
+          <DefaultCard className="flex flex-col items-start justify-center gap-2">
+            {pfp && (
+              <div className="w-full flex items-center justify-center py-2 relative rounded-lg mb-1 overflow-hidden">
+                <Image
+                  src={pfp}
+                  fill
+                  sizes="100%"
+                  alt="Profile"
+                  className="object-cover brightness-50 hover:brightness-75 duration-150"
+                />
+                <div className="overflow-hidden rounded-full shadow-2xl sm:w-40 sm:h-40 w-32 h-32 relative flex items-center justify-center">
                   <Image
                     src={pfp}
                     fill
                     sizes="100%"
                     alt="Profile"
-                    className="object-cover brightness-50 hover:brightness-75 duration-150"
+                    className="object-cover"
                   />
-                  <div className="overflow-hidden rounded-full shadow-2xl sm:w-40 sm:h-40 w-32 h-32 relative flex items-center justify-center">
-                    <Image
-                      src={pfp}
-                      fill
-                      sizes="100%"
-                      alt="Profile"
-                      className="object-cover"
-                    />
-                  </div>
                 </div>
-              )}
-              {/* <div className="flex w-full items-center justify-between">
+              </div>
+            )}
+            {/* <div className="flex w-full items-center justify-between">
                 <MemberPoints points={viewMemberData.points} />
               </div> */}
-              <div className="flex flex-col items-start justify-center">
-                <h1 className="text-xl text-custom-dark-text flex items-center justify-start gap-2">
-                  {rankName} <BookedStatus status={viewMemberData.bookedIn} />
-                </h1>
+            <div className="flex flex-col items-start justify-center">
+              <h1 className="text-xl text-custom-dark-text flex items-center justify-start gap-2">
+                {rankName} <BookedStatus status={viewMemberData.bookedIn} />
+              </h1>
+              <p className="text-sm text-custom-grey-text">
+                {viewMemberData.memberID}
+              </p>
+              {sameMember && (
                 <p className="text-sm text-custom-grey-text">
-                  {viewMemberData.memberID}
+                  Created on: {TimestampToDateString(viewMemberData.createdOn)}
                 </p>
-                {sameMember && (
-                  <p className="text-sm text-custom-grey-text">
-                    Created on:{" "}
-                    {TimestampToDateString(viewMemberData.createdOn)}
-                  </p>
-                )}
-              </div>
-              <MemberBadges badges={viewMemberData.badges} />
-              <HRow />
-              <MainStatisticsSection
-                curID={memberID}
-                clickedMemberID={clickedMemberID}
-                permission={higher}
-              />
-              {/* {(permission || sameMember) && (
+              )}
+            </div>
+            <MemberBadges badges={viewMemberData.badges} />
+            <HRow />
+            <MainStatisticsSection
+              curID={memberID}
+              clickedMemberID={clickedMemberID}
+              permission={higher}
+            />
+            {/* {(permission || sameMember) && (
                   <>
                     <div className="flex items-center justify-center gap-1 w-full flex-col">
                       <h1 className="text-custom-dark-text font-bold">
@@ -161,37 +157,35 @@ export default async function MemberPage({
                     </div>
                   </>
                 )} */}
-            </DefaultCard>
-            <Suspense fallback={<DefaultSkeleton className="h-[20vh]" />}>
-              {permission && <MemberHASection memberID={clickedMemberID} />}
-            </Suspense>
+          </DefaultCard>
+          <Suspense fallback={<DefaultSkeleton className="h-[20vh]" />}>
+            {permission && <MemberHASection memberID={clickedMemberID} />}
+          </Suspense>
 
+          <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
+            <JoinedActivities clickedMemberID={clickedMemberID} />
+          </Suspense>
+          {(permission || sameMember) && (
             <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
-              <JoinedActivities clickedMemberID={clickedMemberID} />
+              <DefaultCard className="w-full">
+                <StatusFeed viewProfile memberID={clickedMemberID} />
+              </DefaultCard>
             </Suspense>
-            {(permission || sameMember) && (
-              <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
-                <DefaultCard className="w-full">
-                  <StatusFeed viewProfile memberID={clickedMemberID} />
-                </DefaultCard>
-              </Suspense>
-            )}
-            {higher && !sameMember && !normalMember && (
-              // global member permissions
-              <PermissionForm
-                currentMember={currentMemberData}
-                viewMember={viewMemberData}
-              />
-            )}
-            {permission && higher && !sameMember && (
-              <ResetPasswordButton memberID={viewMemberData.memberID} />
-            )}
-          </PageCenterWrapper>
-        </>
-      );
-    } catch (err: any) {
-      return ErrorScreenHandler(err);
-    }
+          )}
+          {higher && !sameMember && !normalMember && (
+            // global member permissions
+            <PermissionForm
+              currentMember={currentMemberData}
+              viewMember={viewMemberData}
+            />
+          )}
+          {permission && higher && !sameMember && (
+            <ResetPasswordButton memberID={viewMemberData.memberID} />
+          )}
+        </PageCenterWrapper>
+      </>
+    );
+  } catch (err: any) {
+    return ErrorScreenHandler(err);
   }
-  return <SignInAgainScreen />;
 }
