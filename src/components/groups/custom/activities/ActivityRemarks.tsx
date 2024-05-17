@@ -1,8 +1,8 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import InnerContainer from "@/src/components/utils/InnerContainer";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
+import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 import { REMARKS_SCHEMA } from "@/src/utils/schemas/group-activities";
 import Link from "next/link";
 import React from "react";
@@ -78,6 +78,7 @@ export default async function ActivityRemarks({
               const { status, readOn } = read;
               return (
                 <Link
+                  scroll={false}
                   key={remarkID}
                   href={`/groups/${groupID}/activity?${new URLSearchParams({
                     id: activityID,

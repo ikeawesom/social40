@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useMemberID } from "./useMemberID";
 import QRCode from "qrcode";
-import getCurrentDate, { TimestampToDateString } from "../utils/getCurrentDate";
+import getCurrentDate, {
+  TimestampToDateString,
+} from "../utils/helpers/getCurrentDate";
 import { BIBO_SCHEMA } from "../utils/schemas/bibo";
 
 export function useBiboQR() {

@@ -6,7 +6,7 @@ import {
   signOut,
   updatePassword,
 } from "firebase/auth";
-import handleResponses from "../utils/handleResponses";
+import handleResponses from "../utils/helpers/handleResponses";
 import { FIREBASE_APP } from "./config";
 
 class AuthClass {

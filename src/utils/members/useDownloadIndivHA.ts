@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { AllDatesActivitiesType } from "../schemas/ha";
 import { toast } from "sonner";
-import { DateToString, StringToDate } from "../getCurrentDate";
+import { DateToString, StringToDate } from "../helpers/getCurrentDate";
 import { HATableRowType } from "@/src/components/groups/custom/HA/DownloadHAButton";
 import { getDateDiff } from "../groups/HA/handleHA";
-import { ExportExcel } from "../ExportExcel";
+import { ExportExcel } from "../helpers/ExportExcel";
 
 export function useDownloadIndivHA(
   memberID: string,

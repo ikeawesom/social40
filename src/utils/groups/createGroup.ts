@@ -4,7 +4,7 @@ import {
   GROUP_SCHEMA,
   initGroupObject,
 } from "../schemas/groups";
-import handleResponses from "../handleResponses";
+import handleResponses from "../helpers/handleResponses";
 import {
   MEMBER_CREATED_GROUPS_SCHEMA,
   MEMBER_SCHEMA,

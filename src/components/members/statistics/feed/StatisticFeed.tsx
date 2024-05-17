@@ -1,9 +1,9 @@
 import { dbHandler } from "@/src/firebase/db";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { DEFAULT_STATS } from "@/src/utils/constants";
 import Image from "next/image";
 import DefaultCard from "../../../DefaultCard";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 import HRow from "../../../utils/HRow";
 import IPPTFeedCard from "./IPPTFeedCard";
 import IPPTFeaturedCard from "./IPPTFeaturedCard";

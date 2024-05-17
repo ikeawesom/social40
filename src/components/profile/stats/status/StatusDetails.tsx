@@ -2,7 +2,7 @@
 import {
   DateToTimestamp,
   TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
+} from "@/src/utils/helpers/getCurrentDate";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import Link from "next/link";
 import React from "react";
@@ -31,6 +31,7 @@ export function StatusDetails({ active, curStatus }: StatusDetailType) {
 
   return (
     <Link
+      scroll={false}
       href={route}
       className={twMerge(
         "w-full flex items-start justify-center px-3 py-2 flex-col gap-1 hover:brightness-95 duration-150",

@@ -1,6 +1,6 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import HRow from "@/src/components/utils/HRow";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 import { IPPT_SCHEMA } from "@/src/utils/schemas/statistics";
 import React from "react";
 import { twMerge } from "tailwind-merge";

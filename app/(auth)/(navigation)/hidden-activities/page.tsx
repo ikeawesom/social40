@@ -1,25 +1,21 @@
 import HiddenActivitiesSection from "@/src/components/feed/HiddenActivitiesSection";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import ErrorActivities from "@/src/components/screens/ErrorActivities";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import { dbHandler } from "@/src/firebase/db";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
-import handleResponses from "@/src/utils/handleResponses";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
+import handleResponses from "@/src/utils/helpers/handleResponses";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
-import { cookies } from "next/headers";
+import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 
 export default async function EditProfilePage() {
-  const cookieStore = cookies();
-  const data = cookieStore.get("memberID");
+  const { user, isAuthenticated } = await getMemberAuthServer();
+  if (!isAuthenticated || user === null) return;
+  const { memberID } = user;
+  const host = process.env.HOST;
 
-  if (!data) return <SignInAgainScreen />;
-
-  const memberID = data.value;
   try {
-    const host = process.env.HOST;
-
     const PostObj = GetPostObj({
       memberID: memberID,
     });

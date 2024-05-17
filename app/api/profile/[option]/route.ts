@@ -6,8 +6,8 @@ import { getMethod } from "@/src/utils/API/getAPIMethod";
 import getCurrentDate, {
   DateToTimestamp,
   StringToTimestamp,
-} from "@/src/utils/getCurrentDate";
-import handleResponses from "@/src/utils/handleResponses";
+} from "@/src/utils/helpers/getCurrentDate";
+import handleResponses from "@/src/utils/helpers/handleResponses";
 import { getFriendsList } from "@/src/utils/profile/getFriendsList";
 import resetPassword from "@/src/utils/profile/resetPassword";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";

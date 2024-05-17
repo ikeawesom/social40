@@ -1,7 +1,7 @@
 "use server";
 
 import { dbHandler } from "@/src/firebase/db";
-import handleResponses from "../handleResponses";
+import handleResponses from "../helpers/handleResponses";
 
 export async function setDismissUpdate(
   id: string,

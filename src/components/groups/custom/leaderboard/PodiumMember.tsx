@@ -67,6 +67,7 @@ export default function PodiumMember({
       </div>
       <div className="flex flex-col items-center justify-center">
         <Link
+          scroll={false}
           href={`/members/${member.memberID}`}
           className="text-sm font-bold hover:text-custom-primary duration-150"
         >

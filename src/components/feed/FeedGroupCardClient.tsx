@@ -124,6 +124,7 @@ export default function FeedGroupCardClient({
       )}
     >
       <Link
+        scroll={false}
         href={`/groups/${groupID}`}
         className="text-xs text-custom-grey-text duration-150 hover:opacity-70"
       >
@@ -132,6 +133,7 @@ export default function FeedGroupCardClient({
       <HRow className="mb-2" />
       <div className="w-full flex items-center justify-between flex-wrap gap-x-2">
         <Link
+          scroll={false}
           href={`/groups/${activityData.groupID}/activity?${new URLSearchParams(
             {
               id: activityID,
@@ -159,6 +161,7 @@ export default function FeedGroupCardClient({
       </p>
 
       <Link
+        scroll={false}
         href={`/groups/${activityData.groupID}/activity?${new URLSearchParams({
           id: activityID,
         })}`}

@@ -2,15 +2,14 @@ import PlansSection from "@/src/components/groups/custom/cos/plans/PlansSection"
 import COSMembersSection from "@/src/components/groups/custom/cos/members/COSMembersSection";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 import { dbHandler } from "@/src/firebase/db";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { Metadata } from "next";
-import { cookies } from "next/headers";
 import { Suspense } from "react";
 import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
+import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 
 export const metadata: Metadata = {
   title: "COS",
@@ -21,18 +20,12 @@ export default async function GroupCOSPage({
 }: {
   params: { [groupID: string]: string };
 }) {
-  const cookieStore = cookies();
-
-  const data = cookieStore.get("memberID");
-
-  if (!data) return <SignInAgainScreen />;
-
-  const memberID = data.value;
-  if (!memberID) return <SignInAgainScreen />;
+  const { user, isAuthenticated } = await getMemberAuthServer();
+  if (!isAuthenticated || user === null) return;
+  const { memberID } = user;
+  const groupID = params.groupID;
 
   try {
-    const groupID = params.groupID;
-
     // check if group exists
     const { data, error: groupError } = await dbHandler.get({
       col_name: "GROUPS",

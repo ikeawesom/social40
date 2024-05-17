@@ -34,6 +34,7 @@ export default function HomeHeaderBar({
 
       <div className="w-full items-center justify-between flex max-w-[500px]">
         <Link
+          scroll={false}
           key="announcements"
           href={`/home?${new URLSearchParams({ activity: "announcements" })}`}
           className={twMerge(
@@ -45,6 +46,7 @@ export default function HomeHeaderBar({
           Announcements
         </Link>
         <Link
+          scroll={false}
           key="groups"
           href={`/home?${new URLSearchParams({ activity: "groups" })}`}
           className={twMerge(

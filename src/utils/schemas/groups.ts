@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import getCurrentDate from "../getCurrentDate";
+import getCurrentDate from "../helpers/getCurrentDate";
 import { STATUS_SCHEMA } from "./statuses";
 
 export type GroupStatusType = {

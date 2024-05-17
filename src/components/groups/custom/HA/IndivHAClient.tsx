@@ -2,7 +2,7 @@
 
 import DefaultCard from "@/src/components/DefaultCard";
 import HRow from "@/src/components/utils/HRow";
-import { DateToString } from "@/src/utils/getCurrentDate";
+import { DateToString } from "@/src/utils/helpers/getCurrentDate";
 import { DailyHAType } from "@/src/utils/schemas/ha";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -40,6 +40,7 @@ export default function IndivHAClient({
             const updatedTiming = new Date(lastUpdated.seconds * 1000);
             return (
               <Link
+                scroll={false}
                 href={`/members/${memberID}`}
                 key={memberID}
                 className="w-full"

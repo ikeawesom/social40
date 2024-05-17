@@ -1,15 +1,14 @@
 import MonthlyPlanList from "@/src/components/groups/custom/cos/plans/MonthlyPlanList";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 import { dbHandler } from "@/src/firebase/db";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { getMemberCOSPoints } from "@/src/utils/groups/COS/getMemberCOSPoints";
 import { COS_DAILY_SCHEMA, CosDailyType } from "@/src/utils/schemas/cos";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { Metadata } from "next";
-import { cookies } from "next/headers";
+import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 
 export const metadata: Metadata = {
   title: "COS",
@@ -20,14 +19,9 @@ export default async function GroupsMonthlyCOSPage({
 }: {
   params: { [groupID: string]: string };
 }) {
-  const cookieStore = cookies();
-
-  const data = cookieStore.get("memberID");
-
-  if (!data) return <SignInAgainScreen />;
-
-  const memberID = data.value;
-  if (!memberID) return <SignInAgainScreen />;
+  const { user, isAuthenticated } = await getMemberAuthServer();
+  if (!isAuthenticated || user === null) return;
+  const { memberID } = user;
 
   try {
     const groupID = params.groupID;

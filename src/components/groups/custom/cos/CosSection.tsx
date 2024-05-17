@@ -1,7 +1,7 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import { dbHandler } from "@/src/firebase/db";
-import { DateToString } from "@/src/utils/getCurrentDate";
+import { DateToString } from "@/src/utils/helpers/getCurrentDate";
 import { COS_DAILY_SCHEMA } from "@/src/utils/schemas/cos";
 import Link from "next/link";
 import React from "react";
@@ -87,13 +87,14 @@ export default async function CosSection({
                 Hmm.. you do not have a COS planned for today, {dateStr}.
               </p>
               {cos.admins.includes(curMemberID) ? (
-                <Link href={`/groups/${groupID}/COS`}>
+                <Link scroll={false} href={`/groups/${groupID}/COS`}>
                   <PrimaryButton className="w-fit">
                     Start Planning
                   </PrimaryButton>
                 </Link>
               ) : (
                 <Link
+                  scroll={false}
                   href={`/groups/${groupID}/COS`}
                   className="text-xs underline text-custom-primary hover:opacity-70"
                 >
@@ -109,6 +110,7 @@ export default async function CosSection({
             {(cos.admins.includes(curMemberID) ||
               cos.members.includes(curMemberID)) && (
               <Link
+                scroll={false}
                 href={`/groups/${groupID}/COS`}
                 className="text-xs underline text-custom-primary hover:opacity-70"
               >

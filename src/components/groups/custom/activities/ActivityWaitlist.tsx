@@ -7,14 +7,14 @@ import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 import { GROUP_ACTIVITY_WAITLIST } from "@/src/utils/schemas/group-activities";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import Image from "next/image";
-import handleResponses from "@/src/utils/handleResponses";
+import handleResponses from "@/src/utils/helpers/handleResponses";
 import { handleReload } from "@/src/components/navigation/HeaderBar";
 
 export const acceptLogic = async (
@@ -179,6 +179,7 @@ export default function ActivityWaitlist({
                   className="w-full flex flex-col items-start justify-center py-2 px-3 duration-150 hover:bg-custom-light-text"
                 >
                   <Link
+                    scroll={false}
                     href={`/members/${memberID}`}
                     className="text-custom-dark-text text-sm font-semibold hover:opacity-70 duration-150"
                   >

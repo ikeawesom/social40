@@ -1,7 +1,7 @@
 import { HATableRowType } from "@/src/components/groups/custom/HA/DownloadHAButton";
 import { fetchHAData } from "@/src/components/groups/custom/HA/fetchHAData";
-import { ExportExcel } from "@/src/utils/ExportExcel";
-import { StringToDate, DateToString } from "@/src/utils/getCurrentDate";
+import { ExportExcel } from "@/src/utils/helpers/ExportExcel";
+import { StringToDate, DateToString } from "@/src/utils/helpers/getCurrentDate";
 import { getDateDiff } from "@/src/utils/groups/HA/handleHA";
 import {
   HA_REPORT_SCHEMA,
@@ -10,7 +10,12 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 
-export function useDownloadHA(groupID: string, reportID: string, from: string, to: string) {
+export function useDownloadHA(
+  groupID: string,
+  reportID: string,
+  from: string,
+  to: string
+) {
   const [loading, setLoading] = useState(false);
   const download = async () => {
     setLoading(true);

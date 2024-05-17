@@ -32,7 +32,7 @@ export default function AuthPage({
   }, [status]);
 
   if (memberID === null) return <LoadingScreen text="Authenticating user..." />;
-  if (memberID !== "") router.replace("/home", { scroll: false });
+  // if (memberID !== "") router.replace("/home", { scroll: false });
 
   if (memberID === "")
     return (
@@ -46,6 +46,7 @@ export default function AuthPage({
                 Already have an account?{" "}
                 <span>
                   <Link
+                    scroll={false}
                     className="text-orange-500 hover:brightness-90 duration-150"
                     href={`?${new URLSearchParams({ new_user: "false" })}`}
                   >
@@ -61,6 +62,7 @@ export default function AuthPage({
                 New here?{" "}
                 <span>
                   <Link
+                    scroll={false}
                     className="text-orange-500 hover:brightness-90 duration-150"
                     href={`?${new URLSearchParams({ new_user: "true" })}`}
                   >

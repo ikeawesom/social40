@@ -1,4 +1,4 @@
-import handleResponses from "../handleResponses";
+import handleResponses from "../helpers/handleResponses";
 import {
   OnboardGroupMember,
   OnboardGroupMemberType,

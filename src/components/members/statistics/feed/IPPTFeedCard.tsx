@@ -1,7 +1,7 @@
 "use client";
 
 import DefaultCard from "@/src/components/DefaultCard";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import Image from "next/image";

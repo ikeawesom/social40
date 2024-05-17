@@ -67,6 +67,7 @@ export default function UpdatesSection({
           </ul>
           <div className="w-full flex items-center justify-between gap-4">
             <Link
+              scroll={false}
               className="text-sm underline hover:opacity-70"
               href="/docs/updates"
             >

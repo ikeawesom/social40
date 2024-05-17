@@ -4,13 +4,12 @@ import CreateGroupActivityForm from "@/src/components/groups/custom/activities/s
 import GroupActivityData from "@/src/components/groups/custom/activities/settings/GroupActivityData";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
-import { cookies } from "next/headers";
 import React from "react";
 import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 import { dbHandler } from "@/src/firebase/db";
+import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 
 export default async function ActivityPage({
   params,
@@ -19,72 +18,65 @@ export default async function ActivityPage({
   params: { groupID: string };
   searchParams: { [key: string]: string };
 }) {
+  const { user, isAuthenticated } = await getMemberAuthServer();
+  if (!isAuthenticated || user === null) return;
+  const { memberID } = user;
   const groupID = params.groupID;
   const query = searchParams;
-  const cookieStore = cookies();
-  const data = cookieStore.get("memberID");
-  const host = process.env.HOST;
 
-  if (data) {
-    const memberID = data.value;
-    try {
-      // handled parameter errors
-      const view =
-        "id" in query && query["id"] !== ""
-          ? true
-          : "create" in query && query["create"] === "true"
-          ? false
-          : null;
+  try {
+    // handled parameter errors
+    const view =
+      "id" in query && query["id"] !== ""
+        ? true
+        : "create" in query && query["create"] === "true"
+        ? false
+        : null;
 
-      if (view === null) throw new Error("Invalid parameters given.");
-      const title = view ? "View Activity" : "Create Activity";
+    if (view === null) throw new Error("Invalid parameters given.");
+    const title = view ? "View Activity" : "Create Activity";
 
-      const remark = view && "remarkid" in query && query["remarkid"] !== "";
+    const remark = view && "remarkid" in query && query["remarkid"] !== "";
 
-      const { data, error } = await dbHandler.get({
-        col_name: `GROUPS/${groupID}/MEMBERS`,
-        id: memberID,
-      });
-      // const body = await res.json();
+    const { data, error } = await dbHandler.get({
+      col_name: `GROUPS/${groupID}/MEMBERS`,
+      id: memberID,
+    });
+    // const body = await res.json();
 
-      let admin = false;
-      if (data) {
-        const role = data.role;
-        admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
-      }
-
-      // only group owners can create new activities
-
-      if (!admin || error) return <RestrictedScreen />;
-
-      return (
-        <>
-          <HeaderBar back text={title} />
-          <PageCenterWrapper>
-            {view ? (
-              remark ? (
-                <ActivityRemarkData
-                  remarkID={query["remarkid"]}
-                  groupID={groupID}
-                  activityID={query["id"]}
-                />
-              ) : (
-                <GroupActivityData activityID={query["id"]} groupID={groupID} />
-              )
-            ) : (
-              <DefaultCard className="w-full">
-                <CreateGroupActivityForm
-                  memberID={memberID}
-                  groupID={groupID}
-                />
-              </DefaultCard>
-            )}
-          </PageCenterWrapper>
-        </>
-      );
-    } catch (err) {
-      return ErrorScreenHandler(err);
+    let admin = false;
+    if (data) {
+      const role = data.role;
+      admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
     }
+
+    // only group owners can create new activities
+
+    if (!admin || error) return <RestrictedScreen />;
+
+    return (
+      <>
+        <HeaderBar back text={title} />
+        <PageCenterWrapper>
+          {view ? (
+            remark ? (
+              <ActivityRemarkData
+                remarkID={query["remarkid"]}
+                groupID={groupID}
+                activityID={query["id"]}
+              />
+            ) : (
+              <GroupActivityData activityID={query["id"]} groupID={groupID} />
+            )
+          ) : (
+            <DefaultCard className="w-full">
+              <CreateGroupActivityForm memberID={memberID} groupID={groupID} />
+            </DefaultCard>
+          )}
+        </PageCenterWrapper>
+      </>
+    );
+  } catch (err) {
+    return ErrorScreenHandler(err);
   }
-  return <SignInAgainScreen />;
 }

@@ -1,7 +1,7 @@
 import {
   DateToTimestamp,
   TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
+} from "@/src/utils/helpers/getCurrentDate";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import React from "react";
 

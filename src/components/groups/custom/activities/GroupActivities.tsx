@@ -8,7 +8,10 @@ import GroupActivityTab from "./settings/GroupActivityTab";
 import CreateActivityButton from "./settings/create/CreateActivityButton";
 import useQueryObj from "@/src/hooks/useQueryObj";
 import QueryInput from "../../../utils/QueryInput";
-import { DateToTimestamp, ActiveTimestamp } from "@/src/utils/getCurrentDate";
+import {
+  DateToTimestamp,
+  ActiveTimestamp,
+} from "@/src/utils/helpers/getCurrentDate";
 import Link from "next/link";
 
 export type GroupActivitiesType = {
@@ -76,6 +79,7 @@ export default function GroupActivities({
       </InnerContainer>
       <div className="w-full flex items-center justify-end gap-x-4 gap-y-2 flex-wrap">
         <Link
+          scroll={false}
           href={`/groups/${groupID}/activities`}
           className="text-start underline text-sm duration-150 text-custom-grey-text hover:text-custom-primary"
         >

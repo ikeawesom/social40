@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import {
   DateToString,
   TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
+} from "@/src/utils/helpers/getCurrentDate";
 
 export default function EndorseSection({
   statusData,

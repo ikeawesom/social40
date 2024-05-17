@@ -8,8 +8,8 @@ import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import {
   DateToTimestamp,
   TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
-import handleResponses from "@/src/utils/handleResponses";
+} from "@/src/utils/helpers/getCurrentDate";
+import handleResponses from "@/src/utils/helpers/handleResponses";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 import { toast } from "sonner";

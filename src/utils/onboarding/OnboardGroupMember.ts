@@ -1,6 +1,6 @@
 import { dbHandler } from "../../firebase/db";
-import getCurrentDate from "../getCurrentDate";
-import handleResponses from "../handleResponses";
+import getCurrentDate from "../helpers/getCurrentDate";
+import handleResponses from "../helpers/handleResponses";
 import { MEMBER_SCHEMA } from "../schemas/members";
 
 export type OnboardGroupMemberType = {

@@ -2,27 +2,24 @@ import DefaultCard from "@/src/components/DefaultCard";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import ChangePasswordSection from "@/src/components/profile/edit/change-pass/ChangePasswordSection";
 import EditProfileForm from "@/src/components/profile/edit/EditProfileForm";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import HRow from "@/src/components/utils/HRow";
 import SignoutButton from "@/src/components/utils/SignoutButton";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
-import { cookies } from "next/headers";
 import Image from "next/image";
 import NewMemberSection from "@/src/components/profile/edit/new-member/NewMemberSection";
 import Link from "next/link";
 import ProfilePicSection from "@/src/components/profile/edit/ProfilePicSection";
 import { VERSION_NUMBER } from "@/src/utils/versions";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
+import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 
 export default async function EditProfilePage() {
-  const cookieStore = cookies();
-  const data = cookieStore.get("memberID");
+  const { user, isAuthenticated } = await getMemberAuthServer();
+  if (!isAuthenticated || user === null) return;
+  const { memberID } = user;
 
-  if (!data) return <SignInAgainScreen />;
-
-  const memberID = data.value;
   try {
     const host = process.env.HOST;
 
@@ -62,7 +59,7 @@ export default async function EditProfilePage() {
                 <EditProfileForm memberData={memberData} />
               </div>
             </DefaultCard>
-            <Link href="/docs/updates" className="w-full">
+            <Link scroll={false} href="/docs/updates" className="w-full">
               <DefaultCard className="hover:brightness-95 w-full py-2 px-3">
                 <div className="flex items-center justify-between w-full">
                   <h1 className="text-custom-dark-text font-semibold text-start">
@@ -79,7 +76,7 @@ export default async function EditProfilePage() {
               </DefaultCard>
             </Link>
             {/* View Hidden Activities */}
-            <Link href="/hidden-activities" className="w-full">
+            <Link scroll={false} href="/hidden-activities" className="w-full">
               <DefaultCard className="hover:brightness-95 w-full py-2  px-3">
                 <div className="flex items-center justify-between w-full">
                   <h1 className="text-custom-dark-text font-semibold text-start">

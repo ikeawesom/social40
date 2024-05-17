@@ -4,7 +4,7 @@ import HATabs from "@/src/components/groups/custom/HA/HATabs";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import HRow from "@/src/components/utils/HRow";
 import { dbHandler } from "@/src/firebase/db";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { HA_REPORT_SCHEMA } from "@/src/utils/schemas/ha";
 import React from "react";
 
@@ -43,7 +43,12 @@ export default async function ReportPage({
               </p>
             </div>
             <div className="flex items-center justify-center w-full gap-3 max-[400px]:flex-wrap">
-              <DownloadHAButton from={time.from} to={time.to} groupID={groupID} reportID={reportID} />
+              <DownloadHAButton
+                from={time.from}
+                to={time.to}
+                groupID={groupID}
+                reportID={reportID}
+              />
               <DeleteHAButton groupID={groupID} reportID={reportID} />
             </div>
             <HRow />

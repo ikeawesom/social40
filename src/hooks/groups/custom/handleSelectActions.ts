@@ -1,7 +1,7 @@
 "use server";
 
 import { dbHandler } from "@/src/firebase/db";
-import handleResponses from "@/src/utils/handleResponses";
+import handleResponses from "@/src/utils/helpers/handleResponses";
 
 export async function handleModify(membersList: string[], data: any) {
   const arrayList = membersList.map(async (memberID: string) => {

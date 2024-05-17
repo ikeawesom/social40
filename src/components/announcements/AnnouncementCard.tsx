@@ -4,7 +4,7 @@ import React from "react";
 import DefaultCard from "../DefaultCard";
 import Link from "next/link";
 import HRow from "../utils/HRow";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 import Image from "next/image";
 import { deletePost } from "./submitPostData";
 import { toast } from "sonner";
@@ -45,6 +45,7 @@ export default function AnnouncementCard({
     <DefaultCard className="w-full">
       <div className="w-full flex items-center justify-between gap-2 pb-1">
         <Link
+          scroll={false}
           href={`/members/${createdBy}`}
           className="text-xs text-custom-grey-text duration-150 hover:opacity-70"
         >

@@ -135,6 +135,7 @@ export default function GroupLeaderboardClient({
           </div>
         )}
         <Link
+          scroll={false}
           className="text-start underline text-sm duration-150 text-custom-grey-text hover:text-custom-primary mt-3"
           href={`/groups/${groupID}/leaderboard`}
         >

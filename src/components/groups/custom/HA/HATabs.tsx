@@ -45,7 +45,12 @@ export default function HATabs({
         ? HAmembers.map((item: isHAType, index: number) => {
             const { displayName, id, isHA } = item;
             return (
-              <Link href={`/members/${id}`} key={index} className="w-full">
+              <Link
+                scroll={false}
+                href={`/members/${id}`}
+                key={index}
+                className="w-full"
+              >
                 <DefaultCard className="w-full duration-150 hover:bg-custom-light-text py-2 px-3">
                   <h1
                     className={twMerge("font-bold", !isHA && "text-custom-red")}
@@ -60,7 +65,12 @@ export default function HATabs({
         : normalMembers.map((item: isHAType, index: number) => {
             const { displayName, id, isHA } = item;
             return (
-              <Link href={`/members/${id}`} key={index} className="w-full">
+              <Link
+                scroll={false}
+                href={`/members/${id}`}
+                key={index}
+                className="w-full"
+              >
                 <DefaultCard className="w-full duration-150 hover:bg-custom-light-text py-2 px-3">
                   <h1
                     className={twMerge("font-bold", !isHA && "text-custom-red")}

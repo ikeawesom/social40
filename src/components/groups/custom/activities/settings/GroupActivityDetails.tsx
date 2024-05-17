@@ -1,10 +1,10 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import HRow from "@/src/components/utils/HRow";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import {
   ActiveTimestamp,
   TimestampToDateString,
-} from "@/src/utils/getCurrentDate";
+} from "@/src/utils/helpers/getCurrentDate";
 import React from "react";
 import { SuspenseGroupActivityFetchType } from "./GroupActivityData";
 import ActivityStatusTab from "@/src/components/feed/ActivityStatusTab";
@@ -24,6 +24,7 @@ export default async function GroupActivityDetails({
       <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
         <div className="w-full flex flex-col items-start justify-center">
           <Link
+            scroll={false}
             href={`/groups/${activityData.groupID}`}
             className="text-xs text-custom-grey-text duration-150 hover:opacity-70 mb-1"
           >

@@ -21,6 +21,7 @@ export default async function MainStatisticsSection({
       </Suspense>
       <div className="w-full items-center justify-end flex mt-2 gap-4">
         <Link
+          scroll={false}
           href={`/members/${clickedMemberID}/statistics`}
           className="text-sm underline text-custom-grey-text hover:text-custom-primary"
         >

@@ -1,5 +1,5 @@
 import { dbHandler } from "@/src/firebase/db";
-import handleResponses from "../handleResponses";
+import handleResponses from "../helpers/handleResponses";
 import { GROUP_MEMBERS_SCHEMA, GroupDetailsType } from "../schemas/groups";
 import { MEMBER_SCHEMA } from "../schemas/members";
 import { DEFAULT_STATS, DUTY_WEIGHTAGE, TOTAL_DUTY_POINTS } from "../constants";

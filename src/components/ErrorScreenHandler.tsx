@@ -1,7 +1,7 @@
 import React from "react";
-import NotFoundScreen from "../components/screens/NotFoundScreen";
-import OfflineScreen from "../components/screens/OfflineScreen";
-import ServerErrorScreen from "../components/screens/ServerErrorScreen";
+import NotFoundScreen from "./screens/NotFoundScreen";
+import OfflineScreen from "./screens/OfflineScreen";
+import ServerErrorScreen from "./screens/ServerErrorScreen";
 
 export default function ErrorScreenHandler(err: any) {
   const error = err.message;

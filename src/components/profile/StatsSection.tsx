@@ -64,7 +64,10 @@ export default function StatsSection({
               option === item.id ? "border-b-custom-primary" : ""
             )}
           >
-            <Link href={`profile?${new URLSearchParams({ option: item.id })}`}>
+            <Link
+              scroll={false}
+              href={`profile?${new URLSearchParams({ option: item.id })}`}
+            >
               <Image
                 src={
                   option === item.id

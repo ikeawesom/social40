@@ -1,7 +1,7 @@
 "use client";
 
 import InnerContainer from "@/src/components/utils/InnerContainer";
-import { ActiveTimestamp } from "@/src/utils/getCurrentDate";
+import { ActiveTimestamp } from "@/src/utils/helpers/getCurrentDate";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import AddStatusButton from "./AddStatusButton";

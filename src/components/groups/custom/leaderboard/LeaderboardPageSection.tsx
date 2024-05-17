@@ -1,6 +1,6 @@
 import ComingSoonScreen from "@/src/components/screens/ComingSoonScreen";
 import { dbHandler } from "@/src/firebase/db";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import {
   DEFAULT_STATS,
   LEADERBOARD_CATS,
@@ -193,6 +193,7 @@ export async function LeaderboardPageSection({
 
         {type === "OVERALL" && (
           <Link
+            scroll={false}
             className="text-sm underline text-custom-grey-text hover:text-custom-primary duration-150"
             target="_blank"
             href="https://social40.notion.site/v1-4-0-Leaderboard-566f1d15044d4ff88382b4a2e010caa2"

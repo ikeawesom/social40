@@ -1,9 +1,9 @@
 "use server";
 
 import { dbHandler } from "@/src/firebase/db";
-import handleResponses from "../handleResponses";
+import handleResponses from "../helpers/handleResponses";
 import { ATP_SCHEMA, IPPT_SCHEMA, VOC_SCHEMA } from "../schemas/statistics";
-import { DateToTimestamp } from "../getCurrentDate";
+import { DateToTimestamp } from "../helpers/getCurrentDate";
 import { BADGE_SCHEMA, MEMBER_SCHEMA } from "../schemas/members";
 import { BADGE_COLORS } from "../constants";
 import { getAgeGroup, getIpptScore } from "ippt-utils";

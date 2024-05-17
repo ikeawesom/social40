@@ -3,7 +3,7 @@ import { authHandler } from "../../firebase/auth";
 import { SECONDARY_FIREBASE_APP } from "../../firebase/config";
 import { dbHandler } from "../../firebase/db";
 import { initMemberObject } from "../schemas/members";
-import handleResponses from "../handleResponses";
+import handleResponses from "../helpers/handleResponses";
 
 export type OnboardMemberTypes = {
   email?: string;

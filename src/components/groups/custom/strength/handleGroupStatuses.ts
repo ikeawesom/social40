@@ -1,5 +1,5 @@
 import { dbHandler } from "@/src/firebase/db";
-import handleResponses from "@/src/utils/handleResponses";
+import handleResponses from "@/src/utils/helpers/handleResponses";
 import { GroupStatusType } from "@/src/utils/schemas/groups";
 
 export async function handleGroupStatuses(memberList: string[]) {

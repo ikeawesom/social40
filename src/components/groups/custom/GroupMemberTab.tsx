@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
-import { DateToString } from "@/src/utils/getCurrentDate";
+import { DateToString } from "@/src/utils/helpers/getCurrentDate";
 import Link from "next/link";
 import { contentfulImageLoader } from "../../profile/edit/ProfilePicSection";
 import ModalLoading from "../../utils/ModalLoading";
@@ -126,6 +126,7 @@ export default function GroupMemberTab({
               <ModalHeader close={() => setShow(false)} heading={displayName} />
               <div className="flex flex-col items-center justify-start mt-2 gap-1">
                 <Link
+                  scroll={false}
                   className="w-full p-2 text-sm rounded-lg hover:bg-custom-light-text duration-150"
                   href={route}
                 >

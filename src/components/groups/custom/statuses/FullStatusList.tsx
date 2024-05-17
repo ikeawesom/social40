@@ -1,6 +1,6 @@
 "use client";
 import HRow from "@/src/components/utils/HRow";
-import { ActiveTimestamp } from "@/src/utils/getCurrentDate";
+import { ActiveTimestamp } from "@/src/utils/helpers/getCurrentDate";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 import useQueryObj from "@/src/hooks/useQueryObj";
@@ -51,6 +51,7 @@ export default function FullStatusList({
                     const active = ActiveTimestamp(statusData.endDate);
                     return (
                       <Link
+                        scroll={false}
                         key={statusID}
                         href={`/members/${memberID}/${statusID}`}
                         className={twMerge(

@@ -4,13 +4,12 @@ import HAOptions from "@/src/components/groups/custom/HA/HAOptions";
 import IndivaHAServerSection from "@/src/components/groups/custom/HA/IndivaHAServerSection";
 import LastUpdatedHANotice from "@/src/components/groups/custom/HA/LastUpdatedHANotice";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
-import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import CenterFeedSkeleton from "@/src/components/utils/CenterFeedSkeleton";
 import { dbHandler } from "@/src/firebase/db";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
-import { cookies } from "next/headers";
 import { Suspense } from "react";
+import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 
 export default async function HAReportPage({
   params,
@@ -19,11 +18,9 @@ export default async function HAReportPage({
   params: { [groupID: string]: string };
   searchParams: { [type: string]: string };
 }) {
-  const cookieStore = cookies();
+  const { user, isAuthenticated } = await getMemberAuthServer();
+  if (!isAuthenticated || user === null) return;
   const groupID = params.groupID;
-  const data = cookieStore.get("memberID");
-
-  if (!data) return <SignInAgainScreen />;
 
   try {
     const type =

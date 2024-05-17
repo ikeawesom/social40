@@ -8,6 +8,7 @@ export default function GuidebookDownload() {
         Download the{" "}
         <span>
           <Link
+            scroll={false}
             href="https://bit.ly/social40-guidebook"
             className="text-custom-primary font-semibold text-sm hover:underline duration-150"
           >

@@ -10,7 +10,7 @@ import {
 import LoadingIcon from "@/src/components/utils/LoadingIcon";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { DateToString } from "@/src/utils/getCurrentDate";
+import { DateToString } from "@/src/utils/helpers/getCurrentDate";
 import {
   GroupDatesActivitiesType,
   HA_REPORT_SCHEMA,

@@ -4,7 +4,7 @@ import DefaultCard from "@/src/components/DefaultCard";
 import Badge from "@/src/components/utils/Badge";
 import DefaultSkeleton from "@/src/components/utils/DefaultSkeleton";
 import { MONTHS } from "@/src/utils/constants";
-import { DateToString } from "@/src/utils/getCurrentDate";
+import { DateToString } from "@/src/utils/helpers/getCurrentDate";
 import {
   COS_DAILY_SCHEMA,
   COS_MONTHLY_SCHEMA,
@@ -71,6 +71,7 @@ export default function CosPlansSection({
               </p>
               <h1 className="font-bold">{todayCOS.memberID}</h1>
               <Link
+                scroll={false}
                 className="text-xs underline text-custom-primary hover:opacity-70"
                 href={`/groups/${cosData[curMonth].groupID}/COS/${curMonth}`}
               >
@@ -91,6 +92,7 @@ export default function CosPlansSection({
                 const { month } = cosData[date];
                 return (
                   <Link
+                    scroll={false}
                     href={`/groups/${cosData[date].groupID}/COS/${cosData[date].month}`}
                     key={date}
                     className="w-full"

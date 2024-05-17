@@ -8,7 +8,7 @@ import { useHostname } from "@/src/hooks/useHostname";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
-import { getCurrentDateString } from "@/src/utils/getCurrentDate";
+import { getCurrentDateString } from "@/src/utils/helpers/getCurrentDate";
 
 export default function ToggleBibo({
   fetchedBibo,

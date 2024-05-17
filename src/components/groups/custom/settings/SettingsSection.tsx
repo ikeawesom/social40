@@ -9,7 +9,11 @@ export default function SettingsSection({ groupID }: { groupID: string }) {
       <p className="text-sm text-custom-primary text-center">
         Admin ID: {groupID}
       </p>
-      <Link href={`/groups/${groupID}/settings`} className="w-full">
+      <Link
+        scroll={false}
+        href={`/groups/${groupID}/settings`}
+        className="w-full"
+      >
         <PrimaryButton>Group Settings</PrimaryButton>
       </Link>
     </DefaultCard>

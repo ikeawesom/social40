@@ -2,7 +2,7 @@ import { dbHandler } from "@/src/firebase/db";
 import React from "react";
 import AnnouncementCard from "./AnnouncementCard";
 import Image from "next/image";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { handleShowAnnouncements } from "./handleShowAnnouncements";
 
 export default async function AnnouncementSection({

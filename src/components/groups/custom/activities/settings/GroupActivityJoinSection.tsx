@@ -1,7 +1,7 @@
 import React from "react";
 import { SuspenseGroupActivityFetchType } from "./GroupActivityData";
 import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
-import ErrorScreenHandler from "@/src/utils/ErrorScreenHandler";
+import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import JoinGroupActivityButton from "./JoinGroupActivityButton";
 import LeaveActivityButton from "./LeaveActivityButton";
 import AddRemarkButton from "../AddRemarkButton";
@@ -43,7 +43,7 @@ export default async function GroupActivityJoinSection({
           <div className="flex w-full flex-col gap-y-1 items-center justify-center">
             {isFallout && (
               <p className="text-center text-xs text-custom-grey-text">
-                You have fallen out of this activity.
+                You have been kicked out of this activity.
               </p>
             )}
             <JoinGroupActivityButton

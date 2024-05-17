@@ -1,6 +1,6 @@
 import { dbHandler } from "@/src/firebase/db";
 import { getMethod } from "@/src/utils/API/getAPIMethod";
-import { DateToTimestamp } from "@/src/utils/getCurrentDate";
+import { DateToTimestamp } from "@/src/utils/helpers/getCurrentDate";
 import { BIBO_SCHEMA } from "@/src/utils/schemas/bibo";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { NextRequest, NextResponse } from "next/server";

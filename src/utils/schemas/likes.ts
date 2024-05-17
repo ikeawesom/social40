@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import getCurrentDate from "../getCurrentDate";
+import getCurrentDate from "../helpers/getCurrentDate";
 
 export type LIKE_SCHEMA = {
   likeID: string;

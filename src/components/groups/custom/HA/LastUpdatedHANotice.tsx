@@ -1,5 +1,5 @@
 import Notice from "@/src/components/utils/Notice";
-import { TimestampToDateString } from "@/src/utils/getCurrentDate";
+import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 import LastUpdatedHAQuestion from "./LastUpdatedHAQuestion";

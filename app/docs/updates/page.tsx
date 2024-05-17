@@ -12,6 +12,7 @@ export default function PatchNotesPage() {
             Version Updates
           </h1>
           <Link
+            scroll={false}
             className="mt-5 text-lg underline text-custom-primary hover:opacity-70 duration-150"
             target="_blank"
             href="https://social40.notion.site/Social40-Documentation-7657d91a8aaf406a85d29c349b1f3c17"
@@ -50,6 +51,7 @@ export default function PatchNotesPage() {
               )}
               {link && (
                 <Link
+                  scroll={false}
                   className="mt-3 underline text-custom-primary hover:opacity-70"
                   href={link}
                   target="_blank"

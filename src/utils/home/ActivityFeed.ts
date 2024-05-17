@@ -1,7 +1,7 @@
 "use server";
 
 import { dbHandler } from "@/src/firebase/db";
-import handleResponses from "../handleResponses";
+import handleResponses from "../helpers/handleResponses";
 import { GROUP_ACTIVITIES_SCHEMA } from "../schemas/groups";
 
 export async function FetchPaginateActivity({
