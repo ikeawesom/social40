@@ -11,6 +11,7 @@ import { getAuth } from "firebase/auth";
 import { authHandler } from "@/src/firebase/auth";
 import { FIREBASE_APP } from "@/src/firebase/config";
 import { userLoginType } from "@/src/components/auth/SigninForm";
+import { COOKIE_LIFESPAN } from "../settings";
 
 export async function handleServerSignUp({
   groupID,
@@ -133,7 +134,7 @@ export async function linkUIDtoMember(uid: string, memberID: string) {
 
 export async function addAuthToCookies({ uid }: { uid: string }) {
   const cookieStore = cookies();
-  cookieStore.set("uid", uid);
+  cookieStore.set("uid", uid, { maxAge: COOKIE_LIFESPAN });
 }
 
 export type AuthUserTypeA = {
