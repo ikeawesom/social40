@@ -1,13 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import PrimaryButton from "../utils/PrimaryButton";
-import { dbHandler } from "@/src/firebase/db";
-import { initWaitListee } from "@/src/utils/schemas/waitlist";
-import getCurrentDate from "@/src/utils/helpers/getCurrentDate";
-import { GROUP_MEMBERS_SCHEMA } from "@/src/utils/schemas/groups";
 import { LoadingIconBright } from "../utils/LoadingIcon";
+import { handleServerSignUp } from "@/src/utils/auth/handleServerAuth";
 
-type userDetailsType = {
+export type userDetailsType = {
   admin: string;
   password: string;
   name: string;
@@ -42,48 +39,13 @@ export default function SignupForm({ setStatus }: statusType) {
     e.preventDefault();
 
     try {
-      const res = await dbHandler.get({
-        col_name: "GROUPS",
-        id: groupIDtrimmed,
-      });
-
-      if (!res.data) throw new Error("invalid-group");
-
-      const resA = await dbHandler.get({
-        col_name: `GROUPS/${groupIDtrimmed}/WAITLIST`,
-        id: username,
-      });
-
-      if (resA.status)
-        throw new Error(
-          `Your request to ${groupIDtrimmed} is already pending. Please update your commander.`
-        );
-
-      // see if member inside group
-      const resB = await dbHandler.get({
-        col_name: `GROUPS/${groupIDtrimmed}/MEMBERS`,
-        id: username,
-      });
-
-      if (resB.data)
-        throw new Error(
-          "You already have an account under this Admin ID. Please sign in instead."
-        );
-
-      // new member
-      const to_add = initWaitListee({
-        memberID: username,
+      const { error } = await handleServerSignUp({
         groupID: groupIDtrimmed,
-        displayName: userDetails.name.trim(),
-        password: userDetails.password,
-        dateRequested: getCurrentDate(),
+        memberID: username,
+        userDetails,
       });
+      if (error) throw new Error(error);
 
-      await dbHandler.add({
-        col_name: `/GROUPS/${groupIDtrimmed}/WAITLIST`,
-        id: username,
-        to_add: to_add,
-      });
       setStatus("success-signup");
     } catch (e: any) {
       setStatus(e.message);

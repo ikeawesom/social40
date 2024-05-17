@@ -1,17 +1,15 @@
 "use client";
 import React, { useState } from "react";
-import { authHandler } from "@/src/firebase/auth";
 import PrimaryButton from "../utils/PrimaryButton";
-import { getAuth } from "firebase/auth";
-import { FIREBASE_APP } from "@/src/firebase/config";
-import { clearCookies, useAuth } from "@/src/contexts/AuthContext";
-import { useHostname } from "@/src/hooks/useHostname";
-import { GetPostObj } from "@/src/utils/API/GetPostObj";
+import { useAuth } from "@/src/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { LoadingIconBright } from "../utils/LoadingIcon";
-import { dbHandler } from "@/src/firebase/db";
+import {
+  clearCookies,
+  handleServerSignIn,
+} from "@/src/utils/auth/handleServerAuth";
 
-type userDetailsType = {
+export type userLoginType = {
   email: string;
   password: string;
 };
@@ -23,9 +21,8 @@ type statusType = {
 export default function SigninForm({ setStatus }: statusType) {
   const router = useRouter();
   const { setMember } = useAuth();
-  const { host } = useHostname();
   const [loading, setLoading] = useState(false);
-  const [userDetails, setUserDetails] = useState<userDetailsType>({
+  const [userDetails, setUserDetails] = useState<userLoginType>({
     email: "",
     password: "",
   });
@@ -44,38 +41,18 @@ export default function SigninForm({ setStatus }: statusType) {
       // lowercase memberID (not case-sensitive)
       const memberID = username;
 
-      // setting cookie for memberID
-      const PostMember = GetPostObj({ memberID });
-      const resB = await fetch(`${host}/api/auth/cookiemember`, PostMember);
+      const { error } = await handleServerSignIn({
+        email: emailMerged,
+        memberID,
+        userDetails,
+      });
+      if (error) throw new Error(error);
 
       localStorage.setItem("localMemberID", memberID);
-
-      const { status, error } = await resB.json();
-
-      if (!status) throw new Error(error);
-
-      // sign in to firebase
-      const auth = getAuth(FIREBASE_APP);
-      const res = await authHandler.signIn(
-        auth,
-        emailMerged,
-        userDetails.password
-      );
-
-      if (!res.status) throw new Error(res.error);
-
-      const resA = await dbHandler.edit({
-        col_name: `MEMBERS`,
-        data: { password: userDetails.password },
-        id: memberID,
-      });
-
-      if (!resA.status) throw new Error(resA.error);
-
       router.refresh();
       setMember(memberID);
     } catch (e: any) {
-      await clearCookies(host);
+      await clearCookies();
       setStatus(e.message as string);
     } finally {
       setLoading(false);

@@ -1,20 +1,19 @@
-import { cookies } from "next/headers";
 import { useEffect, useState } from "react";
-import { useHostname } from "./useHostname";
+import { getMemberAuthServer } from "../utils/auth/handleServerAuth";
 
 export function useMemberID() {
   const [memberID, setMemberID] = useState("");
-  const { host } = useHostname();
 
   useEffect(() => {
     const getMemberID = async () => {
-      const res = await fetch(`${host}/api/auth/signin`);
-      const fetchedData = await res.json();
-      const { data } = fetchedData;
-      setMemberID(data);
+      const { user } = await getMemberAuthServer();
+      if (user !== null) {
+        const { memberID: data } = user;
+        setMemberID(data);
+      }
     };
     if (memberID === "") getMemberID();
-  }, [memberID, host]);
+  }, [memberID]);
 
   return { memberID, setMemberID };
 }
