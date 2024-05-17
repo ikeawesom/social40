@@ -35,7 +35,9 @@ export default async function Home({
   searchParams: { activity: string; groupID: string };
 }) {
   const { user, isAuthenticated } = await getMemberAuthServer();
-  if (!isAuthenticated || user === null) return;
+  if (!isAuthenticated || user === null) {
+    redirect("/auth");
+  }
   const { memberID } = user;
 
   let activityType = searchParams.activity;
