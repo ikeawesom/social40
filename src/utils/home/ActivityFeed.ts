@@ -9,11 +9,13 @@ export async function FetchPaginateActivity({
   hidden,
   limit,
   path,
+  config,
 }: {
   hidden?: string[];
   lastPointer?: any;
   limit?: number;
   path: string;
+  config?: { field: string; criteria: string; value: string } | null;
 }) {
   try {
     let pointerRef = null;
@@ -26,13 +28,16 @@ export async function FetchPaginateActivity({
       if (!error) pointerRef = data;
     }
 
-    const { data: paginateRes, error: pagiErr } = await dbHandler.getPaginate({
-      path: path,
-      orderCol: "activityDate",
-      ascending: false,
-      limitNo: limit ?? 5,
-      queryNext: pointerRef,
-    });
+    const { data: paginateRes, error: pagiErr } = await dbHandler.getPaginate(
+      {
+        path: path,
+        orderCol: "activityDate",
+        ascending: false,
+        limitNo: limit ?? 5,
+        queryNext: pointerRef,
+      },
+      config ?? null
+    );
 
     if (pagiErr) throw new Error(pagiErr);
 
