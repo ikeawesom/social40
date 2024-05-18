@@ -26,13 +26,9 @@ export default async function NavLayout({
       id,
     });
     const { role } = data;
-    if (IS_DEBUG.membersOnly) {
-      if (ROLES_HIERARCHY[role].rank < ROLES_HIERARCHY["admin"].rank)
-        return <MaintenanceScreen />;
-    } else {
-      if (ROLES_HIERARCHY[role].rank < ROLES_HIERARCHY["owner"].rank)
-        return <MaintenanceScreen />;
-    }
+
+    if (ROLES_HIERARCHY[role].rank < ROLES_HIERARCHY["admin"].rank)
+      return <MaintenanceScreen />;
   }
 
   return (

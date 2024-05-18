@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import PageWrapper from "@/src/components/PageWrapper";
 import { Toaster } from "sonner";
-import { AuthProvider } from "@/src/contexts/AuthContext";
+import { isFullMaintenance } from "@/src/utils/settings";
+import MaintenanceScreen from "@/src/components/screens/MaintenanceScreen";
 
 export const metadata: Metadata = {
   title: { template: "%s | Social 40", default: "Social 40" },
@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Toaster richColors position="top-center" />
-        {children}
+        {isFullMaintenance ? <MaintenanceScreen /> : children}
       </body>
     </html>
   );
