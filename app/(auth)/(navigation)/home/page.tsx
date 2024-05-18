@@ -78,7 +78,7 @@ export default async function Home({
       redirect(
         `/home?${new URLSearchParams({
           activity: "groups",
-          groupID: groupsList[0],
+          groupID: "all",
         })}`
       );
 
@@ -97,7 +97,11 @@ export default async function Home({
                 key={searchParams.groupID}
                 fallback={<ActivityFeedSkeleton />}
               >
-                <FeedGroup memberID={memberID} groupID={searchParams.groupID} />
+                <FeedGroup
+                  memberID={memberID}
+                  groupID={searchParams.groupID}
+                  all={groupsList}
+                />
               </Suspense>
             </div>
           )}

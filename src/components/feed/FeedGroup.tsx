@@ -9,9 +9,11 @@ import { FetchPaginateActivity } from "@/src/utils/home/ActivityFeed";
 export default async function FeedGroup({
   groupID,
   memberID,
+  all,
 }: {
   groupID: string;
   memberID: string;
+  all?: string[];
 }) {
   try {
     // get all hidden activity IDs from member data
