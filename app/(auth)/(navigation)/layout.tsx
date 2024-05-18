@@ -20,19 +20,17 @@ export default async function NavLayout({
   const { memberID } = user;
 
   if (IS_DEBUG.status) {
-    if (IS_DEBUG.membersOnly) {
-      const id = memberID;
-      const { data }: { data: MEMBER_SCHEMA } = await dbHandler.get({
-        col_name: "MEMBERS",
-        id,
-      });
-      const { role } = data;
-      if (ROLES_HIERARCHY[role].rank < ROLES_HIERARCHY["admin"].rank)
-        return <MaintenanceScreen />;
-    } else {
+    const id = memberID;
+    const { data }: { data: MEMBER_SCHEMA } = await dbHandler.get({
+      col_name: "MEMBERS",
+      id,
+    });
+    const { role } = data;
+
+    if (ROLES_HIERARCHY[role].rank < ROLES_HIERARCHY["admin"].rank)
       return <MaintenanceScreen />;
-    }
   }
+
   return (
     <>
       <div className="mb-16 mt-10">{children}</div>

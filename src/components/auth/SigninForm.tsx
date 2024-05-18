@@ -8,6 +8,9 @@ import {
   clearCookies,
   handleServerSignIn,
 } from "@/src/utils/auth/handleServerAuth";
+import { FIREBASE_APP } from "@/src/firebase/config";
+import { getAuth } from "firebase/auth";
+import { authHandler } from "@/src/firebase/auth";
 
 export type userLoginType = {
   email: string;
@@ -41,14 +44,27 @@ export default function SigninForm({ setStatus }: statusType) {
       // lowercase memberID (not case-sensitive)
       const memberID = username;
 
+      // sign in to firebase
+      const auth = getAuth(FIREBASE_APP);
+      const res = await authHandler.signIn(
+        auth,
+        emailMerged,
+        userDetails.password
+      );
+
+      if (!res.status) throw new Error(res.error);
+
+      // manage data on server
       const { error } = await handleServerSignIn({
-        email: emailMerged,
-        memberID,
+        memberID: username,
         userDetails,
       });
+
       if (error) throw new Error(error);
 
+      // add cookie
       localStorage.setItem("localMemberID", memberID);
+
       router.refresh();
       setMember(memberID);
     } catch (e: any) {

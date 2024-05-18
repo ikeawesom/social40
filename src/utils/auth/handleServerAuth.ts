@@ -74,21 +74,13 @@ export async function handleServerSignUp({
 }
 
 export async function handleServerSignIn({
-  email,
   userDetails,
   memberID,
 }: {
   memberID: string;
-  email: string;
   userDetails: userLoginType;
 }) {
   try {
-    // sign in to firebase
-    const auth = getAuth(FIREBASE_APP);
-    const res = await authHandler.signIn(auth, email, userDetails.password);
-
-    if (!res.status) throw new Error(res.error);
-
     const resA = await dbHandler.edit({
       col_name: `MEMBERS`,
       data: { password: userDetails.password },

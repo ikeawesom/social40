@@ -1,4 +1,8 @@
-export const IS_DEBUG = { status: false, membersOnly: true };
+export const IS_DEBUG = { status: false, membersOnly: false };
+export const isFullMaintenance =
+  IS_DEBUG.status &&
+  !IS_DEBUG.membersOnly &&
+  process.env.NODE_ENV === "production";
 
 export const MAX_LENGTH = 30;
 

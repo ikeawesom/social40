@@ -24,6 +24,7 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
+import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -35,9 +36,7 @@ export default async function Home({
   searchParams: { activity: string; groupID: string };
 }) {
   const { user, isAuthenticated } = await getMemberAuthServer();
-  if (!isAuthenticated || user === null) {
-    redirect("/auth");
-  }
+  if (!isAuthenticated || user === null) return <SignInAgainScreen />;
   const { memberID } = user;
 
   let activityType = searchParams.activity;
