@@ -14,14 +14,20 @@ import ErrorActivities from "../screens/ErrorActivities";
 
 export default function FeedGroupClient({
   hidden,
-  groupID,
   activities,
   lastPointer,
+  path,
+  config,
 }: {
   hidden: string[];
-  groupID: string;
   activities: GROUP_ACTIVITIES_SCHEMA[];
   lastPointer: string;
+  config?: null | {
+    field: string;
+    criteria: string;
+    value: any;
+  };
+  path: string;
 }) {
   const { memberID } = useMemberID();
   const [activityData, setActivityData] = useState(activities);
@@ -36,7 +42,8 @@ export default function FeedGroupClient({
       const { data: pagiData, error } = await FetchPaginateActivity({
         hidden,
         lastPointer: lastRef,
-        path: `GROUPS/${groupID}/GROUP-ACTIVITIES`,
+        path,
+        config: config ?? null,
       });
 
       if (error) throw new Error(error);

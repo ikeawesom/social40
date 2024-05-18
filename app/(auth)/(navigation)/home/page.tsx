@@ -99,7 +99,7 @@ export default async function Home({
                 <FeedGroup
                   memberID={memberID}
                   groupID={searchParams.groupID}
-                  all={groupsList}
+                  all={searchParams.groupID === "all" ? groupsList : null}
                 />
               </Suspense>
             </div>
