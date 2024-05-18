@@ -5,7 +5,7 @@ import DefaultSkeleton from "../utils/DefaultSkeleton";
 
 export default function FeedGroupCardSkeleton() {
   return (
-    <DefaultCard className="w-full flex flex-col items-start justify-start">
+    <DefaultCard className="w-full flex flex-col items-start justify-start fade-in-bottom">
       <DefaultSkeleton className="h-[5px] w-[150px]" />
       <HRow className="mb-2" />
       <div className="w-full flex items-center justify-between flex-wrap gap-2">
