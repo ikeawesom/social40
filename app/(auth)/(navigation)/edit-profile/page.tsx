@@ -45,7 +45,7 @@ export default async function EditProfilePage() {
           <div className="w-full flex flex-col items-center justify-start gap-3 max-w-[500px]">
             {/* Edit Profile */}
             <DefaultCard className="w-full">
-              <h1 className="text-custom-dark-text font-semibold text-start">
+              <h1 className="text-custom-dark-text font-semibold text-start text-sm">
                 Edit Profile
               </h1>
               <HRow />
@@ -62,9 +62,17 @@ export default async function EditProfilePage() {
             <Link scroll={false} href="/docs/updates" className="w-full">
               <DefaultCard className="hover:brightness-95 w-full py-2 px-3">
                 <div className="flex items-center justify-between w-full">
-                  <h1 className="text-custom-dark-text font-semibold text-start">
-                    View Updates
-                  </h1>
+                  <div className="flex items-center justify-start gap-2">
+                    <Image
+                      src="/icons/navigation/icon_rocket.svg"
+                      width={25}
+                      height={25}
+                      alt=""
+                    />
+                    <h1 className="text-custom-dark-text font-semibold text-start text-sm">
+                      View Updates
+                    </h1>
+                  </div>
                   <Image
                     src="/icons/icon_arrow-down.svg"
                     width={30}
@@ -79,9 +87,17 @@ export default async function EditProfilePage() {
             <Link scroll={false} href="/hidden-activities" className="w-full">
               <DefaultCard className="hover:brightness-95 w-full py-2  px-3">
                 <div className="flex items-center justify-between w-full">
-                  <h1 className="text-custom-dark-text font-semibold text-start">
-                    View Hidden Activities
-                  </h1>
+                  <div className="flex items-center justify-start gap-2">
+                    <Image
+                      src="/icons/navigation/icon_eye_primary.svg"
+                      width={25}
+                      height={25}
+                      alt=""
+                    />
+                    <h1 className="text-custom-dark-text font-semibold text-start text-sm">
+                      View Hidden Activities
+                    </h1>
+                  </div>
                   <Image
                     src="/icons/icon_arrow-down.svg"
                     width={30}
