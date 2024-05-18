@@ -12,14 +12,7 @@ export default function ChangePasswordSection() {
     <DefaultCard className="w-full py-2 px-3">
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center justify-start gap-2">
-          <Image
-            src="/icons/icon_lock.svg"
-            width={25}
-            height={25}
-            alt=""
-            onClick={() => setShow(!show)}
-            className={`duration-300 ease-in-out ${show ? "rotate-180" : ""}`}
-          />
+          <Image src="/icons/icon_lock.svg" width={25} height={25} alt="" />
           <h1 className="text-custom-dark-text font-semibold text-start text-sm">
             Change Password
           </h1>
