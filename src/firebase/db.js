@@ -97,7 +97,7 @@ class DbClass {
     }
   }
 
-  async getPaginate({ path, orderCol, ascending, limitNo, queryNext }) {
+  async getPaginate({ path, orderCol, ascending, limitNo, queryNext }, config) {
     try {
       const colRef = collection(FIREBASE_DB, path);
       var docList = {};
@@ -105,18 +105,39 @@ class DbClass {
 
       if (queryNext) {
         // queryNext: documentSnapshot
-        q = query(
-          colRef,
-          orderBy(orderCol, ascending ? "asc" : "desc"),
-          startAfter(queryNext),
-          limit(limitNo)
-        );
+        if (config) {
+          const { field, criteria, value } = config;
+          q = query(
+            colRef,
+            where(field, criteria, value),
+            orderBy(orderCol, ascending ? "asc" : "desc"),
+            startAfter(queryNext),
+            limit(limitNo)
+          );
+        } else {
+          q = query(
+            colRef,
+            orderBy(orderCol, ascending ? "asc" : "desc"),
+            startAfter(queryNext),
+            limit(limitNo)
+          );
+        }
       } else {
-        q = query(
-          colRef,
-          orderBy(orderCol ?? "", ascending ? "asc" : "desc"),
-          limit(limitNo)
-        );
+        if (config) {
+          const { field, criteria, value } = config;
+          q = query(
+            colRef,
+            where(field, criteria, value),
+            orderBy(orderCol ?? "", ascending ? "asc" : "desc"),
+            limit(limitNo)
+          );
+        } else {
+          q = query(
+            colRef,
+            orderBy(orderCol ?? "", ascending ? "asc" : "desc"),
+            limit(limitNo)
+          );
+        }
       }
 
       const qSnap = await getDocs(q);
