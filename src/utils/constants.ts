@@ -120,6 +120,18 @@ export const GROUP_MEMBERS_SELECT_OPTIONS = {
   };
 };
 
+export type ActivityFeedViewType = {
+  id: string;
+  name: string;
+  isDefault: boolean;
+};
+
+export const ACTIVITY_FEED_VIEWS = [
+  { id: "scroll", name: "Scroll", isDefault: true },
+  { id: "weekly", name: "Weekly", isDefault: false },
+  { id: "monthly", name: "Monthly", isDefault: false },
+] as ActivityFeedViewType[];
+
 export const ACTIVITY_TYPE = ["Light", "Moderate", "Strenuous"];
 export const GROUP_ACTIVITY_PARTICIPANTS = {
   all: {

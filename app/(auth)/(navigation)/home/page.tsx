@@ -25,6 +25,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
+import GroupsActivitiesViews from "@/src/components/feed/GroupsActivitiesViews";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { activity: string; groupID: string };
+  searchParams: { activity: string; groupID: string; view: string };
 }) {
   const { user, isAuthenticated } = await getMemberAuthServer();
   if (!isAuthenticated || user === null) return <SignInAgainScreen />;
@@ -90,7 +91,10 @@ export default async function Home({
           ) : (
             <div className="flex flex-col w-full items-center justify-start gap-4 max-w-[500px] overflow-x-hidden">
               {groupsList.length > 1 && (
-                <GroupsScrollSection groupsList={groupsList} />
+                <>
+                  <GroupsScrollSection groupsList={groupsList} />
+                  <GroupsActivitiesViews />
+                </>
               )}
               <Suspense
                 key={searchParams.groupID}
