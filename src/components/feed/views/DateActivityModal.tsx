@@ -29,7 +29,7 @@ export default function DateActivityModal({
           const actData = data.activities[id];
           return (
             <AllActivityCard
-              className="border-custom-light-text border-[1px]"
+              className="border-custom-light-text border-[1px] p-3"
               key={id}
               data={actData}
             />
