@@ -1,6 +1,6 @@
 import { useSearchParams } from "next/navigation";
 
-export default function getAllSearchParams() {
+export default function useGetAllSearchParams() {
   const values = {} as { [id: string]: string };
   const searchParams = useSearchParams();
 

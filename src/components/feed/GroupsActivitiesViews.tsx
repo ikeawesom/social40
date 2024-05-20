@@ -4,14 +4,14 @@ import {
   ACTIVITY_FEED_VIEWS,
   ActivityFeedViewType,
 } from "@/src/utils/constants";
-import getAllSearchParams from "@/src/utils/helpers/getAllSearchParams";
+import useGetAllSearchParams from "@/src/utils/helpers/useGetAllSearchParams";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 export default function GroupsActivitiesViews() {
-  const { values } = getAllSearchParams();
+  const { values } = useGetAllSearchParams();
   const [curView, setCurView] = useState(values["view"] ?? "scroll");
   const [show, setShow] = useState(false);
 

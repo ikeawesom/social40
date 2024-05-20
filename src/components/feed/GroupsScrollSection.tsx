@@ -2,14 +2,14 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
-import getAllSearchParams from "@/src/utils/helpers/getAllSearchParams";
+import useGetAllSearchParams from "@/src/utils/helpers/useGetAllSearchParams";
 
 export default function GroupsScrollSection({
   groupsList,
 }: {
   groupsList: string[];
 }) {
-  const { values } = getAllSearchParams();
+  const { values } = useGetAllSearchParams();
   const [curGroup, setCurGroup] = useState(values["groupID"] ?? "all");
 
   return (
