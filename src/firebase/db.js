@@ -187,6 +187,9 @@ class DbClass {
           orderBy(orderCol2, !ascending2 ? "desc" : "asc")
         );
       } else if (field3 && orderCol) {
+        console.log(field, criteria, value);
+        console.log(field2, criteria2, value2);
+        // // console.log(field3, criteria3, value3);
         q = query(
           colRef,
           where(field, criteria, value),
@@ -222,6 +225,7 @@ class DbClass {
       qSnap.forEach((doc) => {
         docList[doc.id] = doc.data();
       });
+
       return handleResponses({ data: docList });
     } catch (err) {
       return handleResponses({ error: err.message, status: false });
