@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
-import useGetAllSearchParams from "@/src/utils/helpers/useGetAllSearchParams";
+import useGetAllSearchParams from "@/src/utils/helpers/getAllSearchParams";
 
 export default function GroupsScrollSection({
   groupsList,
