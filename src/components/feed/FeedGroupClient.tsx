@@ -75,7 +75,7 @@ export default function FeedGroupClient({
     setActivityData(temp);
   };
 
-  if (activityData.length === 0)
+  if (activityData.length === 0 && finished)
     return (
       <ErrorActivities text="Well, looks like there are no activites here for you." />
     );
