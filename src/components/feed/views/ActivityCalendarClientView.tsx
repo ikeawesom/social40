@@ -10,13 +10,11 @@ import {
   getPreviousWeekStartAndEnd,
 } from "@/src/utils/helpers/getCurrentDate";
 import { twMerge } from "tailwind-merge";
-import { activitiesToDates } from "@/src/utils/home/activitiesToDates";
-import AnnouncementTag from "../../announcements/AnnouncementTag";
-import DateActivityModal from "./DateActivityModal";
 import Image from "next/image";
 import { toast } from "sonner";
-import DefaultSkeleton from "../../utils/DefaultSkeleton";
 import { fetchActivitiesWeekly } from "@/src/utils/home/fetchActivitiesWeekly";
+import CalendarActivityTab from "./CalendarActivityTab";
+import LoadingIcon from "../../utils/LoadingIcon";
 
 export type FullActivityType = { [id: string]: GROUP_ACTIVITY_SCHEMA };
 
@@ -35,8 +33,6 @@ export default function ActivityCalendarClientView({
   groupID: string;
   dates: { curDate: Date; startDate: Date; endDate: Date };
 }) {
-  const MAX_ACTIVITIES_PER_DAY = 2;
-  const [showAll, setShowAll] = useState<DisplayDateActivityType>();
   const [rangeDates, setRangeDates] = useState<{
     start: Date;
     end: Date;
@@ -45,7 +41,7 @@ export default function ActivityCalendarClientView({
 
   const fetchData = async () => {
     try {
-      console.log("through client:", rangeDates.start);
+      // console.log("through client:", rangeDates.start);
       const { data, error } = await fetchActivitiesWeekly(
         rangeDates.start,
         rangeDates.end,
@@ -63,25 +59,10 @@ export default function ActivityCalendarClientView({
   useEffect(() => {
     setActivities(undefined);
     fetchData();
-  }, [rangeDates]);
-
-  if (!activities) return <DefaultSkeleton />;
-
-  if (!rangeDates) return <DefaultSkeleton />;
+  }, [rangeDates, groupID]);
 
   const startDateStr = DateToString(rangeDates.start).split(" ")[0];
   const endDateStr = DateToString(rangeDates.end).split(" ")[0];
-
-  const resetShow = () => setShowAll(undefined);
-
-  const { sortedData: matchedActivities } = activitiesToDates({ activities });
-
-  const tabColors = {
-    0: { color: "bg-red-600/80", src: "" },
-    5: { color: "bg-custom-green/80", src: "" },
-    6: { color: "bg-blue-700/80", src: "" },
-    // others: "bg-custom-grey-text/40 text-white",
-  } as { [index: number]: { color: string; src: string } };
 
   const handleShiftBack = async () => {
     const { endDate, startDate } = getPreviousWeekStartAndEnd(rangeDates.start);
@@ -94,8 +75,12 @@ export default function ActivityCalendarClientView({
 
   return (
     <>
-      {showAll && <DateActivityModal close={resetShow} data={showAll} />}
-      <DefaultCard className="w-full">
+      <DefaultCard className="w-full relative">
+        {!activities && (
+          <div className="absolute top-0 left-0 w-full h-full bg-white/40 backdrop-blur-[1px] grid place-items-center">
+            <LoadingIcon height={50} width={50} />
+          </div>
+        )}
         <div className="w-full flex items-center justify-between">
           <Image
             alt="Before"
@@ -153,72 +138,11 @@ export default function ActivityCalendarClientView({
                     </div>
                   </td>
                   <td valign="top" className="py-2 w-full">
-                    {matchedActivities[dateStr] ? (
-                      <>
-                        <div className="flex w-full flex-wrap items-start justify-start gap-x-3 gap-y-2">
-                          {Object.keys(matchedActivities[dateStr])
-                            .splice(0, MAX_ACTIVITIES_PER_DAY)
-                            .map((id: string) => {
-                              const { activityTitle, isPT } = activities[id];
-                              return (
-                                <div
-                                  onClick={() =>
-                                    setShowAll({
-                                      date: dateStr,
-                                      activities: {
-                                        [id]: matchedActivities[dateStr][id],
-                                      },
-                                    })
-                                  }
-                                  key={id}
-                                  className={twMerge(
-                                    isPT &&
-                                      "fade-in-bottom cursor-pointer flex items-center justify-start gap-1 hover:bg-custom-light-text rounded-md pr-2"
-                                  )}
-                                >
-                                  <AnnouncementTag
-                                    className={twMerge(
-                                      !isPT && "fade-in-bottom",
-                                      "cursor-pointer bg-custom-grey-text/40 text-white",
-                                      tabColors[index]?.color
-                                    )}
-                                    key={id}
-                                  >
-                                    {activityTitle}
-                                  </AnnouncementTag>
-                                  {isPT && (
-                                    <Image
-                                      alt="PT activity"
-                                      className="my-1"
-                                      src={`/icons/features/icon_activities_active.svg`}
-                                      width={20}
-                                      height={20}
-                                    />
-                                  )}
-                                </div>
-                              );
-                            })}
-                        </div>
-                        {Object.keys(matchedActivities[dateStr]).length >
-                          MAX_ACTIVITIES_PER_DAY && (
-                          <div className="w-full items-center flex justify-end px-2">
-                            <p
-                              onClick={() =>
-                                setShowAll({
-                                  date: dateStr,
-                                  activities: matchedActivities[dateStr],
-                                })
-                              }
-                              className="text-sm cursor-pointer hover:text-custom-primary duration-150 underline text-custom-grey-text mt-2"
-                            >
-                              Show All
-                            </p>
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <></>
-                    )}
+                    <CalendarActivityTab
+                      index={index}
+                      dateStr={dateStr}
+                      activities={activities ?? undefined}
+                    />
                   </td>
                 </tr>
               );
