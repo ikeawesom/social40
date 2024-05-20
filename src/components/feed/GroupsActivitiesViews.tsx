@@ -44,9 +44,9 @@ export default function GroupsActivitiesViews() {
                   setShow(!show);
                 }}
                 className={twMerge(
-                  "text-xs hover:opacity-60 duration-150 fade-in-bottom",
+                  "text-sm hover:opacity-60 duration-150 fade-in-bottom",
                   curView === id && "text-custom-primary font-bold",
-                  !enabled && "opacity-70 pointer-events-none"
+                  !enabled && "text-custom-grey-text pointer-events-none"
                 )}
                 key={id}
                 href={`/home?${new URLSearchParams({ ...values, view: id })}`}
