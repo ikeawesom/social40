@@ -61,6 +61,7 @@ export default function ActivityCalendarClientView({
   };
 
   useEffect(() => {
+    setActivities(undefined);
     fetchData();
   }, [rangeDates]);
 
