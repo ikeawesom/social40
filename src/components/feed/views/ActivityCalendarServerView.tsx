@@ -26,31 +26,34 @@ export default async function ActivityCalendarServerView({
       view === "weekly"
         ? getWeekStartAndEnd(curDate)
         : getMonthStartAndEnd(curDate);
+    console.log("1.", startDate);
+    // // startDate.setHours(startDate.getHours() + 8);
+    // const { data, error } = await dbHandler.getSpecific({
+    //   path: `GROUP-ACTIVITIES`,
+    //   orderCol: "activityDate",
+    //   ascending: false,
+    //   field: "activityDate",
+    //   criteria: "<=",
+    //   value: endDate,
+    //   field2: "activityDate",
+    //   criteria2: ">=",
+    //   value2: startDate,
+    //   field3: "groupID",
+    //   criteria3: "in",
+    //   value3: all ?? [groupID],
+    // });
 
-    const { data, error } = await dbHandler.getSpecific({
-      path: `GROUP-ACTIVITIES`,
-      orderCol: "activityDate",
-      ascending: false,
-      field: "activityDate",
-      criteria: "<=",
-      value: endDate,
-      field2: "activityDate",
-      criteria2: ">=",
-      value2: startDate,
-      field3: "groupID",
-      criteria3: "in",
-      value3: all ?? [groupID],
-    });
+    // if (error) throw new Error(error);
 
-    if (error) throw new Error(error);
-
-    const parsed = getSimple(data) as FullActivityType;
+    // const parsed = getSimple(data) as FullActivityType;
 
     return (
       <ActivityCalendarClientView
         dates={{ curDate, startDate, endDate }}
         view={view}
-        activities={parsed}
+        all={all}
+        groupID={groupID}
+        // activities={parsed}
       />
     );
   } catch (err: any) {

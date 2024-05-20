@@ -1,15 +1,22 @@
 "use client";
 
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DefaultCard from "../../DefaultCard";
 import { DAYS, MONTHS } from "@/src/utils/constants";
-import { DateToString } from "@/src/utils/helpers/getCurrentDate";
+import {
+  DateToString,
+  getNextWeekStartAndEnd,
+  getPreviousWeekStartAndEnd,
+} from "@/src/utils/helpers/getCurrentDate";
 import { twMerge } from "tailwind-merge";
 import { activitiesToDates } from "@/src/utils/home/activitiesToDates";
 import AnnouncementTag from "../../announcements/AnnouncementTag";
 import DateActivityModal from "./DateActivityModal";
 import Image from "next/image";
+import { toast } from "sonner";
+import DefaultSkeleton from "../../utils/DefaultSkeleton";
+import { fetchActivitiesWeekly } from "@/src/utils/home/fetchActivitiesWeekly";
 
 export type FullActivityType = { [id: string]: GROUP_ACTIVITY_SCHEMA };
 
@@ -18,20 +25,54 @@ export type DisplayDateActivityType = {
   activities: FullActivityType;
 };
 export default function ActivityCalendarClientView({
-  activities,
   view,
+  all,
+  groupID,
   dates: { curDate, endDate, startDate },
 }: {
   view: "monthly" | "weekly";
-  activities: FullActivityType;
+  all?: string[] | null;
+  groupID: string;
   dates: { curDate: Date; startDate: Date; endDate: Date };
 }) {
   const MAX_ACTIVITIES_PER_DAY = 2;
   const [showAll, setShowAll] = useState<DisplayDateActivityType>();
-  const startDateStr = DateToString(startDate).split(" ")[0];
-  const endDateStr = DateToString(endDate).split(" ")[0];
+  const [rangeDates, setRangeDates] = useState<{
+    start: Date;
+    end: Date;
+  }>({ start: startDate, end: endDate });
+  const [activities, setActivities] = useState<FullActivityType>();
+
+  const fetchData = async () => {
+    try {
+      console.log("through client:", rangeDates.start);
+      const { data, error } = await fetchActivitiesWeekly(
+        rangeDates.start,
+        rangeDates.end,
+        all ?? [groupID]
+      );
+
+      if (error) throw new Error(error);
+      const actData = data as FullActivityType;
+      setActivities(actData);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [rangeDates]);
+
+  if (!activities) return <DefaultSkeleton />;
+
+  if (!rangeDates) return <DefaultSkeleton />;
+
+  const startDateStr = DateToString(rangeDates.start).split(" ")[0];
+  const endDateStr = DateToString(rangeDates.end).split(" ")[0];
 
   const resetShow = () => setShowAll(undefined);
+
   const { sortedData: matchedActivities } = activitiesToDates({ activities });
 
   const tabColors = {
@@ -41,16 +82,41 @@ export default function ActivityCalendarClientView({
     // others: "bg-custom-grey-text/40 text-white",
   } as { [index: number]: { color: string; src: string } };
 
+  const handleShiftBack = async () => {
+    const { endDate, startDate } = getPreviousWeekStartAndEnd(rangeDates.start);
+    setRangeDates({ start: startDate, end: endDate });
+  };
+  const handleShiftForward = () => {
+    const { endDate, startDate } = getNextWeekStartAndEnd(rangeDates.start);
+    setRangeDates({ start: startDate, end: endDate });
+  };
+
   return (
     <>
       {showAll && <DateActivityModal close={resetShow} data={showAll} />}
       <DefaultCard className="w-full">
-        <div className="w-full grid place-items-center">
+        <div className="w-full flex items-center justify-between">
+          <Image
+            alt="Before"
+            src="/icons/icon_arrow-down.svg"
+            width={25}
+            height={25}
+            className="rotate-90 cursor-pointer hover:opacity-70 duration-150"
+            onClick={handleShiftBack}
+          />
           <h1 className="font-bold text-center text-custom-dark-text fade-in-bottom">
             {view === "monthly"
               ? MONTHS[curDate.getMonth()]
               : `${startDateStr} - ${endDateStr}`}
           </h1>
+          <Image
+            alt="Before"
+            src="/icons/icon_arrow-down.svg"
+            width={25}
+            height={25}
+            className="-rotate-90 cursor-pointer hover:opacity-70 duration-150"
+            onClick={handleShiftForward}
+          />
         </div>
         {/* <HRow className="mb-3" /> */}
         <table className="mt-3 w-full">
@@ -64,7 +130,7 @@ export default function ActivityCalendarClientView({
               </th>
             </tr>
             {DAYS.map((day: string, index: number) => {
-              let curDate = new Date(startDate.getTime());
+              let curDate = new Date(rangeDates.start.getTime());
               curDate.setDate(curDate.getDate() + index);
               const dateStr = DateToString(curDate).split(" ")[0];
               let todayStr = DateToString(new Date()).split(" ")[0];
@@ -79,7 +145,9 @@ export default function ActivityCalendarClientView({
                 >
                   <td valign="top" className="pl-2 py-2">
                     <div className="flex gap-1 text-sm pr-3">
-                      <p className="font-bold">{startDate.getDate() + index}</p>
+                      <p className="font-bold">
+                        {rangeDates.start.getDate() + index}
+                      </p>
                       <p>{day}</p>
                     </div>
                   </td>
