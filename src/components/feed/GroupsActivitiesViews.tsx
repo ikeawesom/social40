@@ -38,6 +38,7 @@ export default function GroupsActivitiesViews() {
             const { id, name, isDefault } = view;
             return (
               <Link
+                scroll={false}
                 onClick={() => {
                   setCurView(id);
                   setShow(!show);
