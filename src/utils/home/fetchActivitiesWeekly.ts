@@ -9,8 +9,8 @@ export async function fetchActivitiesWeekly(
   end: Date,
   groups: string[]
 ) {
-  // start.setHours(start.getHours() + 8);
-  // end.setHours(end.getHours() + 8);
+  start.setHours(start.getHours() - 8);
+  end.setHours(end.getHours() - 8);
   try {
     const { data, error } = await dbHandler.getSpecific({
       path: `GROUP-ACTIVITIES`,
