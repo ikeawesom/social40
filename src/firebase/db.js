@@ -171,6 +171,9 @@ class DbClass {
       field2,
       criteria2,
       value2,
+      field3,
+      criteria3,
+      value3,
     } = args;
 
     try {
@@ -182,6 +185,14 @@ class DbClass {
           colRef,
           orderBy(orderCol, !ascending ? "desc" : "asc"),
           orderBy(orderCol2, !ascending2 ? "desc" : "asc")
+        );
+      } else if (field3 && orderCol) {
+        q = query(
+          colRef,
+          where(field, criteria, value),
+          where(field2, criteria2, value2),
+          where(field3, criteria3, value3),
+          orderBy(orderCol, !ascending ? "desc" : "asc")
         );
       } else if (field2 && orderCol) {
         q = query(
