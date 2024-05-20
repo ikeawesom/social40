@@ -26,6 +26,7 @@ import { Suspense } from "react";
 import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import GroupsActivitiesViews from "@/src/components/feed/GroupsActivitiesViews";
+import ActivityCalendarServerView from "@/src/components/feed/views/ActivityCalendarServerView";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -34,7 +35,11 @@ export const metadata: Metadata = {
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { activity: string; groupID: string; view: string };
+  searchParams: {
+    activity: string;
+    groupID: string;
+    view: "scroll" | "weekly" | "monthly";
+  };
 }) {
   const { user, isAuthenticated } = await getMemberAuthServer();
   if (!isAuthenticated || user === null) return <SignInAgainScreen />;
@@ -42,6 +47,7 @@ export default async function Home({
 
   let activityType = searchParams.activity;
   const groupID = searchParams.groupID;
+  const view = searchParams.view;
 
   if (!activityType) {
     activityType = "announcements";
@@ -74,11 +80,13 @@ export default async function Home({
     const groupsList = Object.keys(joinedGroupsData).concat(
       Object.keys(ownedGroupsData)
     );
-    if (!groupID && groupsList.length > 0)
+
+    if ((!groupID || !view) && groupsList.length > 0)
       redirect(
         `/home?${new URLSearchParams({
           activity: "groups",
           groupID: "all",
+          view: "scroll",
         })}`
       );
 
@@ -89,23 +97,31 @@ export default async function Home({
           {groupsList.length === 0 ? (
             <ErrorActivities text="Looks like you have no groups joined." />
           ) : (
-            <div className="flex flex-col w-full items-center justify-start gap-4 max-w-[500px] overflow-x-hidden">
+            <div className="flex flex-col w-full items-center justify-start gap-2 max-w-[500px] overflow-x-hidden">
               {groupsList.length > 1 && (
                 <>
                   <GroupsScrollSection groupsList={groupsList} />
                   <GroupsActivitiesViews />
                 </>
               )}
-              <Suspense
-                key={searchParams.groupID}
-                fallback={<ActivityFeedSkeleton />}
-              >
-                <FeedGroup
-                  memberID={memberID}
-                  groupID={searchParams.groupID}
+              {searchParams.view === "scroll" ? (
+                <Suspense
+                  key={searchParams.groupID}
+                  fallback={<ActivityFeedSkeleton />}
+                >
+                  <FeedGroup
+                    memberID={memberID}
+                    groupID={searchParams.groupID}
+                    all={searchParams.groupID === "all" ? groupsList : null}
+                  />
+                </Suspense>
+              ) : (
+                <ActivityCalendarServerView
+                  view={searchParams.view}
+                  groupID={groupID}
                   all={searchParams.groupID === "all" ? groupsList : null}
                 />
-              </Suspense>
+              )}
             </div>
           )}
         </div>
