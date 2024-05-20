@@ -183,6 +183,8 @@ export const MONTHS = [
   "DECEMBER",
 ];
 
+export const DAYS = ["SUN", "MON", "TUES", "WED", "THURS", "FRI", "SAT"];
+
 export type DefaultStatsType = {
   name: string;
   featured: boolean;
