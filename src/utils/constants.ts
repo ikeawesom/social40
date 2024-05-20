@@ -123,13 +123,13 @@ export const GROUP_MEMBERS_SELECT_OPTIONS = {
 export type ActivityFeedViewType = {
   id: string;
   name: string;
-  isDefault: boolean;
+  enabled: boolean;
 };
 
 export const ACTIVITY_FEED_VIEWS = [
-  { id: "scroll", name: "Scroll", isDefault: true },
-  { id: "weekly", name: "Weekly", isDefault: false },
-  { id: "monthly", name: "Monthly", isDefault: false },
+  { id: "scroll", name: "Scroll", enabled: true },
+  { id: "weekly", name: "Weekly", enabled: true },
+  { id: "monthly", name: "Monthly", enabled: false },
 ] as ActivityFeedViewType[];
 
 export const ACTIVITY_TYPE = ["Light", "Moderate", "Strenuous"];

@@ -35,7 +35,7 @@ export default function GroupsActivitiesViews() {
       {show && (
         <div className="flex items-center justify-end gap-4 mt-2">
           {ACTIVITY_FEED_VIEWS.map((view: ActivityFeedViewType) => {
-            const { id, name, isDefault } = view;
+            const { id, name, enabled } = view;
             return (
               <Link
                 scroll={false}
@@ -45,12 +45,13 @@ export default function GroupsActivitiesViews() {
                 }}
                 className={twMerge(
                   "text-xs hover:opacity-60 duration-150 fade-in-bottom",
-                  curView === id && "text-custom-primary font-bold"
+                  curView === id && "text-custom-primary font-bold",
+                  !enabled && "opacity-70 pointer-events-none"
                 )}
                 key={id}
                 href={`/home?${new URLSearchParams({ ...values, view: id })}`}
               >
-                {name} {isDefault ? "(Default)" : ""}
+                {name} {!enabled ? "(Coming Soon!)" : ""}
               </Link>
             );
           })}
