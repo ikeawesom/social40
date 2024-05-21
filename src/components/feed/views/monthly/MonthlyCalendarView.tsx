@@ -47,7 +47,9 @@ export default function MonthlyCalendarView({
       <CalendarHeading
         back={handleMonthBack}
         forward={handleMonthForward}
-        text={`${MONTHS[rangeDates.start.getMonth()]}`}
+        text={`${
+          MONTHS[rangeDates.start.getMonth()]
+        } ${rangeDates.start.getFullYear()}`}
       />
       <div className="w-full relative">
         {!activities && <CalendarLoading />}
