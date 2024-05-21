@@ -27,6 +27,7 @@ export function getMonthStartAndEnd(date: Date) {
 
   // Calculate the start date of the month
   const startDate = new Date(inputDate.getFullYear(), inputDate.getMonth(), 1);
+  startDate.setHours(0, 0, 0);
 
   // Calculate the end date of the month
   const endDate = new Date(
@@ -34,6 +35,7 @@ export function getMonthStartAndEnd(date: Date) {
     inputDate.getMonth() + 1,
     0
   );
+  endDate.setHours(23, 59, 59);
 
   return { startDate, endDate };
 }
