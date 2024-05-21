@@ -132,7 +132,7 @@ export default function ActivityCalendarClientView({
                   <td valign="top" className="pl-2 py-2">
                     <div className="flex gap-1 text-sm pr-3">
                       <p className="font-bold">
-                        {rangeDates.start.getDate() + index}
+                        {curDate.getDate()}
                       </p>
                       <p>{day}</p>
                     </div>
