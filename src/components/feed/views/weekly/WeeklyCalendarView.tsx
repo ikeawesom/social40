@@ -22,13 +22,13 @@ export default function WeeklyCalendarView({
   const [startDay, startMonth, startYear] = DateToString(rangeDates.start)
     .split(" ")[0]
     .split("/");
-  const startDateMonthStr = `${startDay} $${
+  const startDateMonthStr = `${startDay} ${
     MONTHS[Number(startMonth) - 1]
   } ${startYear.substring(2, 4)}`;
   const [endDay, endMonth, endYear] = DateToString(rangeDates.end)
     .split(" ")[0]
     .split("/");
-  const endDateMonthStr = `${endDay} $${
+  const endDateMonthStr = `${endDay} ${
     MONTHS[Number(endMonth) - 1]
   } ${endYear.substring(2, 4)}`;
 
