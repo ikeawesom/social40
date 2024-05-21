@@ -1,13 +1,14 @@
 import { FullActivityType } from "@/src/components/feed/views/ActivityCalendarClientView";
 import { DateToString } from "../helpers/getCurrentDate";
 
+export type DateToActivityType = { [date: string]: FullActivityType };
 export function activitiesToDates({
   activities,
 }: {
   activities: FullActivityType;
 }) {
-  let data = {} as { [date: string]: FullActivityType };
-  let sortedData = {} as { [date: string]: FullActivityType };
+  let data = {} as DateToActivityType;
+  let sortedData = {} as DateToActivityType;
   Object.keys(activities).forEach((id: string) => {
     const { activityDate, activityID } = activities[id];
     const dateStr = DateToString(new Date(activityDate.seconds * 1000)).split(

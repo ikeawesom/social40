@@ -28,11 +28,6 @@ export async function fetchActivitiesWeekly(
     });
     if (error) throw new Error(error);
 
-    console.log("=============");
-    Object.keys(data).forEach((id: string) => {
-      console.log(`${id}: ${new Date(data[id].activityDate.seconds * 1000)}`);
-    });
-
     return handleResponses({ data: getSimple(data) });
   } catch (err: any) {
     return handleResponses({ status: false, error: err.message });

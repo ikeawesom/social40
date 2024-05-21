@@ -25,7 +25,7 @@ export default async function ActivityCalendarServerView({
 
     return (
       <ActivityCalendarClientView
-        dates={{ curDate, startDate, endDate }}
+        dates={{ startDate, endDate }}
         view={view}
         all={all}
         groupID={groupID}

@@ -27,6 +27,7 @@ export function getMonthStartAndEnd(date: Date) {
 
   // Calculate the start date of the month
   const startDate = new Date(inputDate.getFullYear(), inputDate.getMonth(), 1);
+  startDate.setHours(0, 0, 0);
 
   // Calculate the end date of the month
   const endDate = new Date(
@@ -34,7 +35,50 @@ export function getMonthStartAndEnd(date: Date) {
     inputDate.getMonth() + 1,
     0
   );
+  endDate.setHours(23, 59, 59);
 
+  return { startDate, endDate };
+}
+
+export function getPreviousMonthStartAndEnd(date: Date) {
+  // Clone the input date to avoid mutating the original date
+  const inputDate = new Date(date.getTime());
+
+  // Get the current day of the week (0 is Sunday, 6 is Saturday)
+  const dateDay = inputDate.getDate();
+
+  // Calculate the end date of the previous week (last Saturday)
+  const endDate = new Date(inputDate);
+  endDate.setDate(inputDate.getDate() - dateDay - 1);
+  endDate.setHours(23, 59, 0);
+
+  // Calculate the start date of the previous week (last Sunday)
+  const startDate = new Date(endDate.getFullYear(), endDate.getMonth(), 1);
+  startDate.setHours(0, 0, 0);
+
+  return { startDate, endDate };
+}
+
+export function getNextMonthStartAndEnd(date: Date) {
+  // Clone the input date to avoid mutating the original date
+  const inputDate = new Date(date.getTime());
+
+  // Calculate the start date of the previous week (last Sunday)
+  const startDate = new Date(
+    inputDate.getFullYear(),
+    inputDate.getMonth() + 1,
+    1
+  );
+  startDate.setHours(0, 0, 0);
+
+  // Calculate the end date of the previous week (last Saturday)
+  const endDate = new Date(
+    inputDate.getFullYear(),
+    inputDate.getMonth() + 2,
+    1
+  );
+  endDate.setDate(endDate.getDate() - 1);
+  endDate.setHours(23, 59, 0);
   return { startDate, endDate };
 }
 

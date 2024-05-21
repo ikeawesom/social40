@@ -1,4 +1,16 @@
 export const VERSION_MAP = {
+  "1.5.3": {
+    version: "1.5.3",
+    title: "Weekly and Monthly Activity Feed",
+    desc: "Get a broader insight on what to look out for in the week or month!",
+    updates: [
+      "New weekly view displays days of the week and respective activities on each day",
+      "New monthly view displays activities throughout the month, showing the number of activities on each day",
+      "Able to toggle weeks and months back and forth to view previous and future activities",
+    ],
+    date: "22/05/2024",
+    link: "https://social40.notion.site/v1-5-2-Weekly-and-Monthly-Activity-Feed-d86b72751397430089730a8fa94d3833",
+  },
   "1.5.2": {
     version: "1.5.2",
     title: "Weekly Activity Feed",
@@ -8,7 +20,7 @@ export const VERSION_MAP = {
       "Able to toggle weeks back and forth to view previous and future activities",
     ],
     date: "20/05/2024",
-    link: "https://social40.notion.site/v1-5-2-Weekly-Activity-Feed-d86b72751397430089730a8fa94d3833?pvs=4",
+    // link: "https://social40.notion.site/v1-5-2-Weekly-and-Monthly-Activity-Feed-d86b72751397430089730a8fa94d3833",
   },
   "1.5.1": {
     version: "1.5.1",
