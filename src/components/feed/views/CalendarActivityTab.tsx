@@ -47,7 +47,7 @@ export default function CalendarActivityTab({
                 key={id}
                 className={twMerge(
                   isPT &&
-                    "fade-in-bottom cursor-pointer flex items-center justify-start gap-1 hover:bg-custom-light-text rounded-md pr-2"
+                    "fade-in-bottom cursor-pointer flex items-center justify-start gap-1 hover:bg-custom-light-text rounded-md pr-2 duration-150"
                 )}
               >
                 <AnnouncementTag
