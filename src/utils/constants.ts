@@ -129,7 +129,7 @@ export type ActivityFeedViewType = {
 export const ACTIVITY_FEED_VIEWS = [
   { id: "scroll", name: "Scroll", enabled: true },
   { id: "weekly", name: "Weekly", enabled: true },
-  { id: "monthly", name: "Monthly", enabled: false },
+  { id: "monthly", name: "Monthly", enabled: true },
 ] as ActivityFeedViewType[];
 
 export const ACTIVITY_TYPE = ["Light", "Moderate", "Strenuous"];
