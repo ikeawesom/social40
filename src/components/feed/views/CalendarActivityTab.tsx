@@ -54,7 +54,8 @@ export default function CalendarActivityTab({
                   className={twMerge(
                     !isPT && "fade-in-bottom",
                     "cursor-pointer bg-custom-grey-text/40 text-white",
-                    tabColors[index]?.color
+                    tabColors[index]?.color,
+                    isPT && "bg-custom-primary/80"
                   )}
                   key={id}
                 >
