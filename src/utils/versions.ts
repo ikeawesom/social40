@@ -1,4 +1,15 @@
 export const VERSION_MAP = {
+  "1.5.2": {
+    version: "1.5.2",
+    title: "Weekly Activity Feed",
+    desc: "Get a broader insight on what to look out for in the week!",
+    updates: [
+      "Added new view that displays days of the week and respective activities on each day",
+      "Able to toggle weeks back and forth to view previous and future activities",
+    ],
+    date: "16/05/2024",
+    noShow: true,
+  },
   "1.5.1": {
     version: "1.5.1",
     title: "Scrolling Activity Feed",
