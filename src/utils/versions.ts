@@ -7,8 +7,8 @@ export const VERSION_MAP = {
       "Added new view that displays days of the week and respective activities on each day",
       "Able to toggle weeks back and forth to view previous and future activities",
     ],
-    date: "16/05/2024",
-    noShow: true,
+    date: "20/05/2024",
+    link: "https://social40.notion.site/v1-5-2-Weekly-Activity-Feed-d86b72751397430089730a8fa94d3833?pvs=4",
   },
   "1.5.1": {
     version: "1.5.1",
