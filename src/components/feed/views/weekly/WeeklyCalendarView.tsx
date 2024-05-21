@@ -6,7 +6,7 @@ import {
   CalendarViewTypes,
   useHandleCalendarView,
 } from "@/src/hooks/feed/useHandleCalendarViews";
-import { DAYS } from "@/src/utils/constants";
+import { DAYS, MONTHS } from "@/src/utils/constants";
 import { DateToString } from "@/src/utils/helpers/getCurrentDate";
 import { twMerge } from "tailwind-merge";
 import CalendarActivityTab from "../CalendarActivityTab";
@@ -19,15 +19,25 @@ export default function WeeklyCalendarView({
 }: CalendarViewTypes) {
   const { activities, rangeDates, handleWeekBack, handleWeekForward } =
     useHandleCalendarView({ dates, groupID, all });
-  const startDateStr = DateToString(rangeDates.start).split(" ")[0];
-  const endDateStr = DateToString(rangeDates.end).split(" ")[0];
+  const [startDay, startMonth, startYear] = DateToString(rangeDates.start)
+    .split(" ")[0]
+    .split("/");
+  const startDateMonthStr = `${startDay} $${
+    MONTHS[Number(startMonth) - 1]
+  } ${startYear.substring(2, 4)}`;
+  const [endDay, endMonth, endYear] = DateToString(rangeDates.end)
+    .split(" ")[0]
+    .split("/");
+  const endDateMonthStr = `${endDay} $${
+    MONTHS[Number(endMonth) - 1]
+  } ${endYear.substring(2, 4)}`;
 
   return (
     <>
       <CalendarHeading
         back={handleWeekBack}
         forward={handleWeekForward}
-        text={`${startDateStr} - ${endDateStr}`}
+        text={`${startDateMonthStr} to ${endDateMonthStr}`}
       />
       <div className="w-full relative">
         {!activities && <CalendarLoading />}
