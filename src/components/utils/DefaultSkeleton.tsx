@@ -6,7 +6,7 @@ export default function DefaultSkeleton({ className }: { className?: string }) {
   return (
     <DefaultCard
       className={twMerge(
-        "w-full bg-gray-300 h-[20vh] relative overflow-hidden",
+        "w-full bg-gray-300 h-[20vh] relative overflow-hidden fade-in-bottom",
         className
       )}
     >

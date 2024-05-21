@@ -120,6 +120,18 @@ export const GROUP_MEMBERS_SELECT_OPTIONS = {
   };
 };
 
+export type ActivityFeedViewType = {
+  id: string;
+  name: string;
+  enabled: boolean;
+};
+
+export const ACTIVITY_FEED_VIEWS = [
+  { id: "scroll", name: "Scroll", enabled: true },
+  { id: "weekly", name: "Weekly", enabled: true },
+  { id: "monthly", name: "Monthly", enabled: false },
+] as ActivityFeedViewType[];
+
 export const ACTIVITY_TYPE = ["Light", "Moderate", "Strenuous"];
 export const GROUP_ACTIVITY_PARTICIPANTS = {
   all: {
@@ -170,6 +182,17 @@ export const MONTHS = [
   "NOVEMBER",
   "DECEMBER",
 ];
+
+export const DAYS = ["SUN", "MON", "TUES", "WED", "THURS", "FRI", "SAT"];
+
+export const MAX_ACTIVITIES_PER_DAY = 2;
+
+export const tabColors = {
+  0: { color: "bg-red-600/80", src: "" },
+  5: { color: "bg-custom-green/80", src: "" },
+  6: { color: "bg-blue-700/80", src: "" },
+  // others: "bg-custom-grey-text/40 text-white",
+} as { [index: number]: { color: string; src: string } };
 
 export type DefaultStatsType = {
   name: string;

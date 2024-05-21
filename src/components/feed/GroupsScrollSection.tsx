@@ -2,16 +2,15 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
-import { useSearchParams } from "next/navigation";
+import useGetAllSearchParams from "@/src/utils/helpers/getAllSearchParams";
 
 export default function GroupsScrollSection({
   groupsList,
 }: {
   groupsList: string[];
 }) {
-  const searchParams = useSearchParams();
-  const paramID = searchParams.get("groupID");
-  const [curGroup, setCurGroup] = useState(paramID);
+  const { values } = useGetAllSearchParams();
+  const [curGroup, setCurGroup] = useState(values["groupID"] ?? "all");
 
   return (
     <div className="w-full">
@@ -20,10 +19,7 @@ export default function GroupsScrollSection({
         <Link
           scroll={false}
           key={"all"}
-          href={`/home?${new URLSearchParams({
-            activity: "groups",
-            groupID: "all",
-          })}`}
+          href={`/home?${new URLSearchParams({ ...values, groupID: "all" })}`}
           onClick={() => setCurGroup("all")}
           className={twMerge(
             "self-stretch w-fit rounded-lg px-2 py-1 flex text-sm items-center justify-center text-center bg-white text-custom-dark-text shadow-md duration-150",
@@ -39,10 +35,7 @@ export default function GroupsScrollSection({
             <Link
               scroll={false}
               key={groupID}
-              href={`/home?${new URLSearchParams({
-                activity: "groups",
-                groupID,
-              })}`}
+              href={`/home?${new URLSearchParams({ ...values, groupID })}`}
               onClick={() => setCurGroup(groupID)}
               className={twMerge(
                 "self-stretch w-fit rounded-lg px-2 py-1 flex text-sm items-center justify-center text-center bg-white text-custom-dark-text shadow-md duration-150",

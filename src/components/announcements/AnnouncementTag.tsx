@@ -15,6 +15,9 @@ export default function AnnouncementTag({
 }) {
   return (
     <div
+      onClick={() => {
+        onClick ? (isDelete ? () => {} : onClick()) : () => {};
+      }}
       className={twMerge(
         "flex items-center justify-start gap-1 px-2 py-1 bg-custom-grey-text text-white rounded-md cursor-default hover:brightness-95 text-sm",
         className

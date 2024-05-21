@@ -1,6 +1,79 @@
 import { Timestamp } from "firebase/firestore";
 import handleResponses from "./handleResponses";
 
+export function getWeekStartAndEnd(date: Date) {
+  // Clone the input date to avoid mutating the original date
+  const inputDate = new Date(date.getTime());
+
+  // Get the current day of the week (0 is Sunday, 6 is Saturday)
+  const dayOfWeek = inputDate.getDay();
+
+  // Calculate the start date (Sunday) of the week
+  const startDate = new Date(inputDate);
+  startDate.setDate(inputDate.getDate() - dayOfWeek);
+  startDate.setHours(0, 0, 0);
+
+  // Calculate the end date (Saturday) of the week
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 6);
+  endDate.setHours(23, 59, 59);
+
+  return { startDate, endDate };
+}
+
+export function getMonthStartAndEnd(date: Date) {
+  // Clone the input date to avoid mutating the original date
+  const inputDate = new Date(date.getTime());
+
+  // Calculate the start date of the month
+  const startDate = new Date(inputDate.getFullYear(), inputDate.getMonth(), 1);
+
+  // Calculate the end date of the month
+  const endDate = new Date(
+    inputDate.getFullYear(),
+    inputDate.getMonth() + 1,
+    0
+  );
+
+  return { startDate, endDate };
+}
+
+export function getPreviousWeekStartAndEnd(date: Date) {
+  // Clone the input date to avoid mutating the original date
+  const inputDate = new Date(date.getTime());
+
+  // Get the current day of the week (0 is Sunday, 6 is Saturday)
+  const dayOfWeek = inputDate.getDay();
+
+  // Calculate the end date of the previous week (last Saturday)
+  const endDate = new Date(inputDate);
+  endDate.setDate(inputDate.getDate() - dayOfWeek - 1);
+
+  // Calculate the start date of the previous week (last Sunday)
+  const startDate = new Date(endDate);
+  startDate.setDate(endDate.getDate() - 6);
+
+  return { startDate, endDate };
+}
+
+export function getNextWeekStartAndEnd(date: Date) {
+  // Clone the input date to avoid mutating the original date
+  const inputDate = new Date(date.getTime());
+
+  // Get the current day of the week (0 is Sunday, 6 is Saturday)
+  const dayOfWeek = inputDate.getDay();
+
+  // Calculate the start date (Sunday) of the next week
+  const startDate = new Date(inputDate);
+  startDate.setDate(inputDate.getDate() + (7 - dayOfWeek));
+
+  // Calculate the end date (Saturday) of the next week
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 6);
+
+  return { startDate, endDate };
+}
+
 export function DateToString(date: Date) {
   const day = date.getDate();
   const month = date.getMonth() + 1;

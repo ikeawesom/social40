@@ -9,11 +9,14 @@ import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { twMerge } from "tailwind-merge";
 
 export default function AllActivityCard({
   data,
+  className,
 }: {
   data: GROUP_ACTIVITY_SCHEMA;
+  className?: string;
 }) {
   const {
     groupID,
@@ -37,7 +40,12 @@ export default function AllActivityCard({
         id: activityID,
       })}`}
     >
-      <DefaultCard className="w-full flex flex-col items-start justify-start duration-150 hover:bg-white/50">
+      <DefaultCard
+        className={twMerge(
+          "w-full flex flex-col items-start justify-start duration-150 hover:bg-white/50",
+          className
+        )}
+      >
         <div className="w-full flex items-center justify-between flex-wrap gap-x-2">
           <h1 className="text-start font-semibold text-lg text-custom-dark-text flex items-start justify-start gap-2">
             {activityTitle}

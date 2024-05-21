@@ -1,4 +1,15 @@
 export const VERSION_MAP = {
+  "1.5.2": {
+    version: "1.5.2",
+    title: "Weekly Activity Feed",
+    desc: "Get a broader insight on what to look out for in the week!",
+    updates: [
+      "Added new view that displays days of the week and respective activities on each day",
+      "Able to toggle weeks back and forth to view previous and future activities",
+    ],
+    date: "20/05/2024",
+    link: "https://social40.notion.site/v1-5-2-Weekly-Activity-Feed-d86b72751397430089730a8fa94d3833?pvs=4",
+  },
   "1.5.1": {
     version: "1.5.1",
     title: "Scrolling Activity Feed",
