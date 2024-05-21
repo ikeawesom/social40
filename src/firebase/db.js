@@ -187,8 +187,8 @@ class DbClass {
           orderBy(orderCol2, !ascending2 ? "desc" : "asc")
         );
       } else if (field3 && orderCol) {
-        console.log(field, criteria, value);
-        console.log(field2, criteria2, value2);
+        // console.log(field, criteria, value);
+        // console.log(field2, criteria2, value2);
         // // console.log(field3, criteria3, value3);
         q = query(
           colRef,
