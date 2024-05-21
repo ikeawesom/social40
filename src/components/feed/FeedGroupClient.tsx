@@ -15,13 +15,13 @@ import ErrorActivities from "../screens/ErrorActivities";
 export default function FeedGroupClient({
   hidden,
   activities,
-  lastPointer,
+  lastPointerServer,
   path,
   config,
 }: {
   hidden: string[];
   activities: GROUP_ACTIVITIES_SCHEMA[];
-  lastPointer: string;
+  lastPointerServer: string;
   config?: null | {
     field: string;
     criteria: string;
@@ -31,7 +31,7 @@ export default function FeedGroupClient({
 }) {
   const { memberID } = useMemberID();
   const [activityData, setActivityData] = useState(activities);
-  const [lastRef, setLastRef] = useState(lastPointer);
+  const [lastRef, setLastRef] = useState(lastPointerServer);
   const [finished, setFinished] = useState(false);
 
   const fetchData = async () => {
@@ -39,20 +39,34 @@ export default function FeedGroupClient({
     if (finished) return;
 
     try {
-      const { data: pagiData, error } = await FetchPaginateActivity({
-        hidden,
-        lastPointer: lastRef,
-        path,
-        config: config ?? null,
-      });
+      let newPointer = lastRef;
+      while (newPointer !== undefined) {
+        const { data: pagiData, error } = await FetchPaginateActivity({
+          hidden,
+          lastPointer: newPointer,
+          path,
+          config: config ?? null,
+        });
 
-      if (error) throw new Error(error);
-      const { data, lastPointer } = pagiData;
+        if (error) throw new Error(error);
+        const { data, lastPointer } = pagiData;
 
-      if (data.length === 0) throw new Error("undefined");
+        // console.log("previous pointer:", lastRef);
+        // console.log("new pointer:", lastPointer);
+        // console.log(data);
 
-      setActivityData((prev: GROUP_ACTIVITIES_SCHEMA[]) => [...prev, ...data]);
-      setLastRef(lastPointer);
+        setLastRef(lastPointer);
+        if (data.length !== 0) {
+          // console.log("data:", data);
+          setActivityData((prev: GROUP_ACTIVITIES_SCHEMA[]) => [
+            ...prev,
+            ...data,
+          ]);
+          break;
+        }
+        newPointer = lastPointer;
+      }
+      if (newPointer === undefined) throw new Error("undefined");
     } catch (err: any) {
       const { message } = err;
       if (message.includes("undefined")) {
@@ -67,7 +81,7 @@ export default function FeedGroupClient({
   const { ref, inView } = useInView();
   useEffect(() => {
     if (!finished && inView) fetchData();
-  }, [inView]);
+  }, [inView, activityData]);
 
   const handleRemove = (index: number) => {
     let temp = [...activityData];
