@@ -10,6 +10,7 @@ import DateActivityModal from "./DateActivityModal";
 import Image from "next/image";
 import { activitiesToDates } from "@/src/utils/home/activitiesToDates";
 import StatusDot from "../../utils/StatusDot";
+import { DateToString } from "@/src/utils/helpers/getCurrentDate";
 
 export default function CalendarActivityTab({
   dateStr,
@@ -28,7 +29,7 @@ export default function CalendarActivityTab({
   if (!activities) return <></>;
 
   const { sortedData: matchedActivities } = activitiesToDates({ activities });
-
+  const isToday = DateToString(new Date()).split(" ")[0] === dateStr;
   return (
     <>
       {showAll && <DateActivityModal close={resetShow} data={showAll} />}
@@ -46,7 +47,8 @@ export default function CalendarActivityTab({
             "flex flex-col items-start justify-start w-full p-1 border-t-[1px] border-t-custom-light-text duration-150 min-h-[6vh]",
             isMonth.diffMonth
               ? "bg-custom-grey-text/30 cursor-not-allowed"
-              : "hover:bg-custom-light-text"
+              : "hover:bg-custom-light-text",
+            isToday && "bg-custom-light-orange"
           )}
         >
           <p className="text-xs text-custom-grey-text text-end fade-in-bottom">
