@@ -51,7 +51,7 @@ export default async function FeedGroup({
 
     return (
       <FeedGroupClient
-        lastPointer={lastPointer}
+        lastPointerServer={lastPointer}
         activities={groupActivities}
         hidden={hiddenActivities}
         path={path}
