@@ -2,12 +2,11 @@ import DeleteGroupSection from "@/src/components/groups/custom/settings/DeleteGr
 import EditGroupForm from "@/src/components/groups/custom/settings/EditGroupForm";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import RestrictedScreen from "@/src/components/screens/RestrictedScreen";
-import { dbHandler } from "@/src/firebase/db";
-import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
-import { GROUP_MEMBERS_SCHEMA, GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import React from "react";
 import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
+import { getGroupData } from "@/src/utils/groups/getGroupData";
+import { getSimple } from "@/src/utils/helpers/parser";
 
 export default async function GroupSettingsPage({
   params,
@@ -22,46 +21,43 @@ export default async function GroupSettingsPage({
 
   try {
     // check if member is in group
-    const groupPostObj = GetPostObj({ groupID, memberID });
-    const res = await fetch(`${host}/api/groups/memberof`, groupPostObj);
-    const body = await res.json();
-    if (!body.status) return <RestrictedScreen />;
-    const { role } = body.data as GROUP_MEMBERS_SCHEMA;
-    const owner = role === "owner" || role === "admin";
-    if (!owner) return <RestrictedScreen />;
+    const { data, error } = await getGroupData(groupID, memberID);
+    if (error) {
+      if (error.message === "RESTRICTED") {
+        return <RestrictedScreen />;
+      } else {
+        throw new Error(error);
+      }
+    }
+    const { groupData, owner } = data;
 
-    // get group data
-    const PostObj = GetPostObj({ groupID });
-    const resA = await fetch(`${host}/api/groups/custom`, PostObj);
-    const bodyA = await resA.json();
+    const parsed = getSimple(groupData);
 
-    if (!bodyA.status) throw new Error(bodyA.error);
-    const data = bodyA.data as GROUP_SCHEMA;
+    // -- for purging members --
+    // // get group members
+    // const resB = await dbHandler.getSpecific({
+    //   path: `GROUPS/${groupID}/MEMBERS`,
+    //   orderCol: `role`,
+    //   ascending: true,
+    // });
 
-    // get group members
-    const resB = await dbHandler.getSpecific({
-      path: `GROUPS/${groupID}/MEMBERS`,
-      orderCol: `role`,
-      ascending: true,
-    });
+    // if (!resB.status) throw new Error(resB.error);
 
-    if (!resB.status) throw new Error(resB.error);
-
-    const groupMembers = resB.data as {
-      [memberID: string]: GROUP_MEMBERS_SCHEMA;
-    };
+    // const groupMembers = resB.data as {
+    //   [memberID: string]: GROUP_MEMBERS_SCHEMA;
+    // };
 
     return (
       <>
         <HeaderBar back text={`Settings for ${groupID}`} />
         <div className="w-full grid place-items-center">
           <div className="flex flex-col items-center justify-center gap-4 w-full max-w-[500px]">
-            <EditGroupForm groupData={data} />
+            <EditGroupForm groupData={parsed} />
             {/* <PurgeMembersSection
                 groupID={groupID}
                 groupMembers={JSON.parse(JSON.stringify(groupMembers))}
               /> */}
-            {owner && <DeleteGroupSection groupData={data} />}
+            {owner && <DeleteGroupSection groupData={parsed} />}
           </div>
         </div>
       </>

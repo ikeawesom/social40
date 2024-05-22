@@ -12,6 +12,7 @@ import {
 } from "@/src/utils/schemas/groups";
 import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
+import { isMemberInGroup } from "@/src/utils/groups/getGroupData";
 
 export default async function Page({
   params,
@@ -25,14 +26,11 @@ export default async function Page({
   const host = process.env.HOST;
 
   try {
-    const PostObj = GetPostObj({ groupID });
     // check if member is in group
-    const groupPostObj = GetPostObj({ groupID, memberID });
-    const res = await fetch(`${host}/api/groups/memberof`, groupPostObj);
-    const body = await res.json();
-    if (!body.status) return <RestrictedScreen />;
+    const { status, data } = await isMemberInGroup(groupID, memberID);
+    if (!status) return <RestrictedScreen />;
 
-    const currentMember = body.data as GROUP_MEMBERS_SCHEMA;
+    const currentMember = data as GROUP_MEMBERS_SCHEMA;
     const { role } = currentMember;
     const admin =
       GROUP_ROLES_HEIRARCHY[role].rank >= GROUP_ROLES_HEIRARCHY["admin"].rank;
@@ -40,6 +38,7 @@ export default async function Page({
     if (!admin) return <RestrictedScreen />;
 
     // get group members
+    const PostObj = GetPostObj({ groupID });
     const resB = await fetch(`${host}/api/groups/members`, PostObj);
     const bodyB = await resB.json();
 

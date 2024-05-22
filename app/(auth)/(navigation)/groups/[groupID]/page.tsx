@@ -17,6 +17,7 @@ import { getGroupData } from "@/src/utils/groups/getGroupData";
 import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 import LeaderboardTabSkeleton from "@/src/components/groups/custom/leaderboard/LeaderboardTabSkeleton";
 import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
+import { getSimple } from "@/src/utils/helpers/parser";
 
 export async function generateMetadata({
   params,
@@ -41,10 +42,17 @@ export default async function GroupPage({
 
   try {
     const { error, data } = await getGroupData(groupID, memberID);
-    if (error) throw new Error(error);
+    if (error) {
+      if (error.message === "RESTRICTED") {
+        return <RestrictedScreen />;
+      } else {
+        throw new Error(error);
+      }
+    }
 
     const { groupData, admin, owner, currentMember } = data;
-    const { createdBy, groupName, groupDesc, cos, lastUpdatedHA } = groupData;
+    const { createdBy, groupName, groupDesc, cos, lastUpdatedHA } =
+      getSimple(groupData);
 
     return (
       <>
