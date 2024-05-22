@@ -51,8 +51,13 @@ export default function AddMemberStatForm({
     handleRemove,
   } = useQueryMember(id);
 
-  const { handleAgeChange, handleIPPTChange, ipptStat, resetIppt } =
-    useSetIppt();
+  const {
+    handleAgeChange,
+    handleIPPTChange,
+    ipptStat,
+    resetIppt,
+    calculating,
+  } = useSetIppt();
 
   const { resetTime, setTime, time } = useSetVOC();
 
@@ -206,6 +211,19 @@ export default function AddMemberStatForm({
                       />
                     </FormInputContainer>
                   </div>
+                  <h1 className="font-bold text-center mt-4">Overall Score</h1>
+                  {calculating && (
+                    <p className="text-xs text-custom-grey-text">
+                      Calculating score...
+                    </p>
+                  )}
+                  <input
+                    required
+                    onChange={handleIPPTChange}
+                    type="number"
+                    name="score"
+                    value={ipptStat.score}
+                  />
                 </>
               )}
               {statType !== "IPPT" && (
