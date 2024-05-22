@@ -56,7 +56,8 @@ export default function AddMemberStatForm({
     handleIPPTChange,
     ipptStat,
     resetIppt,
-    calculating,
+    handleIPPTScoreChange,
+    ipptScore,
   } = useSetIppt();
 
   const { resetTime, setTime, time } = useSetVOC();
@@ -88,7 +89,8 @@ export default function AddMemberStatForm({
             timing,
           },
           date,
-          curID
+          curID,
+          ipptScore.score
         );
         if (error) throw new Error(error);
       } else if (statType === "ATP") {
@@ -212,18 +214,23 @@ export default function AddMemberStatForm({
                     </FormInputContainer>
                   </div>
                   <h1 className="font-bold text-center mt-4">Overall Score</h1>
-                  {calculating && (
-                    <p className="text-xs text-custom-grey-text">
-                      Calculating score...
-                    </p>
-                  )}
-                  <input
-                    required
-                    onChange={handleIPPTChange}
-                    type="number"
-                    name="score"
-                    value={ipptStat.score}
-                  />
+
+                  <FormInputContainer
+                    inputName="score"
+                    labelText={
+                      ipptScore.calculating
+                        ? "Calculating score..."
+                        : "IPPT Score"
+                    }
+                  >
+                    <input
+                      required
+                      onChange={handleIPPTScoreChange}
+                      type="number"
+                      name="score"
+                      value={ipptScore.score}
+                    />
+                  </FormInputContainer>
                 </>
               )}
               {statType !== "IPPT" && (
