@@ -8,6 +8,22 @@ import { BADGE_SCHEMA, MEMBER_SCHEMA } from "../schemas/members";
 import { BADGE_COLORS } from "../constants";
 import { getAgeGroup, getIpptScore } from "ippt-utils";
 
+export async function deleteStatistic(
+  type: string,
+  memberID: string,
+  id: string
+) {
+  try {
+    const { error } = await dbHandler.delete({
+      col_name: `MEMBERS/${memberID}/${type}`,
+      id,
+    });
+    if (error) throw new Error(error);
+    return handleResponses();
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
+}
 export async function getMembersData() {
   try {
     const { error, data } = await dbHandler.getSpecific({
