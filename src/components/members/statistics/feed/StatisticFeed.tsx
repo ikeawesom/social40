@@ -79,10 +79,10 @@ export async function StatisticFeed({
         ) : (
           <div className="flex flex-col items-start justify-start text-custom-dark-text">
             {parsedOthers.map((id: string) => (
-              <>
+              <div className="w-full" key={id}>
                 {type === "IPPT" ? (
                   <IPPTFeedCard
-                    key={id}
+                    // key={id}
                     data={JSON.parse(JSON.stringify(data[id]))}
                     id={id}
                     type={type}
@@ -90,7 +90,7 @@ export async function StatisticFeed({
                 ) : (
                   <DefaultCard
                     className="w-full flex items-center justify-between gap-4"
-                    key={id}
+                    // key={id}
                   >
                     <div>
                       <h1>{type}</h1>
@@ -105,8 +105,8 @@ export async function StatisticFeed({
                     <h1 className="text-xl font-bold">{data[id].score}</h1>
                   </DefaultCard>
                 )}
-                <DeleteStatisticButton memberID={id} type={type} />
-              </>
+                <DeleteStatisticButton id={id} memberID={id} type={type} />
+              </div>
             ))}
           </div>
         )}

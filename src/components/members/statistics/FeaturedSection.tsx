@@ -14,6 +14,8 @@ export default function FeaturedSection({
   bestStat: any;
   memberID: string;
 }) {
+  const idTitle =
+    type === "IPPT" ? "ipptID" : type === "ATP" ? "atpID" : "dataID";
   return (
     <>
       {type === "IPPT" ? (
@@ -21,7 +23,11 @@ export default function FeaturedSection({
       ) : (
         <DefaultFeaturedCard data={bestStat} type={type} />
       )}
-      <DeleteStatisticButton memberID={memberID} type={type} />
+      <DeleteStatisticButton
+        id={bestStat[idTitle]}
+        memberID={memberID}
+        type={type}
+      />
     </>
   );
 }

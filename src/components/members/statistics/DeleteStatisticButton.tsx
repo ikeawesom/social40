@@ -11,12 +11,13 @@ import Image from "next/image";
 export default function DeleteStatisticButton({
   type,
   memberID,
+  id,
 }: {
   type: string;
   memberID: string;
+  id: string;
 }) {
   const router = useRouter();
-  const id = type === "IPPT" ? "ipptID" : type === "ATP" ? "atpID" : "dataID";
 
   const handleDelete = async () => {
     try {
