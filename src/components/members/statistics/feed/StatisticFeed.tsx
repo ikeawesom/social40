@@ -6,8 +6,9 @@ import DefaultCard from "../../../DefaultCard";
 import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 import HRow from "../../../utils/HRow";
 import IPPTFeedCard from "./IPPTFeedCard";
-import IPPTFeaturedCard from "./IPPTFeaturedCard";
-import DefaultFeaturedCard from "./DefaultFeaturedCard";
+import FeaturedSection from "../FeaturedSection";
+import { getSimple } from "@/src/utils/helpers/parser";
+import DeleteStatisticButton from "../DeleteStatisticButton";
 
 export async function StatisticFeed({
   type,
@@ -54,6 +55,9 @@ export async function StatisticFeed({
       (id: string) => id !== bestStatID
     );
 
+    const parsedBest = getSimple(bestStat);
+    const parsedOthers = getSimple(statsData);
+
     const emptyOthers = Object.keys(statsData).length === 0;
 
     return (
@@ -61,11 +65,8 @@ export async function StatisticFeed({
         <h1 className="font-bold text-custom-dark-text">
           Best Performance for {type}
         </h1>
-        {type === "IPPT" ? (
-          <IPPTFeaturedCard bestStat={bestStat} />
-        ) : (
-          <DefaultFeaturedCard data={bestStat} type={type} />
-        )}
+
+        <FeaturedSection memberID={id} bestStat={parsedBest} type={type} />
 
         <h1 className="mt-6 font-bold text-custom-dark-text">Other Attempts</h1>
         <HRow className="bg-custom-grey-text mt-0" />
@@ -77,33 +78,36 @@ export async function StatisticFeed({
           </div>
         ) : (
           <div className="flex flex-col items-start justify-start text-custom-dark-text">
-            {statsData.map((id: string) =>
-              type === "IPPT" ? (
-                <IPPTFeedCard
-                  key={id}
-                  data={JSON.parse(JSON.stringify(data[id]))}
-                  id={id}
-                  type={type}
-                />
-              ) : (
-                <DefaultCard
-                  className="w-full flex items-center justify-between gap-4"
-                  key={id}
-                >
-                  <div>
-                    <h1>{type}</h1>
-                    <p className="text-xs text-custom-grey-text">
-                      {
-                        TimestampToDateString(data[id].dateCompleted).split(
-                          " "
-                        )[0]
-                      }
-                    </p>
-                  </div>
-                  <h1 className="text-xl font-bold">{data[id].score}</h1>
-                </DefaultCard>
-              )
-            )}
+            {parsedOthers.map((id: string) => (
+              <div className="w-full" key={id}>
+                {type === "IPPT" ? (
+                  <IPPTFeedCard
+                    // key={id}
+                    data={JSON.parse(JSON.stringify(data[id]))}
+                    id={id}
+                    type={type}
+                  />
+                ) : (
+                  <DefaultCard
+                    className="w-full flex items-center justify-between gap-4"
+                    // key={id}
+                  >
+                    <div>
+                      <h1>{type}</h1>
+                      <p className="text-xs text-custom-grey-text">
+                        {
+                          TimestampToDateString(data[id].dateCompleted).split(
+                            " "
+                          )[0]
+                        }
+                      </p>
+                    </div>
+                    <h1 className="text-xl font-bold">{data[id].score}</h1>
+                  </DefaultCard>
+                )}
+                <DeleteStatisticButton id={id} memberID={id} type={type} />
+              </div>
+            ))}
           </div>
         )}
       </>
