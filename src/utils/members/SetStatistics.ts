@@ -6,7 +6,6 @@ import { ATP_SCHEMA, IPPT_SCHEMA, VOC_SCHEMA } from "../schemas/statistics";
 import { DateToTimestamp } from "../helpers/getCurrentDate";
 import { BADGE_SCHEMA, MEMBER_SCHEMA } from "../schemas/members";
 import { BADGE_COLORS } from "../constants";
-import { getAgeGroup, getIpptScore } from "ippt-utils";
 
 export async function deleteStatistic(
   type: string,
@@ -43,46 +42,47 @@ export type IPPTStats = {
   situps: number;
   timing: number;
 };
-export async function calculateIPPT(stats: IPPTStats) {
-  const { age, pushups, situps, timing } = stats;
+// export async function calculateIPPT(stats: IPPTStats) {
+//   const { age, pushups, situps, timing } = stats;
 
-  try {
-    // const route = `https://ippt.vercel.app/api?${new URLSearchParams({
-    //   age: `${age}`,
-    //   pushups: `${pushups}`,
-    //   situps: `${situps}`,
-    //   run: `${timing}`,
-    // })}`;
+//   try {
+//     // const route = `https://ippt.vercel.app/api?${new URLSearchParams({
+//     //   age: `${age}`,
+//     //   pushups: `${pushups}`,
+//     //   situps: `${situps}`,
+//     //   run: `${timing}`,
+//     // })}`;
 
-    // const res = await fetch(route);
-    // if (!res.ok) throw new Error(route);
+//     // const res = await fetch(route);
+//     // if (!res.ok) throw new Error(route);
 
-    // const data = await res.json();
-    const ageGroup = getAgeGroup(age);
-    const updatedTime = Math.ceil((timing + 1) / 10) * 10;
-    const result = getIpptScore(ageGroup, pushups, situps, updatedTime);
+//     // const data = await res.json();
+//     const ageGroup = getAgeGroup(age);
+//     const updatedTime = Math.ceil((timing + 1) / 10) * 10;
+//     const result = getIpptScore(ageGroup, pushups, situps, updatedTime);
 
-    return handleResponses({ data: result.score });
-  } catch (err: any) {
-    return handleResponses({ status: false, error: err.message });
-  }
-}
+//     return handleResponses({ data: result.score });
+//   } catch (err: any) {
+//     return handleResponses({ status: false, error: err.message });
+//   }
+// }
 export async function setIPPT(
   id: string,
   stats: IPPTStats,
   date: { day: number; month: number; year: number },
-  curID: string
+  curID: string,
+  score: number
 ) {
   try {
     const { pushups, situps, timing, age } = stats;
     const numTime = Number(timing);
-    const { error: calcError, data: score } = await calculateIPPT({
-      age,
-      pushups,
-      situps,
-      timing: numTime,
-    });
-    if (calcError) throw new Error(calcError);
+    // const { score } = calculateIPPT({
+    //   age,
+    //   pushups,
+    //   situps,
+    //   timing: numTime,
+    // });
+    // if (calcError) throw new Error(calcError);
 
     const to_add = {
       dateCompleted: DateToTimestamp(
