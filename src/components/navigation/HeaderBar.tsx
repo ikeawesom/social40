@@ -8,7 +8,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 
 export const handleReload = (router: AppRouterInstance) => {
   router.refresh();
-  router.replace("/reloading", { scroll: false });
+  router.push("/reloading", { scroll: false });
 };
 
 export default function HeaderBar({
