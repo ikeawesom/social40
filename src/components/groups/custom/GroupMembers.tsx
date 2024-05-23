@@ -23,6 +23,8 @@ import PrimaryButton from "../../utils/PrimaryButton";
 import Modal from "../../utils/Modal";
 import ModalLoading from "../../utils/ModalLoading";
 import { useHandleSelectActions } from "@/src/hooks/groups/custom/useHandleSelectActions";
+import ActivityInvite from "./activities/ActivityInvite";
+import GroupInvite from "./strength/GroupInvite";
 
 export default function GroupMembers({
   membersList,
@@ -190,7 +192,11 @@ export default function GroupMembers({
             {isAdmin && (
               <>
                 <HRow />
-                <InviteMemberForm membersList={membersList} groupID={groupID} />
+                <GroupInvite
+                  participants={Object.keys(membersList)}
+                  groupID={groupID}
+                />
+                {/* <InviteMemberForm membersList={membersList} groupID={groupID} /> */}
               </>
             )}
           </>
