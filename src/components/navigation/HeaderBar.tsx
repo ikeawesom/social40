@@ -8,13 +8,15 @@ import { toast } from "sonner";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export const handleReload = (router: AppRouterInstance) => {
-  try {
-    router.refresh();
-    router.replace("/reloading", { scroll: false });
-  } catch (err: any) {
-    toast.error("An error has occurred.");
-    router.refresh();
-  }
+  setTimeout(() => {
+    try {
+      router.refresh();
+      router.replace("/reloading", { scroll: false });
+    } catch (err: any) {
+      toast.error("An error has occurred.");
+      router.refresh();
+    }
+  }, 400);
 };
 
 export default function HeaderBar({
