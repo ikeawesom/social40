@@ -2,9 +2,9 @@ import { getMembersData } from "@/src/utils/members/SetStatistics";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { useState, useEffect } from "react";
 
-export function useQueryMember(id: string) {
+export function useQueryMember(id?: string) {
   const [query, setQuery] = useState("");
-  const [members, setMembers] = useState<string[]>([id]);
+  const [members, setMembers] = useState<string[]>(id ? [id] : []);
   const [membersList, setMembersList] = useState<{
     [id: string]: MEMBER_SCHEMA;
   }>();
@@ -52,10 +52,11 @@ export function useQueryMember(id: string) {
 
   const resetQueryMember = () => {
     resetQuery();
-    setMembers([id]);
+    setMembers(id ? [id] : []);
   };
 
   return {
+    membersList,
     members,
     isDetail,
     setIsDetail,
