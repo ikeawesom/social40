@@ -6,6 +6,7 @@ import { COS_DAILY_SCHEMA } from "@/src/utils/schemas/cos";
 import Link from "next/link";
 import React from "react";
 import CosHOTOSection from "./CosHOTOSection";
+import { getSimple } from "@/src/utils/helpers/parser";
 
 export default async function CosSection({
   groupID,
@@ -38,7 +39,7 @@ export default async function CosSection({
 
     if (error && !error.includes("not found")) throw new Error(error);
 
-    let cosData = data as COS_DAILY_SCHEMA | null;
+    let cosData = getSimple(data) as COS_DAILY_SCHEMA | null;
     let disabledDate = false;
     let activeCOS = "";
     let curDayCOS = "";
@@ -49,37 +50,36 @@ export default async function CosSection({
     if (cosData) {
       if (cosData.plans[dateStr].disabled) {
         disabledDate = true;
-      } else {
-        // check if previous date COS exists
-        curDayCOS = cosData.plans[dateStr].memberID;
-        const prevDayCosObj = cosData.plans[prevDateStr];
-        const prevDayCosDisabled = cosData.plans[prevDateStr].disabled ?? false;
-        if (prevDayCosObj && !prevDayCosDisabled) {
-          prevDayCos = cosData.plans[prevDateStr].memberID;
-          // if exists, check if COS finished duty
-          if (prevDayCosObj.finished) {
-            // if finished duty, check if current day COS has taken over
-            if (cosData.plans[dateStr].takenOver) {
-              // next day COS has taken over
-              activeCOS = cosData.plans[dateStr].memberID;
-            } else {
-              pendingCurTakeOver = true;
-              activeCOS = prevDayCos;
-            }
+      }
+      // check if previous date COS exists
+      curDayCOS = cosData.plans[dateStr].memberID;
+      const prevDayCosObj = cosData.plans[prevDateStr];
+      const prevDayCosDisabled = cosData.plans[prevDateStr].disabled ?? false;
+      if (prevDayCosObj && !prevDayCosDisabled) {
+        prevDayCos = cosData.plans[prevDateStr].memberID;
+        // if exists, check if COS finished duty
+        if (prevDayCosObj.finished) {
+          // if finished duty, check if current day COS has taken over
+          if (cosData.plans[dateStr].takenOver) {
+            // next day COS has taken over
+            activeCOS = cosData.plans[dateStr].memberID;
           } else {
-            // if havent finish duty, prompt previous day COS to finish duty
-            pendingPrevFinish = true;
+            pendingCurTakeOver = true;
             activeCOS = prevDayCos;
           }
         } else {
-          // if dont exist, continue to today
-          activeCOS = cosData.plans[dateStr].memberID;
+          // if havent finish duty, prompt previous day COS to finish duty
+          pendingPrevFinish = true;
+          activeCOS = prevDayCos;
         }
+      } else {
+        // if dont exist, continue to today
+        activeCOS = cosData.plans[dateStr].memberID;
       }
     }
     return (
       <DefaultCard className="w-full">
-        {!cosData || disabledDate ? (
+        {!cosData || (disabledDate && !pendingPrevFinish) ? (
           (cos.admins.includes(curMemberID) ||
             cos.members.includes(curMemberID)) && (
             <div className="flex w-full items-start justify-center flex-col gap-2">

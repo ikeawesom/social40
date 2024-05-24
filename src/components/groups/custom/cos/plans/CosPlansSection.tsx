@@ -45,10 +45,11 @@ export default function CosPlansSection({
         </div>
       ) : (
         <div>
-          {Object.keys(curMonthPlan).length === 0 ? (
+          {Object.keys(curMonthPlan).length === 0 || todayCOS?.disabled ? (
             <div className="min-h-[10vh] bg-white grid place-items-center p-4 rounded-md">
               <p className="text-sm text-custom-grey-text text-center">
-                Seems like there is no COS plan for this month...
+                Seems like there is no COS plan for{" "}
+                {todayCOS?.disabled ? "today" : "this month"}...
               </p>
             </div>
           ) : todayCOS ? (
