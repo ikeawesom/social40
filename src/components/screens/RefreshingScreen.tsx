@@ -6,11 +6,14 @@ export default function RefreshingScreen() {
   const router = useRouter();
   useEffect(() => {
     const url = sessionStorage.getItem("url");
-    if (url) {
-      router.replace(url, { scroll: false });
-    } else {
-      router.replace("/home", { scroll: false });
-    }
+    router.refresh();
+    setTimeout(() => {
+      if (url) {
+        router.replace(url, { scroll: false });
+      } else {
+        router.replace("/home", { scroll: false });
+      }
+    }, 400);
   }, []);
   return <></>;
 }

@@ -17,6 +17,7 @@ import ModalLoading from "../../utils/ModalLoading";
 import ModalHeader from "../../utils/ModalHeader";
 import Badge from "../../utils/Badge";
 import { MAX_LENGTH } from "@/src/utils/settings";
+import { handleReload } from "../../navigation/HeaderBar";
 
 export default function GroupMemberTab({
   data,
@@ -92,7 +93,7 @@ export default function GroupMemberTab({
         toast.success(`Removed admin rights from ${groupMemberID}.`);
       }
       setShow(false);
-      router.refresh();
+      handleReload(router);
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -108,7 +109,7 @@ export default function GroupMemberTab({
       if (!body.status) throw new Error(body.error);
       toast.success(`Removed ${groupMemberID} from group.`);
       setShow(false);
-      router.refresh();
+      handleReload(router);
     } catch (err: any) {
       toast.error(err.message);
     }

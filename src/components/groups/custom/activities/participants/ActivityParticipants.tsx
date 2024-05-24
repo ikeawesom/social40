@@ -4,9 +4,10 @@ import { FetchGroupActivityData } from "@/src/utils/activities/group/FetchData";
 import React from "react";
 import { SuspenseGroupActivityFetchType } from "../settings/GroupActivityData";
 import ActivityParticipantsList from "./ActivityParticipantsList";
-import InviteMemberForm from "../InviteMemberActivityForm";
+import InviteMemberActivityForm from "../InviteMemberActivityForm";
 import HRow from "@/src/components/utils/HRow";
 import { getSimple } from "@/src/utils/helpers/parser";
+import ActivityInvite from "../ActivityInvite";
 
 export default async function ActivityParticipants({
   activityData,
@@ -38,10 +39,14 @@ export default async function ActivityParticipants({
         {admin && (
           <>
             <HRow />
-            <InviteMemberForm
+            {/* <InviteMemberActivityForm
               participants={parsed}
               activityID={activityData.activityID}
               host={host}
+            /> */}
+            <ActivityInvite
+              activityID={activityData.activityID}
+              participants={Object.keys(parsed)}
             />
           </>
         )}

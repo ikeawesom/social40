@@ -4,17 +4,11 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import { MAX_LENGTH } from "@/src/utils/settings";
-import { toast } from "sonner";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export const handleReload = (router: AppRouterInstance) => {
-  try {
-    router.refresh();
-    router.replace("/reloading", { scroll: false });
-  } catch (err: any) {
-    toast.error("An error has occurred.");
-    router.refresh();
-  }
+  router.refresh();
+  router.push("/reloading", { scroll: false });
 };
 
 export default function HeaderBar({
