@@ -90,6 +90,7 @@ export default function CreateGroupActivityForm({
   }, [startT]);
 
   const handleLogic = async () => {
+    setUseHA({ ...useHA, loading: true });
     try {
       const createGroupClass = new createGroupActivityClass({
         addMembers,
@@ -129,7 +130,7 @@ export default function CreateGroupActivityForm({
       toast.success("Created activity. Bringing you there now...");
     } catch (err: any) {
       toast.error(err.message);
-      setLoading(false);
+      setUseHA({ ...useHA, loading: false });
     }
   };
 
