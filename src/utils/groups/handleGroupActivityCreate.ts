@@ -171,10 +171,38 @@ export async function third(
   memberID: string,
   fetchedID: string,
   membersData: string[],
-  timestamp: any
+  timestamp: any,
+  nonHAMembers: string[]
 ) {
   try {
     const promiseList = membersData.map(async (selectedMemberID: string) => {
+      // // for admin clean up
+      // const { error: adminErr } = await helperParticipate(
+      //   selectedMemberID,
+      //   fetchedID
+      // );
+      // if (adminErr) return handleResponses({ status: false, adminErr });
+
+      // add non-HA members to fallouts straight away
+      if (nonHAMembers.includes(selectedMemberID)) {
+        const to_add = {
+          activityID: fetchedID,
+          memberID: selectedMemberID,
+          reason: "Not HA Qualified",
+          verifiedBy: memberID,
+        } as FALLOUTS_SCHEMA;
+
+        const res = await dbHandler.add({
+          col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
+          id: selectedMemberID,
+          to_add,
+        });
+
+        if (!res.status)
+          return handleResponses({ status: false, error: res.error });
+        return handleResponses();
+      }
+
       const res = await dbHandler.getSpecific({
         path: `MEMBERS/${selectedMemberID}/STATUSES`,
         orderCol: "endDate",
@@ -182,121 +210,105 @@ export async function third(
       });
       if (!res.status) throw new Error(res.error);
 
-      // for admin clean up
-      const { error } = await helperParticipate(selectedMemberID, fetchedID);
+      let reason = "";
+
+      // get status data from current member
+      const statusData = res.data as { [statusID: string]: STATUS_SCHEMA };
+      if (Object.keys(statusData).length > 0) {
+        console.log("Checking status for:", selectedMemberID);
+        const { startDate, endDate, statusTitle, mc } =
+          statusData[Object.keys(statusData)[0]];
+        console.log(
+          "Latest status:",
+          TimestampToDate(startDate),
+          TimestampToDate(endDate),
+          statusTitle
+        );
+        console.log(
+          "Start:",
+          TimestampToDate(startDate),
+          "End:",
+          TimestampToDate(endDate)
+        );
+
+        const activeStatus = isActive(timestamp, startDate, endDate);
+        // handles MC/status plus 1
+        const statusPlusOne = isActivePlusOne(timestamp, startDate, endDate);
+        if (!activeStatus && !statusPlusOne) {
+          // // if status/MC is over,
+          // do not add to reason
+        } else {
+          // status is current, add to fall out
+          if (activeStatus) {
+            // status is active
+            reason = `${statusTitle} (${
+              TimestampToDateString(startDate).split(" ")[0]
+            }-${TimestampToDateString(endDate).split(" ")[0]})`;
+          } else {
+            // status is +1
+            reason = `${mc ? "MC + 1" : `STATUS + 1: ${statusTitle}`}`;
+          }
+        }
+      }
+
+      // if check for onCourse/bookedIn
+      const { error, data } = await dbHandler.get({
+        col_name: "MEMBERS",
+        id: selectedMemberID,
+      });
+
       if (error) return handleResponses({ status: false, error });
+      const memberData = data as MEMBER_SCHEMA;
+      const { bookedIn, isOnCourse } = memberData;
 
-      // let reason = "";
+      console.log("reason for", selectedMemberID, reason);
+      if (bookedIn && !isOnCourse) {
+        // booked in and not on course
+        // do not add to reason
+      } else {
+        if (!bookedIn && isOnCourse && addType === "course") {
+          // not booked in but on course and activity is for on course
+          // add member unless status
+          // do not add to reason
+        } else {
+          if (!bookedIn && addType === "custom") {
+            // not booked in, may/may not be on course but activity is for custom members
+            // do not add to reason
+          } else {
+            if (isOnCourse && addType !== "course") {
+              // not booked in, member on course but activity is not for course
+              reason += `${reason !== "" ? " | " : ""}ON COURSE`;
+            } else {
+              // member not on course but member not booked in
+              reason += `${reason !== "" ? " | " : ""}NOT BOOKED IN`;
+            }
+            console.log(reason);
+          }
+        }
+      }
 
-      // // get status data from current member
-      // const statusData = res.data as { [statusID: string]: STATUS_SCHEMA };
-      // if (Object.keys(statusData).length > 0) {
-      //   console.log("Checking:", selectedMemberID);
-      //   const { startDate, endDate, statusTitle, mc } =
-      //     statusData[Object.keys(statusData)[0]];
-      //   console.log(
-      //     "Latest status:",
-      //     TimestampToDate(startDate),
-      //     TimestampToDate(endDate),
-      //     statusTitle
-      //   );
-      //   console.log(
-      //     "Start:",
-      //     TimestampToDate(startDate),
-      //     "End:",
-      //     TimestampToDate(endDate)
-      //   );
+      // have reasons to fall out
+      if (reason !== "") {
+        console.log("reason:", reason);
+        const to_add = {
+          activityID: fetchedID,
+          memberID: selectedMemberID,
+          reason,
+          verifiedBy: memberID,
+        } as FALLOUTS_SCHEMA;
 
-      //   const activeStatus = isActive(timestamp, startDate, endDate);
-      //   // handles MC/status plus 1
-      //   const statusPlusOne = isActivePlusOne(timestamp, startDate, endDate);
-      //   if (!activeStatus && !statusPlusOne) {
-      //     // if status/MC is over, add as participant
-      //     const res = await helperParticipate(selectedMemberID, fetchedID);
-      //     if (!res.status)
-      //       return handleResponses({ status: false, error: res.error });
-      //   } else {
-      //     // status is current, add to fall out
-      //     if (activeStatus) {
-      //       // status is active
-      //       reason = `${statusTitle} (${
-      //         TimestampToDateString(startDate).split(" ")[0]
-      //       }-${TimestampToDateString(endDate).split(" ")[0]})`;
-      //     } else {
-      //       // status is +1
-      //       reason = `${mc ? "MC + 1" : `STATUS + 1: ${statusTitle}`}`;
-      //     }
-      //   }
-      // }
+        const res = await dbHandler.add({
+          col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
+          id: selectedMemberID,
+          to_add,
+        });
 
-      // // if check for onCourse/bookedIn
-      // const { error, data } = await dbHandler.get({
-      //   col_name: "MEMBERS",
-      //   id: selectedMemberID,
-      // });
-
-      // if (error) return handleResponses({ status: false, error });
-      // const memberData = data as MEMBER_SCHEMA;
-      // const { bookedIn, isOnCourse } = memberData;
-
-      // console.log("reason for", selectedMemberID, reason);
-      // if (bookedIn && !isOnCourse) {
-      //   // booked in and not on course
-      //   const { error } = await helperParticipate(selectedMemberID, fetchedID);
-      //   if (error) return handleResponses({ status: false, error });
-      // } else {
-      //   if (!bookedIn && isOnCourse && addType === "course") {
-      //     // not booked in but on course and activity is for on course
-      //     // add member unless status
-      //     if (reason === "") {
-      //       const { error } = await helperParticipate(
-      //         selectedMemberID,
-      //         fetchedID
-      //       );
-      //       if (error) return handleResponses({ status: false, error });
-      //       reason = "";
-      //     }
-      //   } else {
-      //     if (!bookedIn && addType === "custom") {
-      //       // not booked in, may/may not be on course but activity is for custom members
-      //       // add member
-
-      //       const { error } = await helperParticipate(
-      //         selectedMemberID,
-      //         fetchedID
-      //       );
-      //       if (error) return handleResponses({ status: false, error });
-      //     } else {
-      //       if (isOnCourse && addType !== "course") {
-      //         // not booked in, member on course but activity is not for course
-      //         reason += `${reason !== "" ? " | " : ""}ON COURSE`;
-      //       } else {
-      //         // member not on course but member not booked in
-      //         reason += `${reason !== "" ? " | " : ""}NOT BOOKED IN`;
-      //       }
-      //       console.log(reason);
-      //     }
-      //   }
-      // }
-
-      // // have reasons to fall out
-      // if (reason !== "") {
-      //   const to_add = {
-      //     activityID: fetchedID,
-      //     memberID: selectedMemberID,
-      //     reason,
-      //     verifiedBy: memberID,
-      //   } as FALLOUTS_SCHEMA;
-
-      //   const res = await dbHandler.add({
-      //     col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
-      //     id: selectedMemberID,
-      //     to_add,
-      //   });
-
-      //   if (!res.status)
-      //     return handleResponses({ status: false, error: res.error });
-      // }
+        if (!res.status)
+          return handleResponses({ status: false, error: res.error });
+      } else {
+        const { error } = await helperParticipate(selectedMemberID, fetchedID);
+        if (error) return handleResponses({ status: false, error });
+      }
       return handleResponses();
     });
 
@@ -341,7 +353,7 @@ export async function fourth(
   }
 }
 
-async function helperParticipate(memberID: string, activityID: string) {
+export async function helperParticipate(memberID: string, activityID: string) {
   try {
     const date = getCurrentDate();
     // add to group participants subcollection
