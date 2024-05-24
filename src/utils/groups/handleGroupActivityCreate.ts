@@ -47,8 +47,8 @@ export async function first(groupID: string, input: any, memberID: string) {
     const createdOn = getCurrentDate();
     const to_add = {
       activityDate: timestamp,
-      activityDesc: input.desc,
-      activityTitle: input.title,
+      activityDesc: input.desc.trim(),
+      activityTitle: input.title.trim(),
       activityLevel,
       createdBy: memberID,
       createdOn,
