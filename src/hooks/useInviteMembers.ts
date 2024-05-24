@@ -8,7 +8,11 @@ export function useInviteMembers() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
   const [members, setMembers] = useState<string[]>([]);
+
+  const resetErrors = () => setErrors([]);
+
   return {
+    resetErrors,
     router,
     host,
     loading,

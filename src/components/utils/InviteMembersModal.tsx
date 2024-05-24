@@ -20,11 +20,13 @@ export default function InviteMembersModal({
   setMembers,
   participants,
   config,
+  resetError,
 }: {
   handleSubmit: (e: React.FormEvent) => void;
   setMembers: React.Dispatch<React.SetStateAction<string[]>>;
   participants: string[];
   config: { loading: boolean; errors: string[] };
+  resetError: () => void;
 }) {
   const [show, setShow] = useState(false);
   const { errors, loading } = config;
@@ -47,6 +49,7 @@ export default function InviteMembersModal({
   const resetModal = () => {
     resetQueryMember();
     setShow(false);
+    resetError();
   };
 
   let filteredObj = {} as { [id: string]: MEMBER_SCHEMA };
