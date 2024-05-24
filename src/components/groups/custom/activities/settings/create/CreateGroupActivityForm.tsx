@@ -90,7 +90,8 @@ export default function CreateGroupActivityForm({
   }, [startT]);
 
   const handleLogic = async () => {
-    setUseHA({ ...useHA, loading: true });
+    setLoading(true);
+    setUseHA({ warning: false, loading: false });
     try {
       const createGroupClass = new createGroupActivityClass({
         addMembers,
@@ -130,8 +131,8 @@ export default function CreateGroupActivityForm({
       toast.success("Created activity. Bringing you there now...");
     } catch (err: any) {
       toast.error(err.message);
-      setUseHA({ ...useHA, loading: false });
     }
+    setLoading(false);
   };
 
   const resetModal = () => {
@@ -144,7 +145,7 @@ export default function CreateGroupActivityForm({
     setLoading(true);
     if (input.needHA) {
       // show warning modal
-      setUseHA({ ...useHA, warning: true, loading: true });
+      setUseHA({ warning: true, loading: true });
 
       // get filtered group members based on selection
       const { data: filtered, error: filterErr } = await second(
@@ -160,7 +161,7 @@ export default function CreateGroupActivityForm({
       if (Object.keys(data).length > 0) {
         // if have members not HA, display warning
         setNonHAMembers(Object.keys(data));
-        setUseHA({ ...useHA, warning: true, loading: false });
+        setUseHA({ warning: true, loading: false });
       } else {
         // if no not HA, remove modal
         resetModal();
