@@ -1,11 +1,11 @@
 import HRow from "@/src/components/utils/HRow";
 import { dbHandler } from "@/src/firebase/db";
 import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
-import { COS_MONTHLY_SCHEMA } from "@/src/utils/schemas/cos";
 import React from "react";
 import CreatePlanSection from "./CreatePlanSection";
 import CosPlansSection from "./CosPlansSection";
 import { getMemberCOSPoints } from "@/src/utils/groups/COS/getMemberCOSPoints";
+import { getSimple } from "@/src/utils/helpers/parser";
 
 export default async function PlansSection({
   groupID,
@@ -27,14 +27,14 @@ export default async function PlansSection({
 
     if (error) throw new Error(error);
 
-    const cosData = data as COS_MONTHLY_SCHEMA;
+    const cosData = getSimple(data);
 
     const { data: memberRes, error: memberError } = await getMemberCOSPoints(
       members
     );
 
     if (memberError) throw new Error(memberError);
-    const memberPoints = memberRes as { [memberID: string]: number };
+    const memberPoints = getSimple(memberRes) as { [memberID: string]: number };
 
     return (
       <div className="w-full">

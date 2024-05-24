@@ -9,6 +9,7 @@ import { COS_DAILY_SCHEMA, CosDailyType } from "@/src/utils/schemas/cos";
 import { GROUP_SCHEMA } from "@/src/utils/schemas/groups";
 import { Metadata } from "next";
 import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
+import { getSimple } from "@/src/utils/helpers/parser";
 
 export const metadata: Metadata = {
   title: "COS",
@@ -32,7 +33,7 @@ export default async function GroupsMonthlyCOSPage({
     });
     if (groupError) throw new Error(groupError);
 
-    const groupData = data as GROUP_SCHEMA;
+    const groupData = getSimple(data) as GROUP_SCHEMA;
     const { cos } = groupData;
     if (!cos) return <RestrictedScreen />;
 
@@ -49,7 +50,7 @@ export default async function GroupsMonthlyCOSPage({
 
     if (error) throw new Error(error);
 
-    const monthCOSData = monthlyCOSRes as COS_DAILY_SCHEMA;
+    const monthCOSData = getSimple(monthlyCOSRes) as COS_DAILY_SCHEMA;
     const { plans, confirmed, membersOriginalScores } = monthCOSData;
 
     const sortedPlansArr = Object.keys(plans).sort(
@@ -65,7 +66,7 @@ export default async function GroupsMonthlyCOSPage({
     );
 
     if (memberError) throw new Error(memberError);
-    const memberPoints = memberRes as { [memberID: string]: number };
+    const memberPoints = getSimple(memberRes) as { [memberID: string]: number };
 
     return (
       <>
