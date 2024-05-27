@@ -61,7 +61,7 @@ export default function AnnouncementCard({
         )}
       </div>
       <HRow className="mb-2" />
-      <h1 className="font-bold text-xl mb-3">{title}</h1>
+      <h1 className="font-bold text-xl mb-2">{title}</h1>
       {descLines.map((line: string, index: number) => {
         if (line === "") return <br key={index} />;
         return (
@@ -74,7 +74,7 @@ export default function AnnouncementCard({
       <div className="flex items-center justify-between gap-3 mt-3">
         {createdOn && (
           <div className="flex flex-col items-start justify-start gap-2">
-            {groups && (
+            {groups && curMember === createdBy && (
               <div className="flex items-start justify-start gap-2">
                 {groups.map((id: string, index: number) => (
                   <AnnouncementTag key={index}> {id}</AnnouncementTag>
