@@ -17,18 +17,26 @@ export function useHandleAnnouncements(memberID: string) {
 
   const [postData, setPostData] = useState<ANNOUNCEMENT_SCHEMA>(defaultAnnouce);
 
-  const [tempGrp, setGrp] = useState("");
-  const [searching, setSearching] = useState(false);
+  const [isPriv, setIsPriv] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [advanced, setAdvanced] = useState(false);
+
+  const enablePin = () => setPostData({ ...postData, pin: true });
+  const disablePin = () => setPostData({ ...postData, pin: false });
+  const enablePriv = () => setIsPriv(true);
+  const disablePriv = () => setIsPriv(false);
 
   const reset = () => {
     resetForm();
     setShowModal(false);
   };
 
-  const resetForm = () => setPostData(defaultAnnouce);
+  const resetForm = () => {
+    setPostData(defaultAnnouce);
+    setAdvanced(false);
+    setIsPriv(false);
+  };
 
   const handleChange = (
     e:
@@ -38,11 +46,11 @@ export function useHandleAnnouncements(memberID: string) {
     setPostData({ ...postData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent, groups: string[]) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { status, error } = await submitPost(postData);
+      const { status, error } = await submitPost(postData, groups);
       if (!status) throw new Error(error);
       reset();
       router.refresh();
@@ -51,35 +59,6 @@ export function useHandleAnnouncements(memberID: string) {
       toast.error(err.message);
     }
     setLoading(false);
-  };
-
-  const handleAddGroup = async () => {
-    setSearching(true);
-    try {
-      // handle group
-      const { error } = await handleSearchGroup(tempGrp);
-      if (error) throw new Error(error);
-
-      const tempArr = postData.groups as string[];
-      if (!tempArr.includes(tempGrp)) {
-        tempArr.push(tempGrp);
-        setPostData({ ...postData, groups: tempArr });
-      }
-    } catch (err: any) {
-      const { message } = err;
-      if (message.includes("not found")) {
-        toast.error("Invalid group ID");
-      } else {
-        toast.error(err.message);
-      }
-    }
-    setSearching(false);
-  };
-
-  const handleRemoveGroup = (group: string) => {
-    const tempArr = postData.groups as string[];
-    tempArr.splice(tempArr.indexOf(group), 1);
-    setPostData({ ...postData, groups: tempArr });
   };
 
   return {
@@ -92,11 +71,11 @@ export function useHandleAnnouncements(memberID: string) {
     postData,
     setAdvanced,
     advanced,
-    setPostData,
-    handleRemoveGroup,
-    tempGrp,
-    setGrp,
-    handleAddGroup,
-    searching,
+
+    enablePin,
+    disablePin,
+    disablePriv,
+    enablePriv,
+    isPriv,
   };
 }
