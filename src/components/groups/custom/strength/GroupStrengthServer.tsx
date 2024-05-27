@@ -59,7 +59,9 @@ export async function GroupStrengthServer({
             </Suspense>
             <>
               <HRow />
-              <LastUpdatedHANotice lastUpdatedHA={lastUpdatedHA} />
+              {lastUpdatedHA && (
+                <LastUpdatedHANotice lastUpdatedHA={lastUpdatedHA} />
+              )}
               <CalculateHAButton groupID={groupID} membersList={parsed} />
               <Link
                 scroll={false}
