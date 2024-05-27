@@ -13,7 +13,6 @@ import {
   GROUP_ACTIVITY_PARTICIPANTS,
 } from "@/src/utils/constants";
 import SelectMembers from "../SelectMembers";
-import Toggle from "@/src/components/utils/Toggle";
 import HRow from "@/src/components/utils/HRow";
 import { createGroupActivityClass } from "@/src/utils/groups/createGroupActivityClass";
 import Image from "next/image";
@@ -25,6 +24,7 @@ import ModalLoading from "@/src/components/utils/ModalLoading";
 import InnerContainer from "@/src/components/utils/InnerContainer";
 import { second } from "@/src/utils/groups/handleGroupActivityCreate";
 import Link from "next/link";
+import ToggleContainer from "@/src/components/utils/toggle/ToggleContainer";
 
 export default function CreateGroupActivityForm({
   groupID,
@@ -176,6 +176,11 @@ export default function CreateGroupActivityForm({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
+
+  const enableIsHA = () => setInput({ ...input, pt: true });
+  const disableIsHA = () => setInput({ ...input, pt: false });
+  const enableNeedHA = () => setInput({ ...input, needHA: true });
+  const disableNeedHA = () => setInput({ ...input, needHA: false });
 
   return (
     <form
@@ -395,33 +400,23 @@ export default function CreateGroupActivityForm({
             </h1>
             <HRow />
             <div className="w-full">
-              <div className="w-full flex items-center justify-between gap-2 py-2">
-                <p className="text-sm">This is a HA activity</p>
-                <Toggle
-                  className="shadow-none border-none"
-                  buttonClassName="border-[1px]"
-                  disable={() => setInput({ ...input, pt: false })}
-                  enable={() => setInput({ ...input, pt: true })}
-                  disabled={!input.pt}
-                />
-              </div>
+              <ToggleContainer
+                flex
+                className="justify-between"
+                text="This is a HA activity"
+                disable={disableIsHA}
+                enable={enableIsHA}
+                disabled={!input.pt}
+              />
 
-              <div className="w-full flex items-center justify-between gap-2 py-2">
-                <div>
-                  <p className="text-sm">This activity requires HA</p>
-                  {/* <p className="text-xs text-custom-grey-text opacity-50">
-                    Coming soon...
-                  </p> */}
-                </div>
-                <Toggle
-                  // forceDisable={true}
-                  className="shadow-none border-none"
-                  buttonClassName="border-[1px]"
-                  disable={() => setInput({ ...input, needHA: false })}
-                  enable={() => setInput({ ...input, needHA: true })}
-                  disabled={!input.needHA}
-                />
-              </div>
+              <ToggleContainer
+                flex
+                className="justify-between mt-2"
+                text="This activity requires HA"
+                disable={disableNeedHA}
+                enable={enableNeedHA}
+                disabled={!input.needHA}
+              />
             </div>
           </div>
 

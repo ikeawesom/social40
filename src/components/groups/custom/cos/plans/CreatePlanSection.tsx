@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Badge from "@/src/components/utils/Badge";
 import { CreateCOSPlan } from "@/src/utils/groups/COS/handleCOS";
-import Toggle from "@/src/components/utils/Toggle";
+import ToggleContainer from "@/src/components/utils/toggle/ToggleContainer";
 
 export const getType = (day: number) => {
   return day === 0 || day === 6 ? "weekend" : day === 5 ? "friday" : "standard";
@@ -211,16 +211,14 @@ export default function CreatePlanSection({
                               HOLIDAY
                             </Badge>
                           )}
-                          <div className="flex items-center justify-start gap-2">
-                            <h1 className="font-bold text-sm text-custom-dark-text">
-                              {day} {MONTHS[month]}
-                            </h1>
-                            <Toggle
-                              disable={() => handleToggleDisable(date)}
-                              disabled={disabled ?? false}
-                              enable={() => handleToggleDisable(date)}
-                            />
-                          </div>
+                          <ToggleContainer
+                            flex
+                            textClassName="font-bold"
+                            text={`${day} ${MONTHS[month]}`}
+                            disable={() => handleToggleDisable(date)}
+                            disabled={disabled ?? false}
+                            enable={() => handleToggleDisable(date)}
+                          />
                         </div>
                         {!disabled && (
                           <div className="self-start">

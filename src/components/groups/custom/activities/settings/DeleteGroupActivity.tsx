@@ -11,8 +11,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { useHostname } from "@/src/hooks/useHostname";
-import SecondaryButton from "@/src/components/utils/SecondaryButton";
-import Toggle from "@/src/components/utils/Toggle";
+import ToggleContainer from "@/src/components/utils/toggle/ToggleContainer";
 
 const DEFAULT_CHECKS = {
   check1: false,
@@ -67,6 +66,13 @@ export default function DeleteGroupActivity({
     }
   };
 
+  const enableCheck1 = () => setChecks({ ...checks, check1: true });
+  const enableCheck2 = () => setChecks({ ...checks, check2: true });
+  const enableCheck3 = () => setChecks({ ...checks, check3: true });
+  const disableCheck1 = () => setChecks({ ...checks, check1: false });
+  const disableCheck2 = () => setChecks({ ...checks, check2: false });
+  const disableCheck3 = () => setChecks({ ...checks, check3: false });
+
   return (
     <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
       <div className="flex items-center justify-between w-full">
@@ -89,43 +95,26 @@ export default function DeleteGroupActivity({
           onSubmit={handleSubmit}
           className="w-full flex flex-col items-start justify-start gap-3"
         >
-          <div>
-            <p className="text-sm">
-              I understand that deleting this activity will forfeit the
-              participation of every member
-            </p>
-            <Toggle
-              className="w-fit mt-2"
-              buttonClassName="border-[1px]"
-              disable={() => setChecks({ ...checks, check1: false })}
-              enable={() => setChecks({ ...checks, check1: true })}
-              disabled={!checks.check1}
-            />
-          </div>
-          <div>
-            <p className="text-sm">
-              I understand that this action is irreversible and may affect heat
-              acclimatisation (HA) tracking
-            </p>
-            <Toggle
-              className="w-fit mt-2"
-              buttonClassName="border-[1px]"
-              disable={() => setChecks({ ...checks, check2: false })}
-              enable={() => setChecks({ ...checks, check2: true })}
-              disabled={!checks.check2}
-            />
-          </div>
-
-          <div>
-            <p className="text-sm">I want to delete this activity</p>
-            <Toggle
-              className="w-fit mt-2"
-              buttonClassName="border-[1px]"
-              disable={() => setChecks({ ...checks, check3: false })}
-              enable={() => setChecks({ ...checks, check3: true })}
-              disabled={!checks.check3}
-            />
-          </div>
+          <ToggleContainer
+            disable={disableCheck1}
+            disabled={!checks.check1}
+            enable={enableCheck1}
+            text="I understand that deleting this activity will forfeit the
+              participation of every member"
+          />
+          <ToggleContainer
+            disable={disableCheck2}
+            disabled={!checks.check2}
+            enable={enableCheck2}
+            text="I understand that this action is irreversible and may affect heat
+            acclimatisation (HA) tracking"
+          />
+          <ToggleContainer
+            disable={disableCheck3}
+            disabled={!checks.check3}
+            enable={enableCheck3}
+            text="I want to delete this activity"
+          />
 
           {allChecked && (
             <FormInputContainer

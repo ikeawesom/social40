@@ -23,7 +23,7 @@ import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { getType } from "./CreatePlanSection";
 import Notice from "@/src/components/utils/Notice";
-import Toggle from "@/src/components/utils/Toggle";
+import ToggleContainer from "@/src/components/utils/toggle/ToggleContainer";
 
 export default function MonthlyPlanList({
   sortedPlans,
@@ -357,24 +357,20 @@ export default function MonthlyPlanList({
                       </Badge>
                     )}
                   </div>
-                  <div className="flex items-center justify-start gap-2 mb-2">
-                    <p
-                      className={twMerge(
-                        "text-xs text-custom-grey-text flex items-center justify-start",
-                        memberID !== ori[date].memberID &&
-                          "text-custom-dark-text font-bold"
-                      )}
-                    >
-                      {day} {MONTHS[month]}
-                      {memberID !== ori[date].memberID && "*"}
-                    </p>
-                    <Toggle
-                      forceDisable={!unlocked || dutyOver}
-                      disable={() => handleToggleDisable(date)}
-                      disabled={disabled ?? false}
-                      enable={() => handleToggleDisable(date)}
-                    />
-                  </div>
+                  <ToggleContainer
+                    textClassName={twMerge(
+                      "text-xs text-custom-grey-text flex items-center justify-start",
+                      memberID !== ori[date].memberID &&
+                        "text-custom-dark-text font-bold"
+                    )}
+                    flex
+                    text={`${day} ${MONTHS[month]}\n
+                    ${memberID !== ori[date].memberID ? "*" : ""}`}
+                    forceDisable={!unlocked || dutyOver}
+                    disable={() => handleToggleDisable(date)}
+                    disabled={disabled ?? false}
+                    enable={() => handleToggleDisable(date)}
+                  />
                   {dutyOver ? (
                     <h1 className="font-bold text-custom-dark-text">
                       {memberID}

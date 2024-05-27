@@ -6,10 +6,8 @@ import { LoadingIconBright } from "../utils/LoadingIcon";
 import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { useRouter } from "next/navigation";
-import SecondaryButton from "../utils/SecondaryButton";
-import { twMerge } from "tailwind-merge";
-import Toggle from "../utils/Toggle";
 import HRow from "../utils/HRow";
+import ToggleContainer from "../utils/toggle/ToggleContainer";
 
 export type StatusInputType = {
   title: string;
@@ -113,6 +111,9 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
     setChecked({ ...checked, [e.target.name]: e.target.checked });
   };
 
+  const enableMC = () => setChecked({ ...checked, status: true });
+  const disableMC = () => setChecked({ ...checked, status: false });
+
   return (
     <DefaultCard className="w-full">
       <form
@@ -128,16 +129,15 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
             value={statusDetails.title}
             onChange={handleChange}
           />
-          <div className="w-full flex items-center justify-start gap-2 mt-2 rounded-md">
-            <p className="text-sm">This is a medical leave</p>
-            <Toggle
-              className="shadow-none border-none"
-              buttonClassName="border-[1px]"
-              disable={() => setChecked({ ...checked, status: false })}
-              enable={() => setChecked({ ...checked, status: true })}
-              disabled={!checked.status}
-            />
-          </div>
+
+          <ToggleContainer
+            flex
+            className="mt-2"
+            text="This is a medical leave"
+            disable={disableMC}
+            enable={enableMC}
+            disabled={!checked.status}
+          />
         </div>
 
         <div className="w-full flex flex-col items-start justify-center gap-1">
@@ -330,32 +330,22 @@ export default function CreateStatus({ memberID }: { memberID: string }) {
             </label>
           </div> */}
           <HRow />
-          <div>
-            <p className="text-sm mb-1">
-              I have confirmed that the details provided above is accurate to
-              the best of my knowledge.
-            </p>
-            <Toggle
-              className="shadow-none border-none w-fit"
-              buttonClassName="border-[1px]"
-              disable={() => setChecked({ ...checked, cfm: false })}
-              enable={() => setChecked({ ...checked, cfm: true })}
-              disabled={!checked.cfm}
-            />
-          </div>
-          <div className="mt-2">
-            <p className="text-sm mb-1">
-              I consent that this information can be used for tracking when
-              needed.
-            </p>
-            <Toggle
-              className="shadow-none border-none w-fit"
-              buttonClassName="border-[1px]"
-              disable={() => setChecked({ ...checked, consent: false })}
-              enable={() => setChecked({ ...checked, consent: true })}
-              disabled={!checked.consent}
-            />
-          </div>
+
+          <ToggleContainer
+            text="I have confirmed that the details provided above is accurate to
+              the best of my knowledge."
+            disable={() => setChecked({ ...checked, cfm: false })}
+            enable={() => setChecked({ ...checked, cfm: true })}
+            disabled={!checked.cfm}
+          />
+
+          <ToggleContainer
+            text="I consent that this information can be used for tracking when
+              needed."
+            disable={() => setChecked({ ...checked, consent: false })}
+            enable={() => setChecked({ ...checked, consent: true })}
+            disabled={!checked.consent}
+          />
         </div>
         <PrimaryButton
           disabled={loading || !ready}
