@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import SecondaryButton from "./SecondaryButton";
+import SecondaryButton from "../SecondaryButton";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 
@@ -32,7 +32,7 @@ export default function Toggle({
         disabled={forceDisable}
         activated={!disabled}
         className={twMerge(
-          "py-1 px-1 flex items-center justify-center rounded-full border-0 shadow-none",
+          "py-1 px-1 flex items-center justify-center rounded-full border-[1px] shadow-none",
           buttonClassName
         )}
       >
@@ -48,7 +48,7 @@ export default function Toggle({
         onClick={disable}
         activated={disabled}
         className={twMerge(
-          "py-1 px-1 flex items-center justify-center rounded-full border-0 shadow-none",
+          "py-1 px-1 flex items-center justify-center rounded-full border-[1px] shadow-none",
           buttonClassName
         )}
       >
