@@ -7,6 +7,19 @@ import {
 } from "../schemas/groups";
 import handleResponses from "../helpers/handleResponses";
 
+export async function getGroups() {
+  try {
+    const { error, data } = await dbHandler.getSpecific({
+      path: "GROUPS",
+      orderCol: "groupID",
+      ascending: true,
+    });
+    if (error) throw new Error(error);
+    return handleResponses({ data });
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
+}
 export async function isMemberInGroup(groupID: string, memberID: string) {
   const res = await dbHandler.get({
     col_name: `GROUPS/${groupID}/MEMBERS`,
