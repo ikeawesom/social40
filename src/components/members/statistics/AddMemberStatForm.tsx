@@ -9,13 +9,18 @@ import { DEFAULT_STATS } from "@/src/utils/constants";
 import FormInputContainer from "../../utils/FormInputContainer";
 import HRow from "../../utils/HRow";
 import { toast } from "sonner";
-import { setATP, setIPPT, setVOC } from "@/src/utils/members/SetStatistics";
+import {
+  getMembersData,
+  setATP,
+  setIPPT,
+  setVOC,
+} from "@/src/utils/members/SetStatistics";
 import { useRouter } from "next/navigation";
 import { useSetIppt } from "@/src/hooks/members/useSetIppt";
 import InnerContainer from "../../utils/InnerContainer";
 import Badge from "../../utils/Badge";
 import SecondaryButton from "../../utils/SecondaryButton";
-import { useQueryMember } from "@/src/hooks/members/useQueryMember";
+import { useQueryDrop } from "@/src/hooks/members/useQueryMember";
 import { useSetVOC } from "@/src/hooks/members/useSetVOC";
 import { useSetATP } from "@/src/hooks/members/useSetATP";
 import AnnouncementTag from "../../announcements/AnnouncementTag";
@@ -49,7 +54,11 @@ export default function AddMemberStatForm({
     setIsDetail,
     setQuery,
     handleRemove,
-  } = useQueryMember(id);
+  } = useQueryDrop({
+    fetchFunction: getMembersData,
+    id,
+    secondaryKey: "displayName",
+  });
 
   const {
     handleAgeChange,
