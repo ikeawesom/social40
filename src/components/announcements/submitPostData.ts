@@ -5,8 +5,11 @@ import getCurrentDate from "@/src/utils/helpers/getCurrentDate";
 import handleResponses from "@/src/utils/helpers/handleResponses";
 import { ANNOUNCEMENT_SCHEMA } from "@/src/utils/schemas/announcements";
 
-export default async function submitPost(formData: ANNOUNCEMENT_SCHEMA) {
-  const { createdBy, desc, title, groups, pin } = formData;
+export default async function submitPost(
+  formData: ANNOUNCEMENT_SCHEMA,
+  groups: string[]
+) {
+  const { createdBy, desc, title, pin } = formData;
   const createdOn = getCurrentDate();
   const newDesc = desc.split("\n").join("$a");
 
