@@ -1,6 +1,5 @@
-import submitPost, {
-  handleSearchGroup,
-} from "@/src/components/announcements/submitPostData";
+import { DisplayMediaType } from "@/src/components/announcements/AddMedia";
+import submitPost from "@/src/components/announcements/submitPostData";
 import {
   getDefaultAnnouncement,
   ANNOUNCEMENT_SCHEMA,
@@ -8,6 +7,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useState, FormEvent } from "react";
 import { toast } from "sonner";
+import { handleMediaUpload } from "./handleMediaUpload";
 
 export function useHandleAnnouncements(memberID: string) {
   const router = useRouter();
@@ -16,6 +16,7 @@ export function useHandleAnnouncements(memberID: string) {
   const defaultAnnouce = getDefaultAnnouncement(memberID);
 
   const [postData, setPostData] = useState<ANNOUNCEMENT_SCHEMA>(defaultAnnouce);
+  const [mediaFiles, setMediaFiles] = useState<DisplayMediaType[]>([]);
 
   const [isPriv, setIsPriv] = useState(false);
 
@@ -30,6 +31,7 @@ export function useHandleAnnouncements(memberID: string) {
   const reset = () => {
     resetForm();
     setShowModal(false);
+    setMediaFiles([]);
   };
 
   const resetForm = () => {
@@ -46,12 +48,28 @@ export function useHandleAnnouncements(memberID: string) {
     setPostData({ ...postData, [e.target.name]: e.target.value });
   };
 
+  const handleMediaChange = ({ file, id, src }: DisplayMediaType) =>
+    setMediaFiles((temp) => [...temp, { file, id, src }]);
+
+  const removeFile = (id: string) => {
+    setMediaFiles((temp) =>
+      temp.filter((item: DisplayMediaType) => item.id !== id)
+    );
+  };
+
   const handleSubmit = async (e: FormEvent, groups: string[]) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { status, error } = await submitPost(postData, groups);
-      if (!status) throw new Error(error);
+      const { error, data: id } = await submitPost(postData, groups);
+      if (error) throw new Error(error);
+
+      // handle files upload
+      if (mediaFiles.length > 0) {
+        const { error } = await handleMediaUpload(id, mediaFiles);
+        if (error) throw new Error(error);
+      }
+
       reset();
       router.refresh();
       toast.success("Nice, your announcement has been posted!");
@@ -62,6 +80,9 @@ export function useHandleAnnouncements(memberID: string) {
   };
 
   return {
+    mediaFiles,
+    removeFile,
+    handleMediaChange,
     setShowModal,
     loading,
     showModal,
@@ -71,7 +92,6 @@ export function useHandleAnnouncements(memberID: string) {
     postData,
     setAdvanced,
     advanced,
-
     enablePin,
     disablePin,
     disablePriv,

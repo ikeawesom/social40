@@ -9,38 +9,56 @@ export default async function submitPost(
   formData: ANNOUNCEMENT_SCHEMA,
   groups: string[]
 ) {
-  const { createdBy, desc, title, pin } = formData;
-  const createdOn = getCurrentDate();
-  const newDesc = desc.split("\n").join("$a");
+  try {
+    const { createdBy, desc, title, pin } = formData;
+    const createdOn = getCurrentDate();
+    const newDesc = desc.split("\n").join("$a");
 
-  const to_add = {
-    title,
-    desc: newDesc,
-    createdOn,
-    createdBy,
-    groups,
-    pin,
-  } as ANNOUNCEMENT_SCHEMA;
+    const to_add = {
+      title,
+      desc: newDesc,
+      createdOn,
+      createdBy,
+      groups,
+      pin,
+    } as ANNOUNCEMENT_SCHEMA;
 
-  const {
-    status,
-    error,
-    data: { id },
-  } = await dbHandler.addGeneral({
-    path: "ANNOUNCEMENTS",
-    to_add,
-  });
-  if (!status) return handleResponses({ status: false, error });
+    const {
+      error,
+      data: { id },
+    } = await dbHandler.addGeneral({
+      path: "ANNOUNCEMENTS",
+      to_add,
+    });
+    if (error) throw new Error(error);
 
-  await dbHandler.edit({
-    col_name: "ANNOUNCEMENTS",
-    id,
-    data: {
-      announcementID: id,
-    },
-  });
+    await dbHandler.edit({
+      col_name: "ANNOUNCEMENTS",
+      id,
+      data: {
+        announcementID: id,
+      },
+    });
 
-  return handleResponses();
+    return handleResponses({ data: id });
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
+}
+
+export async function addMedia(id: string, mediaLinks: string[]) {
+  try {
+    await dbHandler.edit({
+      col_name: "ANNOUNCEMENTS",
+      id,
+      data: {
+        media: mediaLinks,
+      },
+    });
+    return handleResponses();
+  } catch (err: any) {
+    return handleResponses({ status: false, error: err.message });
+  }
 }
 
 export async function deletePost(id: string) {

@@ -12,6 +12,7 @@ import ToggleContainer from "../utils/toggle/ToggleContainer";
 import { useQueryDrop } from "@/src/hooks/members/useQueryMember";
 import { getGroups } from "@/src/utils/groups/getGroupData";
 import Badge from "../utils/Badge";
+import AddMedia from "./AddMedia";
 
 export default function CreateAnnouncementForm({
   memberID,
@@ -33,6 +34,9 @@ export default function CreateAnnouncementForm({
     isPriv,
     disablePriv,
     enablePriv,
+    handleMediaChange,
+    mediaFiles,
+    removeFile,
   } = useHandleAnnouncements(memberID);
 
   const { filtered, query, setQuery, handleAdd, handleRemove, members } =
@@ -68,6 +72,12 @@ export default function CreateAnnouncementForm({
                 value={postData.desc}
               />
             </div>
+
+            <AddMedia
+              removeFile={removeFile}
+              handleMediaChange={handleMediaChange}
+              mediaFiles={mediaFiles}
+            />
 
             <div className="w-full flex flex-col items-start justify-start gap-1">
               <div className="w-full flex items-center justify-between">
