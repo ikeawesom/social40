@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import PrimaryButton from "../utils/PrimaryButton";
 import Image from "next/image";
 import InnerContainer from "../utils/InnerContainer";
@@ -13,12 +13,15 @@ import { useQueryDrop } from "@/src/hooks/members/useQueryMember";
 import { getGroups } from "@/src/utils/groups/getGroupData";
 import Badge from "../utils/Badge";
 import AddMedia from "./media/AddMedia";
+import SecondaryButton from "../utils/SecondaryButton";
 
 export default function CreateAnnouncementForm({
   memberID,
 }: {
   memberID: string;
 }) {
+  const [page, setPage] = useState(false);
+
   const {
     setShowModal,
     loading,
@@ -27,8 +30,6 @@ export default function CreateAnnouncementForm({
     handleSubmit,
     handleChange,
     postData,
-    setAdvanced,
-    advanced,
     enablePin,
     disablePin,
     isPriv,
@@ -45,58 +46,54 @@ export default function CreateAnnouncementForm({
       secondaryKey: "groupName",
     });
 
+  const resetAll = () => {
+    setPage(false);
+    reset();
+  };
+
+  const toggleModal = () => {
+    setShowModal(true);
+    setPage(false);
+  };
+
   return (
     <>
       {showModal && (
         <Modal>
-          <ModalHeader close={reset} heading="Create Announcement" />
+          <ModalHeader close={resetAll} heading="Create Announcement" />
           <form
             onSubmit={(e) => handleSubmit(e, members)}
             className="flex flex-col items-center justify-start mt-2 gap-2"
           >
-            <div className="w-full flex flex-col items-center justify-start gap-2">
-              <input
-                name="title"
-                type="text"
-                onChange={handleChange}
-                placeholder="Add a title..."
-                value={postData.title}
-                required
-              />
-              <textarea
-                name="desc"
-                onChange={handleChange}
-                rows={5}
-                placeholder="Type something here..."
-                required
-                value={postData.desc}
-              />
-            </div>
+            {!page ? (
+              <>
+                <div className="w-full flex flex-col items-center justify-start gap-2">
+                  <input
+                    name="title"
+                    type="text"
+                    onChange={handleChange}
+                    placeholder="Add a title..."
+                    value={postData.title}
+                    required
+                  />
+                  <textarea
+                    name="desc"
+                    onChange={handleChange}
+                    rows={5}
+                    placeholder="Type something here..."
+                    required
+                    value={postData.desc}
+                  />
+                </div>
 
-            <AddMedia
-              removeFile={removeFile}
-              handleMediaChange={handleMediaChange}
-              mediaFiles={mediaFiles}
-            />
-
-            <div className="w-full flex flex-col items-start justify-start gap-1">
-              <div className="w-full flex items-center justify-between">
-                <h1 className="text-sm text-custom-dark-text font-bold">
-                  Advanced Settings
-                </h1>
-
-                <Image
-                  onClick={() => setAdvanced(!advanced)}
-                  src="/icons/icon_arrow-down.svg"
-                  alt="Show"
-                  width={30}
-                  height={30}
-                  className={`duration-300 ease-in-out ${
-                    advanced ? "rotate-180" : ""
-                  }`}
+                <AddMedia
+                  removeFile={removeFile}
+                  handleMediaChange={handleMediaChange}
+                  mediaFiles={mediaFiles}
                 />
-              </div>
-              {advanced && (
+              </>
+            ) : (
+              <div className="w-full flex flex-col items-start justify-start gap-1">
                 <>
                   <ToggleContainer
                     flex
@@ -165,12 +162,12 @@ export default function CreateAnnouncementForm({
                                   onClick={() => handleAdd(id)}
                                   className="w-full px-3 py-2 bg-white hover:bg-custom-light-text"
                                 >
-                                  <p className="text-xs flex items-center justify-start gap-2">
+                                  <div className="text-xs flex items-center justify-start gap-2">
                                     {id}{" "}
                                     {members.includes(id) && (
                                       <Badge>Added</Badge>
                                     )}
-                                  </p>
+                                  </div>
                                 </div>
                               ))
                             )}
@@ -180,22 +177,47 @@ export default function CreateAnnouncementForm({
                     </>
                   )}
                 </>
-              )}
-            </div>
+              </div>
+            )}
 
-            <PrimaryButton
-              disabled={loading || (isPriv && members.length === 0)}
-              type="submit"
-              className="mt-1"
-            >
-              {loading ? "Posting..." : "Post it"}
-            </PrimaryButton>
+            <div className="w-full flex items-center justify-center gap-2 mt-1">
+              <SecondaryButton
+                disabled={postData.title === "" || postData.desc === ""}
+                onClick={() => setPage(!page)}
+                className="flex items-center justify-center"
+              >
+                {page && (
+                  <Image
+                    alt=""
+                    src="/icons/icon_arrow-down.svg"
+                    className="rotate-90 translate-y-[1px] translate-x-[2px]"
+                    width={25}
+                    height={25}
+                  />
+                )}
+                {page ? "Back" : "Next"}
+                {!page && (
+                  <Image
+                    alt=""
+                    src="/icons/icon_arrow-down.svg"
+                    className="-rotate-90 translate-y-[1px] -translate-x-[2px]"
+                    width={25}
+                    height={25}
+                  />
+                )}
+              </SecondaryButton>
+              <PrimaryButton
+                disabled={!page || loading || (isPriv && members.length === 0)}
+                type="submit"
+                className="w-full self-stretch"
+              >
+                {loading ? "Posting..." : "Post it"}
+              </PrimaryButton>
+            </div>
           </form>
         </Modal>
       )}
-      <PrimaryButton onClick={() => setShowModal(true)}>
-        Create Announcement
-      </PrimaryButton>
+      <PrimaryButton onClick={toggleModal}>Create Announcement</PrimaryButton>
     </>
   );
 }
