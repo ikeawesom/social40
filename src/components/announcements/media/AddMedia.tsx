@@ -5,7 +5,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 import ScrollMedia from "./ScrollMedia";
 
-export type DisplayMediaType = { file: File; src: string; id: string };
+export type DisplayMediaType = { file: File | null; src: string; id: string };
 
 export default function AddMedia({
   handleMediaChange,
