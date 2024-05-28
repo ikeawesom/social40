@@ -19,6 +19,8 @@ import PageCenterWrapper from "@/src/components/utils/PageCenterWrapper";
 import { MemberHASection } from "@/src/components/members/HA/MemberHASection";
 import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
+import MemberTabs from "@/src/components/members/MemberTabs";
+import ErrorSection from "@/src/components/utils/ErrorSection";
 
 export async function generateMetadata({
   params,
@@ -33,14 +35,17 @@ export async function generateMetadata({
 
 export default async function MemberPage({
   params,
+  searchParams,
 }: {
   params: { memberID: string };
+  searchParams: { view: string };
 }) {
   const clickedMemberID = params.memberID;
   const { user, isAuthenticated } = await getMemberAuthServer();
   if (!isAuthenticated || user === null) return;
   const { memberID } = user;
   const host = process.env.HOST;
+  const view = searchParams.view ?? "activities";
 
   try {
     // fetch current member data from server
@@ -67,21 +72,21 @@ export default async function MemberPage({
     if (!dataA.status) throw new Error(dataA.error);
 
     const viewMemberData = dataA.data as MEMBER_SCHEMA;
-
-    const sameMember = viewMemberData.memberID === currentMemberData.memberID;
-
-    const permission =
-      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
-
-    const higher =
-      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY[viewMemberData.role].rank;
-
-    const normalMember = role === "member";
-
     const rankName =
       `${viewMemberData.rank} ${viewMemberData.displayName}`.trim();
-
     const pfp = viewMemberData.pfp;
+
+    // get roles
+    const sameMember = viewMemberData.memberID === currentMemberData.memberID;
+    const permission =
+      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
+    const higher =
+      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY[viewMemberData.role].rank;
+    const normalMember = role === "member";
+
+    // get permissions
+    const canViewStatus = permission || sameMember;
+    const canViewPerms = higher && !sameMember && !normalMember;
 
     return (
       <>
@@ -131,7 +136,79 @@ export default async function MemberPage({
               clickedMemberID={clickedMemberID}
               permission={higher}
             />
-            {/* {(permission || sameMember) && (
+          </DefaultCard>
+          <MemberTabs memberID={clickedMemberID} view={view} />
+          {view === "HA" &&
+            (permission ? (
+              <Suspense
+                key={searchParams.view}
+                fallback={<DefaultSkeleton className="h-[20vh]" />}
+              >
+                <MemberHASection memberID={clickedMemberID} />
+              </Suspense>
+            ) : (
+              <ErrorSection>
+                Oops, you do not have permissions to view this section. Please
+                ask a commander for assistance.
+              </ErrorSection>
+            ))}
+
+          {view === "activities" && (
+            <Suspense
+              key={searchParams.view}
+              fallback={<DefaultSkeleton className="h-[50vh]" />}
+            >
+              <JoinedActivities clickedMemberID={clickedMemberID} />
+            </Suspense>
+          )}
+
+          {view === "statuses" &&
+            (canViewStatus ? (
+              <Suspense
+                key={searchParams.view}
+                fallback={<DefaultSkeleton className="h-[50vh]" />}
+              >
+                <DefaultCard className="w-full">
+                  <StatusFeed viewProfile memberID={clickedMemberID} />
+                </DefaultCard>
+              </Suspense>
+            ) : (
+              <ErrorSection>
+                Oops, you do not have permissions to view this section. Please
+                ask a commander for assistance.
+              </ErrorSection>
+            ))}
+
+          {view === "settings" &&
+            (canViewPerms || permission ? (
+              <>
+                {canViewPerms && (
+                  // global member permissions
+                  <PermissionForm
+                    currentMember={currentMemberData}
+                    viewMember={viewMemberData}
+                  />
+                )}
+                {permission && (
+                  <ResetPasswordButton memberID={viewMemberData.memberID} />
+                )}
+              </>
+            ) : (
+              <ErrorSection>
+                Oops, you do not have permissions to view this section. Please
+                ask a commander for assistance.
+              </ErrorSection>
+            ))}
+        </PageCenterWrapper>
+      </>
+    );
+  } catch (err: any) {
+    return ErrorScreenHandler(err);
+  }
+}
+
+{
+  /* {(permission || sameMember) && (
                   <>
                     <div className="flex items-center justify-center gap-1 w-full flex-col">
                       <h1 className="text-custom-dark-text font-bold">
@@ -156,36 +233,5 @@ export default async function MemberPage({
                       </div>
                     </div>
                   </>
-                )} */}
-          </DefaultCard>
-          <Suspense fallback={<DefaultSkeleton className="h-[20vh]" />}>
-            {permission && <MemberHASection memberID={clickedMemberID} />}
-          </Suspense>
-
-          <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
-            <JoinedActivities clickedMemberID={clickedMemberID} />
-          </Suspense>
-          {(permission || sameMember) && (
-            <Suspense fallback={<DefaultSkeleton className="h-[50vh]" />}>
-              <DefaultCard className="w-full">
-                <StatusFeed viewProfile memberID={clickedMemberID} />
-              </DefaultCard>
-            </Suspense>
-          )}
-          {higher && !sameMember && !normalMember && (
-            // global member permissions
-            <PermissionForm
-              currentMember={currentMemberData}
-              viewMember={viewMemberData}
-            />
-          )}
-          {permission && higher && !sameMember && (
-            <ResetPasswordButton memberID={viewMemberData.memberID} />
-          )}
-        </PageCenterWrapper>
-      </>
-    );
-  } catch (err: any) {
-    return ErrorScreenHandler(err);
-  }
+                )} */
 }
