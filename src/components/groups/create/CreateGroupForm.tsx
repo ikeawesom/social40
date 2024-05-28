@@ -11,7 +11,7 @@ import { useMemberID } from "@/src/hooks/useMemberID";
 import { useRouter } from "next/navigation";
 import { createGroup } from "@/src/utils/groups/createGroup";
 import ModalHeader from "../../utils/ModalHeader";
-import Toggle from "../../utils/Toggle";
+import ToggleContainer from "../../utils/toggle/ToggleContainer";
 
 type FormType = {
   className?: string;
@@ -42,6 +42,18 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
     setGroupDetails({ ...groupDetails, desc: e.target.value });
   };
 
+  const disableCOS = () =>
+    setGroupDetails({
+      ...groupDetails,
+      cos: { ...groupDetails.cos, state: false },
+    });
+
+  const enableCOS = () =>
+    setGroupDetails({
+      ...groupDetails,
+      cos: { ...groupDetails.cos, state: true },
+    });
+
   const handleGroup = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -62,7 +74,9 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
 
       if (!res.status) throw new Error(res.error);
       closeModal();
-      toast.success(`Successfully created group ${admin}`);
+      toast.success(
+        `Successfully created group ${admin}! Let's take you there.`
+      );
       router.push(`/groups/${admin}`, { scroll: false });
     } catch (err: any) {
       toast.error(err.message);
@@ -118,40 +132,14 @@ export default function CreateGroupForm({ className, closeModal }: FormType) {
           onChange={handleTextArea}
           value={groupDetails.desc}
         />
-        {/* <SecondaryButton
-          onClick={() =>
-            setGroupDetails({
-              ...groupDetails,
-              cos: { ...groupDetails.cos, state: !groupDetails.cos.state },
-            })
-          }
-          className={twMerge(
-            "w-fit",
-            groupDetails.cos.state &&
-              "bg-custom-light-orange border-custom-orange"
-          )}
-        >
-          {groupDetails.cos.state ? "COS Enabled" : "Enable COS"}
-        </SecondaryButton>
-        <div> */}
-        <div className="w-full flex items-center justify-start gap-2">
-          <p className="text-sm">Enable COS</p>
-          <Toggle
-            disable={() =>
-              setGroupDetails({
-                ...groupDetails,
-                cos: { ...groupDetails.cos, state: false },
-              })
-            }
-            enable={() =>
-              setGroupDetails({
-                ...groupDetails,
-                cos: { ...groupDetails.cos, state: true },
-              })
-            }
-            disabled={!groupDetails.cos.state}
-          />
-        </div>
+
+        <ToggleContainer
+          flex
+          disable={disableCOS}
+          disabled={groupDetails.cos.state === false}
+          enable={enableCOS}
+          text="Enable COS"
+        />
 
         <PrimaryButton
           disabled={loading}

@@ -6,10 +6,10 @@ import Link from "next/link";
 import HRow from "../utils/HRow";
 import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 import Image from "next/image";
-import { deletePost } from "./submitPostData";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import AnnouncementTag from "./AnnouncementTag";
+import DeleteButton from "./card/DeleteButton";
+import ScrollMedia from "./media/ScrollMedia";
+import { DisplayMediaType } from "./media/AddMedia";
 
 export default function AnnouncementCard({
   announcementData,
@@ -18,31 +18,28 @@ export default function AnnouncementCard({
   announcementData: ANNOUNCEMENT_SCHEMA;
   curMember: string;
 }) {
-  const router = useRouter();
-
-  const { announcementID, createdBy, createdOn, desc, title, groups, pin } =
-    announcementData;
+  const {
+    announcementID,
+    createdBy,
+    createdOn,
+    desc,
+    title,
+    groups,
+    pin,
+    media,
+  } = announcementData;
 
   const descLines = desc.split("$a");
 
-  const handleDelete = async () => {
-    if (
-      confirm(
-        "Are you sure you want to delete this post? This is irreversible!"
-      )
-    ) {
-      try {
-        const res = await deletePost(announcementID ?? "");
-        if (!res.status) throw new Error(res.error);
-        router.refresh();
-        toast.success("Post deleted");
-      } catch (err: any) {
-        toast.error(err.message);
-      }
-    }
-  };
+  let mediaFiles = [] as DisplayMediaType[];
+  if (media) {
+    media.forEach((src: string) => {
+      mediaFiles.push({ file: null, id: src, src });
+    });
+  }
+
   return (
-    <DefaultCard className="w-full">
+    <DefaultCard className="w-[90vw] max-w-[500px]">
       <div className="w-full flex items-center justify-between gap-2 pb-1">
         <Link
           scroll={false}
@@ -61,7 +58,7 @@ export default function AnnouncementCard({
         )}
       </div>
       <HRow className="mb-2" />
-      <h1 className="font-bold text-xl mb-3">{title}</h1>
+      <h1 className="font-bold text-xl mb-2">{title}</h1>
       {descLines.map((line: string, index: number) => {
         if (line === "") return <br key={index} />;
         return (
@@ -71,29 +68,35 @@ export default function AnnouncementCard({
           >{`${line}`}</p>
         );
       })}
+
+      {mediaFiles.length > 0 && (
+        <ScrollMedia mediaFiles={mediaFiles} className="mt-2" />
+      )}
       <div className="flex items-center justify-between gap-3 mt-3">
         {createdOn && (
-          <div className="flex flex-col items-start justify-start gap-2">
-            {groups && (
-              <div className="flex items-start justify-start gap-2">
-                {groups.map((id: string, index: number) => (
-                  <AnnouncementTag key={index}> {id}</AnnouncementTag>
-                ))}
-              </div>
-            )}
+          <div className="flex flex-col items-start justify-start gap-1">
             <p className="text-xs text-custom-grey-text">
               {TimestampToDateString(createdOn).split(" ")[0]}
             </p>
+            {groups && curMember === createdBy && (
+              <div className="flex items-start justify-start gap-2">
+                {groups.map((id: string, index: number) => (
+                  <AnnouncementTag
+                    className="px-1 py-[2px] text-xs"
+                    key={index}
+                  >
+                    {" "}
+                    {id}
+                  </AnnouncementTag>
+                ))}
+              </div>
+            )}
           </div>
         )}
         {curMember === createdBy && (
-          <Image
-            onClick={handleDelete}
-            className="cursor-pointer self-end"
-            src="/icons/icon_trash.svg"
-            alt="Delete Post"
-            height={25}
-            width={25}
+          <DeleteButton
+            haveMedia={mediaFiles.length > 0}
+            id={announcementID ?? ""}
           />
         )}
       </div>

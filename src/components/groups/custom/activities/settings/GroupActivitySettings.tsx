@@ -11,10 +11,8 @@ import { toast } from "sonner";
 import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { DateToString } from "@/src/utils/helpers/getCurrentDate";
-import SecondaryButton from "@/src/components/utils/SecondaryButton";
-import { twMerge } from "tailwind-merge";
-import Toggle from "@/src/components/utils/Toggle";
 import HRow from "@/src/components/utils/HRow";
+import ToggleContainer from "@/src/components/utils/toggle/ToggleContainer";
 
 export default function GroupActivitySettings({
   activityData,
@@ -96,6 +94,9 @@ export default function GroupActivitySettings({
     }
     setLoading(false);
   };
+
+  const enableHA = () => setInput({ ...input, isPT: true });
+  const disableHA = () => setInput({ ...input, isPT: false });
 
   return (
     <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
@@ -253,16 +254,15 @@ export default function GroupActivitySettings({
 
             <div className="w-full">
               <HRow />
-              <div className="w-full flex items-center justify-between gap-2 py-2">
-                <p className="text-sm">This is a HA activity</p>
-                <Toggle
-                  className="shadow-none border-none"
-                  buttonClassName="border-[1px]"
-                  disable={() => setInput({ ...input, isPT: false })}
-                  enable={() => setInput({ ...input, isPT: true })}
-                  disabled={!input.isPT}
-                />
-              </div>
+
+              <ToggleContainer
+                flex
+                className="mt-2"
+                text="This is a HA activity"
+                disable={disableHA}
+                enable={enableHA}
+                disabled={!input.isPT}
+              />
             </div>
 
             {!noChanges && (

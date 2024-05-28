@@ -6,11 +6,9 @@ import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import { LoadingIconBright } from "@/src/components/utils/LoadingIcon";
 import { toast } from "sonner";
 import { dbHandler } from "@/src/firebase/db";
-import SecondaryButton from "@/src/components/utils/SecondaryButton";
-import { twMerge } from "tailwind-merge";
 import { useRouter } from "next/navigation";
-import Toggle from "@/src/components/utils/Toggle";
 import FormInputContainer from "@/src/components/utils/FormInputContainer";
+import ToggleContainer from "@/src/components/utils/toggle/ToggleContainer";
 
 export default function EditGroupForm({
   groupData,
@@ -72,6 +70,17 @@ export default function EditGroupForm({
     setLoading(false);
   };
 
+  const enableCOS = () =>
+    setInputGroup({
+      ...inputGroup,
+      cos: { ...inputGroup.cos, state: true },
+    });
+  const disableCOS = () =>
+    setInputGroup({
+      ...inputGroup,
+      cos: { ...inputGroup.cos, state: false },
+    });
+
   return (
     <DefaultCard className="w-full">
       <h1 className="text-custom-dark-text font-bold mb-2">General</h1>
@@ -97,24 +106,13 @@ export default function EditGroupForm({
             onChange={handleChange}
           />
         </FormInputContainer>
-        <div className="w-full flex items-center justify-start gap-2">
-          <p className="text-sm">Enable COS</p>
-          <Toggle
-            disable={() =>
-              setInputGroup({
-                ...inputGroup,
-                cos: { ...inputGroup.cos, state: false },
-              })
-            }
-            enable={() =>
-              setInputGroup({
-                ...inputGroup,
-                cos: { ...inputGroup.cos, state: true },
-              })
-            }
-            disabled={!inputGroup.cos.state}
-          />
-        </div>
+        <ToggleContainer
+          flex
+          text="Enable COS"
+          disable={disableCOS}
+          enable={enableCOS}
+          disabled={!inputGroup.cos.state}
+        />
         <PrimaryButton
           disabled={noChange || loading}
           className="grid place-items-center"

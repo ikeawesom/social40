@@ -4,10 +4,7 @@ import { ANNOUNCEMENT_SCHEMA } from "@/src/utils/schemas/announcements";
 type PostType = { [announcementID: string]: ANNOUNCEMENT_SCHEMA };
 
 function checkValid(arr: string[], arr2: string[]) {
-  arr.forEach((item: string, index: number) => {
-    if (arr2.includes(arr[index])) return true;
-  });
-  return false;
+  return arr2.some((item) => arr.includes(item));
 }
 
 export async function handleShowAnnouncements(curMember: string) {

@@ -1,6 +1,5 @@
-import submitPost, {
-  handleSearchGroup,
-} from "@/src/components/announcements/submitPostData";
+import { DisplayMediaType } from "@/src/components/announcements/media/AddMedia";
+import submitPost from "@/src/components/announcements/submitPostData";
 import {
   getDefaultAnnouncement,
   ANNOUNCEMENT_SCHEMA,
@@ -8,6 +7,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useState, FormEvent } from "react";
 import { toast } from "sonner";
+import { handleMediaUpload } from "./handleMediaUpload";
 
 export function useHandleAnnouncements(memberID: string) {
   const router = useRouter();
@@ -16,19 +16,27 @@ export function useHandleAnnouncements(memberID: string) {
   const defaultAnnouce = getDefaultAnnouncement(memberID);
 
   const [postData, setPostData] = useState<ANNOUNCEMENT_SCHEMA>(defaultAnnouce);
+  const [mediaFiles, setMediaFiles] = useState<DisplayMediaType[]>([]);
 
-  const [tempGrp, setGrp] = useState("");
-  const [searching, setSearching] = useState(false);
+  const [isPriv, setIsPriv] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [advanced, setAdvanced] = useState(false);
+
+  const enablePin = () => setPostData({ ...postData, pin: true });
+  const disablePin = () => setPostData({ ...postData, pin: false });
+  const enablePriv = () => setIsPriv(true);
+  const disablePriv = () => setIsPriv(false);
 
   const reset = () => {
     resetForm();
     setShowModal(false);
+    setMediaFiles([]);
   };
 
-  const resetForm = () => setPostData(defaultAnnouce);
+  const resetForm = () => {
+    setPostData(defaultAnnouce);
+    setIsPriv(false);
+  };
 
   const handleChange = (
     e:
@@ -38,12 +46,28 @@ export function useHandleAnnouncements(memberID: string) {
     setPostData({ ...postData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleMediaChange = ({ file, id, src }: DisplayMediaType) =>
+    setMediaFiles((temp) => [...temp, { file, id, src }]);
+
+  const removeFile = (id: string) => {
+    setMediaFiles((temp) =>
+      temp.filter((item: DisplayMediaType) => item.id !== id)
+    );
+  };
+
+  const handleSubmit = async (e: FormEvent, groups: string[]) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { status, error } = await submitPost(postData);
-      if (!status) throw new Error(error);
+      const { error, data: id } = await submitPost(postData, groups);
+      if (error) throw new Error(error);
+
+      // handle files upload
+      if (mediaFiles.length > 0) {
+        const { error } = await handleMediaUpload(id, mediaFiles);
+        if (error) throw new Error(error);
+      }
+
       reset();
       router.refresh();
       toast.success("Nice, your announcement has been posted!");
@@ -53,36 +77,10 @@ export function useHandleAnnouncements(memberID: string) {
     setLoading(false);
   };
 
-  const handleAddGroup = async () => {
-    setSearching(true);
-    try {
-      // handle group
-      const { error } = await handleSearchGroup(tempGrp);
-      if (error) throw new Error(error);
-
-      const tempArr = postData.groups as string[];
-      if (!tempArr.includes(tempGrp)) {
-        tempArr.push(tempGrp);
-        setPostData({ ...postData, groups: tempArr });
-      }
-    } catch (err: any) {
-      const { message } = err;
-      if (message.includes("not found")) {
-        toast.error("Invalid group ID");
-      } else {
-        toast.error(err.message);
-      }
-    }
-    setSearching(false);
-  };
-
-  const handleRemoveGroup = (group: string) => {
-    const tempArr = postData.groups as string[];
-    tempArr.splice(tempArr.indexOf(group), 1);
-    setPostData({ ...postData, groups: tempArr });
-  };
-
   return {
+    mediaFiles,
+    removeFile,
+    handleMediaChange,
     setShowModal,
     loading,
     showModal,
@@ -90,13 +88,10 @@ export function useHandleAnnouncements(memberID: string) {
     handleSubmit,
     handleChange,
     postData,
-    setAdvanced,
-    advanced,
-    setPostData,
-    handleRemoveGroup,
-    tempGrp,
-    setGrp,
-    handleAddGroup,
-    searching,
+    enablePin,
+    disablePin,
+    disablePriv,
+    enablePriv,
+    isPriv,
   };
 }

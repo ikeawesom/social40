@@ -16,6 +16,7 @@ export type ANNOUNCEMENT_SCHEMA = {
   desc: string;
   pin?: boolean;
   groups?: string[];
+  media?: string[];
   createdBy: string; // memberID
   createdOn?: Timestamp;
 };

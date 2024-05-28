@@ -8,12 +8,13 @@ import ModalHeader from "@/src/components/utils/ModalHeader";
 import ModalLoading from "@/src/components/utils/ModalLoading";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
-import { useQueryMember } from "@/src/hooks/members/useQueryMember";
+import { useQueryDrop } from "@/src/hooks/members/useQueryMember";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import Notice from "@/src/components/utils/Notice";
+import { getMembersData } from "@/src/utils/members/SetStatistics";
 
 export default function InviteMembersModal({
   handleSubmit,
@@ -40,7 +41,10 @@ export default function InviteMembersModal({
     query,
     resetQueryMember,
     setQuery,
-  } = useQueryMember();
+  } = useQueryDrop({
+    fetchFunction: getMembersData,
+    secondaryKey: "displayName",
+  });
 
   useEffect(() => {
     setMembers(members);

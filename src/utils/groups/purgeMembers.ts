@@ -233,7 +233,7 @@ export async function deleteStatuses(memberID: string) {
 
 export async function deletePFP(memberID: string) {
   try {
-    const res = await storageHandler.delete({ memberID });
+    const res = await storageHandler.delete({ path: `PROFILE/${memberID}` });
     if (!res.status) throw new Error(res.error);
     return handleResponses();
   } catch (err: any) {

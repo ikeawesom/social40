@@ -5,6 +5,7 @@ import {
   uploadBytes,
   getDownloadURL,
   deleteObject,
+  listAll,
 } from "firebase/storage";
 import handleResponses from "../utils/helpers/handleResponses";
 
@@ -27,10 +28,34 @@ class StorageClass {
     }
   }
 
-  async delete({ memberID }) {
+  async delete({ path }) {
     try {
-      const storageRef = ref(FB_STORAGE, `PROFILE/${memberID}`);
+      const storageRef = ref(FB_STORAGE, path);
       await deleteObject(storageRef);
+      return handleResponses();
+    } catch (err) {
+      return handleResponses({ status: false, error: err.message });
+    }
+  }
+
+  async deleteMultiple({ path }) {
+    try {
+      const storageRef = ref(FB_STORAGE, path);
+      const { items } = await listAll(storageRef);
+
+      const promArr = items.map(async (item) => {
+        const path = item.fullPath;
+        const { error } = await this.delete({ path });
+        if (error) return handleResponses({ status: false, error });
+        return handleResponses();
+      });
+
+      const resArr = await Promise.all(promArr);
+
+      resArr.forEach((item) => {
+        if (item.error) throw new Error(item.error);
+      });
+
       return handleResponses();
     } catch (err) {
       return handleResponses({ status: false, error: err.message });
