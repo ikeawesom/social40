@@ -1,4 +1,16 @@
 export const VERSION_MAP = {
+  "1.5.4": {
+    version: "1.5.3",
+    title: "Images in Announcements",
+    desc: "Create more engagement by posting with pictures!",
+    updates: [
+      "Upload images together with your announcements",
+      "Showcase your posts to the public or personalized for the groups of your choice",
+    ],
+    date: "28/05/2024",
+    link: "https://social40.notion.site/v1-5-4-Images-in-Announcements-2d09087899b34b0ca80cf548d59325e9",
+    adminOnly: true,
+  },
   "1.5.3": {
     version: "1.5.3",
     title: "Weekly and Monthly Activity Feed",
