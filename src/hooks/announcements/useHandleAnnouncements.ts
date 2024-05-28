@@ -21,7 +21,6 @@ export function useHandleAnnouncements(memberID: string) {
   const [isPriv, setIsPriv] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [advanced, setAdvanced] = useState(false);
 
   const enablePin = () => setPostData({ ...postData, pin: true });
   const disablePin = () => setPostData({ ...postData, pin: false });
@@ -36,7 +35,6 @@ export function useHandleAnnouncements(memberID: string) {
 
   const resetForm = () => {
     setPostData(defaultAnnouce);
-    setAdvanced(false);
     setIsPriv(false);
   };
 
@@ -90,8 +88,6 @@ export function useHandleAnnouncements(memberID: string) {
     handleSubmit,
     handleChange,
     postData,
-    setAdvanced,
-    advanced,
     enablePin,
     disablePin,
     disablePriv,
