@@ -1,6 +1,7 @@
 "use server";
 
 import { dbHandler } from "@/src/firebase/db";
+import { storageHandler } from "@/src/firebase/storage";
 import getCurrentDate from "@/src/utils/helpers/getCurrentDate";
 import handleResponses from "@/src/utils/helpers/handleResponses";
 import { ANNOUNCEMENT_SCHEMA } from "@/src/utils/schemas/announcements";
@@ -61,9 +62,15 @@ export async function addMedia(id: string, mediaLinks: string[]) {
   }
 }
 
-export async function deletePost(id: string) {
+export async function deletePost(id: string, haveMedia: boolean) {
   const res = await dbHandler.delete({ col_name: "ANNOUNCEMENTS", id });
   if (!res.status) return handleResponses({ status: false, error: res.error });
+  if (haveMedia) {
+    const { error } = await storageHandler.deleteMultiple({
+      path: `ANNOUNCEMENTS/${id}`,
+    });
+    if (error) return handleResponses({ status: false, error });
+  }
   return handleResponses();
 }
 

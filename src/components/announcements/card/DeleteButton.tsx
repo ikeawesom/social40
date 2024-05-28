@@ -4,7 +4,13 @@ import { deletePost } from "../submitPostData";
 import { toast } from "sonner";
 import Image from "next/image";
 
-export default function DeleteButton({ id }: { id: string }) {
+export default function DeleteButton({
+  id,
+  haveMedia,
+}: {
+  id: string;
+  haveMedia: boolean;
+}) {
   const [loading, setLoading] = useState("");
   const router = useRouter();
   const handleDelete = async () => {
@@ -15,7 +21,7 @@ export default function DeleteButton({ id }: { id: string }) {
     ) {
       setLoading("Deleting...");
       try {
-        const res = await deletePost(id ?? "");
+        const res = await deletePost(id ?? "", haveMedia);
         if (!res.status) throw new Error(res.error);
         router.refresh();
         // toast.success("Post deleted");
