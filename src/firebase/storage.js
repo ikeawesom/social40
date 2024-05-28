@@ -27,9 +27,9 @@ class StorageClass {
     }
   }
 
-  async delete({ memberID }) {
+  async delete({ path }) {
     try {
-      const storageRef = ref(FB_STORAGE, `PROFILE/${memberID}`);
+      const storageRef = ref(FB_STORAGE, path);
       await deleteObject(storageRef);
       return handleResponses();
     } catch (err) {
