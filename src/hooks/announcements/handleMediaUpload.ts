@@ -1,4 +1,4 @@
-import { DisplayMediaType } from "@/src/components/announcements/AddMedia";
+import { DisplayMediaType } from "@/src/components/announcements/media/AddMedia";
 import { addMedia } from "@/src/components/announcements/submitPostData";
 import { storageHandler } from "@/src/firebase/storage";
 import handleResponses from "@/src/utils/helpers/handleResponses";

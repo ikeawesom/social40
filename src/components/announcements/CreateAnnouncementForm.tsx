@@ -12,7 +12,7 @@ import ToggleContainer from "../utils/toggle/ToggleContainer";
 import { useQueryDrop } from "@/src/hooks/members/useQueryMember";
 import { getGroups } from "@/src/utils/groups/getGroupData";
 import Badge from "../utils/Badge";
-import AddMedia from "./AddMedia";
+import AddMedia from "./media/AddMedia";
 
 export default function CreateAnnouncementForm({
   memberID,
