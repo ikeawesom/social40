@@ -60,7 +60,7 @@ export default function CreateAnnouncementForm({
     <>
       {showModal && (
         <Modal>
-          <ModalHeader close={resetAll} heading="Create Announcement" />
+          <ModalHeader close={resetAll} heading="Create Post" />
           <form
             onSubmit={(e) => handleSubmit(e, members)}
             className="flex flex-col items-center justify-start mt-2 gap-2"
@@ -217,7 +217,7 @@ export default function CreateAnnouncementForm({
           </form>
         </Modal>
       )}
-      <PrimaryButton onClick={toggleModal}>Create Announcement</PrimaryButton>
+      <PrimaryButton onClick={toggleModal}>Post Something</PrimaryButton>
     </>
   );
 }
