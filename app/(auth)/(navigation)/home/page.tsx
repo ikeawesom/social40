@@ -9,15 +9,10 @@ import GroupsScrollSection from "@/src/components/feed/GroupsScrollSection";
 import HomeHeaderBar from "@/src/components/navigation/HomeHeaderBar";
 import ErrorActivities from "@/src/components/screens/ErrorActivities";
 import { dbHandler } from "@/src/firebase/db";
-import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 
-import {
-  MEMBER_JOINED_GROUPS_SCHEMA,
-  MEMBER_CREATED_GROUPS_SCHEMA,
-  MEMBER_SCHEMA,
-} from "@/src/utils/schemas/members";
+import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { IS_DEBUG } from "@/src/utils/settings";
 import { noShowUpdate } from "@/src/utils/versions";
 import { Metadata } from "next";
@@ -27,6 +22,7 @@ import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import GroupsActivitiesViews from "@/src/components/feed/GroupsActivitiesViews";
 import ActivityCalendarServerView from "@/src/components/feed/views/ActivityCalendarServerView";
+import { getInvolvedGroups } from "@/src/utils/groups/getInvolvedGroups";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -54,32 +50,8 @@ export default async function Home({
   }
   // redirect(`/home?${new URLSearchParams({ activity: "announcements" })}`);
 
-  const host = process.env.HOST;
-
   if (activityType === "groups") {
-    // fetch groups member is in
-    const MemberObj = GetPostObj({ memberID });
-    const res = await fetch(`${host}/api/groups/joined`, MemberObj);
-    const body = await res.json();
-
-    if (!body.status) return ErrorScreenHandler(body.error);
-
-    // fetch group member created
-    const resA = await fetch(`${host}/api/groups/owned`, MemberObj);
-    const bodyA = await resA.json();
-
-    if (!bodyA.status) return ErrorScreenHandler(bodyA.error);
-
-    const joinedGroupsData = body.data as {
-      [groupID: string]: MEMBER_JOINED_GROUPS_SCHEMA;
-    };
-    const ownedGroupsData = bodyA.data as {
-      [groupID: string]: MEMBER_CREATED_GROUPS_SCHEMA;
-    };
-
-    const groupsList = Object.keys(joinedGroupsData).concat(
-      Object.keys(ownedGroupsData)
-    );
+    const { groupsList } = await getInvolvedGroups(memberID);
 
     if ((!groupID || !view) && groupsList.length > 0)
       redirect(
