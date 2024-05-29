@@ -64,7 +64,7 @@ export default async function StatusOverviewSection({
           received.
         </p>
       </div>
-      <div className="flex items-center justify-center gap-4 my-3 w-full">
+      <div className="flex items-center justify-center gap-4 my-3 mb-1 w-full">
         <ProfileStatSection
           title="MCs/month"
           config={{ first: 1, second: 3 }}
