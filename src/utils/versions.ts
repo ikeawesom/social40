@@ -1,6 +1,19 @@
 export const VERSION_MAP = {
+  "1.6.0": {
+    version: "1.6.0",
+    title: "Profile Statistics",
+    desc: "Get deeper insights to your soldiers!",
+    updates: [
+      "Calculated statistics for members' group activities and statuses",
+      "Provides accurate insights to soldiers' fighting fitness based on statuses and MCs",
+      "Automatically calculates values based on all previous records",
+    ],
+    date: "29/05/2024",
+    link: "https://social40.notion.site/v1-6-0-Profile-Statistics-47230629ead94edc92077430816f1fce",
+    adminOnly: true,
+  },
   "1.5.4": {
-    version: "1.5.3",
+    version: "1.5.4",
     title: "Images in Announcements",
     desc: "Create more engagement by posting with pictures!",
     updates: [
