@@ -4,19 +4,28 @@ import DefaultCard from "../DefaultCard";
 
 export interface ProfileStatType {
   value: number;
-  config: { first: number; second: number };
+  config: { first: number; second: number; higherBetter?: boolean };
 }
 
 export default function ProfileStatCard({ config, value }: ProfileStatType) {
+  const { first, second, higherBetter } = config;
+  const color = higherBetter
+    ? value > first
+      ? "border-l-custom-green"
+      : value > second
+      ? "border-l-custom-orange"
+      : "border-l-custom-red"
+    : value < first
+    ? "border-l-custom-green"
+    : value < second
+    ? "border-l-custom-orange"
+    : "border-l-custom-red";
+
   return (
     <DefaultCard
       className={twMerge(
         "border-l-8 py-2 px-3 flex items-center justify-end gap-2",
-        value < config.first
-          ? "border-l-custom-green"
-          : value < config.second
-          ? "border-l-custom-orange"
-          : "border-l-custom-red"
+        color
       )}
     >
       {value}
