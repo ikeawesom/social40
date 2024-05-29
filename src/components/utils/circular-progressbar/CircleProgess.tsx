@@ -7,7 +7,7 @@ import {
 import "./circleStyles.css";
 import ProgressProvider from "./ProgressProvider";
 import { twMerge } from "tailwind-merge";
-import { ProfileStatSectionType } from "../../ProfileStatSection";
+import { ProfileStatSectionType } from "../../profile/ProfileStatSection";
 
 export interface CircularProgressType extends ProfileStatSectionType {
   children: React.ReactNode;
@@ -18,19 +18,30 @@ export default function CircleProgess({
   config,
   children,
 }: CircularProgressType) {
-  const color =
-    value < config.first
+  const { first, second, higherBetter } = config;
+  const color = higherBetter
+    ? value > first
       ? "#2B8B35"
-      : value < config.second
+      : value > second
       ? "#FF9901"
-      : "#FF4141";
+      : "#FF4141"
+    : value < first
+    ? "#2B8B35"
+    : value < second
+    ? "#FF9901"
+    : "#FF4141";
 
-  const textColor =
-    value < config.first
+  const textColor = higherBetter
+    ? value > first
       ? "text-[#2B8B35]"
-      : value < config.second
+      : value > second
       ? "text-[#FF9901]"
-      : "text-[#FF4141]";
+      : "text-[#FF4141]"
+    : value < first
+    ? "text-[#2B8B35]"
+    : value < second
+    ? "text-[#FF9901]"
+    : "text-[#FF4141]";
 
   return (
     <ProgressProvider valueStart={0} valueEnd={value}>

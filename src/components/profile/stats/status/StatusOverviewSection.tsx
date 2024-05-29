@@ -3,7 +3,7 @@ import { StatusListType } from "../../StatsSection";
 import { dbHandler } from "@/src/firebase/db";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { getDateDiff } from "@/src/utils/groups/HA/handleHA";
-import CircleProgess from "./CircleProgess";
+import CircleProgess from "../../../utils/circular-progressbar/CircleProgess";
 import ProfileStatSection from "../../ProfileStatSection";
 
 export default async function StatusOverviewSection({
