@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
 import { dbHandler } from "@/src/firebase/db";
@@ -8,6 +8,7 @@ import HRow from "../../utils/HRow";
 import RecentActivitiesSection from "./RecentActivitiesSection";
 import UpcomingActivitiesSection from "./UpcomingActivitiesSection";
 import ActivitiesOverviewSection from "./ActivitiesOverviewSection";
+import OverviewSkeleton from "../OverviewSkeleton";
 
 export default async function JoinedActivities({
   clickedMemberID,
@@ -70,7 +71,9 @@ export default async function JoinedActivities({
     const parsed = JSON.parse(JSON.stringify(activitiesDataObj));
     return (
       <div className="flex items-start justify-start flex-col w-full gap-4">
-        <ActivitiesOverviewSection memberID={clickedMemberID} />
+        <Suspense fallback={<OverviewSkeleton />}>
+          <ActivitiesOverviewSection memberID={clickedMemberID} />
+        </Suspense>
         <UpcomingActivitiesSection activitiesData={parsed} />
         <HRow className="bg-custom-grey-text/50" />
         <RecentActivitiesSection activitiesData={parsed} />

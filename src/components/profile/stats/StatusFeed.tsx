@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { StatusListType } from "../StatsSection";
 import ActiveStatusesSection from "./status/ActiveStatusesSection";
@@ -6,6 +6,7 @@ import HRow from "../../utils/HRow";
 import RecentStatusesSection from "./status/RecentStatusesSection";
 import { getSimple } from "@/src/utils/helpers/parser";
 import StatusOverviewSection from "./status/StatusOverviewSection";
+import OverviewSkeleton from "../OverviewSkeleton";
 
 export default async function StatusFeed({
   viewProfile,
@@ -29,7 +30,9 @@ export default async function StatusFeed({
 
   return (
     <div className="flex items-start justify-start flex-col w-full gap-4">
-      <StatusOverviewSection memberID={memberID} statuses={parsed} />
+      <Suspense fallback={<OverviewSkeleton />}>
+        <StatusOverviewSection memberID={memberID} statuses={parsed} />
+      </Suspense>
       <ActiveStatusesSection
         status={parsed}
         viewProfile={viewProfile ?? false}
