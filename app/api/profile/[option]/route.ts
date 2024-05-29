@@ -147,7 +147,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ status: false, error: res.error });
     return NextResponse.json({ status: true });
   } else if (option === "set-status") {
-    const { mc } = fetchedData;
+    const { mc, alt } = fetchedData;
     const data = fetchedData.status as StatusInputType;
 
     const startDate = `${data.start} 00:00`;
@@ -173,7 +173,7 @@ export async function POST(request: NextRequest) {
     // tempStartDate.setDate(tempStartDate.getDate() + 1);
     const newStartTimestamp = DateToTimestamp(tempStartDate);
 
-    const to_add = {
+    let to_add = {
       statusID: "",
       statusTitle: data.title,
       statusDesc: data.desc,
@@ -188,6 +188,10 @@ export async function POST(request: NextRequest) {
       mc,
     } as STATUS_SCHEMA;
 
+    if (alt) {
+      to_add = { ...to_add, alt };
+    }
+
     const res = await dbHandler.addGeneral({
       path: `MEMBERS/${memberID}/STATUSES`,
       to_add: to_add,
@@ -198,10 +202,25 @@ export async function POST(request: NextRequest) {
 
     const fetchedStatusID = res.data.id as string;
 
+    let to_edit = {
+      statusID: fetchedStatusID,
+    } as Object;
+
+    if (alt) {
+      to_edit = {
+        ...to_edit,
+        endorsed: {
+          endorsedOn: getCurrentDate(),
+          endorsedBy: alt,
+          status: true,
+        },
+      };
+    }
+
     const resA = await dbHandler.edit({
       col_name: `MEMBERS/${memberID}/STATUSES`,
       id: fetchedStatusID,
-      data: { statusID: fetchedStatusID },
+      data: to_edit,
     });
 
     if (!resA.status)
