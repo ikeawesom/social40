@@ -5,6 +5,7 @@ import ActiveStatusesSection from "./status/ActiveStatusesSection";
 import HRow from "../../utils/HRow";
 import RecentStatusesSection from "./status/RecentStatusesSection";
 import { getSimple } from "@/src/utils/helpers/parser";
+import StatusOverviewSection from "./status/StatusOverviewSection";
 
 export default async function StatusFeed({
   viewProfile,
@@ -24,10 +25,11 @@ export default async function StatusFeed({
   if (!dataB.status) throw new Error(dataB.error);
 
   const status = dataB.data as StatusListType;
-  const parsed = getSimple(status);
+  const parsed = getSimple(status) as StatusListType;
 
   return (
     <div className="flex items-start justify-start flex-col w-full gap-4">
+      <StatusOverviewSection memberID={memberID} statuses={parsed} />
       <ActiveStatusesSection
         status={parsed}
         viewProfile={viewProfile ?? false}
