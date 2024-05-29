@@ -7,6 +7,7 @@ import handleResponses from "@/src/utils/helpers/handleResponses";
 import HRow from "../../utils/HRow";
 import RecentActivitiesSection from "./RecentActivitiesSection";
 import UpcomingActivitiesSection from "./UpcomingActivitiesSection";
+import ActivitiesOverviewSection from "./ActivitiesOverviewSection";
 
 export default async function JoinedActivities({
   clickedMemberID,
@@ -69,6 +70,7 @@ export default async function JoinedActivities({
     const parsed = JSON.parse(JSON.stringify(activitiesDataObj));
     return (
       <div className="flex items-start justify-start flex-col w-full gap-4">
+        <ActivitiesOverviewSection memberID={clickedMemberID} />
         <UpcomingActivitiesSection activitiesData={parsed} />
         <HRow className="bg-custom-grey-text/50" />
         <RecentActivitiesSection activitiesData={parsed} />
