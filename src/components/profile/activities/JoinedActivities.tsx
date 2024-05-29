@@ -1,12 +1,12 @@
 import React from "react";
-import DefaultCard from "../../DefaultCard";
-import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
-import JoinedActivitiesList from "./JoinedActivitiesList";
 import { dbHandler } from "@/src/firebase/db";
 import { ACTIVITY_PARTICIPANT_SCHEMA } from "@/src/utils/schemas/members";
 import handleResponses from "@/src/utils/helpers/handleResponses";
+import HRow from "../../utils/HRow";
+import RecentActivitiesSection from "./RecentActivitiesSection";
+import UpcomingActivitiesSection from "./UpcomingActivitiesSection";
 
 export default async function JoinedActivities({
   clickedMemberID,
@@ -66,13 +66,13 @@ export default async function JoinedActivities({
       const activityID = item.activityID;
       activitiesDataObj[activityID] = item;
     });
-
+    const parsed = JSON.parse(JSON.stringify(activitiesDataObj));
     return (
-      <DefaultCard className="w-full flex flex-col items-start justify-start">
-        <JoinedActivitiesList
-          activitiesData={JSON.parse(JSON.stringify(activitiesDataObj))}
-        />
-      </DefaultCard>
+      <div className="flex items-start justify-start flex-col w-full gap-4">
+        <UpcomingActivitiesSection activitiesData={parsed} />
+        <HRow className="bg-custom-grey-text/50" />
+        <RecentActivitiesSection activitiesData={parsed} />
+      </div>
     );
   } catch (err: any) {
     return ErrorScreenHandler(err);
