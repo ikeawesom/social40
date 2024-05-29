@@ -32,7 +32,10 @@ export default function RevokeStatus({
       if (!data.status) throw new Error(data.error);
       toast.success("Status revoked.");
       router.refresh();
-      router.back();
+      router.replace(
+        `/members/${memberID}?${new URLSearchParams({ view: "statuses" })}`,
+        { scroll: false }
+      );
     } catch (error: any) {
       toast.error(error.message);
       setLoading(false);
