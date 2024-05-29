@@ -1,13 +1,12 @@
 "use client";
 
-import InnerContainer from "@/src/components/utils/InnerContainer";
 import { ActiveTimestamp } from "@/src/utils/helpers/getCurrentDate";
-import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import AddStatusButton from "./AddStatusButton";
 import { StatusDetails } from "./StatusDetails";
 import { StatusListType } from "../../StatsSection";
 import ErrorSection from "@/src/components/utils/ErrorSection";
+import DefaultCard from "@/src/components/DefaultCard";
 
 export default function ActiveStatusesSection({
   status,
@@ -50,11 +49,15 @@ export default function ActiveStatusesSection({
         Object.keys(filteredData).map((statusID: string) => {
           const curStatus = status[statusID];
           return (
-            <StatusDetails
-              active={ActiveTimestamp(curStatus.endDate)}
-              curStatus={curStatus}
+            <DefaultCard
+              className="w-full overflow-hidden p-0"
               key={curStatus.statusID}
-            />
+            >
+              <StatusDetails
+                active={ActiveTimestamp(curStatus.endDate)}
+                curStatus={curStatus}
+              />
+            </DefaultCard>
           );
         })
       )}
