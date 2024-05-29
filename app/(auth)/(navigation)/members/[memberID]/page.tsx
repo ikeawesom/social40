@@ -21,6 +21,7 @@ import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
 import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 import MemberTabs from "@/src/components/members/MemberTabs";
 import ErrorSection from "@/src/components/utils/ErrorSection";
+import ProfileListSkeleton from "@/src/components/profile/ProfileListSkeleton";
 
 export async function generateMetadata({
   params,
@@ -138,25 +139,11 @@ export default async function MemberPage({
             />
           </DefaultCard>
           <MemberTabs memberID={clickedMemberID} view={view} />
-          {view === "HA" &&
-            (permission ? (
-              <Suspense
-                key={searchParams.view}
-                fallback={<DefaultSkeleton className="h-[20vh]" />}
-              >
-                <MemberHASection memberID={clickedMemberID} />
-              </Suspense>
-            ) : (
-              <ErrorSection>
-                Oops, you do not have permissions to view this section. Please
-                ask a commander for assistance.
-              </ErrorSection>
-            ))}
 
           {view === "activities" && (
             <Suspense
               key={searchParams.view}
-              fallback={<DefaultSkeleton className="h-[50vh]" />}
+              fallback={<ProfileListSkeleton search />}
             >
               <JoinedActivities clickedMemberID={clickedMemberID} />
             </Suspense>
@@ -166,11 +153,24 @@ export default async function MemberPage({
             (canViewStatus ? (
               <Suspense
                 key={searchParams.view}
-                fallback={<DefaultSkeleton className="h-[50vh]" />}
+                fallback={<ProfileListSkeleton />}
               >
-                <DefaultCard className="w-full">
-                  <StatusFeed viewProfile memberID={clickedMemberID} />
-                </DefaultCard>
+                <StatusFeed viewProfile memberID={clickedMemberID} />
+              </Suspense>
+            ) : (
+              <ErrorSection>
+                Oops, you do not have permissions to view this section. Please
+                ask a commander for assistance.
+              </ErrorSection>
+            ))}
+
+          {view === "HA" &&
+            (permission ? (
+              <Suspense
+                key={searchParams.view}
+                fallback={<DefaultSkeleton className="h-[20vh]" />}
+              >
+                <MemberHASection memberID={clickedMemberID} />
               </Suspense>
             ) : (
               <ErrorSection>
