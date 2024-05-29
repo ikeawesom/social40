@@ -5,6 +5,7 @@ export type STATUS_SCHEMA = {
   statusTitle: string;
   statusDesc: string;
   memberID: string;
+  alt?: string;
   doctor: string; // name of doctor
   endorsed: {
     status: boolean;

@@ -1,3 +1,4 @@
+import DefaultCard from "@/src/components/DefaultCard";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
 import CreateStatus from "@/src/components/status/CreateStatus";
 import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
@@ -17,8 +18,10 @@ export default async function StatusPage() {
     <>
       <HeaderBar back text="Add Status" />
       <div className="w-full grid place-items-center">
-        <div className="flex flex-col items-start justify-center gap-4 max-w-[500px]">
-          <CreateStatus memberID={memberID} />
+        <div className="w-full flex flex-col items-start justify-center gap-4 max-w-[500px]">
+          <DefaultCard className="w-full">
+            <CreateStatus memberID={memberID} />
+          </DefaultCard>
           {/* <QuickStatusLinks /> */}
         </div>
       </div>
