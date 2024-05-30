@@ -3,7 +3,7 @@ import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { useEffect, useState } from "react";
 import { useMemberID } from "../useMemberID";
 
-export function useProfile() {
+export function useProfile(id?: string) {
   const { memberID } = useMemberID();
   const [memberDetails, setMemberDetails] = useState<MEMBER_SCHEMA | null>();
   const [error, setError] = useState<string>();
@@ -14,7 +14,8 @@ export function useProfile() {
       if (res.status) setMemberDetails(res.data);
       else setError(res.error);
     };
-    if (memberID !== "" && memberDetails === undefined) handleFetch(memberID);
+    if (memberID !== "" && memberDetails === undefined)
+      handleFetch(id ?? memberID);
   }, [memberID, memberDetails]);
 
   return { memberDetails, setMemberDetails, error };
