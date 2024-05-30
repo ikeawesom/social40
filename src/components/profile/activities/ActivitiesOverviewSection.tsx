@@ -8,6 +8,8 @@ import {
 } from "@/src/utils/schemas/group-activities";
 import { getInvolvedGroups } from "@/src/utils/groups/getInvolvedGroups";
 import { getMemberFallouts } from "@/src/utils/members/getMemberFallouts";
+import { FALLOUTS_SCHEMA } from "@/src/utils/schemas/activities";
+import ViewFalloutsModal from "./ViewFalloutsModal";
 
 export default async function ActivitiesOverviewSection({
   memberID,
@@ -28,7 +30,7 @@ export default async function ActivitiesOverviewSection({
       value: groupsList,
     });
 
-  const { data: activitiesFellout }: { data: string[] } =
+  const { data: activitiesFellout }: { data: FALLOUTS_SCHEMA[] } =
     await getMemberFallouts(memberID, Object.keys(groupActivities));
 
   const {
@@ -82,14 +84,9 @@ export default async function ActivitiesOverviewSection({
           value={noParticipated}
           className="flex-1"
         />
-        <ProfileStatSection
-          title="Fallouts"
-          config={{
-            first: (20 / 100) * totalActivities,
-            second: (50 / 100) * totalActivities,
-          }}
-          value={noFallouts}
-          className="flex-1"
+        <ViewFalloutsModal
+          activitiesFellout={activitiesFellout}
+          totalActivities={totalActivities}
         />
       </div>
       <p className="text-xs text-custom-grey-text text-center max-w-[95%] mb-3">
