@@ -302,7 +302,7 @@ export default function CreateStatus({
                     <h1 className="text-sm font-bold text-custom-dark-text">
                       Summarised IR
                     </h1>
-                    <textarea rows={6} readOnly value={ir} />
+                    <textarea rows={8} readOnly value={ir} />
                     <CopyToClipboard text={ir} onCopy={onCopy}>
                       <div className="absolute bottom-5 right-5 shadow-md rounded-full bg-custom-primary p-3 cursor-pointer hover:opacity-80 duration-200">
                         <Clipboard />
