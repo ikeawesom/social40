@@ -8,7 +8,7 @@ export default function EditProfileButton() {
   return (
     <SecondaryButton
       className="flex-1"
-      onClick={() => router.push("/edit-profile", { scroll: false })}
+      onClick={() => router.push("/settings", { scroll: false })}
     >
       Settings
     </SecondaryButton>
