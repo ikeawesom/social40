@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useHostname } from "../useHostname";
+import { handleReload } from "@/src/components/navigation/HeaderBar";
 
 export function useCreateStatus({
   memberID,
@@ -91,9 +92,7 @@ export function useCreateStatus({
       router.refresh();
       toast.success("Added new status");
       if (close) close();
-      // setTimeout(() => {
-      //   router.push("/profile", { scroll: false });
-      // }, 1000);
+      handleReload(router);
     } catch (err: any) {
       toast.error(err.message);
       ready = false;
