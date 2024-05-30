@@ -14,8 +14,10 @@ import { twMerge } from "tailwind-merge";
 export default function AllActivityCard({
   data,
   className,
+  falloutReason,
 }: {
   data: GROUP_ACTIVITY_SCHEMA;
+  falloutReason?: string;
   className?: string;
 }) {
   const {
@@ -67,6 +69,11 @@ export default function AllActivityCard({
           {active ? "Begins on: " : "Ended on: "}
           {dateStr}
         </p>
+        {falloutReason && (
+          <p className="text-custom-grey-text text-xs">
+            Fellout due to: {falloutReason}
+          </p>
+        )}
       </DefaultCard>
     </Link>
   );

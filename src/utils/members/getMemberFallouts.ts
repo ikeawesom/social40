@@ -21,18 +21,19 @@ export async function getMemberFallouts(
       });
       if (error) return handleResponses({ status: false, error });
       const fallouts = data as { [memID: string]: FALLOUTS_SCHEMA };
+      const memberFallout = fallouts[memberID];
       return handleResponses({
         data: Object.keys(fallouts).includes(memberID)
-          ? checkValidReason(fallouts[memberID].reason)
+          ? checkValidReason(memberFallout.reason)
             ? false
-            : id
+            : memberFallout
           : null,
       });
     });
 
     const resArr = await Promise.all(promArr);
 
-    const felloutActivities = [] as string[];
+    const felloutActivities = [] as FALLOUTS_SCHEMA[];
     resArr.forEach((item: any) => {
       if (item.error) throw new Error(item.error);
       if (item.data) felloutActivities.push(item.data);
