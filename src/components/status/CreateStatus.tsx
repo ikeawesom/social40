@@ -10,6 +10,7 @@ import { DateToString } from "@/src/utils/helpers/getCurrentDate";
 import Clipboard from "../Clipboard";
 import { toast } from "sonner";
 import CopyToClipboard from "react-copy-to-clipboard";
+import Link from "next/link";
 
 export type StatusInputType = {
   title: string;
@@ -296,16 +297,29 @@ export default function CreateStatus({
                 />
               </div>
               {!incomplete && (
-                <div className="w-full relative">
-                  <h1 className="text-sm font-bold text-custom-dark-text">
-                    Summarised IR
-                  </h1>
-                  <textarea rows={6} readOnly value={ir} />
-                  <CopyToClipboard text={ir} onCopy={onCopy}>
-                    <div className="absolute bottom-5 right-5 shadow-md rounded-full bg-custom-primary p-3 cursor-pointer hover:opacity-80 duration-200">
-                      <Clipboard />
-                    </div>
-                  </CopyToClipboard>
+                <div className="w-full">
+                  <div className="w-full relative">
+                    <h1 className="text-sm font-bold text-custom-dark-text">
+                      Summarised IR
+                    </h1>
+                    <textarea rows={6} readOnly value={ir} />
+                    <CopyToClipboard text={ir} onCopy={onCopy}>
+                      <div className="absolute bottom-5 right-5 shadow-md rounded-full bg-custom-primary p-3 cursor-pointer hover:opacity-80 duration-200">
+                        <Clipboard />
+                      </div>
+                    </CopyToClipboard>
+                  </div>
+                  <p className="text-sm">
+                    Need a full IR? Visit{" "}
+                    <Link
+                      target="_blank"
+                      className="font-bold text-custom-primary duration-150 hover:opacity-70"
+                      href="https://ir-generator.vercel.app"
+                    >
+                      IR Generator
+                    </Link>
+                    .
+                  </p>
                 </div>
               )}
             </>
