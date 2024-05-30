@@ -6,13 +6,19 @@ import {
   GroupDetailsType,
 } from "../schemas/groups";
 import handleResponses from "../helpers/handleResponses";
+import { getInvolvedGroups } from "./getInvolvedGroups";
 
-export async function getGroups() {
+export async function getGroups(memberID: string) {
   try {
+    const { groupsList } = await getInvolvedGroups(memberID);
+
     const { error, data } = await dbHandler.getSpecific({
       path: "GROUPS",
       orderCol: "groupID",
       ascending: true,
+      field: "groupID",
+      criteria: "in",
+      value: groupsList,
     });
     if (error) throw new Error(error);
     return handleResponses({ data });

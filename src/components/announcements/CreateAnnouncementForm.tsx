@@ -41,9 +41,11 @@ export default function CreateAnnouncementForm({
     removeFile,
   } = useHandleAnnouncements(memberID);
 
+  const getCustomGroups = async () => await getGroups(memberID);
+
   const { filtered, query, setQuery, handleAdd, handleRemove, members } =
     useQueryDrop({
-      fetchFunction: getGroups,
+      fetchFunction: getCustomGroups,
       secondaryKey: "groupName",
     });
 
@@ -157,7 +159,12 @@ export default function CreateAnnouncementForm({
                             <div className="flex flex-col items-start justify-start w-full absolute top-18 left-0 z-20 rounded-md border-[1px] border-custom-light-text overflow-x-hidden overflow-y-scroll max-h-[20vh]">
                               {filtered.length === 0 ? (
                                 <div className="w-full px-3 py-2 bg-white">
-                                  <p className="text-xs">No groups found</p>
+                                  <p className="text-xs">
+                                    None of your groups match{" "}
+                                    <span className="font-bold italic">
+                                      {query}
+                                    </span>
+                                  </p>
                                 </div>
                               ) : (
                                 filtered.map((id: string) => (
