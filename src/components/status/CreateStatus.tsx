@@ -5,6 +5,11 @@ import { useCreateStatus } from "@/src/hooks/status/useCreateStatus";
 import ModalNext from "../utils/modal/ModalNext";
 import { usePageNum } from "@/src/hooks/usePageNum";
 import ModalLoading from "../utils/ModalLoading";
+import { useProfile } from "@/src/hooks/profile/useProfile";
+import { DateToString } from "@/src/utils/helpers/getCurrentDate";
+import Clipboard from "../Clipboard";
+import { toast } from "sonner";
+import CopyToClipboard from "react-copy-to-clipboard";
 
 export type StatusInputType = {
   title: string;
@@ -40,6 +45,17 @@ export default function CreateStatus({
   } = useCreateStatus({ memberID, alt, close });
 
   const { nextPage, page, prevPage } = usePageNum();
+  const { memberDetails } = useProfile(memberID);
+
+  const rankName = `${memberDetails?.rank} ${memberDetails?.displayName}`
+    .toUpperCase()
+    .trim();
+
+  const now = DateToString(new Date());
+
+  const ir = `${rankName} experienced ${statusDetails.desc} and reported sick to ${statusDetails.doctor} on ${now}. ${rankName} received ${statusDetails.title} from ${statusDetails.start} to ${statusDetails.end}.`;
+
+  const onCopy = () => toast.success("Copied IR to clipboard!");
 
   const incomplete =
     statusDetails.title === "" ||
@@ -279,6 +295,19 @@ export default function CreateStatus({
                   disabled={!checked.consent}
                 />
               </div>
+              {!incomplete && (
+                <div className="w-full relative">
+                  <h1 className="text-sm font-bold text-custom-dark-text">
+                    Summarised IR
+                  </h1>
+                  <textarea rows={6} readOnly value={ir} />
+                  <CopyToClipboard text={ir} onCopy={onCopy}>
+                    <div className="absolute bottom-5 right-5 shadow-md rounded-full bg-custom-primary p-3 cursor-pointer hover:opacity-80 duration-200">
+                      <Clipboard />
+                    </div>
+                  </CopyToClipboard>
+                </div>
+              )}
             </>
           )}
           <ModalNext
@@ -287,7 +316,7 @@ export default function CreateStatus({
             toggleBack={prevPage}
             toggleNext={nextPage}
             primaryDisabled={incomplete || !ready}
-            primaryText="Create Status"
+            primaryText="Add Status"
           />
         </form>
       )}
