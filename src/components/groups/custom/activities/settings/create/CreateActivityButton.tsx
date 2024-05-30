@@ -6,21 +6,15 @@ import { useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 
 export default function CreateActivityButton({
-  group,
   className,
   groupID,
-  memberID,
 }: {
-  group: boolean;
   className?: string;
-  groupID?: string;
-  memberID?: string;
+  groupID: string;
 }) {
   const router = useRouter();
   const params = new URLSearchParams({ create: "true" });
-  const route = group
-    ? `/groups/${groupID}/activity?${params}`
-    : `/profile/activity?${params}`;
+  const route = `/groups/${groupID}/activity?${params}`;
 
   return (
     <PrimaryButton

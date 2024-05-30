@@ -85,7 +85,7 @@ export default function GroupActivities({
         >
           View all activites ( {Object.keys(activitiesData).length} )
         </Link>
-        {admin && <CreateActivityButton group groupID={groupID} />}
+        {admin && <CreateActivityButton groupID={groupID} />}
       </div>
     </DefaultCard>
   );
