@@ -3,31 +3,34 @@ import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import useNavigation from "@/src/hooks/useNavigation";
+import { useMemberID } from "@/src/hooks/useMemberID";
 
-const NAV_LINKS = [
-  {
-    title: "Home",
-    icon: "icon_home.svg",
-    active: "icon_home_active.svg",
-    link: "/home",
-  },
-  {
-    title: "Groups",
-    icon: "icon_group.svg",
-    active: "icon_group_active.svg",
-    link: "/groups",
-  },
-  {
-    title: "Profile",
-    icon: "icon_profile.svg",
-    active: "icon_profile_active.svg",
-    link: "/profile",
-  },
-];
 export default function Navbar() {
   const router = useRouter();
 
   const { pathname, setPathname } = useNavigation();
+  const { memberID } = useMemberID();
+
+  const NAV_LINKS = [
+    {
+      title: "Home",
+      icon: "icon_home.svg",
+      active: "icon_home_active.svg",
+      link: "/home",
+    },
+    {
+      title: "Groups",
+      icon: "icon_group.svg",
+      active: "icon_group_active.svg",
+      link: "/groups",
+    },
+    {
+      title: "Profile",
+      icon: "icon_profile.svg",
+      active: "icon_profile_active.svg",
+      link: `/members/${memberID}`,
+    },
+  ];
 
   const handleNav = (path: string) => {
     setPathname(path);

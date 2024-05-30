@@ -22,6 +22,9 @@ import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 import MemberTabs from "@/src/components/members/MemberTabs";
 import ErrorSection from "@/src/components/utils/ErrorSection";
 import ProfileListSkeleton from "@/src/components/profile/ProfileListSkeleton";
+import BiboSection from "@/src/components/bibo/BiboSection";
+import EditProfileButton from "@/src/components/profile/edit/EditProfileButton";
+import ToggleBibo from "@/src/components/profile/ToggleBibo";
 
 export async function generateMetadata({
   params,
@@ -76,6 +79,7 @@ export default async function MemberPage({
     const rankName =
       `${viewMemberData.rank} ${viewMemberData.displayName}`.trim();
     const pfp = viewMemberData.pfp;
+    const bibo = viewMemberData.bookedIn as boolean;
 
     // get roles
     const sameMember = viewMemberData.memberID === currentMemberData.memberID;
@@ -131,6 +135,16 @@ export default async function MemberPage({
               )}
             </div>
             <MemberBadges badges={viewMemberData.badges} />
+            {sameMember && (
+              <div className="w-full flex items-center justify-between gap-3 mt-1">
+                <EditProfileButton />
+                <ToggleBibo
+                  memberID={memberID}
+                  role={role}
+                  fetchedBibo={bibo}
+                />
+              </div>
+            )}
             <HRow />
             <MainStatisticsSection
               curID={memberID}
@@ -182,6 +196,7 @@ export default async function MemberPage({
           {view === "settings" &&
             (canViewPerms || permission ? (
               <>
+                {sameMember && permission && <BiboSection />}
                 {canViewPerms && (
                   // global member permissions
                   <PermissionForm

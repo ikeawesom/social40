@@ -15,12 +15,11 @@ export default function BiboPage() {
   const router = useRouter();
 
   if (memberDetails) {
-    const memberID = memberDetails.memberID;
-    const role = memberDetails.role;
+    const { memberID, role } = memberDetails;
     const aboveAdmin =
       ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
 
-    if (aboveAdmin) router.replace("/profile", { scroll: false });
+    if (aboveAdmin) router.replace(`/members/${memberID}`, { scroll: false });
 
     const unsub = onSnapshot(doc(FIREBASE_DB, "MEMBERS", memberID), (doc) => {
       const data = doc.data() as MEMBER_SCHEMA;
@@ -28,7 +27,7 @@ export default function BiboPage() {
 
       if (biboStatus === true) {
         router.refresh();
-        router.replace("/profile", { scroll: false });
+        router.replace(`/members/${memberID}`, { scroll: false });
       }
     });
   }
