@@ -108,6 +108,7 @@ export default function CreatePlanSection({
       ...plan,
       [date]: {
         ...plan[date],
+        customPoints: undefined,
         type:
           plan[date].type !== "public"
             ? "public"
