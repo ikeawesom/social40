@@ -134,6 +134,16 @@ export default function CreatePlanSection({
     });
   };
 
+  const handleCustomPoints = (date: string, value: undefined | number) => {
+    setPlan({
+      ...plan,
+      [date]: {
+        ...plan[date],
+        customPoints: value,
+      },
+    });
+  };
+
   const handleAssignMember = (
     e: React.ChangeEvent<HTMLSelectElement>,
     date: string
@@ -187,10 +197,12 @@ export default function CreatePlanSection({
               </FormInputContainer>
               <InnerContainer className="items-start max-h-[50vh]">
                 {Object.keys(plan).map((date: string) => {
-                  const { day, month, type, disabled } = plan[date];
+                  const { day, month, type, disabled, customPoints } =
+                    plan[date];
                   const newScore =
                     Number(memberPoints[plan[date].memberID]) +
-                    Number(COS_TYPES[type]);
+                    (customPoints ?? Number(COS_TYPES[type]));
+
                   return (
                     <div
                       key={date}
@@ -220,13 +232,6 @@ export default function CreatePlanSection({
                             enable={() => handleToggleDisable(date)}
                           />
                         </div>
-                        {!disabled && (
-                          <div className="self-start">
-                            <p className="text-xs items-end text-custom-grey-text custom-red mb-1">
-                              To earn: {COS_TYPES[type]}
-                            </p>
-                          </div>
-                        )}
                       </div>
                       <FormInputContainer
                         inputName="assignMember"
@@ -247,10 +252,29 @@ export default function CreatePlanSection({
                       </FormInputContainer>
                       {!disabled && (
                         <>
-                          <h1 className="mt-2 text-sm font-bold text-custom-green">
-                            Points: {memberPoints[plan[date].memberID]} {" >> "}{" "}
-                            {newScore}
-                          </h1>
+                          <div className="mb-1">
+                            <h1 className="mt-2 font-bold text-custom-green mb-1">
+                              Points: {memberPoints[plan[date].memberID]}{" "}
+                              {" >> "} {newScore}
+                            </h1>
+                            <div className="flex items-center justify-start gap-1">
+                              <p className="text-sm items-end text-custom-grey-text custom-red min-w-fit">
+                                To earn:
+                              </p>
+                              <input
+                                value={customPoints ?? COS_TYPES[type]}
+                                type="number"
+                                placeholder="1"
+                                className="custom px-2 py-1 w-full shadow-sm rounded-lg border-[1px] border-gray-200 text-sm"
+                                onChange={(e) =>
+                                  handleCustomPoints(
+                                    date,
+                                    Number(e.target.value)
+                                  )
+                                }
+                              />
+                            </div>
+                          </div>
                           <p
                             onClick={() => togglePublicHols(date)}
                             className="w-fit text-xs mt-2 text-custom-grey-text underline cursor-pointer hover:text-custom-primary"

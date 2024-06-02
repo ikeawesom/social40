@@ -54,8 +54,10 @@ export default function MonthlyPlanList({
   const handleFinishMember = async (date: string, id: string) => {
     setLoading(true);
     try {
-      const newScore =
-        Number(memberPoints[id]) + Number(COS_TYPES[sortedPlans[date].type]);
+      const prevScore = Number(memberPoints[id]);
+      const plan = sortedPlans[date];
+      const to_earn = plan.customPoints ?? COS_TYPES[plan.type];
+      const newScore = prevScore + Number(to_earn);
 
       const { error } = await FinishCosDuty(groupID, month, date, id, newScore);
 

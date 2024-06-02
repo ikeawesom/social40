@@ -51,8 +51,9 @@ export default function CosHOTOSection({
       if (oldScoreErr) throw new Error(oldScoreErr);
 
       const prevScore = Number(scoreRes[curMemberID]);
-      const to_earn = Number(COS_TYPES[cosData.plans[prevDateStr].type]);
-      const newScore = prevScore + to_earn;
+      const plan = cosData.plans[prevDateStr];
+      const to_earn = plan.customPoints ?? COS_TYPES[plan.type];
+      const newScore = prevScore + Number(to_earn);
 
       const { error } = await FinishCosDuty(
         groupID,
