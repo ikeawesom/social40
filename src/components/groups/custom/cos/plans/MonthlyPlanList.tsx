@@ -174,7 +174,7 @@ export default function MonthlyPlanList({
         if (error) throw new Error(error);
         router.refresh();
         toast.success("We have deleted your COS plan for this month.");
-        router.replace(`/groups/${groupID}/COS`);
+        router.replace(`/groups/${groupID}/COS`, { scroll: false });
       } catch (err: any) {
         toast.error(err.message);
       }
