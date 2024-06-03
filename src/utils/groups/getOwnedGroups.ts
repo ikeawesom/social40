@@ -1,12 +1,11 @@
 import { dbHandler } from "../../firebase/db";
-import { MemberIDType } from "../profile/getFriendsList";
 import { MEMBER_CREATED_GROUPS_SCHEMA } from "../schemas/members";
 
 export type ownedGroupsType = {
   [groupID: string]: MEMBER_CREATED_GROUPS_SCHEMA;
 };
 
-export async function getOwnedGroups({ memberID }: MemberIDType) {
+export async function getOwnedGroups({ memberID }: { memberID: string }) {
   var ownedGroups = {} as ownedGroupsType;
   const res = await dbHandler.getDocs({
     col_name: `MEMBERS/${memberID}/GROUPS-CREATED`,

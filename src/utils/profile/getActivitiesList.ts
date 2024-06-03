@@ -1,9 +1,8 @@
 import { dbHandler } from "@/src/firebase/db";
-import { MemberIDType } from "./getFriendsList";
 import { ACTIVITY_SCHEMA } from "../schemas/activities";
 import { MEMBER_SCHEMA } from "../schemas/members";
 
-export async function getActivitiesList({ memberID }: MemberIDType) {
+export async function getActivitiesList({ memberID }: { memberID: string }) {
   var activitiesData = {} as { [activityID: string]: ACTIVITY_SCHEMA };
   var activitiesDataWithName = {} as { [activityID: string]: ACTIVITY_SCHEMA };
 
