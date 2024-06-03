@@ -86,7 +86,7 @@ export default function PermissionForm({
   return (
     <>
       {showRoles !== "" && (
-        <Modal className="max-h-[50vh]">
+        <Modal>
           <ModalHeader
             close={() => setShowRoles("")}
             heading="View Permissions"
