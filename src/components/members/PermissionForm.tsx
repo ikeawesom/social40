@@ -1,5 +1,5 @@
 "use client";
-import { ROLES_HIERARCHY } from "@/src/utils/constants";
+import { ROLES_DESC, ROLES_HIERARCHY } from "@/src/utils/constants";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import React, { useState } from "react";
 import PrimaryButton from "../utils/PrimaryButton";
@@ -10,9 +10,10 @@ import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { twMerge } from "tailwind-merge";
 import DefaultCard from "../DefaultCard";
-import HRow from "../utils/HRow";
 import SecondaryButton from "../utils/SecondaryButton";
 import Image from "next/image";
+import Modal from "../utils/Modal";
+import ModalHeader from "../utils/ModalHeader";
 
 export default function PermissionForm({
   currentMember,
@@ -27,9 +28,9 @@ export default function PermissionForm({
 
   const { host } = useHostname();
   const [confirm, setConfirm] = useState("");
-  const [showRoles, setShowRoles] = useState(false);
   const [currentRole, setCurrentRole] = useState(oldRole);
   const [loading, setLoading] = useState(false);
+  const [showRoles, setShowRoles] = useState("");
 
   const ready = confirm === viewMember.memberID;
   const noChange = currentRole === oldRole;
@@ -46,6 +47,8 @@ export default function PermissionForm({
   };
 
   const permissions = getPermissions(currentMember.role);
+  const defaultPerms =
+    Object.keys(permissions)[Object.keys(permissions).length - 1];
 
   const handleChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCurrentRole(e.target.value);
@@ -80,144 +83,176 @@ export default function PermissionForm({
   };
 
   return (
-    <DefaultCard className={twMerge("w-full", sameRole && "opacity-60")}>
-      <div
-        onClick={() => {
-          sameRole &&
-            toast.error(
-              "You cannot change the permissions of another member of the same tier."
-            );
-        }}
-      >
-        <div className={sameRole ? "pointer-events-none" : ""}>
-          <div className="flex w-full items-center justify-between gap-2">
-            <div className="flex flex-row items-center justify-start gap-2">
-              <h1 className="text-start font-semibold text-base">
-                Account Permissions
-              </h1>
-              <SecondaryButton
-                onClick={() => setShowRoles(!showRoles)}
-                className="w-fit self-stretch p-0 border-0 shadow-none"
-              >
-                {showRoles ? (
-                  <Image
-                    src="/icons/icon_question_primary.svg"
-                    alt="Show"
-                    width={30}
-                    height={30}
-                  />
-                ) : (
-                  <Image
-                    src="/icons/icon_question.svg"
-                    alt="Hide"
-                    width={30}
-                    height={30}
-                  />
-                )}
-              </SecondaryButton>
-            </div>
-          </div>
+    <>
+      {showRoles !== "" && (
+        <Modal className="max-h-[50vh]">
+          <ModalHeader
+            close={() => setShowRoles("")}
+            heading="View Permissions"
+          />
+          <select
+            value={showRoles}
+            onChange={(e) => setShowRoles(e.target.value)}
+          >
+            {Object.keys(permissions).map((item: any) => (
+              <option value={item} key={item}>
+                {permissions[item].title}
+              </option>
+            ))}
+          </select>
 
-          <>
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col items-start justify-center gap-2 mt-2"
-            >
-              <div
-                className="flex items-center justify-between w-full gap-2 shadow-sm border-[1px]
+          <div className="w-full mt-2 flex items-start flex-col justify-start gap-1">
+            {Object.keys(ROLES_DESC).map((itemA: string) => {
+              const desc = ROLES_DESC[itemA];
+              const includes = permissions[showRoles].desc.includes(
+                desc
+              ) as boolean;
+              return (
+                <div className="flex items-center justify-start gap-1">
+                  {includes ? (
+                    <Image
+                      alt="Yes"
+                      src="/icons/features/icon_tick.svg"
+                      width={25}
+                      height={25}
+                    />
+                  ) : (
+                    <Image
+                      alt="Yes"
+                      src="/icons/features/icon_cross_red.svg"
+                      width={25}
+                      height={25}
+                    />
+                  )}
+                  <p key={itemA} className="text-sm">
+                    {desc}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+          {permissions[showRoles].notes && (
+            <p className="text-xs text-custom-grey-text text-start mt-1">
+              NOTE: {permissions[showRoles].notes}
+            </p>
+          )}
+        </Modal>
+      )}
+      <DefaultCard className={twMerge("w-full", sameRole && "opacity-60")}>
+        <div
+          onClick={() => {
+            sameRole &&
+              toast.error(
+                "You cannot change the permissions of another member of the same tier."
+              );
+          }}
+        >
+          <div className={sameRole ? "pointer-events-none" : ""}>
+            <div className="flex w-full items-center justify-between gap-2">
+              <div className="flex flex-row items-center justify-start gap-2">
+                <h1 className="text-start font-semibold text-base">
+                  Account Permissions
+                </h1>
+                <SecondaryButton
+                  onClick={() => setShowRoles(defaultPerms)}
+                  className="w-fit self-stretch p-0 border-0 shadow-none"
+                >
+                  {showRoles ? (
+                    <Image
+                      src="/icons/icon_question_primary.svg"
+                      alt="Show"
+                      width={30}
+                      height={30}
+                    />
+                  ) : (
+                    <Image
+                      src="/icons/icon_question.svg"
+                      alt="Hide"
+                      width={30}
+                      height={30}
+                    />
+                  )}
+                </SecondaryButton>
+              </div>
+            </div>
+
+            <>
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col items-start justify-center gap-2 mt-2"
+              >
+                <div
+                  className="flex items-center justify-between w-full gap-2 shadow-sm border-[1px]
     border-gray-200 rounded-lg px-3 py-2"
-              >
-                <p className="text-sm w-fit">Your Permissions</p>
-                <p className="text-sm font-semibold">
-                  {ROLES_HIERARCHY[currentMember.role].title}
-                </p>
-              </div>
-              <div
-                className={twMerge(
-                  "flex justify-between w-full gap-2 shadow-sm border-[1px] border-gray-200 rounded-lg px-3 py-2",
-                  sameRole ? "flex-row items-center" : "flex-col items-start"
-                )}
-              >
-                <label htmlFor="permission" className="text-sm w-fit">
-                  Set Permissions
-                </label>
-                {sameRole ? (
-                  <>
-                    <p className="text-sm font-semibold">
-                      {ROLES_HIERARCHY[viewMember.role].title}
-                    </p>
-                  </>
-                ) : (
-                  <select
-                    name="permission"
-                    id="permission"
-                    value={currentRole}
-                    onChange={handleChangeSelect}
-                  >
-                    {Object.keys(permissions).map((item: string) => {
-                      return (
-                        <option className="p-2" key={item} value={item}>
-                          {permissions[item].title}
-                        </option>
-                      );
-                    })}
-                  </select>
-                )}
-              </div>
-              <div className="flex flex-col items-start justify-center gap-1 w-full m2-2">
-                <p className="text-sm">
-                  Please type this member's member ID below to confirm.
-                </p>
-                <input
-                  type="text"
-                  placeholder={viewMember.memberID}
-                  value={confirm}
-                  onChange={handleChangeCfm}
-                />
-                <p className="text-xs mt-1 text-custom-grey-text">
-                  Note that the higher the tier, the more permissions will be
-                  available to this member.
-                </p>
-              </div>
-              <PrimaryButton
-                type="submit"
-                disabled={loading || !ready || noChange}
-                className="grid place-items-center"
-              >
-                {loading ? (
-                  <LoadingIconBright width={20} height={20} />
-                ) : (
-                  "Update Permissions"
-                )}
-              </PrimaryButton>
-            </form>
-            {showRoles && (
-              <ul className="mt-4 w-full flex flex-col items-start justify-center gap-4">
-                {Object.keys(permissions).map((item: any) => (
-                  <li key={item} className="w-full">
-                    <h1 className="text-custom-dark-text font-semibold">
-                      {permissions[item].title}
-                    </h1>
-                    <HRow />
-                    <ul className="list-disc ml-4">
-                      {permissions[item].desc.map((itemA: string) => (
-                        <li key={itemA} className="text-sm">
-                          {itemA}
-                        </li>
-                      ))}
-                    </ul>
-                    {permissions[item].notes && (
-                      <p className="text-xs text-custom-grey-text text-start mt-1">
-                        NOTE: {permissions[item].notes}
+                >
+                  <p className="text-sm w-fit">Your Permissions</p>
+                  <p className="text-sm font-semibold">
+                    {ROLES_HIERARCHY[currentMember.role].title}
+                  </p>
+                </div>
+                <div
+                  className={twMerge(
+                    "flex justify-between w-full gap-2 shadow-sm border-[1px] border-gray-200 rounded-lg px-3 py-2",
+                    sameRole ? "flex-row items-center" : "flex-col items-start"
+                  )}
+                >
+                  <label htmlFor="permission" className="text-sm w-fit">
+                    Set Permissions
+                  </label>
+                  {sameRole ? (
+                    <>
+                      <p className="text-sm font-semibold">
+                        {ROLES_HIERARCHY[viewMember.role].title}
                       </p>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </>
+                    </>
+                  ) : (
+                    <select
+                      name="permission"
+                      id="permission"
+                      value={currentRole}
+                      onChange={handleChangeSelect}
+                    >
+                      {Object.keys(permissions).map((item: string) => {
+                        return (
+                          <option className="p-2" key={item} value={item}>
+                            {permissions[item].title}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  )}
+                </div>
+                <div className="flex flex-col items-start justify-center gap-1 w-full m2-2">
+                  <p className="text-sm">
+                    Please type this member's member ID below to confirm.
+                  </p>
+                  <input
+                    type="text"
+                    placeholder={viewMember.memberID}
+                    value={confirm}
+                    onChange={handleChangeCfm}
+                  />
+                  <p className="text-xs mt-1 text-custom-grey-text">
+                    Note that the higher the tier, the more permissions will be
+                    available to this member.
+                  </p>
+                </div>
+                <PrimaryButton
+                  type="submit"
+                  disabled={loading || !ready || noChange}
+                  className="grid place-items-center"
+                >
+                  {loading ? (
+                    <LoadingIconBright width={20} height={20} />
+                  ) : (
+                    "Update Permissions"
+                  )}
+                </PrimaryButton>
+              </form>
+            </>
+          </div>
         </div>
-      </div>
-    </DefaultCard>
+      </DefaultCard>
+    </>
   );
 }
