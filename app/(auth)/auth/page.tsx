@@ -27,7 +27,12 @@ export default function AuthPage({
       toast.error(
         "You have entered an invalid group. Please check for typos or contact your commander."
       );
-    else if (status !== "" && status !== "success-signin") toast.error(status); // error message
+    else if (status.includes("auth")) {
+      toast.error(
+        "Invalid credentials. You have limited attempts before you are locked out!"
+      );
+    } else if (status !== "" && status !== "success-signin")
+      toast.error(status); // error message
     if (status !== "") setStatus("");
   }, [status]);
 
