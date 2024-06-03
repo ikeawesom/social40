@@ -1,14 +1,14 @@
 import { BadgeColorsType } from "./schemas/members";
 
 export const ROLES_DESC = {
+  "join-groups": "Can join groups",
   "permissions-allow": "Can change permissions for other members",
   "create-admins": "Can create new accounts with set permissions",
+  "create-posts": "Can create new posts",
   "view-status": "Can view other lower tier member's statuses",
   "group-create": "Can create new groups and invite members",
   "book-in": "Can book people in",
-  "join-groups": "Can join groups",
-  "create-posts": "Can create new posts",
-};
+} as { [id: string]: string };
 
 export const ROLES_HIERARCHY = {
   owner: {
