@@ -109,7 +109,10 @@ export default function PermissionForm({
                 desc
               ) as boolean;
               return (
-                <div className="flex items-center justify-start gap-1">
+                <div
+                  key={itemA}
+                  className="flex items-center justify-start gap-1"
+                >
                   {includes ? (
                     <Image
                       alt="Yes"
