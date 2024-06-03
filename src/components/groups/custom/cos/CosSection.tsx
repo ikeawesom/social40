@@ -77,38 +77,31 @@ export default async function CosSection({
         activeCOS = cosData.plans[dateStr].memberID;
       }
     }
+
+    const involved =
+      cos.admins.includes(curMemberID) || cos.members.includes(curMemberID);
     return (
       <DefaultCard className="w-full">
         {!cosData || (disabledDate && !pendingPrevFinish) ? (
-          (cos.admins.includes(curMemberID) ||
-            cos.members.includes(curMemberID)) && (
-            <div className="flex w-full items-start justify-center flex-col gap-2">
-              <p className="text-sm text-custom-grey-text">
-                Hmm.. you do not have a COS planned for today, {dateStr}.
-              </p>
-              {cos.admins.includes(curMemberID) ? (
-                <Link scroll={false} href={`/groups/${groupID}/COS`}>
-                  <PrimaryButton className="w-fit">
-                    Start Planning
-                  </PrimaryButton>
-                </Link>
-              ) : (
-                <Link
-                  scroll={false}
-                  href={`/groups/${groupID}/COS`}
-                  className="text-xs underline text-custom-primary hover:opacity-70"
-                >
-                  View COS Plans
-                </Link>
-              )}
-            </div>
-          )
+          <div className="flex w-full items-start justify-center flex-col gap-2">
+            <p className="text-sm text-custom-grey-text">
+              Hmm.. you do not have a COS planned for today, {dateStr}.
+            </p>
+            {involved && (
+              <Link
+                scroll={false}
+                href={`/groups/${groupID}/COS`}
+                className="text-xs underline text-custom-primary hover:opacity-70"
+              >
+                View COS Plans
+              </Link>
+            )}
+          </div>
         ) : (
           <div className="flex flex-col items-start justify-start gap-1">
             <p className="text-xs text-custom-grey-text">Current COS</p>
             <h1 className="font-bold text-custom-dark-text">{activeCOS}</h1>
-            {(cos.admins.includes(curMemberID) ||
-              cos.members.includes(curMemberID)) && (
+            {involved && (
               <Link
                 scroll={false}
                 href={`/groups/${groupID}/COS`}

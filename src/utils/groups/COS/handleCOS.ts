@@ -169,48 +169,6 @@ export async function EditCOSPlan(
   }
 }
 
-export async function UpdateMembersCOSPoints(
-  newMemberPoints: {
-    [memberID: string]: number;
-  },
-  groupID: string,
-  month: string
-) {
-  try {
-    const promiseArr = Object.keys(newMemberPoints).map(async (id: string) => {
-      const { error } = await dbHandler.edit({
-        col_name: "MEMBERS",
-        id,
-        data: {
-          dutyPoints: {
-            cos: newMemberPoints[id],
-          },
-        },
-      });
-      if (error)
-        return handleResponses({ status: false, error: error.message });
-      return handleResponses();
-    });
-
-    const resolvedArr = await Promise.all(promiseArr);
-
-    resolvedArr.forEach((item: any) => {
-      if (!item.status) throw new Error(item.error);
-    });
-
-    const { error: cfmError } = await dbHandler.edit({
-      col_name: `GROUPS/${groupID}/COS`,
-      id: month,
-      data: { confirmed: true },
-    });
-    if (cfmError) throw new Error(cfmError);
-
-    return handleResponses();
-  } catch (err: any) {
-    return handleResponses({ status: false, error: err.message });
-  }
-}
-
 export async function FinishCosDuty(
   groupID: string,
   month: string,

@@ -17,7 +17,7 @@ export default function BiboPage() {
   if (memberDetails) {
     const { memberID, role } = memberDetails;
     const aboveAdmin =
-      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
+      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["memberPlus"].rank;
 
     if (aboveAdmin) router.replace(`/members/${memberID}`, { scroll: false });
 

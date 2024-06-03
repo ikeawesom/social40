@@ -27,7 +27,7 @@ export default async function NavLayout({
     });
     const { role } = data;
 
-    if (ROLES_HIERARCHY[role].rank < ROLES_HIERARCHY["admin"].rank)
+    if (ROLES_HIERARCHY[role].rank < ROLES_HIERARCHY["memberPlus"].rank)
       return <MaintenanceScreen />;
   }
 

@@ -1,19 +1,21 @@
 import { BadgeColorsType } from "./schemas/members";
 
 export const ROLES_DESC = {
+  "join-groups": "Can join groups",
   "permissions-allow": "Can change permissions for other members",
   "create-admins": "Can create new accounts with set permissions",
+  "create-posts": "Can create new posts",
   "view-status": "Can view other lower tier member's statuses",
   "group-create": "Can create new groups and invite members",
   "book-in": "Can book people in",
-  "join-groups": "Can join groups",
-};
+} as { [id: string]: string };
 
 export const ROLES_HIERARCHY = {
   owner: {
-    rank: 5,
-    title: "Tier 5",
+    rank: 4,
+    title: "Admin",
     desc: [
+      ROLES_DESC["create-posts"],
       ROLES_DESC["permissions-allow"],
       ROLES_DESC["create-admins"],
       ROLES_DESC["group-create"],
@@ -23,9 +25,10 @@ export const ROLES_HIERARCHY = {
     ],
   },
   admin: {
-    rank: 4,
-    title: "Tier 4",
+    rank: 3,
+    title: "Commander",
     desc: [
+      ROLES_DESC["create-posts"],
       ROLES_DESC["permissions-allow"],
       ROLES_DESC["create-admins"],
       ROLES_DESC["group-create"],
@@ -34,27 +37,30 @@ export const ROLES_HIERARCHY = {
       ROLES_DESC["book-in"],
     ],
   },
-  cos: {
-    rank: 3,
-    title: "Tier 3 (COS)",
+  memberPlus: {
+    rank: 2,
+    title: "Member PLUS",
     desc: [
+      ROLES_DESC["create-posts"],
+      ROLES_DESC["permissions-allow"],
+      ROLES_DESC["create-admins"],
       ROLES_DESC["group-create"],
       ROLES_DESC["join-groups"],
       ROLES_DESC["view-status"],
       ROLES_DESC["book-in"],
     ],
+    notes:
+      "You may upgrade permissions for members if you need their assitance temporarily. This tier will provide them with permissions of a commander.",
   },
-  commander: {
-    rank: 2,
-    title: "Tier 2",
-    desc: [
-      ROLES_DESC["group-create"],
-      ROLES_DESC["join-groups"],
-      ROLES_DESC["view-status"],
-    ],
-  },
-  member: { rank: 1, title: "Tier 1", desc: [ROLES_DESC["join-groups"]] },
-} as { [role: string]: { rank: number; title: string; desc: string[] } };
+  member: { rank: 1, title: "Member", desc: [ROLES_DESC["join-groups"]] },
+} as {
+  [role: string]: {
+    rank: number;
+    title: string;
+    desc: string[];
+    notes?: string;
+  };
+};
 
 export const GROUP_ROLES_HEIRARCHY = {
   owner: {

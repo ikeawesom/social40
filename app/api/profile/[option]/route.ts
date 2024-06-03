@@ -1,4 +1,3 @@
-import { FriendsListType } from "@/src/components/profile/ProfileSection";
 import { StatusListType } from "@/src/components/profile/StatsSection";
 import { StatusInputType } from "@/src/components/status/CreateStatus";
 import { dbHandler } from "@/src/firebase/db";
@@ -8,13 +7,8 @@ import getCurrentDate, {
   StringToTimestamp,
 } from "@/src/utils/helpers/getCurrentDate";
 import handleResponses from "@/src/utils/helpers/handleResponses";
-import { getFriendsList } from "@/src/utils/profile/getFriendsList";
 import resetPassword from "@/src/utils/profile/resetPassword";
-import { GROUP_ACTIVITY_SCHEMA } from "@/src/utils/schemas/group-activities";
-import {
-  ACTIVITY_PARTICIPANT_SCHEMA,
-  MEMBER_SCHEMA,
-} from "@/src/utils/schemas/members";
+import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { STATUS_SCHEMA } from "@/src/utils/schemas/statuses";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -112,15 +106,6 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ status: true });
-  } else if (option === "friends") {
-    const res = await getFriendsList({ memberID });
-    if (!res)
-      return NextResponse.json({
-        error: "An unknown error has occured. Please try again later.",
-        status: false,
-      });
-    const friendsList = res as FriendsListType;
-    return NextResponse.json({ status: true, data: friendsList });
   } else if (option === "status") {
     const res = await dbHandler.getSpecific({
       path: `MEMBERS/${memberID}/STATUSES`,

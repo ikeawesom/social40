@@ -16,7 +16,9 @@ export default function HAOptions({ type }: { type: string }) {
         <SecondaryButton
           onClick={() => {
             setHAType("group");
-            router.push(`?${new URLSearchParams({ type: "group" })}`);
+            router.push(`?${new URLSearchParams({ type: "group" })}`, {
+              scroll: false,
+            });
           }}
           className={twMerge(
             "self-stretch",
@@ -30,7 +32,9 @@ export default function HAOptions({ type }: { type: string }) {
         <SecondaryButton
           onClick={() => {
             setHAType("indiv");
-            router.push(`?${new URLSearchParams({ type: "indiv" })}`);
+            router.push(`?${new URLSearchParams({ type: "indiv" })}`, {
+              scroll: false,
+            });
           }}
           className={twMerge(
             "self-stretch",

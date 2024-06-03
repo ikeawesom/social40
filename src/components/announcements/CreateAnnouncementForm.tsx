@@ -194,8 +194,8 @@ export default function CreateAnnouncementForm({
               <ModalNext
                 finalNum={1}
                 pageNum={page}
-                toggleBack={nextPage}
-                toggleNext={prevPage}
+                toggleBack={prevPage}
+                toggleNext={nextPage}
                 primaryText="Post it"
                 primaryDisabled={
                   postData.title === "" ||

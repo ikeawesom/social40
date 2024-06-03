@@ -113,7 +113,9 @@ export default function AddMemberStatForm({
       router.refresh();
       toast.success("Excellent, statistic added successfully.");
       setTimeout(() => {
-        router.push(`/members/${id}/statistics?type=${statType}`);
+        router.push(`/members/${id}/statistics?type=${statType}`, {
+          scroll: false,
+        });
       }, 400);
     } catch (err: any) {
       toast.error(err.message);

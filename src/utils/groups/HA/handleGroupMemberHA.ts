@@ -110,7 +110,7 @@ export async function handleGroupMemberHA(
     });
 
     const isCommander =
-      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
+      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["memberPlus"].rank;
 
     console.log("Calculating for:", memberID);
 

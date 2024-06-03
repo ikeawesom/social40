@@ -84,7 +84,7 @@ export default async function MemberPage({
     // get roles
     const sameMember = viewMemberData.memberID === currentMemberData.memberID;
     const permission =
-      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
+      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["memberPlus"].rank;
     const higher =
       ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY[viewMemberData.role].rank;
     const normalMember = role === "member";
