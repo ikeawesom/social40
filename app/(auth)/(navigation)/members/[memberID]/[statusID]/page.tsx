@@ -44,7 +44,7 @@ export default async function CustomStatusPage({
     const { role } = data;
 
     const commanderRole =
-      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["commander"].rank;
+      ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["memberPlus"].rank;
 
     // check if status belongs to member
     const { memberID, statusID } = params;

@@ -32,7 +32,7 @@ export default function DeleteStatisticButton({
         const memberData = data as MEMBER_SCHEMA;
         if (
           ROLES_HIERARCHY[memberData.role].rank >=
-          ROLES_HIERARCHY["commander"].rank
+          ROLES_HIERARCHY["memberPlus"].rank
         ) {
           setAllowed(true);
         }

@@ -36,7 +36,8 @@ export default async function EditProfilePage() {
     const memberData = data.data as MEMBER_SCHEMA;
 
     const admin =
-      ROLES_HIERARCHY[memberData.role].rank >= ROLES_HIERARCHY["admin"].rank;
+      ROLES_HIERARCHY[memberData.role].rank >=
+      ROLES_HIERARCHY["memberPlus"].rank;
 
     return (
       <>

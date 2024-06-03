@@ -23,7 +23,8 @@ export default function ToggleBibo({
   const { host } = useHostname();
 
   const [bibo, setBibo] = useState<boolean>();
-  const aboveCOS = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["cos"].rank;
+  const aboveCOS =
+    ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["memberPlus"].rank;
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

@@ -116,7 +116,8 @@ export default async function Home({
 
     if ("role" in memberData) {
       admin =
-        ROLES_HIERARCHY[memberData.role].rank >= ROLES_HIERARCHY["admin"].rank;
+        ROLES_HIERARCHY[memberData.role].rank >=
+        ROLES_HIERARCHY["memberPlus"].rank;
     }
 
     return (

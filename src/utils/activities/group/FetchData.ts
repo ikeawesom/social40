@@ -161,7 +161,7 @@ class FetchGroupActivityClass {
       let admin = false;
 
       const role = memData.role;
-      admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
+      admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["memberPlus"].rank;
 
       return handleResponses({
         data: {

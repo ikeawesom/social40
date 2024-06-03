@@ -174,7 +174,7 @@ export default function PermissionForm({
                   value={confirm}
                   onChange={handleChangeCfm}
                 />
-                <p className="text-sm text-custom-grey-text">
+                <p className="text-xs mt-1 text-custom-grey-text">
                   Note that the higher the tier, the more permissions will be
                   available to this member.
                 </p>
@@ -206,6 +206,11 @@ export default function PermissionForm({
                         </li>
                       ))}
                     </ul>
+                    {permissions[item].notes && (
+                      <p className="text-xs text-custom-grey-text text-start mt-1">
+                        NOTE: {permissions[item].notes}
+                      </p>
+                    )}
                   </li>
                 ))}
               </ul>

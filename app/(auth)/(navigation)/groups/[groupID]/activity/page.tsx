@@ -47,7 +47,7 @@ export default async function ActivityPage({
     let admin = false;
     if (data) {
       const role = data.role;
-      admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["admin"].rank;
+      admin = ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["memberPlus"].rank;
     }
 
     // only group owners can create new activities
