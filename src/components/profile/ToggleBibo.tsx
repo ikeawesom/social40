@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 import SecondaryButton from "../utils/SecondaryButton";
 import { twMerge } from "tailwind-merge";
-import LoadingIcon from "../utils/LoadingIcon";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { useHostname } from "@/src/hooks/useHostname";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { getCurrentDateString } from "@/src/utils/helpers/getCurrentDate";
+import { useBiboCtx } from "@/src/contexts/BiboContext";
 
 export default function ToggleBibo({
   fetchedBibo,
@@ -21,18 +21,18 @@ export default function ToggleBibo({
 }) {
   const router = useRouter();
   const { host } = useHostname();
+  const { clientBibo, setClientBibo } = useBiboCtx();
 
-  const [bibo, setBibo] = useState<boolean>();
+  useEffect(() => {
+    if (clientBibo === null) setClientBibo(fetchedBibo);
+  }, []);
+
   const aboveCOS =
     ROLES_HIERARCHY[role].rank >= ROLES_HIERARCHY["memberPlus"].rank;
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setBibo(fetchedBibo);
-  }, [fetchedBibo]);
-
   const handleBibo = async () => {
-    if (bibo || aboveCOS) {
+    if (clientBibo || aboveCOS) {
       setLoading(true);
       if (confirm("Press OK to confirm")) {
         try {
@@ -59,6 +59,7 @@ export default function ToggleBibo({
           if (!bodyA.status) throw new Error(bodyA.error);
 
           router.refresh();
+          setClientBibo((cur) => !cur);
         } catch (error: any) {
           toast.error(error.message);
         }
@@ -69,25 +70,20 @@ export default function ToggleBibo({
     }
   };
 
+  const notReady = loading || clientBibo === null;
   return (
     <SecondaryButton
-      disabled={loading}
+      disabled={notReady}
       onClick={handleBibo}
       className={twMerge(
         "font-bold flex-1",
-        bibo
+        clientBibo
           ? "bg-custom-light-green border-custom-green text-custom-green"
           : "border-custom-orange text-custom-orange bg-custom-light-orange",
-        loading ? "opacity-40 grid place-items-center" : ""
+        notReady ? "grid place-items-center" : ""
       )}
     >
-      {loading ? (
-        <LoadingIcon width={20} height={20} />
-      ) : bibo ? (
-        "Book Out"
-      ) : (
-        "Book In"
-      )}
+      {notReady ? "Working..." : clientBibo ? "Book Out" : "Book In"}
     </SecondaryButton>
   );
 }
