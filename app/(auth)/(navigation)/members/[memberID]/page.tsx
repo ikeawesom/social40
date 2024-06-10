@@ -25,6 +25,7 @@ import ProfileListSkeleton from "@/src/components/profile/ProfileListSkeleton";
 import BiboSection from "@/src/components/bibo/BiboSection";
 import EditProfileButton from "@/src/components/profile/edit/EditProfileButton";
 import ToggleBibo from "@/src/components/profile/ToggleBibo";
+import { BiboProvider } from "@/src/contexts/BiboContext";
 
 export async function generateMetadata({
   params,
@@ -121,30 +122,33 @@ export default async function MemberPage({
             {/* <div className="flex w-full items-center justify-between">
                 <MemberPoints points={viewMemberData.points} />
               </div> */}
-            <div className="flex flex-col items-start justify-center">
-              <h1 className="text-xl text-custom-dark-text flex items-center justify-start gap-2">
-                {rankName} <BookedStatus status={viewMemberData.bookedIn} />
-              </h1>
-              <p className="text-sm text-custom-grey-text">
-                {viewMemberData.memberID}
-              </p>
-              {sameMember && (
+            <BiboProvider>
+              <div className="flex flex-col items-start justify-center">
+                <h1 className="text-xl text-custom-dark-text flex items-center justify-start gap-2">
+                  {rankName} <BookedStatus status={viewMemberData.bookedIn} />
+                </h1>
                 <p className="text-sm text-custom-grey-text">
-                  Created on: {TimestampToDateString(viewMemberData.createdOn)}
+                  {viewMemberData.memberID}
                 </p>
-              )}
-            </div>
-            <MemberBadges badges={viewMemberData.badges} />
-            {sameMember && (
-              <div className="w-full flex items-center justify-between gap-3 mt-1">
-                <EditProfileButton />
-                <ToggleBibo
-                  memberID={memberID}
-                  role={role}
-                  fetchedBibo={bibo}
-                />
+                {sameMember && (
+                  <p className="text-sm text-custom-grey-text">
+                    Created on:{" "}
+                    {TimestampToDateString(viewMemberData.createdOn)}
+                  </p>
+                )}
               </div>
-            )}
+              <MemberBadges badges={viewMemberData.badges} />
+              {sameMember && (
+                <div className="w-full flex items-center justify-between gap-3 mt-1">
+                  <EditProfileButton />
+                  <ToggleBibo
+                    memberID={memberID}
+                    role={role}
+                    fetchedBibo={bibo}
+                  />
+                </div>
+              )}
+            </BiboProvider>
             <HRow />
             <MainStatisticsSection
               curID={memberID}
