@@ -17,11 +17,13 @@ export function useDownloadIndivHA(
   let curDate = StringToDate(`${Object.keys(dailyActivities)[0]} 00:00`)
     .data as Date;
 
-  const endDate = StringToDate(
-    `${
-      Object.keys(dailyActivities)[Object.keys(dailyActivities).length - 1]
-    } 00:00`
-  ).data as Date;
+  // const endDate = StringToDate(
+  //   `${
+  //     Object.keys(dailyActivities)[Object.keys(dailyActivities).length - 1]
+  //   } 00:00`
+  // ).data as Date;
+
+  const endDate = new Date();
 
   let dayDiff = getDateDiff(endDate, curDate);
   const tableRows = [] as HATableRowType[];
