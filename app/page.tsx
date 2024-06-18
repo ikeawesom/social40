@@ -8,6 +8,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Social 40",
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const { user, isAuthenticated } = await getMemberAuthServer();
+  if (isAuthenticated) redirect("/home");
 
   return (
     <>

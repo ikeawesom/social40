@@ -5,13 +5,11 @@ import MaintenanceSection from "@/src/components/announcements/MaintenanceSectio
 import UpdatesSection from "@/src/components/announcements/UpdatesSection";
 import ActivityFeedSkeleton from "@/src/components/feed/ActivityFeedSkeleton";
 import FeedGroup from "@/src/components/feed/FeedGroup";
-import GroupsScrollSection from "@/src/components/feed/GroupsScrollSection";
 import HomeHeaderBar from "@/src/components/navigation/HomeHeaderBar";
 import ErrorActivities from "@/src/components/screens/ErrorActivities";
 import { dbHandler } from "@/src/firebase/db";
 import ErrorScreenHandler from "@/src/components/ErrorScreenHandler";
 import { ROLES_HIERARCHY } from "@/src/utils/constants";
-
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
 import { IS_DEBUG } from "@/src/utils/settings";
 import { noShowUpdate } from "@/src/utils/versions";
@@ -70,12 +68,7 @@ export default async function Home({
             <ErrorActivities text="Looks like you have no groups joined." />
           ) : (
             <div className="flex flex-col w-full items-center justify-start gap-2 max-w-[500px] overflow-x-hidden">
-              {groupsList.length > 1 && (
-                <>
-                  <GroupsScrollSection groupsList={groupsList} />
-                  <GroupsActivitiesViews />
-                </>
-              )}
+              <GroupsActivitiesViews />
               {searchParams.view === "scroll" ? (
                 <Suspense
                   key={searchParams.groupID}

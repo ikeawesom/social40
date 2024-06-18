@@ -1,6 +1,3 @@
-import GroupHALoadingSkeleton from "@/src/components/groups/custom/HA/GroupHALoadingSkeleton";
-import GroupHAServerSection from "@/src/components/groups/custom/HA/GroupHAServerSection";
-import HAOptions from "@/src/components/groups/custom/HA/HAOptions";
 import IndivaHAServerSection from "@/src/components/groups/custom/HA/IndivaHAServerSection";
 import LastUpdatedHANotice from "@/src/components/groups/custom/HA/LastUpdatedHANotice";
 import HeaderBar from "@/src/components/navigation/HeaderBar";
@@ -13,21 +10,14 @@ import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 
 export default async function HAReportPage({
   params,
-  searchParams,
 }: {
   params: { [groupID: string]: string };
-  searchParams: { [type: string]: string };
 }) {
   const { user, isAuthenticated } = await getMemberAuthServer();
   if (!isAuthenticated || user === null) return;
   const groupID = params.groupID;
 
   try {
-    const type =
-      searchParams.type !== "group" && searchParams.type !== "indiv"
-        ? "group"
-        : searchParams.type ?? "group";
-
     const { data: groupDataRes, error: groupErr } = await dbHandler.get({
       col_name: "GROUPS",
       id: groupID,
@@ -43,16 +33,10 @@ export default async function HAReportPage({
             {lastUpdatedHA && (
               <LastUpdatedHANotice lastUpdatedHA={lastUpdatedHA} />
             )}
-            <HAOptions type={type} />
-            {type === "indiv" ? (
-              <Suspense fallback={<CenterFeedSkeleton height="h-[8vh]" />}>
-                <IndivaHAServerSection key={type} groupID={groupID} />
-              </Suspense>
-            ) : (
-              <Suspense fallback={<GroupHALoadingSkeleton />} key={type}>
-                <GroupHAServerSection groupID={groupID} />
-              </Suspense>
-            )}
+
+            <Suspense fallback={<CenterFeedSkeleton height="h-[8vh]" />}>
+              <IndivaHAServerSection groupID={groupID} />
+            </Suspense>
           </div>
         </div>
       </>
