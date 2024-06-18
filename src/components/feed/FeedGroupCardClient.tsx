@@ -17,6 +17,7 @@ import FeedGroupCardSkeleton from "./FeedGroupCardSkeleton";
 import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
 import { twMerge } from "tailwind-merge";
 import ShowButton from "./ShowButton";
+import { DateToString, StringToDate } from "@/src/utils/helpers/getCurrentDate";
 
 export default function FeedGroupCardClient({
   activityData,
@@ -66,8 +67,17 @@ export default function FeedGroupCardClient({
 
       if (!res.status) throw new Error(res.error);
 
-      const { canJoin, active, dateStr, currentParticipant, participantsData } =
-        res.data;
+      const {
+        canJoin,
+        active,
+        dateStr: tempDateStr,
+        currentParticipant,
+        participantsData,
+      } = res.data;
+
+      const tempDate = StringToDate(tempDateStr).data as Date;
+      tempDate.setHours(tempDate.getHours() + 8);
+      const dateStr = DateToString(tempDate);
 
       const resA = await FetchGroupActivityData.getRequests({
         activityID,
