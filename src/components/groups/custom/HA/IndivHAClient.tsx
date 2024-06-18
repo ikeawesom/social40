@@ -15,7 +15,7 @@ export default function IndivHAClient({
   members: { [id: string]: DailyHAType };
   isHA?: boolean;
 }) {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
   const size = Object.keys(members).length;
   return (
     <div className="w-full">
@@ -32,9 +32,8 @@ export default function IndivHAClient({
           className={`duration-300 ease-in-out ${show ? "rotate-180" : ""}`}
         />
       </div>
-      <HRow className="mb-2" />
       {show && (
-        <div className="w-full flex flex-col items-start justify-start gap-2">
+        <div className="w-full flex flex-col items-start justify-start gap-2 mt-2">
           {Object.keys(members).map((id: string) => {
             const { isHA, lastUpdated, memberID } = members[id];
             const updatedTiming = new Date(lastUpdated.seconds * 1000);
