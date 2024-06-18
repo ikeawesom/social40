@@ -8,10 +8,10 @@ import { GroupStatusesServer } from "./GroupStatusesServer";
 import HRow from "@/src/components/utils/HRow";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
-import CalculateHAButton from "../HA/CalculateHAButton";
 import ErrorSection from "@/src/components/utils/ErrorSection";
 import { Timestamp } from "firebase/firestore";
-import LastUpdatedHANotice from "../HA/LastUpdatedHANotice";
+import PrimaryButton from "@/src/components/utils/PrimaryButton";
+import Image from "next/image";
 
 export async function GroupStrengthServer({
   groupID,
@@ -59,18 +59,20 @@ export async function GroupStrengthServer({
             </Suspense>
             <>
               <HRow />
-              {lastUpdatedHA && (
-                <LastUpdatedHANotice lastUpdatedHA={lastUpdatedHA} />
-              )}
-              <CalculateHAButton groupID={groupID} membersList={parsed} />
               <Link
                 scroll={false}
                 href={`/groups/${groupID}/HA-report`}
-                className={twMerge(
-                  "text-start underline text-sm duration-150 text-custom-grey-text hover:text-custom-primary"
-                )}
+                className={twMerge("w-full")}
               >
-                View Group HA Reports
+                <PrimaryButton className="flex items-center justify-center gap-2">
+                  View Group HA Reports
+                  <Image
+                    alt=""
+                    src="/icons/features/icon_bolt.svg"
+                    width={13}
+                    height={13}
+                  />
+                </PrimaryButton>
               </Link>
             </>
           </>
