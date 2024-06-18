@@ -76,7 +76,7 @@ export default function FeedGroupCardClient({
       } = res.data;
 
       const tempDate = StringToDate(tempDateStr).data as Date;
-      tempDate.setHours(tempDate.getHours() + 8);
+      tempDate.setHours(tempDate.getHours() - 8);
       const dateStr = DateToString(tempDate);
 
       const resA = await FetchGroupActivityData.getRequests({
