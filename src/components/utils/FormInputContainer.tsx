@@ -5,10 +5,12 @@ export default function FormInputContainer({
   children,
   className,
   inputName,
+  labelClassName,
   labelText,
 }: {
   children: React.ReactNode;
   className?: string;
+  labelClassName?: string;
   inputName: string;
   labelText: string;
 }) {
@@ -19,7 +21,10 @@ export default function FormInputContainer({
         className
       )}
     >
-      <label className="text-xs text-custom-grey-text" htmlFor={inputName}>
+      <label
+        className={twMerge("text-xs text-custom-grey-text", labelClassName)}
+        htmlFor={inputName}
+      >
         {labelText}
       </label>
       {children}
