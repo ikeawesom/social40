@@ -25,7 +25,7 @@ export default function CreditsPage() {
           </span>
           .
         </h1>
-        <div className="flex flex-col items-start justify-start gap-6 w-full">
+        <div className="flex flex-col items-start justify-start gap-6 w-full fade-in-bottom">
           {EXECUTIVES.sort((a, b) => a.importance - b.importance).map(
             (member: CreditsRoleType, index: number) => {
               return <CreditNameSection key={index} member={member} />;
@@ -34,7 +34,7 @@ export default function CreditsPage() {
         </div>
         <HRow className="my-6" />
         <h1 className="md:text-3xl sm:text-2xl text-xl mb-6">Lead Roles</h1>
-        <div className="flex flex-col items-start justify-start gap-6 w-full">
+        <div className="flex flex-col items-start justify-start gap-6 w-full fade-in-bottom">
           {TECHNICALS.sort((a, b) => a.importance - b.importance).map(
             (member: CreditsRoleType, index: number) => {
               return <CreditNameSection key={index} member={member} />;
@@ -43,7 +43,7 @@ export default function CreditsPage() {
         </div>
         <HRow className="my-6" />
         <h1 className="md:text-3xl sm:text-2xl text-xl mb-6">Special Thanks</h1>
-        <div className="flex flex-wrap items-start justify-evenly gap-6 w-full">
+        <div className="flex flex-wrap items-start justify-evenly gap-6 w-full fade-in-bottom">
           {SPECIAL_THANKS.sort((a, b) => a.importance - b.importance).map(
             (member: CreditsRoleType, index: number) => {
               return <CreditNameSection small key={index} member={member} />;
