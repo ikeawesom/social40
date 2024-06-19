@@ -10,8 +10,6 @@ import { useHostname } from "@/src/hooks/useHostname";
 import { Onboarding } from "@/src/utils/onboarding";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { LoadingIconBright } from "../../../utils/LoadingIcon";
-import Modal from "@/src/components/utils/Modal";
-import ModalHeader from "@/src/components/utils/ModalHeader";
 
 type NewMemberType = {
   memberData: MEMBER_SCHEMA;
@@ -98,12 +96,20 @@ export default function CreateNewMemberForm({ memberData }: NewMemberType) {
 
   return (
     <>
-      {showRoles !== "" && (
-        <Modal>
-          <ModalHeader
-            close={() => setShowRoles("")}
-            heading="View Permissions"
-          />
+      {showRoles !== "" ? (
+        <>
+          <div
+            onClick={() => setShowRoles("")}
+            className="flex items-center justify-start gap-1 mb-2 cursor-pointer hover:bg-custom-light-text duration-150 rounded-md w-fit pl-1 pr-2 py-1"
+          >
+            <Image
+              alt="Back"
+              src="/icons/navigation/icon_back.svg"
+              width={20}
+              height={20}
+            />
+            <p className="text-custom-dark-text font-bold text-sm">Back</p>
+          </div>
           <p className="text-xs text-custom-grey-text mb-1">
             This can be changed later.
           </p>
@@ -156,120 +162,120 @@ export default function CreateNewMemberForm({ memberData }: NewMemberType) {
               NOTE: {permissionList[showRoles].notes}
             </p>
           )}
-        </Modal>
-      )}
-
-      <form
-        onSubmit={handleSubmit}
-        className="w-full flex flex-col items-center justify-start gap-3 mt-4 pb-2"
-      >
-        <input
-          required
-          type="text"
-          name="id"
-          placeholder="Choose a Member ID"
-          value={newDetails.id}
-          onChange={handleChange}
-        />
-        <input
-          required
-          type="text"
-          name="name"
-          placeholder="Choose a Display Name"
-          value={newDetails.name}
-          onChange={handleChange}
-        />
-
-        <div className="flex items-center justify-between gap-2 w-full">
+        </>
+      ) : (
+        <form
+          onSubmit={handleSubmit}
+          className="w-full flex flex-col items-center justify-start gap-3 mt-4 pb-2"
+        >
           <input
-            type={show ? "text" : "password"}
             required
-            name="password"
-            minLength={8}
-            value={newDetails.password}
+            type="text"
+            name="id"
+            placeholder="Choose a Member ID"
+            value={newDetails.id}
             onChange={handleChange}
-            placeholder="Create a password"
           />
-          <SecondaryButton
-            onClick={() => setShow(!show)}
-            className="w-fit self-stretch px-2 border-0 shadow-none"
-          >
-            {show ? (
-              <Image
-                src="/icons/icon_hide.svg"
-                alt="Hide"
-                width={30}
-                height={30}
-              />
-            ) : (
-              <Image
-                src="/icons/icon_show.svg"
-                alt="Show"
-                width={30}
-                height={30}
-              />
-            )}
-          </SecondaryButton>
-        </div>
+          <input
+            required
+            type="text"
+            name="name"
+            placeholder="Choose a Display Name"
+            value={newDetails.name}
+            onChange={handleChange}
+          />
 
-        <div className="w-full flex flex-col items-start justify-start gap-1">
-          <div className="flex items-center justify-start gap-1">
-            <label
-              htmlFor="permission"
-              className="w-fit text-sm text-custom-dark-text"
-            >
-              Set Permissions
-            </label>
+          <div className="flex items-center justify-between gap-2 w-full">
+            <input
+              type={show ? "text" : "password"}
+              required
+              name="password"
+              minLength={8}
+              value={newDetails.password}
+              onChange={handleChange}
+              placeholder="Create a password"
+            />
             <SecondaryButton
-              onClick={() => setShowRoles(defaultPerms)}
-              className="w-fit self-stretch p-0 border-0 shadow-none"
+              onClick={() => setShow(!show)}
+              className="w-fit self-stretch px-2 border-0 shadow-none"
             >
-              {showRoles ? (
+              {show ? (
                 <Image
-                  src="/icons/icon_question_primary.svg"
-                  alt="Show"
-                  width={25}
-                  height={25}
+                  src="/icons/icon_hide.svg"
+                  alt="Hide"
+                  width={30}
+                  height={30}
                 />
               ) : (
                 <Image
-                  src="/icons/icon_question.svg"
-                  alt="Hide"
-                  width={25}
-                  height={25}
+                  src="/icons/icon_show.svg"
+                  alt="Show"
+                  width={30}
+                  height={30}
                 />
               )}
             </SecondaryButton>
           </div>
 
-          <select
-            name="permission"
-            id="permission"
-            className="flex-1"
-            value={newRole}
-            onChange={handleChangeSelect}
+          <div className="w-full flex flex-col items-start justify-start gap-1">
+            <div className="flex items-center justify-start gap-1">
+              <label
+                htmlFor="permission"
+                className="w-fit text-sm text-custom-dark-text"
+              >
+                Set Permissions
+              </label>
+              <SecondaryButton
+                onClick={() => setShowRoles(defaultPerms)}
+                className="w-fit self-stretch p-0 border-0 shadow-none"
+              >
+                {showRoles ? (
+                  <Image
+                    src="/icons/icon_question_primary.svg"
+                    alt="Show"
+                    width={25}
+                    height={25}
+                  />
+                ) : (
+                  <Image
+                    src="/icons/icon_question.svg"
+                    alt="Hide"
+                    width={25}
+                    height={25}
+                  />
+                )}
+              </SecondaryButton>
+            </div>
+
+            <select
+              name="permission"
+              id="permission"
+              className="flex-1"
+              value={newRole}
+              onChange={handleChangeSelect}
+            >
+              {Object.keys(permissionList).map((item: string) => {
+                return (
+                  <option key={item} value={item}>
+                    {permissionList[item].title}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <PrimaryButton
+            type="submit"
+            className="grid place-items-center"
+            disabled={loading || !ready}
           >
-            {Object.keys(permissionList).map((item: string) => {
-              return (
-                <option key={item} value={item}>
-                  {permissionList[item].title}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-        <PrimaryButton
-          type="submit"
-          className="grid place-items-center"
-          disabled={loading || !ready}
-        >
-          {loading ? (
-            <LoadingIconBright width={20} height={20} />
-          ) : (
-            "Create Account"
-          )}
-        </PrimaryButton>
-      </form>
+            {loading ? (
+              <LoadingIconBright width={20} height={20} />
+            ) : (
+              "Create Account"
+            )}
+          </PrimaryButton>
+        </form>
+      )}
     </>
   );
 }

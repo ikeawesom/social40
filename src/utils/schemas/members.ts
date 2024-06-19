@@ -35,7 +35,8 @@ export type MEMBER_SCHEMA = {
   hiddenActivities?: string[];
 
   // feedback
-  feedback?: false;
+  feedback?: boolean;
+  viewCredits?: boolean;
 
   createdOn: Timestamp; // date format
 };

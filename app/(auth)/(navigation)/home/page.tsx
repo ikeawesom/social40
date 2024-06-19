@@ -23,6 +23,7 @@ import ActivityCalendarServerView from "@/src/components/feed/views/ActivityCale
 import { getInvolvedGroups } from "@/src/utils/groups/getInvolvedGroups";
 import FeedbackModal from "@/src/components/feedback/FeedbackModal";
 import { FeedbackProvider } from "@/src/contexts/FeedbackContext";
+import ViewCreditsSection from "@/src/components/announcements/ViewCreditsSection";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -64,7 +65,7 @@ export default async function Home({
 
     return (
       <>
-        <HomeHeaderBar text="Social40" params={activityType} />
+        <HomeHeaderBar params={activityType} />
         <div className="w-full grid place-items-center mt-[5.5rem]">
           {groupsList.length === 0 ? (
             <ErrorActivities text="Looks like you have no groups joined." />
@@ -114,21 +115,18 @@ export default async function Home({
         ROLES_HIERARCHY[memberData.role].rank >=
         ROLES_HIERARCHY["memberPlus"].rank;
     }
-
+    const parsed = JSON.parse(JSON.stringify(memberData));
     return (
       <>
         <FeedbackProvider>
           <FeedbackModal memberID={memberID} />
         </FeedbackProvider>
-        <HomeHeaderBar text="Social40" params={activityType} />
+        <HomeHeaderBar params={activityType} />
         <div className="w-full grid place-items-center mt-[5.5rem]">
           <div className="flex flex-col w-full items-center justify-start gap-4 max-w-[500px]">
             {IS_DEBUG.status && <MaintenanceSection />}
-            {!noShowUpdate && (
-              <UpdatesSection
-                memberData={JSON.parse(JSON.stringify(memberData))}
-              />
-            )}
+            {!noShowUpdate && <UpdatesSection memberData={parsed} />}
+            <ViewCreditsSection memberData={parsed} />
             {admin && <CreateAnnouncementForm memberID={memberID} />}
             <Suspense fallback={<FeedSkeleton />}>
               <AnnouncementSection curMember={memberID} />

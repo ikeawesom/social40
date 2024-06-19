@@ -61,7 +61,7 @@ export default async function EditProfilePage() {
               </div>
             </DefaultCard>
             <Link scroll={false} href="/docs/updates" className="w-full">
-              <DefaultCard className="hover:brightness-95 w-full py-2 px-3">
+              <DefaultCard className="hover:brightness-95 duration-150 w-full py-2 px-3">
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center justify-start gap-2">
                     <Image
@@ -86,7 +86,7 @@ export default async function EditProfilePage() {
             </Link>
             {/* View Hidden Activities */}
             <Link scroll={false} href="/hidden-activities" className="w-full">
-              <DefaultCard className="hover:brightness-95 w-full py-2  px-3">
+              <DefaultCard className="hover:brightness-95 duration-150 w-full py-2 px-3">
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center justify-start gap-2">
                     <Image
@@ -114,6 +114,36 @@ export default async function EditProfilePage() {
             <ChangePasswordSection />
             {/* Create Member */}
             {admin && <NewMemberSection memberData={memberData} />}
+
+            <Link
+              scroll={false}
+              href="/credits"
+              className="rounded-lg w-full relative overflow-hidden gradient-box p-1 hover:brightness-105 duration-150"
+            >
+              <div className="shimmer slow" />
+              <DefaultCard className="w-full py-2 px-3">
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center justify-start gap-2">
+                    <Image
+                      src="/icons/icon_heart.png"
+                      width={25}
+                      height={25}
+                      alt=""
+                    />
+                    <h1 className="text-custom-dark-text font-semibold text-start text-sm">
+                      Credits
+                    </h1>
+                  </div>
+                  <Image
+                    src="/icons/icon_arrow-down.svg"
+                    width={30}
+                    height={30}
+                    alt="Show"
+                    className="-rotate-90"
+                  />
+                </div>
+              </DefaultCard>
+            </Link>
             <SignoutButton />
           </div>
           <p className="text-custom-grey-text text-center text-sm my-6">
