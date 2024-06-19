@@ -40,6 +40,12 @@ select:not(.custom) {
   animation: shimmer 0.8s infinite ease-in-out;
 }
 
+.gradient-box {
+  background-image: linear-gradient(white, white),
+    linear-gradient(to right, rgb(255, 178, 35), rgb(228, 0, 0));
+  background-origin: border-box;
+  background-clip: content-box, padding-box;
+}
 @keyframes shimmer {
   100% {
     transform: translateX(100%);
