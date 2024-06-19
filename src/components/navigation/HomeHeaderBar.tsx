@@ -2,16 +2,9 @@
 import React from "react";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
-import { MAX_LENGTH } from "@/src/utils/settings";
 import Link from "next/link";
 
-export default function HomeHeaderBar({
-  text,
-  params,
-}: {
-  text: string;
-  params: string;
-}) {
+export default function HomeHeaderBar({ params }: { params: string }) {
   return (
     <div
       className={twMerge(
@@ -20,9 +13,7 @@ export default function HomeHeaderBar({
     >
       <div className="flex items-center justify-center gap-x-2 z-40 w-full p-2">
         <h1 className="font-semibold text-custom-dark-text text-2xl">
-          {text.length > MAX_LENGTH - 4
-            ? text.substring(0, MAX_LENGTH - 4 - 3) + "..."
-            : text}
+          Social<span className="text-custom-primary">40</span>
         </h1>
         <Image
           src="/icons/icon_coin.svg"
