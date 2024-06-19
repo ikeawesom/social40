@@ -1,19 +1,24 @@
 import HRow from "@/src/components/utils/HRow";
 import { VERSION_MAP } from "@/src/utils/versions";
+import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Version Updates",
+};
 
 export default function PatchNotesPage() {
   return (
     <div className="grid place-items-center w-full">
       <div className="flex flex-col items-start justify-start gap-10 w-full max-w-[600px] p-4">
         <div className="w-full text-start">
-          <h1 className="text-5xl text-custom-dark-text font-bold">
+          <h1 className="text-5xl text-custom-dark-text font-bold mb-2">
             Version Updates
           </h1>
           <Link
             scroll={false}
-            className="mt-5 text-lg underline text-custom-primary hover:opacity-70 duration-150"
+            className="underline text-custom-primary hover:opacity-70 duration-150"
             target="_blank"
             href="https://social40.notion.site/Social40-Documentation-7657d91a8aaf406a85d29c349b1f3c17"
           >
