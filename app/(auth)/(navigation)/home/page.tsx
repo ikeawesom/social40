@@ -21,6 +21,8 @@ import SignInAgainScreen from "@/src/components/screens/SignInAgainScreen";
 import GroupsActivitiesViews from "@/src/components/feed/GroupsActivitiesViews";
 import ActivityCalendarServerView from "@/src/components/feed/views/ActivityCalendarServerView";
 import { getInvolvedGroups } from "@/src/utils/groups/getInvolvedGroups";
+import FeedbackModal from "@/src/components/feedback/FeedbackModal";
+import { FeedbackProvider } from "@/src/contexts/FeedbackContext";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -115,6 +117,9 @@ export default async function Home({
 
     return (
       <>
+        <FeedbackProvider>
+          <FeedbackModal memberID={memberID} />
+        </FeedbackProvider>
         <HomeHeaderBar text="Social40" params={activityType} />
         <div className="w-full grid place-items-center mt-[5.5rem]">
           <div className="flex flex-col w-full items-center justify-start gap-4 max-w-[500px]">
