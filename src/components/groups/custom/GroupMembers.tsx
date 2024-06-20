@@ -13,7 +13,6 @@ import {
   GROUP_MEMBERS_SELECT_OPTIONS,
   GROUP_ROLES_HEIRARCHY,
 } from "@/src/utils/constants";
-import InviteMemberForm from "./InviteMemberForm";
 import HRow from "../../utils/HRow";
 import { LoadingIconBright } from "../../utils/LoadingIcon";
 import SecondaryButton from "../../utils/SecondaryButton";
@@ -23,7 +22,6 @@ import PrimaryButton from "../../utils/PrimaryButton";
 import Modal from "../../utils/Modal";
 import ModalLoading from "../../utils/ModalLoading";
 import { useHandleSelectActions } from "@/src/hooks/groups/custom/useHandleSelectActions";
-import ActivityInvite from "./activities/ActivityInvite";
 import GroupInvite from "./strength/GroupInvite";
 
 export default function GroupMembers({
@@ -196,7 +194,6 @@ export default function GroupMembers({
                   participants={Object.keys(membersList)}
                   groupID={groupID}
                 />
-                {/* <InviteMemberForm membersList={membersList} groupID={groupID} /> */}
               </>
             )}
           </>
