@@ -51,9 +51,10 @@ export function useQueryDrop({
         const name = secondaryKey
           ? membersList[id][secondaryKey].toLowerCase()
           : "";
-        return idLower.includes(lowerQuery) || secondaryKey
-          ? name.includes(lowerQuery)
-          : true;
+        return (
+          idLower.includes(lowerQuery) ||
+          (secondaryKey ? name.includes(lowerQuery) : true)
+        );
       });
       setFiltered(temp);
     }
