@@ -43,6 +43,7 @@ export default function SigninForm({ setStatus }: statusType) {
     try {
       // lowercase memberID (not case-sensitive)
       const memberID = username;
+      localStorage.setItem("localMemberID", memberID);
 
       // sign in to firebase
       const auth = getAuth(FIREBASE_APP);
@@ -61,9 +62,6 @@ export default function SigninForm({ setStatus }: statusType) {
       });
 
       if (error) throw new Error(error);
-
-      // add cookie
-      localStorage.setItem("localMemberID", memberID);
 
       router.refresh();
       setMember(memberID);
