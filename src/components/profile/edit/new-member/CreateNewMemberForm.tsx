@@ -51,7 +51,12 @@ export default function CreateNewMemberForm({ memberData }: NewMemberType) {
     Object.keys(permissionList)[Object.keys(permissionList).length - 1];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewDetails({ ...newDetails, [e.target.name]: e.target.value });
+    const value = e.target.value;
+    const name = e.target.name;
+    setNewDetails({
+      ...newDetails,
+      [name]: name === "id" ? value.toLowerCase() : value,
+    });
   };
 
   const handleChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
