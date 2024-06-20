@@ -62,8 +62,6 @@ export default function InviteMembersModal({
       filtered.includes(id)
     );
     temp.forEach((id: string) => (filteredObj[id] = membersList[id]));
-  } else {
-    filteredObj = { ...membersList };
   }
 
   return (
@@ -111,7 +109,7 @@ export default function InviteMembersModal({
                   </>
                 )}
 
-                <InnerContainer className="w-full h-[40vh] mt-2">
+                <InnerContainer className="w-full h-[20vh] mt-2">
                   {query !== "" && filtered.length === 0 ? (
                     <ErrorSection>
                       <p className="text-xs text-custom-grey-text">
