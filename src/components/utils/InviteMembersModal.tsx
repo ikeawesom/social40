@@ -110,7 +110,13 @@ export default function InviteMembersModal({
                 )}
 
                 <InnerContainer className="w-full h-[20vh] mt-2">
-                  {query !== "" && filtered.length === 0 ? (
+                  {query === "" ? (
+                    <ErrorSection>
+                      <p className="text-xs text-custom-grey-text">
+                        Let's find someone!
+                      </p>
+                    </ErrorSection>
+                  ) : query !== "" && filtered.length === 0 ? (
                     <ErrorSection>
                       <p className="text-xs text-custom-grey-text">
                         No member matches that search!
