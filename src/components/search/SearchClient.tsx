@@ -28,7 +28,9 @@ export default function SearchClient() {
         />
       </FormInputContainer>
       {isLoading ? (
-        <LoadingIcon height={30} width={30} />
+        <ErrorSection>
+          <LoadingIcon height={30} width={30} />
+        </ErrorSection>
       ) : query === "" ? (
         <ErrorSection>
           <p className="text-xs text-custom-grey-text">Let's find someone!</p>
