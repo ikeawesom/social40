@@ -34,7 +34,7 @@ export default function HomeHeaderBar({ params }: { params: string }) {
               "border-b-custom-primary text-custom-primary"
           )}
         >
-          Announcements
+          For You
         </Link>
         <Link
           scroll={false}
