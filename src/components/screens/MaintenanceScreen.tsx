@@ -14,7 +14,9 @@ export default function MaintenanceScreen() {
           />
           <h1 className="text-center text-custom-dark-text text-lg">
             Oops, we are currently under maintenance to make{" "}
-            <span className="font-bold text-custom-primary">Social40</span>{" "}
+            <span className="font-bold">
+              Social<span className="text-custom-primary">40</span>
+            </span>{" "}
             better for you! Try checking back later or contact a commander.
           </h1>
         </div>
