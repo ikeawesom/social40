@@ -87,7 +87,11 @@ export default function LikeButton({
             members.length > 0 ? (
               <div className="w-full flex items-start justify-start gap-2 flex-col">
                 {members.map((item: MEMBER_SCHEMA, index: number) => (
-                  <BasicMemberCard member={item} key={index} />
+                  <BasicMemberCard
+                    className="border-custom-light-text border-[1px]"
+                    member={item}
+                    key={index}
+                  />
                 ))}
               </div>
             ) : (
