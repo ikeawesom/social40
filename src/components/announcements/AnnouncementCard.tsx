@@ -12,6 +12,50 @@ import ScrollMedia from "./media/ScrollMedia";
 import { DisplayMediaType } from "./media/AddMedia";
 import LikeButton from "../utils/LikeButton";
 
+const transformString = (input: string) => {
+  return input.split("$a").map((part, index) => {
+    const segments: React.ReactNode[] = [];
+    let remainingText = part;
+
+    while (remainingText.includes("@")) {
+      const atIndex = remainingText.indexOf("@");
+      const nextSpaceIndex = remainingText.indexOf(" ", atIndex);
+      const endIndex =
+        nextSpaceIndex === -1 ? remainingText.length : nextSpaceIndex;
+
+      if (atIndex > 0) {
+        segments.push(remainingText.slice(0, atIndex));
+      }
+
+      const highlightedText = remainingText.slice(atIndex, endIndex);
+      segments.push(
+        <Link
+          key={segments.length}
+          href={`/members/${highlightedText.substring(
+            1,
+            highlightedText.length
+          )}`}
+          className="text-custom-primary font-bold hover:opacity-70 duration-150"
+        >
+          {highlightedText}
+        </Link>
+      );
+      remainingText = remainingText.slice(endIndex);
+    }
+
+    if (remainingText) {
+      segments.push(remainingText);
+    }
+
+    return (
+      <React.Fragment key={index}>
+        {segments}
+        {index < input.split("$a").length - 1 && <br />}
+      </React.Fragment>
+    );
+  });
+};
+
 export default function AnnouncementCard({
   announcementData,
   curMember,
@@ -30,8 +74,6 @@ export default function AnnouncementCard({
     media,
     likes,
   } = announcementData;
-
-  const descLines = desc.split("$a");
 
   let mediaFiles = [] as DisplayMediaType[];
   if (media) {
@@ -76,16 +118,7 @@ export default function AnnouncementCard({
           </div>
         )}
       </div>
-      {descLines.map((line: string, index: number) => {
-        if (line === "") return <br key={index} />;
-        return (
-          <p
-            key={index}
-            className="text-custom-dark-text text-sm"
-          >{`${line}`}</p>
-        );
-      })}
-
+      <p className="text-custom-dark-text text-sm">{transformString(desc)}</p>
       {mediaFiles.length > 0 && (
         <ScrollMedia mediaFiles={mediaFiles} className="mt-2" />
       )}
