@@ -1,4 +1,14 @@
 export const VERSION_MAP = {
+  "1.7.0": {
+    version: "1.7.0",
+    title: "Likes and Tags",
+    desc: "Allowing more interactions for Social40!",
+    updates: [
+      "Show your support by liking posts now!",
+      "Commanders can give recognition to your soldiers by tagging them with the @ symbol",
+    ],
+    date: "21/06/2024",
+  },
   "1.6.0": {
     version: "1.6.0",
     title: "Profile Statistics",
