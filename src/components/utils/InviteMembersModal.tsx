@@ -51,6 +51,10 @@ export default function InviteMembersModal({
     resetError();
   };
 
+  useEffect(() => {
+    setMembers(members);
+  }, [members]);
+
   return (
     <>
       {show && (
