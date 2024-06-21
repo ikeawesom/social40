@@ -74,7 +74,15 @@ export default async function MemberPage({
     const resA = await fetch(`${host}/api/profile/member`, PostObjA);
     const dataA = await resA.json();
 
-    if (!dataA.status) throw new Error(dataA.error);
+    const { error } = dataA;
+    if (error) {
+      if (error.includes("not found")) {
+        throw new Error(
+          "Oops, this member does not exist. Try checking your spelling or contact an administrator!"
+        );
+      }
+      throw new Error(error);
+    }
 
     const viewMemberData = dataA.data as MEMBER_SCHEMA;
     const rankName =
