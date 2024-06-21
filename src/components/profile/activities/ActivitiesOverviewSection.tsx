@@ -18,7 +18,7 @@ export default async function ActivitiesOverviewSection({
 }) {
   const { groupsList } = await getInvolvedGroups(memberID);
 
-  const {
+  let {
     data: groupActivities,
   }: { data: { [id: string]: GROUP_ACTIVITY_SCHEMA } } =
     await dbHandler.getSpecific({
@@ -29,6 +29,8 @@ export default async function ActivitiesOverviewSection({
       criteria: "in",
       value: groupsList,
     });
+
+  if (groupActivities === null) groupActivities = {};
 
   const { data: activitiesFellout }: { data: FALLOUTS_SCHEMA[] } =
     await getMemberFallouts(memberID, Object.keys(groupActivities));
@@ -44,12 +46,11 @@ export default async function ActivitiesOverviewSection({
 
   const noParticipated = Object.keys(participated).length;
   const noFallouts = activitiesFellout.length;
+  const total = noParticipated + noFallouts;
   const percentParticipated =
-    Math.round(
-      (Number.EPSILON +
-        (noParticipated / (noParticipated + noFallouts)) * 100) *
-        10
-    ) / 10;
+    total === 0
+      ? 0
+      : Math.round((Number.EPSILON + (noParticipated / total) * 100) * 10) / 10;
   const totalActivities = noParticipated + noFallouts;
 
   return (
