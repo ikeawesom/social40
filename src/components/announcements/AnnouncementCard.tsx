@@ -10,6 +10,7 @@ import AnnouncementTag from "./AnnouncementTag";
 import DeleteButton from "./card/DeleteButton";
 import ScrollMedia from "./media/ScrollMedia";
 import { DisplayMediaType } from "./media/AddMedia";
+import LikeButton from "../utils/LikeButton";
 
 export default function AnnouncementCard({
   announcementData,
@@ -27,6 +28,7 @@ export default function AnnouncementCard({
     groups,
     pin,
     media,
+    likes,
   } = announcementData;
 
   const descLines = desc.split("$a");
@@ -58,7 +60,22 @@ export default function AnnouncementCard({
         )}
       </div>
       <HRow className="mb-2" />
-      <h1 className="font-bold text-xl mb-2">{title}</h1>
+      <div className="mb-2">
+        <h1 className="font-bold text-xl">{title}</h1>
+        {groups && curMember === createdBy && (
+          <div className="flex items-start justify-start gap-2 mb-1 mt-1">
+            {groups.map((id: string, index: number) => (
+              <AnnouncementTag
+                className="bg-custom-grey-text/80 px-1 py-[2px] text-xs"
+                key={index}
+              >
+                {" "}
+                {id}
+              </AnnouncementTag>
+            ))}
+          </div>
+        )}
+      </div>
       {descLines.map((line: string, index: number) => {
         if (line === "") return <br key={index} />;
         return (
@@ -74,23 +91,16 @@ export default function AnnouncementCard({
       )}
       <div className="flex items-center justify-between gap-3 mt-3">
         {createdOn && (
-          <div className="flex flex-col items-start justify-start gap-1">
+          <div>
+            <LikeButton
+              id={announcementID ?? ""}
+              memberID={curMember}
+              likes={likes ?? []}
+              className="mb-2"
+            />
             <p className="text-xs text-custom-grey-text">
               {TimestampToDateString(createdOn).split(" ")[0]}
             </p>
-            {groups && curMember === createdBy && (
-              <div className="flex items-start justify-start gap-2">
-                {groups.map((id: string, index: number) => (
-                  <AnnouncementTag
-                    className="px-1 py-[2px] text-xs"
-                    key={index}
-                  >
-                    {" "}
-                    {id}
-                  </AnnouncementTag>
-                ))}
-              </div>
-            )}
           </div>
         )}
         {curMember === createdBy && (
