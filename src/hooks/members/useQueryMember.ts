@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export function useQueryDrop({
+export function useQueryMember({
   fetchFunction,
   secondaryKey,
   id,
@@ -70,7 +70,22 @@ export function useQueryDrop({
     setMembers(id ? [id] : []);
   };
 
+  useEffect(() => {
+    setMembers(members);
+  }, [members]);
+
+  let filteredObj = {} as any;
+  if (membersList && filtered.length > 0) {
+    const temp = Object.keys(membersList).filter((id: string) =>
+      filtered.includes(id)
+    );
+    temp.forEach((id: string) => (filteredObj[id] = membersList[id]));
+  }
+
+  const isLoading = membersList === undefined;
   return {
+    isLoading,
+    filteredObj,
     membersList,
     members,
     isDetail,
