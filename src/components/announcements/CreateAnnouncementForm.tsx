@@ -8,7 +8,7 @@ import Modal from "../utils/Modal";
 import ModalHeader from "../utils/ModalHeader";
 import { useHandleAnnouncements } from "@/src/hooks/announcements/useHandleAnnouncements";
 import ToggleContainer from "../utils/toggle/ToggleContainer";
-import { useQueryDrop } from "@/src/hooks/members/useQueryMember";
+import { useQueryMember } from "@/src/hooks/members/useQueryMember";
 import { getGroups } from "@/src/utils/groups/getGroupData";
 import Badge from "../utils/Badge";
 import AddMedia from "./media/AddMedia";
@@ -44,7 +44,7 @@ export default function CreateAnnouncementForm({
   const getCustomGroups = async () => await getGroups(memberID);
 
   const { filtered, query, setQuery, handleAdd, handleRemove, members } =
-    useQueryDrop({
+    useQueryMember({
       fetchFunction: getCustomGroups,
       secondaryKey: "groupName",
     });

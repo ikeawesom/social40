@@ -8,8 +8,7 @@ import ModalHeader from "@/src/components/utils/ModalHeader";
 import ModalLoading from "@/src/components/utils/ModalLoading";
 import PrimaryButton from "@/src/components/utils/PrimaryButton";
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
-import { useQueryDrop } from "@/src/hooks/members/useQueryMember";
-import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
+import { useQueryMember } from "@/src/hooks/members/useQueryMember";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -34,35 +33,23 @@ export default function InviteMembersModal({
   //   const [allMembers, setAllMembers] = useState<MemberIDNameType[]>();
   const {
     filtered,
-    membersList,
     handleAdd,
     handleRemove,
     members,
     query,
     resetQueryMember,
     setQuery,
-  } = useQueryDrop({
+    filteredObj,
+  } = useQueryMember({
     fetchFunction: getMembersData,
     secondaryKey: "displayName",
   });
-
-  useEffect(() => {
-    setMembers(members);
-  }, [members]);
 
   const resetModal = () => {
     resetQueryMember();
     setShow(false);
     resetError();
   };
-
-  let filteredObj = {} as { [id: string]: MEMBER_SCHEMA };
-  if (membersList && filtered.length > 0) {
-    const temp = Object.keys(membersList).filter((id: string) =>
-      filtered.includes(id)
-    );
-    temp.forEach((id: string) => (filteredObj[id] = membersList[id]));
-  }
 
   return (
     <>

@@ -20,7 +20,7 @@ import { useSetIppt } from "@/src/hooks/members/useSetIppt";
 import InnerContainer from "../../utils/InnerContainer";
 import Badge from "../../utils/Badge";
 import SecondaryButton from "../../utils/SecondaryButton";
-import { useQueryDrop } from "@/src/hooks/members/useQueryMember";
+import { useQueryMember } from "@/src/hooks/members/useQueryMember";
 import { useSetVOC } from "@/src/hooks/members/useSetVOC";
 import { useSetATP } from "@/src/hooks/members/useSetATP";
 import AnnouncementTag from "../../announcements/AnnouncementTag";
@@ -54,7 +54,7 @@ export default function AddMemberStatForm({
     setIsDetail,
     setQuery,
     handleRemove,
-  } = useQueryDrop({
+  } = useQueryMember({
     fetchFunction: getMembersData,
     id,
     secondaryKey: "displayName",
