@@ -6,6 +6,7 @@ import { DailyHAType } from "@/src/utils/schemas/ha";
 import React from "react";
 import IndivHAClient from "./IndivHAClient";
 import RecalculateIndivHAButton from "./RecalculateIndivHAButton";
+import getCurrentDate from "@/src/utils/helpers/getCurrentDate";
 
 export default async function IndivaHAServerSection({
   groupID,
@@ -24,7 +25,18 @@ export default async function IndivaHAServerSection({
     const members = grpMemberRes as GroupDetailsType;
     const promArr = Object.keys(members).map(async (id: string) => {
       const { data, error } = await dbHandler.get({ col_name: "HA", id });
-      if (error) return handleResponses({ status: false, error });
+      if (error) {
+        if (error.includes("not found")) {
+          const temp = {
+            dailyActivities: {},
+            isHA: false,
+            lastUpdated: getCurrentDate(),
+            memberID: id,
+          } as DailyHAType;
+          return handleResponses({ status: false, error, data: temp });
+        }
+        return handleResponses({ status: false, error });
+      }
       return handleResponses({ data });
     });
     const resolvedArr = await Promise.all(promArr);
@@ -32,8 +44,11 @@ export default async function IndivaHAServerSection({
     const membersIDs = [] as string[];
     const NonHAMembers = {} as { [id: string]: DailyHAType };
     const HAMembers = {} as { [id: string]: DailyHAType };
+
     resolvedArr.forEach((item: any) => {
-      if (item.error) throw new Error(item.error);
+      const { error } = item;
+      if (error && !error.includes("not found")) throw new Error(error);
+
       const memberData = item.data as DailyHAType;
       const { memberID, isHA } = memberData;
       membersIDs.push(memberID);
