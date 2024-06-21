@@ -28,7 +28,7 @@ export default function ScrollMedia({
             spotlightClassName
           )}
         >
-          <div className="relative w-full bg-black rounded-md shadow-sm h-[30vh]">
+          <div className="relative max-w-[500px] w-full bg-black rounded-md shadow-sm h-[30vh]">
             <Image
               alt={spotlight.file?.name ?? spotlight.src}
               src={spotlight.src}

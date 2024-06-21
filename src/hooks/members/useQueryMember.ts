@@ -24,7 +24,7 @@ export function useQueryMember({
   const handleAdd = (id: string) => {
     if (!members.includes(id)) {
       setMembers([...members, id]);
-      resetQuery();
+      // resetQuery();
     }
   };
 
