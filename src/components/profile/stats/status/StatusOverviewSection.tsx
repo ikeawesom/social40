@@ -89,6 +89,8 @@ export function getAverage(
   noExtra?: boolean
 ) {
   const durationFinal = noExtra ? 1 : duration ?? 30;
+  const avg = age / durationFinal;
+  if (avg === 0) return 0;
   return Math.round((Number.EPSILON + value / (age / durationFinal)) * 10) / 10;
 }
 
