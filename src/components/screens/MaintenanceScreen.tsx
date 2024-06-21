@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function MaintenanceScreen() {
   return (
-    <div className="grid place-items-center h-[70vh] p-2">
+    <div className="grid place-items-center h-[70vh] p-4">
       <div className="flex flex-col gap-5 items-center justify-center max-w-[500px] w-full">
         <div className="flex flex-col gap-10 items-center justify-center w-full">
           <Image
