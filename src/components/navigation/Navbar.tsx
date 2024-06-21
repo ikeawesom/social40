@@ -19,6 +19,12 @@ export default function Navbar() {
       link: "/home",
     },
     {
+      title: "Search",
+      icon: "icon_search_black.svg",
+      active: "icon_search_active.svg",
+      link: "/search",
+    },
+    {
       title: "Groups",
       icon: "icon_group.svg",
       active: "icon_group_active.svg",
@@ -44,7 +50,7 @@ export default function Navbar() {
           <button
             onClick={() => handleNav(item.link)}
             key={index}
-            className="flex flex-col gap-1 items-center justify-center py-2"
+            className="flex flex-col gap-1 items-center justify-center py-2 hover:opacity-50 duration-150"
           >
             <Image
               src={
