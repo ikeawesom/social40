@@ -1,10 +1,12 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import { MAX_LENGTH } from "@/src/utils/settings";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import LoadingIcon from "../utils/LoadingIcon";
+import SecondaryButton from "../utils/SecondaryButton";
 
 export const handleReload = (router: AppRouterInstance) => {
   router.refresh();
@@ -18,6 +20,12 @@ export default function HeaderBar({
   text: string;
   back?: boolean;
 }) {
+  const [loading, setLoading] = useState(false);
+
+  const toggleLoad = () => {
+    setLoading(true);
+    handleReload(router);
+  };
   useEffect(() => {
     sessionStorage.setItem("url", window.location.href);
   }, []);
@@ -27,31 +35,40 @@ export default function HeaderBar({
   return (
     <div
       className={twMerge(
-        "w-full bg-white shadow-sm fixed top-0 left-0 p-2 flex items-center justify-start gap-x-4 z-40",
+        "w-full bg-white shadow-sm fixed top-0 left-0 p-2 flex items-center justify-start gap-x-2 z-40",
         !back ? "px-4" : ""
       )}
     >
       {back && (
-        <Image
-          onClick={() => {
-            router.back();
-            router.refresh();
-          }}
-          src="/icons/navigation/icon_back.svg"
-          className="cursor-pointer"
-          alt="Back"
-          width={30}
-          height={30}
-        />
+        <SecondaryButton className="w-fit p-0">
+          <Image
+            onClick={() => {
+              router.back();
+              router.refresh();
+            }}
+            src="/icons/navigation/icon_back.svg"
+            className="cursor-pointer"
+            alt="Back"
+            width={30}
+            height={30}
+          />
+        </SecondaryButton>
       )}
-      <Image
-        onClick={() => handleReload(router)}
-        src="/icons/navigation/icon_reload.svg"
-        className="cursor-pointer justify-self-end"
-        alt="Reload"
-        width={20}
-        height={20}
-      />
+
+      <SecondaryButton className="w-fit p-1">
+        {loading ? (
+          <LoadingIcon width={20} height={20} />
+        ) : (
+          <Image
+            onClick={toggleLoad}
+            src="/icons/navigation/icon_reload.svg"
+            className="cursor-pointer justify-self-end"
+            alt="Reload"
+            width={20}
+            height={20}
+          />
+        )}
+      </SecondaryButton>
       <h1 className="font-semibold text-custom-dark-text w-full text-start">
         {text.length > MAX_LENGTH - 4
           ? text.substring(0, MAX_LENGTH - 4 - 3) + "..."
