@@ -170,13 +170,7 @@ export default function FeedGroupCardClient({
         {dateStr}
       </p>
 
-      <Link
-        scroll={false}
-        href={`/groups/${activityData.groupID}/activity?${new URLSearchParams({
-          id: activityID,
-        })}`}
-        className="text-sm text-custom-dark-text mt-2"
-      >
+      <h1 className="text-sm text-custom-dark-text mt-2">
         {!noParticipant && (
           <>
             <span className="font-semibold">{randomParticipant} </span>
@@ -194,7 +188,7 @@ export default function FeedGroupCardClient({
             participating.
           </>
         )}
-      </Link>
+      </h1>
 
       <div className="w-full mt-2 flex items-center justify-end gap-3 max-[350px]:flex-wrap">
         {!currentParticipant ? (
