@@ -55,7 +55,7 @@ export default function HeaderBar({
         </SecondaryButton>
       )}
 
-      <SecondaryButton className="w-fit p-1">
+      <SecondaryButton disabled={loading} className="w-fit p-1">
         {loading ? (
           <LoadingIcon width={20} height={20} />
         ) : (
