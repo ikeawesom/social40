@@ -33,6 +33,7 @@ export default function FeedGroupClient({
   const [activityData, setActivityData] = useState(activities);
   const [lastRef, setLastRef] = useState(lastPointerServer);
   const [finished, setFinished] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
     await sleep(400);
@@ -41,6 +42,7 @@ export default function FeedGroupClient({
     try {
       let newPointer = lastRef;
       while (newPointer !== undefined) {
+        setLoading(true);
         const { data: pagiData, error } = await FetchPaginateActivity({
           hidden,
           lastPointer: newPointer,
@@ -56,6 +58,7 @@ export default function FeedGroupClient({
         // console.log(data);
 
         setLastRef(lastPointer);
+        setLoading(false);
         if (data.length !== 0) {
           // console.log("data:", data);
           setActivityData((prev: GROUP_ACTIVITIES_SCHEMA[]) => [
@@ -114,7 +117,7 @@ export default function FeedGroupClient({
           />
         );
       })}
-      {!finished && (
+      {!finished && !loading && (
         <div ref={ref} className="grid place-items-center w-full">
           <LoadingIcon height={40} width={40} />
         </div>
