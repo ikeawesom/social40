@@ -57,7 +57,9 @@ export default function ActivityWaitlist({
       const res = await rejectLogic(memberID);
       if (!res.status) throw new Error(res.error);
       router.refresh();
-      toast.success(`Rejected ${memberID}`);
+      toast.success(
+        `Rejected ${memberID}! Please wait a few seconds for changes to update.`
+      );
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -131,7 +133,9 @@ export default function ActivityWaitlist({
         if (!item.status) throw new Error(item.error);
       });
       router.refresh();
-      toast.success("Successfully rejected all requests");
+      toast.success(
+        "Successfully rejected all requests! Please wait a few seconds for changes to update."
+      );
     } catch (err: any) {
       toast.error(err.message);
     }

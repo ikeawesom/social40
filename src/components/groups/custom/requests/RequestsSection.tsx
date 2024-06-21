@@ -115,7 +115,9 @@ export default function RequestsSection({
     try {
       const res = await rejectLogic(groupID, memberID);
       if (!res.status) throw new Error(res.error);
-      toast.success(`Rejected ${memberID}.`);
+      toast.success(
+        `Rejected ${memberID}! Please wait a few seconds for changes to update.`
+      );
       if (reload) reload(true);
     } catch (error: any) {
       toast.error(error.message);
@@ -167,7 +169,9 @@ export default function RequestsSection({
       promisesRes.forEach((item: any) => {
         if (!item.status) throw new Error(item.error);
       });
-      toast.success("Successfully rejected all member requests");
+      toast.success(
+        "Successfully rejected all member requests! Please wait a few seconds for changes to update."
+      );
       if (reload) reload(true);
     } catch (err: any) {
       toast.error(err.message);
