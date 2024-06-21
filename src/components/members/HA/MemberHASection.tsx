@@ -4,10 +4,19 @@ import LastUpdatedHANotice from "../../groups/custom/HA/LastUpdatedHANotice";
 import DownloadIndivHAButton from "./DownloadIndivHAButton";
 import Image from "next/image";
 import DefaultCard from "../../DefaultCard";
+import ErrorSection from "../../utils/ErrorSection";
 
 export async function MemberHASection({ memberID }: { memberID: string }) {
   const { data, error } = await dbHandler.get({ col_name: "HA", id: memberID });
-  if (error) return <></>;
+  if (error)
+    return (
+      <ErrorSection>
+        <p>
+          Looks like there are no HA details recorded for{" "}
+          <span className="font-bold">{memberID}</span>.
+        </p>
+      </ErrorSection>
+    );
   const memberHA = data as DailyHAType;
   const { dailyActivities, isHA, lastUpdated } = memberHA;
   return (
