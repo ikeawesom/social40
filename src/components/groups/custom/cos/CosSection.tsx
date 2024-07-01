@@ -82,7 +82,9 @@ export default async function CosSection({
     }
 
     const involved =
-      cos.admins.includes(curMemberID) || cos.members.includes(curMemberID);
+      cos.admins?.includes(curMemberID) || cos.members?.includes(curMemberID);
+
+    console.log("involved:", involved);
 
     return <DefaultCard>hi</DefaultCard>;
 
