@@ -37,7 +37,6 @@ export default async function CosSection({
       id: `${month}`,
     });
 
-    console.log("error:", error);
     if (error && !error.includes("not found")) throw new Error(error);
 
     let cosData = getSimple(data) as COS_DAILY_SCHEMA | null;
@@ -48,9 +47,9 @@ export default async function CosSection({
     let pendingPrevFinish = false;
     let pendingCurTakeOver = false;
 
-    console.log("COS Data:", cosData);
-
     if (cosData) {
+      console.log("date str:", dateStr);
+      console.log("plan:", cosData.plans[dateStr]);
       if (cosData.plans[dateStr].disabled) {
         disabledDate = true;
       }
@@ -82,59 +81,54 @@ export default async function CosSection({
     }
 
     const involved =
-      cos.admins?.includes(curMemberID) || cos.members?.includes(curMemberID);
+      cos.admins.includes(curMemberID) || cos.members.includes(curMemberID);
 
-    console.log("involved:", involved);
-
-    return <DefaultCard>hi</DefaultCard>;
-
-    // return (
-    //   <DefaultCard className="w-full">
-    //     {!cosData || (disabledDate && !pendingPrevFinish) ? (
-    //       <div className="flex w-full items-start justify-center flex-col gap-2">
-    //         <p className="text-sm text-custom-grey-text">
-    //           Hmm.. you do not have a COS planned for today, {dateStr}.
-    //         </p>
-    //         {involved && (
-    //           <Link
-    //             scroll={false}
-    //             href={`/groups/${groupID}/COS`}
-    //             className="text-xs underline text-custom-primary hover:opacity-70"
-    //           >
-    //             View COS Plans
-    //           </Link>
-    //         )}
-    //       </div>
-    //     ) : (
-    //       <div className="flex flex-col items-start justify-start gap-1">
-    //         <p className="text-xs text-custom-grey-text">Current COS</p>
-    //         <h1 className="font-bold text-custom-dark-text">{activeCOS}</h1>
-    //         {involved && (
-    //           <Link
-    //             scroll={false}
-    //             href={`/groups/${groupID}/COS`}
-    //             className="text-xs underline text-custom-primary hover:opacity-70"
-    //           >
-    //             View COS Plans
-    //           </Link>
-    //         )}
-    //         <CosHOTOSection
-    //           activeCOS={activeCOS}
-    //           curDayCOS={curDayCOS}
-    //           curMemberID={curMemberID}
-    //           pendingCurTakeOver={pendingCurTakeOver}
-    //           pendingPrevFinish={pendingPrevFinish}
-    //           prevDayCos={prevDayCos}
-    //           cosData={cosData}
-    //           dateStr={dateStr}
-    //           prevDateStr={prevDateStr}
-    //           month={month}
-    //         />
-    //       </div>
-    //     )}
-    //     hi
-    //   </DefaultCard>
-    // );
+    return (
+      <DefaultCard className="w-full">
+        {!cosData || (disabledDate && !pendingPrevFinish) ? (
+          <div className="flex w-full items-start justify-center flex-col gap-2">
+            <p className="text-sm text-custom-grey-text">
+              Hmm.. you do not have a COS planned for today, {dateStr}.
+            </p>
+            {involved && (
+              <Link
+                scroll={false}
+                href={`/groups/${groupID}/COS`}
+                className="text-xs underline text-custom-primary hover:opacity-70"
+              >
+                View COS Plans
+              </Link>
+            )}
+          </div>
+        ) : (
+          <div className="flex flex-col items-start justify-start gap-1">
+            <p className="text-xs text-custom-grey-text">Current COS</p>
+            <h1 className="font-bold text-custom-dark-text">{activeCOS}</h1>
+            {involved && (
+              <Link
+                scroll={false}
+                href={`/groups/${groupID}/COS`}
+                className="text-xs underline text-custom-primary hover:opacity-70"
+              >
+                View COS Plans
+              </Link>
+            )}
+            <CosHOTOSection
+              activeCOS={activeCOS}
+              curDayCOS={curDayCOS}
+              curMemberID={curMemberID}
+              pendingCurTakeOver={pendingCurTakeOver}
+              pendingPrevFinish={pendingPrevFinish}
+              prevDayCos={prevDayCos}
+              cosData={cosData}
+              dateStr={dateStr}
+              prevDateStr={prevDateStr}
+              month={month}
+            />
+          </div>
+        )}
+      </DefaultCard>
+    );
   } catch (err: any) {
     return (
       <DefaultCard className="w-full">{`[COS] ${err.message}`}</DefaultCard>
