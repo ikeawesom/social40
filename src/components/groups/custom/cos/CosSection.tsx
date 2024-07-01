@@ -54,12 +54,16 @@ export default async function CosSection({
         Object.keys(cosData.plans[dateStr]).includes("disabled") &&
         cosData.plans[dateStr].disabled
       ) {
-        disabledDate = true;
+        disabledDate = cosData.plans[dateStr].disabled ?? false;
       }
       // check if previous date COS exists
       curDayCOS = cosData.plans[dateStr].memberID;
       const prevDayCosObj = cosData.plans[prevDateStr];
-      const prevDayCosDisabled = cosData.plans[prevDateStr].disabled ?? false;
+      const prevDayCosDisabled = Object.keys(
+        cosData.plans[prevDateStr]
+      ).includes("disabled")
+        ? cosData.plans[prevDateStr].disabled ?? false
+        : false;
       if (prevDayCosObj && !prevDayCosDisabled) {
         prevDayCos = cosData.plans[prevDateStr].memberID;
         // if exists, check if COS finished duty
