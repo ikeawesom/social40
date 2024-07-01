@@ -37,6 +37,7 @@ export default async function CosSection({
       id: `${month}`,
     });
 
+    console.log("error:", error);
     if (error && !error.includes("not found")) throw new Error(error);
 
     let cosData = getSimple(data) as COS_DAILY_SCHEMA | null;
@@ -46,6 +47,8 @@ export default async function CosSection({
     let prevDayCos = "";
     let pendingPrevFinish = false;
     let pendingCurTakeOver = false;
+
+    console.log("COS Data:", cosData);
 
     if (cosData) {
       if (cosData.plans[dateStr].disabled) {
