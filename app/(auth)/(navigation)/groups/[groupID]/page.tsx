@@ -54,6 +54,7 @@ export default async function GroupPage({
     const { createdBy, groupName, groupDesc, cos, lastUpdatedHA } =
       getSimple(groupData);
 
+    console.log(cos);
     return (
       <>
         <HeaderBar back text={groupID} />
