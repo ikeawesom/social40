@@ -48,22 +48,17 @@ export default async function CosSection({
     let pendingCurTakeOver = false;
 
     if (cosData) {
-      console.log("date str:", dateStr);
-      console.log("plan:", cosData.plans[dateStr]);
-      if (
-        Object.keys(cosData.plans[dateStr]).includes("disabled") &&
-        cosData.plans[dateStr].disabled
-      ) {
-        disabledDate = cosData.plans[dateStr].disabled ?? false;
-      }
+      disabledDate = cosData.plans[dateStr].disabled ?? false;
+
       // check if previous date COS exists
       curDayCOS = cosData.plans[dateStr].memberID;
       const prevDayCosObj = cosData.plans[prevDateStr];
-      const prevDayCosDisabled = Object.keys(
-        cosData.plans[prevDateStr]
-      ).includes("disabled")
-        ? cosData.plans[prevDateStr].disabled ?? false
-        : false;
+      const prevDayCosDisabled =
+        prevDayCosObj &&
+        Object.keys(cosData.plans[prevDateStr]).includes("disabled")
+          ? cosData.plans[prevDateStr].disabled ?? false
+          : false;
+
       if (prevDayCosObj && !prevDayCosDisabled) {
         prevDayCos = cosData.plans[prevDateStr].memberID;
         // if exists, check if COS finished duty
