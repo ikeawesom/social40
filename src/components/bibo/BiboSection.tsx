@@ -11,18 +11,24 @@ import { useHostname } from "@/src/hooks/useHostname";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { LoadingIconBright } from "../utils/LoadingIcon";
 import BiboDownloadButton from "./BiboDownloadButton";
+import { useMemberID } from "@/src/hooks/useMemberID";
 
-export default function BiboSection() {
+export default function BiboSection({ role }: { role: string }) {
   const [member, setMember] = useState("");
   const [loading, setLoading] = useState(false);
   const [biboData, setBiboData] = useState<BIBO_DB_TYPE>();
   const { host } = useHostname();
+  const { memberID } = useMemberID();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const PostObj = GetPostObj({ memberID: member });
+      const PostObj = GetPostObj({
+        memberID: member,
+        viewerRole: role,
+        curMember: memberID,
+      });
       const res = await fetch(`${host}/api/bibo/get`, PostObj);
       const body = await res.json();
 

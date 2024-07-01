@@ -1,5 +1,6 @@
 import { dbHandler } from "@/src/firebase/db";
 import { getMethod } from "@/src/utils/API/getAPIMethod";
+import { ROLES_HIERARCHY } from "@/src/utils/constants";
 import { DateToTimestamp } from "@/src/utils/helpers/getCurrentDate";
 import { BIBO_SCHEMA } from "@/src/utils/schemas/bibo";
 import { MEMBER_SCHEMA } from "@/src/utils/schemas/members";
@@ -18,6 +19,7 @@ export async function POST(request: NextRequest) {
   const { memberID } = fetchedData;
 
   if (option === "get") {
+    const { viewerRole, curMember } = fetchedData;
     try {
       // see if member exists
       const resA = await dbHandler.get({ col_name: `MEMBERS`, id: memberID });
@@ -25,6 +27,16 @@ export async function POST(request: NextRequest) {
         throw new Error(
           "No member exists with that member ID. Please try again."
         );
+
+      const { role: curRole }: { role: string } = resA.data;
+      if (
+        ROLES_HIERARCHY[viewerRole].rank <= ROLES_HIERARCHY[curRole].rank &&
+        curMember !== memberID
+      ) {
+        throw new Error(
+          "You do not have permission to view this member's BIBO logs. Contact an administrator or try another member."
+        );
+      }
 
       const res = await dbHandler.getSpecific({
         path: `MEMBERS/${memberID}/BIBO`,

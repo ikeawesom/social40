@@ -208,7 +208,7 @@ export default async function MemberPage({
           {view === "settings" &&
             (canViewPerms || permission ? (
               <>
-                {sameMember && permission && <BiboSection />}
+                {sameMember && permission && <BiboSection role={role} />}
                 {canViewPerms && (
                   // global member permissions
                   <PermissionForm
