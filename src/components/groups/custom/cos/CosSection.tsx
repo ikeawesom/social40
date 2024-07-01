@@ -127,6 +127,7 @@ export default async function CosSection({
             />
           </div>
         )}
+        hi
       </DefaultCard>
     );
   } catch (err: any) {
