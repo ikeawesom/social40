@@ -127,6 +127,6 @@ export default async function CosSection({
       </DefaultCard>
     );
   } catch (err: any) {
-    console.log(`[COS] ${err.message}`);
+    <DefaultCard className="w-full">{`[COS] ${err.message}`}</DefaultCard>;
   }
 }
