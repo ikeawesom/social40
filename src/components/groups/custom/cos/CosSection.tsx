@@ -48,13 +48,17 @@ export default async function CosSection({
     let pendingCurTakeOver = false;
 
     if (cosData) {
-      if (cosData.plans[dateStr].disabled) {
-        disabledDate = true;
-      }
+      disabledDate = cosData.plans[dateStr].disabled ?? false;
+
       // check if previous date COS exists
       curDayCOS = cosData.plans[dateStr].memberID;
       const prevDayCosObj = cosData.plans[prevDateStr];
-      const prevDayCosDisabled = cosData.plans[prevDateStr].disabled ?? false;
+      const prevDayCosDisabled =
+        prevDayCosObj &&
+        Object.keys(cosData.plans[prevDateStr]).includes("disabled")
+          ? cosData.plans[prevDateStr].disabled ?? false
+          : false;
+
       if (prevDayCosObj && !prevDayCosDisabled) {
         prevDayCos = cosData.plans[prevDateStr].memberID;
         // if exists, check if COS finished duty
@@ -80,6 +84,7 @@ export default async function CosSection({
 
     const involved =
       cos.admins.includes(curMemberID) || cos.members.includes(curMemberID);
+
     return (
       <DefaultCard className="w-full">
         {!cosData || (disabledDate && !pendingPrevFinish) ? (
@@ -127,6 +132,8 @@ export default async function CosSection({
       </DefaultCard>
     );
   } catch (err: any) {
-    console.log(`[COS] ${err.message}`);
+    return (
+      <DefaultCard className="w-full">{`[COS] ${err.message}`}</DefaultCard>
+    );
   }
 }
