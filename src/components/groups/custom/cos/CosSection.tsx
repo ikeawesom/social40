@@ -50,7 +50,10 @@ export default async function CosSection({
     if (cosData) {
       console.log("date str:", dateStr);
       console.log("plan:", cosData.plans[dateStr]);
-      if (cosData.plans[dateStr].disabled) {
+      if (
+        Object.keys(cosData.plans[dateStr]).includes("disabled") &&
+        cosData.plans[dateStr].disabled
+      ) {
         disabledDate = true;
       }
       // check if previous date COS exists
