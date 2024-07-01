@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
   const { memberID } = fetchedData;
 
   if (option === "get") {
-    const { viewerRole, curMember } = fetchedData;
+    const { viewerRole } = fetchedData;
     try {
       // see if member exists
       const resA = await dbHandler.get({ col_name: `MEMBERS`, id: memberID });
@@ -29,10 +29,7 @@ export async function POST(request: NextRequest) {
         );
 
       const { role: curRole }: { role: string } = resA.data;
-      if (
-        ROLES_HIERARCHY[viewerRole].rank <= ROLES_HIERARCHY[curRole].rank &&
-        curMember !== memberID
-      ) {
+      if (ROLES_HIERARCHY[viewerRole].rank < ROLES_HIERARCHY[curRole].rank) {
         throw new Error(
           "You do not have permission to view this member's BIBO logs. Contact an administrator or try another member."
         );
