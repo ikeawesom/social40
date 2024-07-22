@@ -69,6 +69,7 @@ export default function GroupActivities({
               const activityData = itemList[activityID];
               return (
                 <GroupActivityTab
+                  showBadge
                   activityData={activityData}
                   key={activityID}
                 />

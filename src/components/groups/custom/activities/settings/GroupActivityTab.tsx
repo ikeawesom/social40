@@ -7,11 +7,14 @@ import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import { useFetchActivityRequests } from "@/src/hooks/groups/activities/useFetchActivityRequests";
+import LoadingIcon from "@/src/components/utils/LoadingIcon";
 
 export default function GroupActivityTab({
   activityData,
+  showBadge,
 }: {
   activityData: GROUP_ACTIVITIES_SCHEMA;
+  showBadge?: boolean;
 }) {
   const {
     activityDate: tempTimestamp,
@@ -47,10 +50,14 @@ export default function GroupActivityTab({
             height={20}
           />
         )}
-        {length > 0 && (
-          <span className="bg-custom-red text-custom-light-text font-medium px-2 rounded-full text-sm text-center my-2">
-            {length > 9 ? "9+" : length}
-          </span>
+        {showBadge && requested === undefined ? (
+          <LoadingIcon height={10} width={10} />
+        ) : (
+          length > 0 && (
+            <span className="bg-custom-red text-custom-light-text font-medium px-2 rounded-full text-sm text-center my-2">
+              {length > 9 ? "9+" : length}
+            </span>
+          )
         )}
       </h1>
       <h4 className="text-custom-grey-text text-sm">
