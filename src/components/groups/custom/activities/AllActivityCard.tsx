@@ -1,5 +1,6 @@
 import DefaultCard from "@/src/components/DefaultCard";
 import ActivityStatusTab from "@/src/components/feed/ActivityStatusTab";
+import { useFetchActivityRequests } from "@/src/hooks/groups/activities/useFetchActivityRequests";
 import {
   ActiveTimestamp,
   DateToString,
@@ -34,6 +35,9 @@ export default function AllActivityCard({
   const dateStr = DateToString(tempDate);
   const active = ActiveTimestamp(date);
 
+  const { requested } = useFetchActivityRequests(activityID, groupID);
+  const length = Object.keys(requested ?? {}).length;
+
   return (
     <Link
       scroll={false}
@@ -49,18 +53,25 @@ export default function AllActivityCard({
         )}
       >
         <div className="w-full flex items-center justify-between flex-wrap gap-x-2">
-          <h1 className="text-start font-semibold text-lg text-custom-dark-text flex items-start justify-start gap-2">
-            {activityTitle}
-            {isPT && (
-              <Image
-                alt="PT activity"
-                className="my-1"
-                src="/icons/features/icon_activities_active.svg"
-                width={20}
-                height={20}
-              />
+          <div className="flex items-center justify-start gap-2 flex-wrap">
+            <h1 className="text-start font-semibold text-lg text-custom-dark-text flex items-start justify-start gap-2">
+              {activityTitle}
+              {isPT && (
+                <Image
+                  alt="PT activity"
+                  className="my-1"
+                  src="/icons/features/icon_activities_active.svg"
+                  width={20}
+                  height={20}
+                />
+              )}
+            </h1>
+            {length > 0 && (
+              <span className="bg-custom-red text-custom-light-text font-medium px-2 rounded-full text-sm text-center my-2">
+                {length > 9 ? "9+" : length}
+              </span>
             )}
-          </h1>
+          </div>
           <ActivityStatusTab active={active} />
         </div>
 
