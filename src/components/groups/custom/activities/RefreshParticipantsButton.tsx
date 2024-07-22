@@ -1,7 +1,7 @@
 "use client";
 
 import SecondaryButton from "@/src/components/utils/SecondaryButton";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import HRow from "@/src/components/utils/HRow";
 import { toast } from "sonner";
@@ -23,6 +23,7 @@ import { second } from "@/src/utils/groups/handleGroupActivityCreate";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { useHostname } from "@/src/hooks/useHostname";
 import { twMerge } from "tailwind-merge";
+import { handleReload } from "@/src/components/navigation/HeaderBar";
 
 export default function RefreshParticipantsButton({
   activityData,
@@ -42,6 +43,12 @@ export default function RefreshParticipantsButton({
     loading: false,
   });
   const [nonHAmembers, setNonHAMembers] = useState<string[]>();
+  const [toggle, setToggle] = useState<string>();
+
+  useEffect(() => {
+    if (toggle)
+      sessionStorage.setItem("url", `${window.location.origin}${toggle}`);
+  }, [toggle]);
 
   const {
     activityID,
@@ -112,13 +119,15 @@ export default function RefreshParticipantsButton({
       if (!body.status) throw new Error(body.error);
       toast.success("Great, your changes will be updated in a few seconds.");
 
+      const route = `/groups/${
+        activityData.groupID
+      }/activity?${new URLSearchParams({
+        id: data,
+      })}`;
+
+      setToggle(route);
       router.refresh();
-      router.replace(
-        `/groups/${activityData.groupID}/activity?${new URLSearchParams({
-          id: data,
-        })}`,
-        { scroll: false }
-      );
+      handleReload(router);
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -182,7 +191,7 @@ export default function RefreshParticipantsButton({
             }
           />
           {loading ? (
-            <ModalLoading text="This might take a few minutes... Please do not or refresh this page." />
+            <ModalLoading text="This might take a moment... Please do not or refresh this page." />
           ) : (
             useHA.warning &&
             (useHA.loading ? (
