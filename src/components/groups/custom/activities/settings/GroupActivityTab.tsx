@@ -6,22 +6,27 @@ import { GROUP_ACTIVITIES_SCHEMA } from "@/src/utils/schemas/groups";
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
+import { useFetchActivityRequests } from "@/src/hooks/groups/activities/useFetchActivityRequests";
 
 export default function GroupActivityTab({
   activityData,
 }: {
   activityData: GROUP_ACTIVITIES_SCHEMA;
 }) {
-  // const date = activityData.activityDate;
-  // const active = ActiveTimestamp(date);
-  // const dateStr = TimestampToDateString(date);
-
-  const { activityDate: tempTimestamp, isPT } = activityData;
+  const {
+    activityDate: tempTimestamp,
+    isPT,
+    activityID,
+    groupID,
+  } = activityData;
 
   const tempDate = new Date(tempTimestamp.seconds * 1000);
   tempDate.setHours(tempDate.getHours() - 8);
   const newDate = DateToTimestamp(tempDate);
   const dateStr = TimestampToDateString(newDate);
+
+  const { requested } = useFetchActivityRequests(activityID, groupID);
+  const length = Object.keys(requested ?? {}).length;
 
   return (
     <Link
@@ -41,6 +46,11 @@ export default function GroupActivityTab({
             width={20}
             height={20}
           />
+        )}
+        {length > 0 && (
+          <span className="bg-custom-red text-custom-light-text font-medium px-2 rounded-full text-sm text-center my-2">
+            {length > 9 ? "9+" : length}
+          </span>
         )}
       </h1>
       <h4 className="text-custom-grey-text text-sm">
