@@ -17,7 +17,10 @@ import Link from "next/link";
 import { createGroupActivityClass } from "@/src/utils/groups/createGroupActivityClass";
 import { useMemberID } from "@/src/hooks/useMemberID";
 import { GROUP_ACTIVITY_PARTICIPANTS } from "@/src/utils/constants";
-import { TimestampToDateString } from "@/src/utils/helpers/getCurrentDate";
+import {
+  DateToString,
+  TimestampToDateString,
+} from "@/src/utils/helpers/getCurrentDate";
 import { getNonHAMembers } from "../HA/getNonHAMembers";
 import { second } from "@/src/utils/groups/handleGroupActivityCreate";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
@@ -51,7 +54,8 @@ export default function RefreshParticipantsButton({
     needsHA,
   } = activityData;
 
-  const dateStr = TimestampToDateString(activityDate);
+  const tempDate = new Date(activityDate.seconds * 1000);
+  const dateStr = DateToString(tempDate);
 
   const input = {
     title: activityTitle,
@@ -113,6 +117,7 @@ export default function RefreshParticipantsButton({
         })}`,
         { scroll: false }
       );
+      toast.success("Great, your changes will be updated in a few seconds.");
     } catch (err: any) {
       toast.error(err.message);
     }
