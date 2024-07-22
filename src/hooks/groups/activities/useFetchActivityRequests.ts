@@ -20,6 +20,7 @@ export function useFetchActivityRequests(activityID: string, groupID: string) {
       const { requestsData } = data;
       setRequested(requestsData);
     } else {
+      setRequested({});
       console.log(error);
     }
   };
