@@ -71,7 +71,9 @@ export default async function JoinedActivities({
     const parsed = JSON.parse(JSON.stringify(activitiesDataObj));
     return (
       <div className="flex items-start justify-start flex-col w-full gap-4">
-        <ActivitiesOverviewSection memberID={clickedMemberID} />
+        <Suspense fallback={<OverviewSkeleton />}>
+          <ActivitiesOverviewSection memberID={clickedMemberID} />
+        </Suspense>
         <UpcomingActivitiesSection activitiesData={parsed} />
         <HRow className="bg-custom-grey-text/50" />
         <RecentActivitiesSection activitiesData={parsed} />
