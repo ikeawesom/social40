@@ -10,7 +10,7 @@ export default function ModalHeader({
 }: {
   className?: string;
   heading?: string;
-  close: () => void;
+  close?: () => void;
 }) {
   return (
     <>
@@ -23,14 +23,16 @@ export default function ModalHeader({
         <h1 className="text-custom-dark-text font-semibold text-base">
           {heading ?? "Modal Heading"}
         </h1>
-        <button onClick={close} className="hover:opacity-75 duration-150">
-          <Image
-            src="/icons/icon_close.svg"
-            alt="Close"
-            width={15}
-            height={15}
-          />
-        </button>
+        {close && (
+          <button onClick={close} className="hover:opacity-75 duration-150">
+            <Image
+              src="/icons/icon_close.svg"
+              alt="Close"
+              width={15}
+              height={15}
+            />
+          </button>
+        )}
       </div>
       <HRow className="mb-2" />
     </>
