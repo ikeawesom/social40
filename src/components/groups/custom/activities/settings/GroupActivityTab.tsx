@@ -50,15 +50,16 @@ export default function GroupActivityTab({
             height={20}
           />
         )}
-        {showBadge && requested === undefined ? (
-          <LoadingIcon height={10} width={10} />
-        ) : (
-          length > 0 && (
-            <span className="bg-custom-red text-custom-light-text font-medium px-2 rounded-full text-sm text-center my-2">
-              {length > 9 ? "9+" : length}
-            </span>
-          )
-        )}
+        {showBadge &&
+          (requested === undefined ? (
+            <LoadingIcon height={10} width={10} />
+          ) : (
+            length > 0 && (
+              <span className="bg-custom-red text-custom-light-text font-medium px-2 rounded-full text-sm text-center my-2">
+                {length > 9 ? "9+" : length}
+              </span>
+            )
+          ))}
       </h1>
       <h4 className="text-custom-grey-text text-sm">
         {activityData.activityDesc}
