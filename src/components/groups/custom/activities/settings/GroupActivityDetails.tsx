@@ -21,7 +21,7 @@ export default async function GroupActivityDetails({
 }: SuspenseGroupActivityFetchType) {
   try {
     const active = ActiveTimestamp(activityData.activityDate);
-    const { activityLevel, needsHA, isPT } = activityData;
+    const { activityLevel, needsHA, isPT, refreshed } = activityData;
 
     return (
       <DefaultCard className="w-full flex flex-col items-start justify-center gap-2">
@@ -91,7 +91,10 @@ export default async function GroupActivityDetails({
           </Notice>
         )}
         {isAdmin && (
-          <RefreshParticipantsButton activityData={getSimple(activityData)} />
+          <RefreshParticipantsButton
+            refreshed={refreshed ?? false}
+            activityData={getSimple(activityData)}
+          />
         )}
       </DefaultCard>
     );

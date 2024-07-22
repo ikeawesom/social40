@@ -12,6 +12,8 @@ export type GROUP_ACTIVITY_SCHEMA = {
   isPT: boolean;
   needsHA?: boolean;
 
+  refreshed?: boolean;
+
   duration: {
     active: boolean;
     dateCutOff: Timestamp;
