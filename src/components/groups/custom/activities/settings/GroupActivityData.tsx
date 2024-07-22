@@ -18,6 +18,7 @@ import { getMemberAuthServer } from "@/src/utils/auth/handleServerAuth";
 export type SuspenseGroupActivityFetchType = {
   memberID: string;
   activityData: GROUP_ACTIVITY_SCHEMA;
+  isAdmin?: boolean;
 };
 
 export default async function GroupActivityData({
@@ -78,6 +79,7 @@ export default async function GroupActivityData({
           <GroupActivityDetails
             activityData={activityData}
             memberID={memberID}
+            isAdmin={admin}
           />
 
           <GroupActivityJoinSection

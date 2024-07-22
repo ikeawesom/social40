@@ -12,9 +12,12 @@ import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 import Image from "next/image";
 import Notice from "@/src/components/utils/Notice";
+import RefreshParticipantsButton from "../RefreshParticipantsButton";
+import { getSimple } from "@/src/utils/helpers/parser";
 
 export default async function GroupActivityDetails({
   activityData,
+  isAdmin,
 }: SuspenseGroupActivityFetchType) {
   try {
     const active = ActiveTimestamp(activityData.activityDate);
@@ -86,6 +89,9 @@ export default async function GroupActivityDetails({
             <span className="font-bold">IMPORTANT:</span> This activity requires
             HA
           </Notice>
+        )}
+        {isAdmin && (
+          <RefreshParticipantsButton activityData={getSimple(activityData)} />
         )}
       </DefaultCard>
     );
