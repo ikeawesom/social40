@@ -17,18 +17,18 @@ import Link from "next/link";
 import { createGroupActivityClass } from "@/src/utils/groups/createGroupActivityClass";
 import { useMemberID } from "@/src/hooks/useMemberID";
 import { GROUP_ACTIVITY_PARTICIPANTS } from "@/src/utils/constants";
-import {
-  DateToString,
-  TimestampToDateString,
-} from "@/src/utils/helpers/getCurrentDate";
+import { DateToString } from "@/src/utils/helpers/getCurrentDate";
 import { getNonHAMembers } from "../HA/getNonHAMembers";
 import { second } from "@/src/utils/groups/handleGroupActivityCreate";
 import { GetPostObj } from "@/src/utils/API/GetPostObj";
 import { useHostname } from "@/src/hooks/useHostname";
+import { twMerge } from "tailwind-merge";
 
 export default function RefreshParticipantsButton({
   activityData,
+  refreshed,
 }: {
+  refreshed: boolean;
   activityData: GROUP_ACTIVITY_SCHEMA;
 }) {
   const router = useRouter();
@@ -71,6 +71,7 @@ export default function RefreshParticipantsButton({
     level: activityLevel,
     pt: isPT,
     needHA: needsHA,
+    refreshed: true,
   };
 
   const addMembers = {
@@ -109,6 +110,7 @@ export default function RefreshParticipantsButton({
       const body = await res.json();
 
       if (!body.status) throw new Error(body.error);
+      toast.success("Great, your changes will be updated in a few seconds.");
 
       router.refresh();
       router.replace(
@@ -117,7 +119,6 @@ export default function RefreshParticipantsButton({
         })}`,
         { scroll: false }
       );
-      toast.success("Great, your changes will be updated in a few seconds.");
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -129,7 +130,10 @@ export default function RefreshParticipantsButton({
     setShow(true);
     if (
       confirm(
-        "Are you sure you want to refresh current participants? This will allow all valid participants within this group to join. You can only do this twice maximum and it will erase all current participation data!"
+        `Are you sure you want to refresh current participants?
+- This will allow all valid participants within this group to join
+- This will overwrite all current participation data
+- You can only do this ONCE`
       )
     ) {
       if (input.needHA) {
@@ -178,7 +182,7 @@ export default function RefreshParticipantsButton({
             }
           />
           {loading ? (
-            <ModalLoading text="This will take a few minutes... Please do not or refresh this page." />
+            <ModalLoading text="This might take a few minutes... Please do not or refresh this page." />
           ) : (
             useHA.warning &&
             (useHA.loading ? (
@@ -225,8 +229,12 @@ export default function RefreshParticipantsButton({
       )}
       <HRow />
       <SecondaryButton
+        disabled={refreshed}
         onClick={handleRefresh}
-        className="flex items-center justify-center border-custom-orange gap-1"
+        className={twMerge(
+          "flex items-center justify-center gap-1",
+          !refreshed && "border-custom-orange"
+        )}
       >
         Refresh Participants{" "}
         <Image
@@ -236,6 +244,11 @@ export default function RefreshParticipantsButton({
           height={18}
         />
       </SecondaryButton>
+      {refreshed && (
+        <p className="text-xs text-custom-grey-text self-center text-center">
+          You have already refreshed this activity.
+        </p>
+      )}
     </>
   );
 }
