@@ -27,8 +27,6 @@ import EditProfileButton from "@/src/components/profile/edit/EditProfileButton";
 import ToggleBibo from "@/src/components/profile/ToggleBibo";
 import { BiboProvider } from "@/src/contexts/BiboContext";
 
-export const revalidate = 0;
-
 export async function generateMetadata({
   params,
 }: {
