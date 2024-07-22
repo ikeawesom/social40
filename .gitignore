@@ -37,3 +37,5 @@ next-env.d.ts
 # PWA files
 **/public/pwa/build
 **/public/pwa/backup
+# Sentry Config File
+.env.sentry-build-plugin

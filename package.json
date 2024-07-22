@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sentry/nextjs": "^8.19.0",
     "encoding": "^0.1.13",
     "file-saver": "^2.0.5",
     "firebase": "^10.11.1",
