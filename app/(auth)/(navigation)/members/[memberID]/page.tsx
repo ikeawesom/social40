@@ -26,6 +26,7 @@ import BiboSection from "@/src/components/bibo/BiboSection";
 import EditProfileButton from "@/src/components/profile/edit/EditProfileButton";
 import ToggleBibo from "@/src/components/profile/ToggleBibo";
 import { BiboProvider } from "@/src/contexts/BiboContext";
+import ActivitiesOverviewSection from "@/src/components/profile/activities/ActivitiesOverviewSection";
 
 export async function generateMetadata({
   params,
@@ -171,7 +172,10 @@ export default async function MemberPage({
               key={searchParams.view}
               fallback={<ProfileListSkeleton search />}
             >
-              <JoinedActivities clickedMemberID={clickedMemberID} />
+              <div className="flex items-start justify-start flex-col w-full gap-4">
+                {/* <ActivitiesOverviewSection memberID={clickedMemberID} /> */}
+                <JoinedActivities clickedMemberID={clickedMemberID} />
+              </div>
             </Suspense>
           )}
 

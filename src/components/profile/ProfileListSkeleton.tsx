@@ -5,7 +5,7 @@ import OverviewSkeleton from "./OverviewSkeleton";
 export default function ProfileListSkeleton({ search }: { search?: boolean }) {
   return (
     <>
-      <OverviewSkeleton />
+      {/* <OverviewSkeleton /> */}
       <div className="flex items-start justify-start flex-col w-full gap-4">
         <div className="flex items-start justify-start flex-col w-full gap-1">
           <DefaultSkeleton className="w-[200px] h-[10px]" />
