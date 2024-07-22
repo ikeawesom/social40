@@ -173,7 +173,7 @@ export default async function MemberPage({
               fallback={<ProfileListSkeleton search />}
             >
               <div className="flex items-start justify-start flex-col w-full gap-4">
-                <ActivitiesOverviewSection memberID={clickedMemberID} />
+                {/* <ActivitiesOverviewSection memberID={clickedMemberID} /> */}
                 <JoinedActivities clickedMemberID={clickedMemberID} />
               </div>
             </Suspense>
