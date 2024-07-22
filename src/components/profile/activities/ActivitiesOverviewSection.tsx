@@ -58,7 +58,7 @@ export default async function ActivitiesOverviewSection({
       <h1 className="text-xl mb-2 font-bold text-center text-custom-dark-text">
         Overview
       </h1>
-      {/* <div className="flex items-center justify-center gap-2 flex-col">
+      <div className="flex items-center justify-center gap-2 flex-col">
         <div className="w-[120px] h-[120px] mb-2">
           <CircleProgess
             value={percentParticipated}
@@ -73,7 +73,7 @@ export default async function ActivitiesOverviewSection({
             </p>
           </CircleProgess>
         </div>
-      </div> */}
+      </div>
       <div className="flex items-center justify-center gap-4 my-2 w-full">
         <ProfileStatSection
           title="Participated"
