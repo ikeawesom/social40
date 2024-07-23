@@ -97,9 +97,12 @@ export async function handleGroupMemberHA(
           createdBy: activityData[activityID].createdBy,
         } as EachActivityType;
 
-        const tempDataA = { [activityID]: tempData };
+        const date = dateStr.split(" ")[0];
 
-        activityListPerDate[dateStr.split(" ")[0]] = tempDataA;
+        activityListPerDate[date] = {
+          ...activityListPerDate[date],
+          [activityID]: tempData,
+        };
       }
     });
 
