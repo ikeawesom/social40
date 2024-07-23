@@ -60,6 +60,7 @@ export async function first(groupID: string, input: any, memberID: string) {
       },
       isPT: input.pt,
       needsHA: input.needHA,
+      refreshed: input.refreshed ?? false,
     } as GROUP_ACTIVITY_SCHEMA;
 
     const res = await dbHandler.addGeneral({
