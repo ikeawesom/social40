@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import SecondaryButton from "../utils/SecondaryButton";
 import { handleReload } from "../navigation/HeaderBar";
 
-export default function OfflineScreen() {
+export default function OfflineScreen({ msg }: { msg: string }) {
   const router = useRouter();
 
   return (
@@ -23,6 +23,7 @@ export default function OfflineScreen() {
             Seems like your connection is unstable. Please check your internet
             connection or try again later.
           </p>
+          <p className="text-center text-custom-grey-text">Error: {msg}</p>
         </div>
         <div className="flex flex-col items-center justify-center w-fit gap-2">
           <SecondaryButton

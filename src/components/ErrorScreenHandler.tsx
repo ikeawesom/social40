@@ -5,7 +5,7 @@ import ServerErrorScreen from "./screens/ServerErrorScreen";
 
 export default function ErrorScreenHandler(err: any) {
   const error = err.message;
-  if (error.includes("offline")) return <OfflineScreen />;
+  if (error.includes("offline")) return <OfflineScreen msg={error} />;
   if (error.includes("not found")) return <NotFoundScreen error={error} />;
   else return <ServerErrorScreen eMsg={error} />;
 }
