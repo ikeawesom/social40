@@ -318,13 +318,13 @@ export async function third(
     });
 
     const promiseRes = await Promise.all(promiseList);
-    for (const item of promiseRes) {
-      if (!item.status) {
-        console.log("error:", item.error);
-        throw new Error(item.error);
-      }
-    }
-    console.log("NO ERROR");
+    // for (const item of promiseRes) {
+    //   if (!item.status) {
+    //     console.log("error:", item.error);
+    //     throw new Error(item.error);
+    //   }
+    // }
+    // console.log("NO ERROR");
     return handleResponses();
   } catch (err: any) {
     console.log("ERROR");
