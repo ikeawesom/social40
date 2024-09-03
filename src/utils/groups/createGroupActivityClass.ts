@@ -99,11 +99,11 @@ export class createGroupActivityClass {
     const timestamp = this.timestamp ?? DateToTimestamp(new Date());
     try {
       const { error } = await fourth(
-        this.fetchedID ?? "a",
-        timestamp ?? DateToTimestamp(new Date()),
-        activityDesc ?? "a",
-        activityTitle ?? "a",
-        groupID ?? "a",
+        this.fetchedID ?? "",
+        timestamp,
+        activityDesc ?? "",
+        activityTitle ?? "",
+        groupID ?? "",
         isPT ?? false
       );
       if (error) throw new Error(error);
