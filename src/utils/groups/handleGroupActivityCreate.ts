@@ -288,6 +288,7 @@ export async function third(
         }
       }
 
+      reason = "";
       // have reasons to fall out
       if (reason !== "") {
         console.log("reason:", reason);
