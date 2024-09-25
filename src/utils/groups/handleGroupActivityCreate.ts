@@ -404,17 +404,19 @@ export async function helperParticipate(memberID: string, activityID: string) {
     // add to member's group activities subcollection
     const to_addA = {
       activityID,
-      // dateJoined: date,
-      // activityDate,
+      dateJoined: date,
+      activityDate,
     } as ACTIVITY_PARTICIPANT_SCHEMA;
 
-    const resA = await dbHandler.add({
-      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
-      id: activityID,
-      to_add: to_addA,
-    });
+    console.log("value:", to_addA);
 
-    if (!resA.status) throw new Error(resA.error);
+    // const { error } = await dbHandler.add({
+    //   col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+    //   id: activityID,
+    //   to_add: to_addA,
+    // });
+
+    // if (error) throw new Error(error);
 
     return handleResponses();
   } catch (err: any) {
