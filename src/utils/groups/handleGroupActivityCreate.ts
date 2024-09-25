@@ -294,22 +294,20 @@ export async function third(
 
       // have reasons to fall out
       if (reason !== "") {
-        console.log("reason:", reason);
-        const to_add = {
-          activityID: fetchedID,
-          memberID: selectedMemberID,
-          reason,
-          verifiedBy: memberID,
-        } as FALLOUTS_SCHEMA;
-
-        const res = await dbHandler.add({
-          col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
-          id: selectedMemberID,
-          to_add,
-        });
-
-        if (!res.status)
-          return handleResponses({ status: false, error: res.error });
+        // console.log("reason:", reason);
+        // const to_add = {
+        //   activityID: fetchedID,
+        //   memberID: selectedMemberID,
+        //   reason,
+        //   verifiedBy: memberID,
+        // } as FALLOUTS_SCHEMA;
+        // const res = await dbHandler.add({
+        //   col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
+        //   id: selectedMemberID,
+        //   to_add,
+        // });
+        // if (!res.status)
+        //   return handleResponses({ status: false, error: res.error });
       } else {
         const { error } = await helperParticipate(selectedMemberID, fetchedID);
         if (error) return handleResponses({ status: false, error });
