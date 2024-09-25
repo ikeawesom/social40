@@ -206,114 +206,114 @@ export async function third(
 
       console.log("DEBUG: Added non-ha members to fallout");
 
-      const res = await dbHandler.getSpecific({
-        path: `MEMBERS/${selectedMemberID}/STATUSES`,
-        orderCol: "endDate",
-        ascending: false,
-      });
-      if (!res.status) throw new Error(res.error);
+      // const res = await dbHandler.getSpecific({
+      //   path: `MEMBERS/${selectedMemberID}/STATUSES`,
+      //   orderCol: "endDate",
+      //   ascending: false,
+      // });
+      // if (!res.status) throw new Error(res.error);
 
-      console.log("DEBUG: before checking reason");
+      // console.log("DEBUG: before checking reason");
 
-      let reason = "";
+      // let reason = "";
 
-      // get status data from current member
-      const statusData = res.data as { [statusID: string]: STATUS_SCHEMA };
-      if (Object.keys(statusData).length > 0) {
-        console.log("Checking status for:", selectedMemberID);
-        const { startDate, endDate, statusTitle, mc } =
-          statusData[Object.keys(statusData)[0]];
-        console.log(
-          "Latest status:",
-          TimestampToDate(startDate),
-          TimestampToDate(endDate),
-          statusTitle
-        );
-        console.log(
-          "Start:",
-          TimestampToDate(startDate),
-          "End:",
-          TimestampToDate(endDate)
-        );
+      // // get status data from current member
+      // const statusData = res.data as { [statusID: string]: STATUS_SCHEMA };
+      // if (Object.keys(statusData).length > 0) {
+      //   console.log("Checking status for:", selectedMemberID);
+      //   const { startDate, endDate, statusTitle, mc } =
+      //     statusData[Object.keys(statusData)[0]];
+      //   console.log(
+      //     "Latest status:",
+      //     TimestampToDate(startDate),
+      //     TimestampToDate(endDate),
+      //     statusTitle
+      //   );
+      //   console.log(
+      //     "Start:",
+      //     TimestampToDate(startDate),
+      //     "End:",
+      //     TimestampToDate(endDate)
+      //   );
 
-        const activeStatus = isActive(timestamp, startDate, endDate);
-        // handles MC/status plus 1
-        const statusPlusOne = isActivePlusOne(timestamp, startDate, endDate);
-        if (!activeStatus && !statusPlusOne) {
-          // // if status/MC is over,
-          // do not add to reason
-        } else {
-          // status is current, add to fall out
-          if (activeStatus) {
-            // status is active
-            reason = `${statusTitle} (${
-              TimestampToDateString(startDate).split(" ")[0]
-            }-${TimestampToDateString(endDate).split(" ")[0]})`;
-          } else {
-            // status is +1
-            reason = `${mc ? "MC + 1" : `STATUS + 1: ${statusTitle}`}`;
-          }
-        }
-      }
+      //   const activeStatus = isActive(timestamp, startDate, endDate);
+      //   // handles MC/status plus 1
+      //   const statusPlusOne = isActivePlusOne(timestamp, startDate, endDate);
+      //   if (!activeStatus && !statusPlusOne) {
+      //     // // if status/MC is over,
+      //     // do not add to reason
+      //   } else {
+      //     // status is current, add to fall out
+      //     if (activeStatus) {
+      //       // status is active
+      //       reason = `${statusTitle} (${
+      //         TimestampToDateString(startDate).split(" ")[0]
+      //       }-${TimestampToDateString(endDate).split(" ")[0]})`;
+      //     } else {
+      //       // status is +1
+      //       reason = `${mc ? "MC + 1" : `STATUS + 1: ${statusTitle}`}`;
+      //     }
+      //   }
+      // }
 
-      // if check for onCourse/bookedIn
-      const { error, data } = await dbHandler.get({
-        col_name: "MEMBERS",
-        id: selectedMemberID,
-      });
+      // // if check for onCourse/bookedIn
+      // const { error, data } = await dbHandler.get({
+      //   col_name: "MEMBERS",
+      //   id: selectedMemberID,
+      // });
 
-      if (error) return handleResponses({ status: false, error });
-      const memberData = data as MEMBER_SCHEMA;
-      const { bookedIn, isOnCourse } = memberData;
+      // if (error) return handleResponses({ status: false, error });
+      // const memberData = data as MEMBER_SCHEMA;
+      // const { bookedIn, isOnCourse } = memberData;
 
-      console.log("reason for", selectedMemberID, reason);
-      if (bookedIn && !isOnCourse) {
-        // booked in and not on course
-        // do not add to reason
-      } else {
-        if (!bookedIn && isOnCourse && addType === "course") {
-          // not booked in but on course and activity is for on course
-          // add member unless status
-          // do not add to reason
-        } else {
-          if (!bookedIn && addType === "custom") {
-            // not booked in, may/may not be on course but activity is for custom members
-            // do not add to reason
-          } else {
-            if (isOnCourse && addType !== "course") {
-              // not booked in, member on course but activity is not for course
-              reason += `${reason !== "" ? " | " : ""}ON COURSE`;
-            } else {
-              // member not on course but member not booked in
-              reason += `${reason !== "" ? " | " : ""}NOT BOOKED IN`;
-            }
-            console.log(reason);
-          }
-        }
-      }
+      // console.log("reason for", selectedMemberID, reason);
+      // if (bookedIn && !isOnCourse) {
+      //   // booked in and not on course
+      //   // do not add to reason
+      // } else {
+      //   if (!bookedIn && isOnCourse && addType === "course") {
+      //     // not booked in but on course and activity is for on course
+      //     // add member unless status
+      //     // do not add to reason
+      //   } else {
+      //     if (!bookedIn && addType === "custom") {
+      //       // not booked in, may/may not be on course but activity is for custom members
+      //       // do not add to reason
+      //     } else {
+      //       if (isOnCourse && addType !== "course") {
+      //         // not booked in, member on course but activity is not for course
+      //         reason += `${reason !== "" ? " | " : ""}ON COURSE`;
+      //       } else {
+      //         // member not on course but member not booked in
+      //         reason += `${reason !== "" ? " | " : ""}NOT BOOKED IN`;
+      //       }
+      //       console.log(reason);
+      //     }
+      //   }
+      // }
 
-      // have reasons to fall out
-      if (reason !== "") {
-        console.log("reason:", reason);
-        const to_add = {
-          activityID: fetchedID,
-          memberID: selectedMemberID,
-          reason,
-          verifiedBy: memberID,
-        } as FALLOUTS_SCHEMA;
+      // // have reasons to fall out
+      // if (reason !== "") {
+      //   console.log("reason:", reason);
+      //   const to_add = {
+      //     activityID: fetchedID,
+      //     memberID: selectedMemberID,
+      //     reason,
+      //     verifiedBy: memberID,
+      //   } as FALLOUTS_SCHEMA;
 
-        const res = await dbHandler.add({
-          col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
-          id: selectedMemberID,
-          to_add,
-        });
+      //   const res = await dbHandler.add({
+      //     col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
+      //     id: selectedMemberID,
+      //     to_add,
+      //   });
 
-        if (!res.status)
-          return handleResponses({ status: false, error: res.error });
-      } else {
-        const { error } = await helperParticipate(selectedMemberID, fetchedID);
-        if (error) return handleResponses({ status: false, error });
-      }
+      //   if (!res.status)
+      //     return handleResponses({ status: false, error: res.error });
+      // } else {
+      //   const { error } = await helperParticipate(selectedMemberID, fetchedID);
+      //   if (error) return handleResponses({ status: false, error });
+      // }
       return handleResponses();
     });
 
