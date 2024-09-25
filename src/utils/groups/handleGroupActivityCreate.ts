@@ -309,8 +309,8 @@ export async function third(
         if (!res.status)
           return handleResponses({ status: false, error: res.error });
       } else {
-        // const { error } = await helperParticipate(selectedMemberID, fetchedID);
-        // if (error) return handleResponses({ status: false, error });
+        const { error } = await helperParticipate(selectedMemberID, fetchedID);
+        if (error) return handleResponses({ status: false, error });
       }
       return handleResponses();
     });
@@ -393,28 +393,28 @@ export async function helperParticipate(memberID: string, activityID: string) {
 
     if (!resC.status) throw new Error(resC.error);
 
-    const { activityDate } = resC.data as GROUP_ACTIVITY_SCHEMA;
+    // const { activityDate } = resC.data as GROUP_ACTIVITY_SCHEMA;
 
-    // see if member fell out
-    await dbHandler.delete({
-      col_name: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
-      id: memberID,
-    });
+    // // see if member fell out
+    // await dbHandler.delete({
+    //   col_name: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
+    //   id: memberID,
+    // });
 
-    // add to member's group activities subcollection
-    const to_addA = {
-      activityID,
-      dateJoined: date,
-      activityDate,
-    } as ACTIVITY_PARTICIPANT_SCHEMA;
+    // // add to member's group activities subcollection
+    // const to_addA = {
+    //   activityID,
+    //   dateJoined: date,
+    //   activityDate,
+    // } as ACTIVITY_PARTICIPANT_SCHEMA;
 
-    const resA = await dbHandler.add({
-      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
-      id: activityID,
-      to_add: to_addA,
-    });
+    // const resA = await dbHandler.add({
+    //   col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+    //   id: activityID,
+    //   to_add: to_addA,
+    // });
 
-    if (!resA.status) throw new Error(resA.error);
+    // if (!resA.status) throw new Error(resA.error);
 
     return handleResponses();
   } catch (err: any) {
