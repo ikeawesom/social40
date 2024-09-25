@@ -267,53 +267,53 @@ export async function third(
       const { bookedIn, isOnCourse } = memberData;
 
       console.log("reason for", selectedMemberID, reason);
-      // if (bookedIn && !isOnCourse) {
-      //   // booked in and not on course
-      //   // do not add to reason
-      // } else {
-      //   if (!bookedIn && isOnCourse && addType === "course") {
-      //     // not booked in but on course and activity is for on course
-      //     // add member unless status
-      //     // do not add to reason
-      //   } else {
-      //     if (!bookedIn && addType === "custom") {
-      //       // not booked in, may/may not be on course but activity is for custom members
-      //       // do not add to reason
-      //     } else {
-      //       if (isOnCourse && addType !== "course") {
-      //         // not booked in, member on course but activity is not for course
-      //         reason += `${reason !== "" ? " | " : ""}ON COURSE`;
-      //       } else {
-      //         // member not on course but member not booked in
-      //         reason += `${reason !== "" ? " | " : ""}NOT BOOKED IN`;
-      //       }
-      //       console.log(reason);
-      //     }
-      //   }
-      // }
+      if (bookedIn && !isOnCourse) {
+        // booked in and not on course
+        // do not add to reason
+      } else {
+        if (!bookedIn && isOnCourse && addType === "course") {
+          // not booked in but on course and activity is for on course
+          // add member unless status
+          // do not add to reason
+        } else {
+          if (!bookedIn && addType === "custom") {
+            // not booked in, may/may not be on course but activity is for custom members
+            // do not add to reason
+          } else {
+            if (isOnCourse && addType !== "course") {
+              // not booked in, member on course but activity is not for course
+              reason += `${reason !== "" ? " | " : ""}ON COURSE`;
+            } else {
+              // member not on course but member not booked in
+              reason += `${reason !== "" ? " | " : ""}NOT BOOKED IN`;
+            }
+            console.log(reason);
+          }
+        }
+      }
 
-      // // have reasons to fall out
-      // if (reason !== "") {
-      //   console.log("reason:", reason);
-      //   const to_add = {
-      //     activityID: fetchedID,
-      //     memberID: selectedMemberID,
-      //     reason,
-      //     verifiedBy: memberID,
-      //   } as FALLOUTS_SCHEMA;
+      // have reasons to fall out
+      if (reason !== "") {
+        console.log("reason:", reason);
+        const to_add = {
+          activityID: fetchedID,
+          memberID: selectedMemberID,
+          reason,
+          verifiedBy: memberID,
+        } as FALLOUTS_SCHEMA;
 
-      //   const res = await dbHandler.add({
-      //     col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
-      //     id: selectedMemberID,
-      //     to_add,
-      //   });
+        const res = await dbHandler.add({
+          col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
+          id: selectedMemberID,
+          to_add,
+        });
 
-      //   if (!res.status)
-      //     return handleResponses({ status: false, error: res.error });
-      // } else {
-      //   const { error } = await helperParticipate(selectedMemberID, fetchedID);
-      //   if (error) return handleResponses({ status: false, error });
-      // }
+        if (!res.status)
+          return handleResponses({ status: false, error: res.error });
+      } else {
+        const { error } = await helperParticipate(selectedMemberID, fetchedID);
+        if (error) return handleResponses({ status: false, error });
+      }
       return handleResponses();
     });
 
