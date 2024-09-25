@@ -412,11 +412,11 @@ export async function helperParticipate(memberID: string, activityID: string) {
     if (!res.status) throw new Error(res.error);
 
     // remove from activity waitlist
-    const resB = await dbHandler.delete({
+    await dbHandler.delete({
       col_name: `GROUP-ACTIVITIES/${activityID}/WAITLIST`,
       id: memberID,
     });
-    if (!resB.status) throw new Error(resB.error);
+    // if (!resB.status) throw new Error(resB.error);
 
     // see if member fell out
     // await dbHandler.delete({
