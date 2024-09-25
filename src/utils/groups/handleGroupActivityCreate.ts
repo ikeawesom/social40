@@ -415,15 +415,15 @@ export async function helperParticipate(memberID: string, activityID: string) {
       activityDate,
     } as ACTIVITY_PARTICIPANT_SCHEMA;
 
-    await dbHandler.add({
-      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
-      id: activityID,
-      to_add: to_addA,
-    });
+    // await dbHandler.add({
+    //   col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+    //   id: activityID,
+    //   to_add: to_addA,
+    // });
 
     // if (error) throw new Error(error);
 
-    return handleResponses({ data: to_add });
+    return handleResponses({ data: to_addA });
   } catch (err: any) {
     return handleResponses({ status: false, error: err.message });
   }
