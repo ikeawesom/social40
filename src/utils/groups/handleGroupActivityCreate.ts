@@ -315,17 +315,17 @@ export async function third(
         );
         if (error) return handleResponses({ status: false, error });
 
-        // // remove from activity waitlist
-        // await dbHandler.delete({
-        //   col_name: `GROUP-ACTIVITIES/${fetchedID}/WAITLIST`,
-        //   id: memberID,
-        // });
+        // remove from activity waitlist
+        await dbHandler.delete({
+          col_name: `GROUP-ACTIVITIES/${fetchedID}/WAITLIST`,
+          id: memberID,
+        });
 
-        // // see if member fell out
-        // await dbHandler.delete({
-        //   col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
-        //   id: memberID,
-        // });
+        // see if member fell out
+        await dbHandler.delete({
+          col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
+          id: memberID,
+        });
 
         return handleResponses({ data });
       }
