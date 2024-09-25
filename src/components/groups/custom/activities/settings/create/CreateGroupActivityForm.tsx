@@ -113,15 +113,16 @@ export default function CreateGroupActivityForm({
       }
       console.log("DEBUG: Verified members");
 
-      const { error: errC } = await createGroupClass.addParticipants();
-      if (errC) throw new Error(errC);
-      setLoadingStage((loadingStage) => loadingStage + 1);
+      // const { error: errC } = await createGroupClass.addParticipants();
+      // if (errC) throw new Error(errC);
+      // setLoadingStage((loadingStage) => loadingStage + 1);
 
       console.log("DEBUG: finished adding participants");
       const { error: errD, data } = await createGroupClass.addToGroupCol();
       if (errD) throw new Error(errD);
       setLoadingStage((loadingStage) => loadingStage + 1);
-      console.log("DEBUG: finished adding to group col");
+      console.log("DEBUG: finished adding to group col. data:");
+      console.log(data);
 
       router.refresh();
       router.replace(
