@@ -317,7 +317,7 @@ export async function third(
         console.log("data:", data);
         return handleResponses({ data });
       }
-      return handleResponses();
+      return handleResponses({ data: { memberID: selectedMemberID } });
     });
 
     let dataArr = [] as any[];
