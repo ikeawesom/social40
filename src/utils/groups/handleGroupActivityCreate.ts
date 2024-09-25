@@ -256,17 +256,17 @@ export async function third(
         }
       }
 
-      // // if check for onCourse/bookedIn
-      // const { error, data } = await dbHandler.get({
-      //   col_name: "MEMBERS",
-      //   id: selectedMemberID,
-      // });
+      // if check for onCourse/bookedIn
+      const { error, data } = await dbHandler.get({
+        col_name: "MEMBERS",
+        id: selectedMemberID,
+      });
 
-      // if (error) return handleResponses({ status: false, error });
-      // const memberData = data as MEMBER_SCHEMA;
-      // const { bookedIn, isOnCourse } = memberData;
+      if (error) return handleResponses({ status: false, error });
+      const memberData = data as MEMBER_SCHEMA;
+      const { bookedIn, isOnCourse } = memberData;
 
-      // console.log("reason for", selectedMemberID, reason);
+      console.log("reason for", selectedMemberID, reason);
       // if (bookedIn && !isOnCourse) {
       //   // booked in and not on course
       //   // do not add to reason
