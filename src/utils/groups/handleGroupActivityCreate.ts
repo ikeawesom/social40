@@ -314,7 +314,6 @@ export async function third(
           fetchedID
         );
         if (error) return handleResponses({ status: false, error });
-        console.log("data:", data);
         return handleResponses({ data });
       }
       return handleResponses({ data: { memberID: selectedMemberID } });
@@ -416,13 +415,11 @@ export async function helperParticipate(memberID: string, activityID: string) {
       activityDate,
     } as ACTIVITY_PARTICIPANT_SCHEMA;
 
-    console.log("value:", to_addA);
-
-    // const { error } = await dbHandler.add({
-    //   col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
-    //   id: activityID,
-    //   to_add: to_addA,
-    // });
+    await dbHandler.add({
+      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+      id: activityID,
+      to_add: to_addA,
+    });
 
     // if (error) throw new Error(error);
 
