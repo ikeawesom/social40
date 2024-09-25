@@ -206,14 +206,14 @@ export async function third(
 
       console.log("DEBUG: Added non-ha members to fallout");
 
-      // const res = await dbHandler.getSpecific({
-      //   path: `MEMBERS/${selectedMemberID}/STATUSES`,
-      //   orderCol: "endDate",
-      //   ascending: false,
-      // });
-      // if (!res.status) throw new Error(res.error);
+      const res = await dbHandler.getSpecific({
+        path: `MEMBERS/${selectedMemberID}/STATUSES`,
+        orderCol: "endDate",
+        ascending: false,
+      });
+      if (!res.status) throw new Error(res.error);
 
-      // console.log("DEBUG: before checking reason");
+      console.log("DEBUG: before checking reason");
 
       // let reason = "";
 
