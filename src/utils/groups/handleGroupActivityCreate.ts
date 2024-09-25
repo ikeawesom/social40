@@ -215,46 +215,46 @@ export async function third(
 
       console.log("DEBUG: before checking reason");
 
-      // let reason = "";
+      let reason = "";
 
-      // // get status data from current member
-      // const statusData = res.data as { [statusID: string]: STATUS_SCHEMA };
-      // if (Object.keys(statusData).length > 0) {
-      //   console.log("Checking status for:", selectedMemberID);
-      //   const { startDate, endDate, statusTitle, mc } =
-      //     statusData[Object.keys(statusData)[0]];
-      //   console.log(
-      //     "Latest status:",
-      //     TimestampToDate(startDate),
-      //     TimestampToDate(endDate),
-      //     statusTitle
-      //   );
-      //   console.log(
-      //     "Start:",
-      //     TimestampToDate(startDate),
-      //     "End:",
-      //     TimestampToDate(endDate)
-      //   );
+      // get status data from current member
+      const statusData = res.data as { [statusID: string]: STATUS_SCHEMA };
+      if (Object.keys(statusData).length > 0) {
+        console.log("Checking status for:", selectedMemberID);
+        const { startDate, endDate, statusTitle, mc } =
+          statusData[Object.keys(statusData)[0]];
+        console.log(
+          "Latest status:",
+          TimestampToDate(startDate),
+          TimestampToDate(endDate),
+          statusTitle
+        );
+        console.log(
+          "Start:",
+          TimestampToDate(startDate),
+          "End:",
+          TimestampToDate(endDate)
+        );
 
-      //   const activeStatus = isActive(timestamp, startDate, endDate);
-      //   // handles MC/status plus 1
-      //   const statusPlusOne = isActivePlusOne(timestamp, startDate, endDate);
-      //   if (!activeStatus && !statusPlusOne) {
-      //     // // if status/MC is over,
-      //     // do not add to reason
-      //   } else {
-      //     // status is current, add to fall out
-      //     if (activeStatus) {
-      //       // status is active
-      //       reason = `${statusTitle} (${
-      //         TimestampToDateString(startDate).split(" ")[0]
-      //       }-${TimestampToDateString(endDate).split(" ")[0]})`;
-      //     } else {
-      //       // status is +1
-      //       reason = `${mc ? "MC + 1" : `STATUS + 1: ${statusTitle}`}`;
-      //     }
-      //   }
-      // }
+        const activeStatus = isActive(timestamp, startDate, endDate);
+        // handles MC/status plus 1
+        const statusPlusOne = isActivePlusOne(timestamp, startDate, endDate);
+        if (!activeStatus && !statusPlusOne) {
+          // // if status/MC is over,
+          // do not add to reason
+        } else {
+          // status is current, add to fall out
+          if (activeStatus) {
+            // status is active
+            reason = `${statusTitle} (${
+              TimestampToDateString(startDate).split(" ")[0]
+            }-${TimestampToDateString(endDate).split(" ")[0]})`;
+          } else {
+            // status is +1
+            reason = `${mc ? "MC + 1" : `STATUS + 1: ${statusTitle}`}`;
+          }
+        }
+      }
 
       // // if check for onCourse/bookedIn
       // const { error, data } = await dbHandler.get({
