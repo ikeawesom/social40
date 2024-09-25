@@ -309,8 +309,13 @@ export async function third(
         if (!res.status)
           return handleResponses({ status: false, error: res.error });
       } else {
-        const { error } = await helperParticipate(selectedMemberID, fetchedID);
+        const { error, data } = await helperParticipate(
+          selectedMemberID,
+          fetchedID
+        );
         if (error) return handleResponses({ status: false, error });
+        console.log("data:", data);
+        return handleResponses({ data });
       }
       return handleResponses();
     });
@@ -418,7 +423,7 @@ export async function helperParticipate(memberID: string, activityID: string) {
 
     // if (error) throw new Error(error);
 
-    return handleResponses();
+    return handleResponses({ data: to_add });
   } catch (err: any) {
     return handleResponses({ status: false, error: err.message });
   }
