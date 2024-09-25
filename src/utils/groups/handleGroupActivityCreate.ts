@@ -393,13 +393,13 @@ export async function helperParticipate(memberID: string, activityID: string) {
 
     if (!resC.status) throw new Error(resC.error);
 
-    // const { activityDate } = resC.data as GROUP_ACTIVITY_SCHEMA;
+    const { activityDate } = resC.data as GROUP_ACTIVITY_SCHEMA;
 
-    // // see if member fell out
-    // await dbHandler.delete({
-    //   col_name: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
-    //   id: memberID,
-    // });
+    // see if member fell out
+    await dbHandler.delete({
+      col_name: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
+      id: memberID,
+    });
 
     // // add to member's group activities subcollection
     // const to_addA = {
