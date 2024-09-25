@@ -396,20 +396,20 @@ export async function helperParticipate(memberID: string, activityID: string) {
 
     if (error) throw new Error(error);
 
-    // // add to group participants subcollection
-    // const to_add = {
-    //   memberID,
-    //   dateJoined: date,
-    //   activityID,
-    // } as GROUP_ACTIVITY_PARTICIPANT;
+    // add to group participants subcollection
+    const to_add = {
+      memberID,
+      dateJoined: date,
+      activityID,
+    } as GROUP_ACTIVITY_PARTICIPANT;
 
-    // const res = await dbHandler.add({
-    //   col_name: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
-    //   id: memberID,
-    //   to_add,
-    // });
+    const res = await dbHandler.add({
+      col_name: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
+      id: memberID,
+      to_add,
+    });
 
-    // if (!res.status) throw new Error(res.error);
+    if (!res.status) throw new Error(res.error);
 
     // // remove from activity waitlist
     // const resB = await dbHandler.delete({
