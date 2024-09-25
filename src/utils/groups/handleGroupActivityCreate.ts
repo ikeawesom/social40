@@ -315,23 +315,17 @@ export async function third(
         );
         if (error) return handleResponses({ status: false, error });
 
-        const { error: errorA } = await helperParticipate(
-          selectedMemberID,
-          fetchedID
-        );
-        if (errorA) return handleResponses({ status: false, errorA });
+        // remove from activity waitlist
+        await dbHandler.delete({
+          col_name: `GROUP-ACTIVITIES/${fetchedID}/WAITLIST`,
+          id: selectedMemberID,
+        });
 
-        // // remove from activity waitlist
-        // await dbHandler.delete({
-        //   col_name: `GROUP-ACTIVITIES/${fetchedID}/WAITLIST`,
-        //   id: selectedMemberID,
-        // });
-
-        // // see if member fell out
-        // await dbHandler.delete({
-        //   col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
-        //   id: selectedMemberID,
-        // });
+        // see if member fell out
+        await dbHandler.delete({
+          col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
+          id: selectedMemberID,
+        });
 
         return handleResponses({ data });
       }
