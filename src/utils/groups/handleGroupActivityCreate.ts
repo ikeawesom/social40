@@ -395,26 +395,26 @@ export async function helperParticipate(memberID: string, activityID: string) {
 
     const { activityDate } = resC.data as GROUP_ACTIVITY_SCHEMA;
 
-    // // see if member fell out
+    // see if member fell out
     // await dbHandler.delete({
     //   col_name: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
     //   id: memberID,
     // });
 
-    // // add to member's group activities subcollection
-    // const to_addA = {
-    //   activityID,
-    //   dateJoined: date,
-    //   activityDate,
-    // } as ACTIVITY_PARTICIPANT_SCHEMA;
+    // add to member's group activities subcollection
+    const to_addA = {
+      activityID,
+      // dateJoined: date,
+      // activityDate,
+    } as ACTIVITY_PARTICIPANT_SCHEMA;
 
-    // const resA = await dbHandler.add({
-    //   col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
-    //   id: activityID,
-    //   to_add: to_addA,
-    // });
+    const resA = await dbHandler.add({
+      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+      id: activityID,
+      to_add: to_addA,
+    });
 
-    // if (!resA.status) throw new Error(resA.error);
+    if (!resA.status) throw new Error(resA.error);
 
     return handleResponses();
   } catch (err: any) {
