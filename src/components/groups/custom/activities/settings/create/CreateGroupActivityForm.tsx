@@ -121,8 +121,7 @@ export default function CreateGroupActivityForm({
       const { error: errD, data } = await createGroupClass.addToGroupCol();
       if (errD) throw new Error(errD);
       setLoadingStage((loadingStage) => loadingStage + 1);
-      console.log("DEBUG: finished adding to group col. data:");
-      console.log(data);
+      console.log("DEBUG: finished adding to group col.");
 
       router.refresh();
       router.replace(

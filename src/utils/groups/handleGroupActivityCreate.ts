@@ -320,15 +320,18 @@ export async function third(
       return handleResponses();
     });
 
+    let dataArr = [] as any[];
+
     const promiseRes = await Promise.all(promiseList);
-    // for (const item of promiseRes) {
-    //   if (!item.status) {
-    //     console.log("error:", item.error);
-    //     throw new Error(item.error);
-    //   }
-    // }
-    // console.log("NO ERROR");
-    return handleResponses();
+    for (const item of promiseRes) {
+      if (item.error) {
+        console.log("error:", item.error);
+        throw new Error(item.error);
+      }
+      dataArr.push(item.data);
+    }
+    console.log("NO ERROR");
+    return handleResponses({ data: dataArr });
   } catch (err: any) {
     console.log("ERROR");
     return handleResponses({ status: false, error: err.message });

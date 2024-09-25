@@ -77,7 +77,7 @@ export class createGroupActivityClass {
     const fetchedID = this.fetchedID ?? "";
 
     try {
-      const { error } = await third(
+      const { error, data } = await third(
         this.config.addMembers.check,
         memberID,
         fetchedID,
@@ -86,6 +86,7 @@ export class createGroupActivityClass {
         this.nonHAMembers
       );
 
+      console.log("dataArr:", data);
       if (error) throw new Error(error);
       return handleResponses();
     } catch (err: any) {
