@@ -314,6 +314,19 @@ export async function third(
           fetchedID
         );
         if (error) return handleResponses({ status: false, error });
+
+        // // remove from activity waitlist
+        // await dbHandler.delete({
+        //   col_name: `GROUP-ACTIVITIES/${fetchedID}/WAITLIST`,
+        //   id: memberID,
+        // });
+
+        // // see if member fell out
+        // await dbHandler.delete({
+        //   col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
+        //   id: memberID,
+        // });
+
         return handleResponses({ data });
       }
       return handleResponses({ data: { memberID: selectedMemberID } });
@@ -410,19 +423,6 @@ export async function helperParticipate(memberID: string, activityID: string) {
     });
 
     if (!res.status) throw new Error(res.error);
-
-    // remove from activity waitlist
-    await dbHandler.delete({
-      col_name: `GROUP-ACTIVITIES/${activityID}/WAITLIST`,
-      id: memberID,
-    });
-    // if (!resB.status) throw new Error(resB.error);
-
-    // see if member fell out
-    // await dbHandler.delete({
-    //   col_name: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
-    //   id: memberID,
-    // });
 
     return handleResponses({ data: to_addA });
   } catch (err: any) {
