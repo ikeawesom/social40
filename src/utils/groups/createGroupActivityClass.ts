@@ -77,15 +77,16 @@ export class createGroupActivityClass {
     const fetchedID = this.fetchedID ?? "";
 
     try {
-      const { error } = await third(
-        this.config.addMembers.check,
-        memberID,
-        fetchedID,
-        this.members,
-        this.timestamp,
-        this.nonHAMembers
-      );
-      if (error) throw new Error(error);
+      // const { error } = await third(
+      //   this.config.addMembers.check,
+      //   memberID,
+      //   fetchedID,
+      //   this.members,
+      //   this.timestamp,
+      //   this.nonHAMembers
+      // );
+
+      // if (error) throw new Error(error);
       return handleResponses();
     } catch (err: any) {
       return handleResponses({ status: false, error: err.message });

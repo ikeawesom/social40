@@ -113,9 +113,9 @@ export default function CreateGroupActivityForm({
       }
       console.log("DEBUG: Verified members");
 
-      // const { error: errC } = await createGroupClass.addParticipants();
-      // if (errC) throw new Error(errC);
-      // setLoadingStage((loadingStage) => loadingStage + 1);
+      const { error: errC } = await createGroupClass.addParticipants();
+      if (errC) throw new Error(errC);
+      setLoadingStage((loadingStage) => loadingStage + 1);
 
       console.log("DEBUG: finished adding participants");
       const { error: errD, data } = await createGroupClass.addToGroupCol();
