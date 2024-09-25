@@ -371,27 +371,6 @@ export async function fourth(
 export async function helperParticipate(memberID: string, activityID: string) {
   try {
     const date = getCurrentDate();
-    // add to group participants subcollection
-    const to_add = {
-      memberID,
-      dateJoined: date,
-      activityID,
-    } as GROUP_ACTIVITY_PARTICIPANT;
-
-    const res = await dbHandler.add({
-      col_name: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
-      id: memberID,
-      to_add,
-    });
-
-    if (!res.status) throw new Error(res.error);
-
-    // remove from activity waitlist
-    const resB = await dbHandler.delete({
-      col_name: `GROUP-ACTIVITIES/${activityID}/WAITLIST`,
-      id: memberID,
-    });
-    if (!resB.status) throw new Error(resB.error);
 
     const resC = await dbHandler.get({
       col_name: `GROUP-ACTIVITIES`,
@@ -402,12 +381,6 @@ export async function helperParticipate(memberID: string, activityID: string) {
 
     const { activityDate } = resC.data as GROUP_ACTIVITY_SCHEMA;
 
-    // see if member fell out
-    // await dbHandler.delete({
-    //   col_name: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
-    //   id: memberID,
-    // });
-
     // add to member's group activities subcollection
     const to_addA = {
       activityID,
@@ -415,13 +388,41 @@ export async function helperParticipate(memberID: string, activityID: string) {
       activityDate,
     } as ACTIVITY_PARTICIPANT_SCHEMA;
 
-    // await dbHandler.add({
-    //   col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
-    //   id: activityID,
-    //   to_add: to_addA,
+    const { error } = await dbHandler.add({
+      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+      id: activityID,
+      to_add: to_addA,
+    });
+
+    if (error) throw new Error(error);
+
+    // // add to group participants subcollection
+    // const to_add = {
+    //   memberID,
+    //   dateJoined: date,
+    //   activityID,
+    // } as GROUP_ACTIVITY_PARTICIPANT;
+
+    // const res = await dbHandler.add({
+    //   col_name: `GROUP-ACTIVITIES/${activityID}/PARTICIPANTS`,
+    //   id: memberID,
+    //   to_add,
     // });
 
-    // if (error) throw new Error(error);
+    // if (!res.status) throw new Error(res.error);
+
+    // // remove from activity waitlist
+    // const resB = await dbHandler.delete({
+    //   col_name: `GROUP-ACTIVITIES/${activityID}/WAITLIST`,
+    //   id: memberID,
+    // });
+    // if (!resB.status) throw new Error(resB.error);
+
+    // see if member fell out
+    // await dbHandler.delete({
+    //   col_name: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
+    //   id: memberID,
+    // });
 
     return handleResponses({ data: to_addA });
   } catch (err: any) {
