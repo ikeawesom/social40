@@ -204,12 +204,16 @@ export async function third(
         return handleResponses();
       }
 
+      console.log("DEBUG: Added non-ha members to fallout");
+
       const res = await dbHandler.getSpecific({
         path: `MEMBERS/${selectedMemberID}/STATUSES`,
         orderCol: "endDate",
         ascending: false,
       });
       if (!res.status) throw new Error(res.error);
+
+      console.log("DEBUG: before checking reason");
 
       let reason = "";
 
@@ -297,28 +301,51 @@ export async function third(
           reason,
           verifiedBy: memberID,
         } as FALLOUTS_SCHEMA;
-
         const res = await dbHandler.add({
           col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
           id: selectedMemberID,
           to_add,
         });
-
         if (!res.status)
           return handleResponses({ status: false, error: res.error });
       } else {
-        const { error } = await helperParticipate(selectedMemberID, fetchedID);
+        const { error, data } = await helperParticipate(
+          selectedMemberID,
+          fetchedID
+        );
         if (error) return handleResponses({ status: false, error });
+
+        // // remove from activity waitlist
+        // await dbHandler.delete({
+        //   col_name: `GROUP-ACTIVITIES/${fetchedID}/WAITLIST`,
+        //   id: selectedMemberID,
+        // });
+
+        // // see if member fell out
+        // await dbHandler.delete({
+        //   col_name: `GROUP-ACTIVITIES/${fetchedID}/FALLOUTS`,
+        //   id: selectedMemberID,
+        // });
+
+        return handleResponses({ data });
       }
-      return handleResponses();
+      return handleResponses({ data: { memberID: selectedMemberID } });
     });
 
+    let dataArr = [] as any[];
+
     const promiseRes = await Promise.all(promiseList);
-    promiseRes.forEach((item: any) => {
-      if (!item.status) console.log(item.error);
-    });
-    return handleResponses();
+    for (const item of promiseRes) {
+      if (item.error) {
+        console.log("error:", item.error);
+        throw new Error(item.error);
+      }
+      dataArr.push(item.data);
+    }
+    console.log("NO ERROR");
+    return handleResponses({ data: dataArr });
   } catch (err: any) {
+    console.log("ERROR");
     return handleResponses({ status: false, error: err.message });
   }
 }
@@ -357,6 +384,31 @@ export async function fourth(
 export async function helperParticipate(memberID: string, activityID: string) {
   try {
     const date = getCurrentDate();
+
+    const resC = await dbHandler.get({
+      col_name: `GROUP-ACTIVITIES`,
+      id: activityID,
+    });
+
+    if (!resC.status) throw new Error(resC.error);
+
+    const { activityDate } = resC.data as GROUP_ACTIVITY_SCHEMA;
+
+    // add to member's group activities subcollection
+    const to_addA = {
+      activityID,
+      dateJoined: date,
+      activityDate,
+    } as ACTIVITY_PARTICIPANT_SCHEMA;
+
+    const { error } = await dbHandler.add({
+      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
+      id: activityID,
+      to_add: to_addA,
+    });
+
+    if (error) throw new Error(error);
+
     // add to group participants subcollection
     const to_add = {
       memberID,
@@ -372,44 +424,7 @@ export async function helperParticipate(memberID: string, activityID: string) {
 
     if (!res.status) throw new Error(res.error);
 
-    // remove from activity waitlist
-    const resB = await dbHandler.delete({
-      col_name: `GROUP-ACTIVITIES/${activityID}/WAITLIST`,
-      id: memberID,
-    });
-    if (!resB.status) throw new Error(resB.error);
-
-    const resC = await dbHandler.get({
-      col_name: `GROUP-ACTIVITIES`,
-      id: activityID,
-    });
-
-    if (!resC.status) throw new Error(resC.error);
-
-    const { activityDate } = resC.data as GROUP_ACTIVITY_SCHEMA;
-
-    // see if member fell out
-    await dbHandler.delete({
-      col_name: `GROUP-ACTIVITIES/${activityID}/FALLOUTS`,
-      id: memberID,
-    });
-
-    // add to member's group activities subcollection
-    const to_addA = {
-      activityID,
-      dateJoined: date,
-      activityDate,
-    } as ACTIVITY_PARTICIPANT_SCHEMA;
-
-    const resA = await dbHandler.add({
-      col_name: `MEMBERS/${memberID}/GROUP-ACTIVITIES`,
-      id: activityID,
-      to_add: to_addA,
-    });
-
-    if (!resA.status) throw new Error(resA.error);
-
-    return handleResponses();
+    return handleResponses({ data: to_addA });
   } catch (err: any) {
     return handleResponses({ status: false, error: err.message });
   }
