@@ -34,9 +34,16 @@ export default async function JoinedActivities({
           col_name: `GROUP-ACTIVITIES`,
           id: activityID,
         });
-        if (!res.status)
-          return handleResponses({ status: false, error: res.error });
-        return handleResponses({ data: res.data });
+        if (!res.status) {
+          // delete activityID if ID does not exist
+          await dbHandler.delete({
+            col_name: `MEMBERS/${clickedMemberID}/GROUP-ACTIVITIES`,
+            id: activityID,
+          });
+          return handleResponses({ status: true });
+        } else {
+          return handleResponses({ data: res.data });
+        }
       }
     );
 
@@ -51,8 +58,10 @@ export default async function JoinedActivities({
 
     activitiesDataList.forEach((item: any) => {
       if (!item.status) throw new Error(item.error);
-      const data = item.data as GROUP_ACTIVITY_SCHEMA;
-      sortedActivitiesList.push(data);
+      if (item.data) {
+        const data = item.data as GROUP_ACTIVITY_SCHEMA;
+        sortedActivitiesList.push(data);
+      }
     });
 
     sortedActivitiesList.sort(function (a, b) {
