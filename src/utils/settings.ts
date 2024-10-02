@@ -1,4 +1,4 @@
-export const IS_DEBUG = { status: false, membersOnly: false };
+export const IS_DEBUG = { status: true, membersOnly: false };
 export const isFullMaintenance =
   IS_DEBUG.status &&
   !IS_DEBUG.membersOnly &&
