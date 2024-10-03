@@ -52,7 +52,7 @@ export default async function ActivityPage({
 
     // only group owners can create new activities
 
-    if (!admin || error) return <RestrictedScreen />;
+    if ((!view && !admin) || error) return <RestrictedScreen />;
 
     return (
       <>
