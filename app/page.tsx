@@ -47,6 +47,7 @@ export default async function Home() {
                 {links.map((item: any) => {
                   return (
                     <Link
+                      key={item.name}
                       href={item.url}
                       className="hover:opacity-75 hover:-translate-y-1 duration-150"
                       target="_blank"
