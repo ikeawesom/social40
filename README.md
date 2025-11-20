@@ -1,25 +1,113 @@
 <img src="./public/images/banner.png" alt="Social40 Banner" />
 
 # Social 40
-Welcome to the Social40 repository!
+A unified ERP and social engagement system designed to streamline administrative workflows, personnel management, and community communication within military units.
+Built with Next.js, TypeScript, and TailwindCSS, the platform delivers a modern, modular, and scalable approach to digitalising army administrative processes.
 
-## What is Social40?
-Social40 is a one-stop social portal for 40 SAR’s administrative needs. A problem noticed among many commanders is indeed the backend administrative hassle, such as the manual tracking of activities, participations, statuses, etc.
+## 🚀 Overview
 
-This core idea was the birth of Social40. Aimed to reduce countless manhours and manual tracking, Social40 handles all this under the hood, paired with a seamless user experience.
+This project combines two major domains into a single platform:
 
-Whether you are a commander or a soldier, Social40 can help you visualize and monitor statistics much easier.
+### 🪖 1. Army Administrative ERP
 
-## Main Features
-Some of the main Social40 features include:
-| Feature    | Brief Description |
-| -------- | ------- |
-| Admins  |  Commanders have administrative rights to manage data.  |
-| Announcements | Soldiers can be grouped for easier tracking between companies/platoons/sections.     |
-| Activities    | Easy tracking of soldiers’ participation in activities.     |
-| Statuses    |  Monitor your soldiers’ wellbeing with status tracking.   |
-| BIBO (Book-In-Book-Out)    | Say goodbye to manually signing BIBO books every week.    |
-| HA (Heat acclimatation)    | HA calculator to monitor your solders progress.    |
+A suite of tools that supports unit-level and formation-level administrative operations, such as:
+- Personnel management & records
+- Tasking and duty planning
+- Attendance / activity tracking
+- Document management
+- Workflow & approval systems
+- Reporting and analytics
 
-## Documentation
-New to Social40? You can view the main docs [here](https://social40.notion.site/Social40-Documentation-7657d91a8aaf406a85d29c349b1f3c17).
+### 💬 2. Social Media & Community Engagement
+
+An internal social platform for soldiers and commanders:
+- Newsfeed & posts
+- Comments, likes, and reactions
+- Media uploads
+- Announcements & broadcasts
+- Unit-wide engagement modules
+
+The result is a complete digital ecosystem for both operational efficiency and community cohesion.
+
+## 🛠️ Tech Stack
+
+- Next.js 14 (App Router)
+- React + TypeScript
+- TailwindCSS
+- Sentry (client, server & edge monitoring)
+- Vercel deployment ready
+- REST APIs / internal services (extendable)
+- Environment-based configuration via .env.local
+
+## 📂 Project Structure
+```
+social40/
+├── app/                     # Next.js app-router pages & routes
+├── src/
+│   ├── components/          # Reusable UI components
+│   ├── hooks/               # Custom client-side hooks
+│   ├── lib/                 # Utilities, API wrappers, helpers
+│   └── ...
+├── public/                  # Assets (images, icons)
+├── sentry.*.config.ts       # Sentry monitoring configs
+├── next.config.js
+├── tailwind.config.ts
+├── tsconfig.json
+├── package.json
+└── vercel.json
+```
+
+## ⚙️ Setup & Installation
+### 1. Clone the repository
+
+```
+git clone https://github.com/ikeawesom/social40.git
+cd social40
+```
+
+### 2. Install dependencies
+
+```
+npm install
+```
+
+### 3. Create environment configuration
+
+Copy `.env.local` (or create it if missing) and fill in your variables:
+```
+NEXT_PUBLIC_API_URL=...
+SENTRY_AUTH_TOKEN=...
+SENTRY_DSN=...
+```
+
+### 4. Start development server
+
+```
+npm run dev
+```
+
+App will be available at `http://localhost:3000`.
+
+## 🏗️ Build for Production
+```
+npm run build
+npm start
+```
+
+## 🔒 Security Notes
+
+This project is designed for internal military deployment, and includes:
+- Environment-based secret separation
+- Optional Sentry monitoring
+- Scalable RBAC (role-based access control) patterns
+- Potential integration with military networks or intranets
+
+⚠️ Ensure environment variables containing sensitive data are never committed to version control.
+
+## 📄 License
+
+Specify your intended license (MIT, Apache-2.0, AGPL, or private internal license).
+
+## 📢 Acknowledgements
+
+This system was built to modernise and streamline administrative processes, improve communication, and enhance soldier engagement using modern web technologies.
